@@ -1,0 +1,6 @@
+[submodule "doc"]
+	path = doc
+	url = https://github.com/tarantool/doc.git
+[submodule "internals"]
+	path = internals
+	url = https://github.com/tarantool/tarantool-internals.git
