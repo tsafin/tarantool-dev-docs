@@ -11,6 +11,11 @@ deactivate () {
         export PATH
         unset _OLD_VIRTUAL_PATH
     fi
+    if ! [ -z "${_OLD_PYTHONPATH+_}" ] ; then
+        PYTHONPATH="$_OLD_PYTHONPATH"
+        export PYTHONPATH
+        unset _OLD_PHYTHONPATH
+    fi
     if ! [ -z "${_OLD_VIRTUAL_PYTHONHOME+_}" ] ; then
         PYTHONHOME="$_OLD_VIRTUAL_PYTHONHOME"
         export PYTHONHOME
@@ -40,12 +45,15 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/tsafin/tarantool-dev-docs/venv"
+SCRIPT_PATH=$(dirname $(realpath -s "$BASH_SOURCE"))
+VIRTUAL_ENV=$(readlink -f $SCRIPT_PATH/..)
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
+_OLD_PYTHONPATH="$PYTHONPATH"
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
+export PYTHONPATH="$PYTHONPATH:$VIRTUAL_ENV/lib/python3.7/site-packages/"
 
 # unset PYTHONHOME if set
 if ! [ -z "${PYTHONHOME+_}" ] ; then

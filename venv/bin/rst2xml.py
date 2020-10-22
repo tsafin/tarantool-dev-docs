@@ -1,4 +1,4 @@
-#!/home/tsafin/tarantool-dev-docs/venv/bin/python3
+#!/usr/bin/env python3
 
 # $Id: rst2xml.py 4564 2006-05-21 20:44:42Z wiemann $
 # Author: David Goodger <goodger@python.org>

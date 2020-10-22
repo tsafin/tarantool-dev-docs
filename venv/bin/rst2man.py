@@ -1,4 +1,4 @@
-#!/home/tsafin/tarantool-dev-docs/venv/bin/python3
+#!/usr/bin/env python3
 
 # Author: 
 # Contact: grubert@users.sf.net

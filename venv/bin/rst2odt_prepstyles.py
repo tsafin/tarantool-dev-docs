@@ -1,4 +1,4 @@
-#!/home/tsafin/tarantool-dev-docs/venv/bin/python3
+#!/usr/bin/env python3
 
 # $Id: rst2odt_prepstyles.py 5839 2009-01-07 19:09:28Z dkuhlman $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>
