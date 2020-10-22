@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libslave tutorial &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><cite>libslave</cite> tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/tutorials/libslave.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="libslave-tutorial">
+<span id="libslave"></span><h1><cite>libslave</cite> tutorial<a class="headerlink" href="#libslave-tutorial" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">libslave</span></code> is a C++ library for reading data changes done by MysQL and,
+optionally, writing them to a Tarantool database.
+It works by acting as a replication slave.
+The MySQL server writes data-change information to
+a “binary log”, and transfers the information to
+any client that says “I want to see the information
+starting with this file and this record, continuously”.
+So, <code class="docutils literal notranslate"><span class="pre">libslave</span></code> is primarily good for making a Tarantool database replica
+(much faster than using a conventional MySQL slave server),
+and for keeping track of data changes so they can be searched.</p>
+<p>We will not go into the many details here – the
+<a class="reference external" href="https://github.com/vozbu/libslave/wiki/API">API documentation</a> has them.
+We will only show an exercise: a minimal program that uses the library.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Use a test machine. Do not use a production machine.</p>
+</div>
+<p>STEP 1: Make sure you have:</p>
+<ul>
+<li><p class="first">a recent version of Linux (versions such as Ubuntu 14.04 will not do),</p>
+</li>
+<li><p class="first">a recent version of MySQL 5.6 or MySQL 5.7 server (MariaDB will not do),</p>
+</li>
+<li><p class="first">MySQL client development package. For example, on Ubuntu you can download
+it with this command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install mysql-client-core-5.7
+</pre></div>
+</div>
+</li>
+</ul>
+<p>STEP 2: Download <code class="docutils literal notranslate"><span class="pre">libslave</span></code>.</p>
+<p>The recommended source is <a class="reference external" href="https://github.com/tarantool/libslave/">https://github.com/tarantool/libslave/</a>.
+Downloads include the source code only.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install libboost-all-dev
+<span class="gp">$</span> <span class="nb">cd</span> ~
+<span class="gp">$</span> git clone https://github.com/tarantool/libslave.git tarantool-libslave
+<span class="gp">$</span> <span class="nb">cd</span> tarantool-libslave
+<span class="gp">$</span> git submodule init
+<span class="gp">$</span> git submodule update
+<span class="gp">$</span> cmake .
+<span class="gp">$</span> make
+</pre></div>
+</div>
+<p>If you see an error message mentioning the word “vector”,
+edit <code class="docutils literal notranslate"><span class="pre">field.h</span></code> and add this line:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>STEP 3: Start the MySQL server. On the command line, add
+appropriate switches for doing replication. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> mysqld --log-bin<span class="o">=</span>mysql-bin --server-id<span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>STEP 4: For purposes of this exercise, we are assuming you have:</p>
+<ul class="simple">
+<li>a “root” user with password “root” with privileges,</li>
+<li>a “test” database with a table named “test”,</li>
+<li>a binary log named “mysql-bin”,</li>
+<li>a server with server id = 1.</li>
+</ul>
+<p>The values are hard-coded in the program, though of course
+you can change the program – it’s easy to see their settings.</p>
+<p>STEP 5: Look at the program:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;Slave.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;DefaultExtState.h&quot;</span><span class="cp"></span>
+
+<span class="n">slave</span><span class="o">::</span><span class="n">Slave</span><span class="o">*</span> <span class="n">sl</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">callback</span><span class="p">(</span><span class="k">const</span> <span class="n">slave</span><span class="o">::</span><span class="n">RecordSet</span><span class="o">&amp;</span> <span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">slave</span><span class="o">::</span><span class="n">Position</span> <span class="n">sBinlogPos</span> <span class="o">=</span> <span class="n">sl</span><span class="o">-&gt;</span><span class="n">getLastBinlogPos</span><span class="p">();</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">type_event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">slave</span><span class="o">::</span><span class="n">RecordSet</span><span class="o">::</span><span class="nl">Update</span><span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;UPDATE&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">slave</span><span class="o">::</span><span class="n">RecordSet</span><span class="o">::</span><span class="nl">Delete</span><span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;DELETE&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">slave</span><span class="o">::</span><span class="n">RecordSet</span><span class="o">::</span><span class="nl">Write</span><span class="p">:</span>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;INSERT&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">isStopping</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">slave</span><span class="o">::</span><span class="n">MasterInfo</span> <span class="n">masterinfo</span><span class="p">;</span>
+    <span class="n">slave</span><span class="o">::</span><span class="n">Position</span> <span class="n">position</span><span class="p">(</span><span class="s">&quot;mysql-bin&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">masterinfo</span><span class="p">.</span><span class="n">conn_options</span><span class="p">.</span><span class="n">mysql_host</span> <span class="o">=</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">;</span>
+    <span class="n">masterinfo</span><span class="p">.</span><span class="n">conn_options</span><span class="p">.</span><span class="n">mysql_port</span> <span class="o">=</span> <span class="mi">3306</span><span class="p">;</span>
+    <span class="n">masterinfo</span><span class="p">.</span><span class="n">conn_options</span><span class="p">.</span><span class="n">mysql_user</span> <span class="o">=</span> <span class="s">&quot;root&quot;</span><span class="p">;</span>
+    <span class="n">masterinfo</span><span class="p">.</span><span class="n">conn_options</span><span class="p">.</span><span class="n">mysql_pass</span> <span class="o">=</span> <span class="s">&quot;root&quot;</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">try</span> <span class="p">{</span>
+        <span class="n">slave</span><span class="o">::</span><span class="n">DefaultExtState</span> <span class="n">sDefExtState</span><span class="p">;</span>
+        <span class="n">slave</span><span class="o">::</span><span class="n">Slave</span> <span class="n">slave</span><span class="p">(</span><span class="n">masterinfo</span><span class="p">,</span> <span class="n">sDefExtState</span><span class="p">);</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">slave</span><span class="p">;</span>
+        <span class="n">sDefExtState</span><span class="p">.</span><span class="n">setMasterPosition</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+        <span class="n">slave</span><span class="p">.</span><span class="n">setCallback</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">);</span>
+        <span class="n">slave</span><span class="p">.</span><span class="n">init</span><span class="p">();</span>
+        <span class="n">slave</span><span class="p">.</span><span class="n">createDatabaseStructure</span><span class="p">();</span>
+        <span class="n">try</span> <span class="p">{</span>
+            <span class="n">slave</span><span class="p">.</span><span class="n">get_remote_binlog</span><span class="p">(</span><span class="n">isStopping</span><span class="p">);</span>
+        <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Error reading: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ex</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Error initializing: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ex</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Everything unnecessary has been stripped so that you can
+see quickly how it works. At the start of <code class="docutils literal notranslate"><span class="pre">main()</span></code>, there are
+some settings used for connecting – host, port, user, password.
+Then there is an initialization call with the binary log file
+name = “mysql-bin”. Pay particular attention to the <code class="docutils literal notranslate"><span class="pre">setCallback</span></code>
+statement, which passes database name = “test”, table name = “test”,
+and callback function address = callback. The program will be
+looping and invoking this callback function. See how, earlier
+in the program, the callback function prints “UPDATE” or “DELETE”
+or “INSERT” depending on what is passed to it.</p>
+<p>STEP 5: Put the program in the <code class="docutils literal notranslate"><span class="pre">tarantool-libslave</span></code> directory and
+name it <code class="docutils literal notranslate"><span class="pre">example.cpp</span></code>.</p>
+<p>Step 6: Compile and build:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> g++ -I/tarantool-libslave/include example.cpp -o example libslave_a.a -ldl -lpthread
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">tarantool-libslave/include</span></code> with the full directory name.</p>
+<p class="last">Notice that the name of the static library is <code class="docutils literal notranslate"><span class="pre">libslave_a.a</span></code>,
+not <code class="docutils literal notranslate"><span class="pre">libslave.a</span></code>.</p>
+</div>
+<p>Step 7: Run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ./example
+</pre></div>
+</div>
+<p>The result will be nothing – the program is looping, waiting for
+the MySQL server to write to the replication binary log.</p>
+<p>Step 8: Start a MySQL client program – any client program will do.
+Enter these statements:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">USE</span> <span class="n">test</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">);</span>
+<span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">test</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Watch what happens in <code class="docutils literal notranslate"><span class="pre">example.cpp</span></code> output – it displays:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INSERT
+INSERT
+DELETE
+DELETE
+</pre></div>
+</div>
+<p>This is row-based replication, so you see two DELETEs, because there are two
+rows.</p>
+<p>What the exercise has shown is:</p>
+<ul class="simple">
+<li>the library can be built, and</li>
+<li>programs that use the library can access everything that
+the MySQL server dumps.</li>
+</ul>
+<p>For the many details and examples of usage in the field, see:</p>
+<ul>
+<li><div class="first line-block">
+<div class="line">Our downloadable <code class="docutils literal notranslate"><span class="pre">libslave</span></code> version:</div>
+<div class="line"><a class="reference external" href="https://github.com/tarantool/libslave">https://github.com/tarantool/libslave</a></div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">The version it was forked from (with a different README):</div>
+<div class="line"><a class="reference external" href="https://github.com/vozbu/libslave/wiki/API">https://github.com/vozbu/libslave/wiki/API</a></div>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="http://highscalability.com/blog/2017/3/29/how-to-speed-up-your-mysql-with-replication-to-in-memory-dat.html">How to speed up your MySQL with replication to in-memory database</a>
+article</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://habrahabr.ru/company/mailru/blog/323870/">Replicating data from MySQL to Tarantool</a>
+article (in Russian)</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://habrahabr.ru/company/oleg-bunin/blog/313594/">Asynchronous replication uncensored</a>
+article (in Russian)</p>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module expirationd &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>expirationd</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_rock/expirationd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-expirationd">
+<span id="expirationd-module"></span><h1>Module <cite>expirationd</cite><a class="headerlink" href="#module-expirationd" title="Permalink to this headline">¶</a></h1>
+<p>For a commercial-grade example of a Lua rock that works with Tarantool, let us
+look at the source code of <code class="docutils literal notranslate"><span class="pre">expirationd</span></code>, which Tarantool supplies on <a class="reference external" href="https://github.com/tarantool/expirationd/blob/master/expirationd.lua">GitHub</a> with
+an Artistic license.
+The <code class="docutils literal notranslate"><span class="pre">expirationd.lua</span></code> program is lengthy (about 500 lines), so here we will only
+highlight the matters that will be enhanced by studying the full source later.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">task</span><span class="p">.</span><span class="n">worker_fiber</span> <span class="o">=</span> <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">worker_loop</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;expiration: task %q restarted&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">expirationd</span><span class="p">.</span><span class="n">constants</span><span class="p">.</span><span class="n">check_interval</span><span class="p">)</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>Whenever one hears “daemon” in Tarantool, one should suspect it’s being done
+with a <a class="reference internal" href="../reference_lua/fiber.html"><span class="doc">fiber</span></a>. The program is making a fiber and
+turning control over to it so it runs occasionally, goes to sleep, then comes
+back for more.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tuple</span> <span class="kr">in</span> <span class="n">scan_space</span><span class="p">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="nb">pairs</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="p">{</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">ALL</span><span class="p">})</span> <span class="kr">do</span>
+<span class="p">...</span>
+    <span class="n">expiration_process</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span>
+<span class="p">...</span>
+    <span class="o">/*</span> <span class="n">expiration_process</span><span class="p">()</span> <span class="n">contains</span><span class="p">:</span>
+    <span class="kr">if</span> <span class="n">task</span><span class="p">.</span><span class="n">is_tuple_expired</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="n">task</span><span class="p">.</span><span class="n">expired_tuples_count</span> <span class="o">=</span> <span class="n">task</span><span class="p">.</span><span class="n">expired_tuples_count</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">task</span><span class="p">.</span><span class="n">process_expired_tuple</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">space_id</span><span class="p">,</span> <span class="n">task</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span> <span class="o">*/</span>
+</pre></div>
+</div>
+<p>The “for” instruction can be translated as “iterate through the index of the
+space that is being scanned”, and within it, if the tuple is “expired” (for
+example, if the tuple has a timestamp field which is less than the current time),
+process the tuple as an expired tuple.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- default process_expired_tuple function</span>
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">default_tuple_drop</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_id</span><span class="p">]:</span><span class="n">delete</span><span class="p">(</span><span class="n">construct_key</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">tuple</span><span class="p">))</span>
+<span class="kr">end</span>
+    <span class="o">/*</span> <span class="n">construct_key</span><span class="p">()</span> <span class="n">contains</span><span class="p">:</span>
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">construct_key</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="n">fun</span><span class="p">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="kr">return</span> <span class="n">tuple</span><span class="p">[</span><span class="n">x</span><span class="p">.</span><span class="n">fieldno</span><span class="p">]</span> <span class="kr">end</span><span class="p">,</span>
+           <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_id</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">parts</span>
+        <span class="p">):</span><span class="n">totable</span><span class="p">()</span>
+    <span class="kr">end</span> <span class="o">*/</span>
+</pre></div>
+</div>
+<p>Ultimately the tuple-expiry process leads to <code class="docutils literal notranslate"><span class="pre">default_tuple_drop()</span></code>
+which does a “delete” of a tuple from its original space.
+First the fun <a class="reference internal" href="../reference_lua/fun.html#fun-module"><span class="std std-ref">fun</span></a> module is used,
+specifically <a class="reference external" href="https://luafun.github.io/transformations.html#fun.map">fun.map</a>.
+Remembering that <a href="#id1"><span class="problematic" id="id2">:codenormal:`index[0]`</span></a> is always the space’s primary key,
+and <a href="#id3"><span class="problematic" id="id4">:codenormal:`index[0].parts[`</span></a><a href="#id5"><span class="problematic" id="id6">:codeitalic:`N`</span></a><a href="#id7"><span class="problematic" id="id8">:codenormal:`].fieldno`</span></a>
+is always the field number for key part <a href="#id9"><span class="problematic" id="id10">:codeitalic:`N`</span></a>,
+fun.map() is creating a table from the primary-key values of the tuple.
+The result of fun.map() is passed to <a class="reference internal" href="../reference_lua/box_space_index.html#box-space-delete"><span class="std std-ref">space_object:delete()</span></a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="kr">function</span> <span class="nf">expirationd_run_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">space_id</span><span class="p">,</span> <span class="n">is_tuple_expired</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>At this point, if the above explanation is worthwhile, it is clear that
+<code class="docutils literal notranslate"><span class="pre">expirationd.lua</span></code> starts a background routine (fiber) which iterates through
+all the tuples in a space, sleeps cooperatively so that other fibers can
+operate at the same time, and – whenever it finds a tuple that has expired –
+deletes it from this space. Now the
+“<code class="docutils literal notranslate"><span class="pre">expirationd_run_task()</span></code>” function can be used
+in a test which creates sample data, lets the
+daemon run for a while, and prints results.</p>
+<p>For those who like to see things run, here are the exact steps to get
+<code class="docutils literal notranslate"><span class="pre">expirationd</span></code> through the test.</p>
+<ol class="arabic simple">
+<li>Get <code class="docutils literal notranslate"><span class="pre">expirationd.lua</span></code>. There are standard ways – it is after all part
+of a <a class="reference external" href="https://luarocks.org/modules/rtsisyk/expirationd">standard rock</a> – but
+for this purpose just copy the contents of
+<code class="docutils literal notranslate"><span class="pre">expirationd.lua</span></code> to a directory on the Lua path
+(type <code class="docutils literal notranslate"><span class="pre">print(package.path)</span></code> to see the Lua path).</li>
+<li>Start the Tarantool server as described before.</li>
+<li>Execute these requests:</li>
+</ol>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="n">expd</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;expirationd&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{}</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;expirationd_test&#39;</span><span class="p">)</span>
+<span class="n">e</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}})</span>
+<span class="n">e</span><span class="p">:</span><span class="n">replace</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="n">fiber</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">e</span><span class="p">:</span><span class="n">replace</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="n">fiber</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">30</span><span class="p">}</span>
+<span class="kr">function</span> <span class="nf">is_tuple_expired</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">tuple</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="p">(</span><span class="n">tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fiber</span><span class="p">.</span><span class="n">time</span><span class="p">())</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">true</span> <span class="kr">end</span>
+  <span class="kr">return</span> <span class="kc">false</span>
+  <span class="kr">end</span>
+<span class="n">expd</span><span class="p">.</span><span class="n">run_task</span><span class="p">(</span><span class="s1">&#39;expirationd_test&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">is_tuple_expired</span><span class="p">)</span>
+<span class="n">retval</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">expd</span><span class="p">.</span><span class="n">task_stats</span><span class="p">()</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">expd</span><span class="p">.</span><span class="n">task_stats</span><span class="p">()</span>
+<span class="n">expd</span><span class="p">.</span><span class="n">kill_task</span><span class="p">(</span><span class="s1">&#39;expirationd_test&#39;</span><span class="p">)</span>
+<span class="n">e</span><span class="p">:</span><span class="n">drop</span><span class="p">()</span>
+<span class="nb">os.exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The database-specific requests (<code class="docutils literal notranslate"><span class="pre">cfg</span></code>,
+<a class="reference internal" href="../reference_lua/box_schema.html#box-schema-space-create"><span class="std std-ref">space.create</span></a>,
+<a class="reference internal" href="../reference_lua/box_space_index.html#box-space-create-index"><span class="std std-ref">create_index</span></a>)
+should already be familiar.</p>
+<p>The function which will be supplied to <code class="docutils literal notranslate"><span class="pre">expirationd</span></code> is
+<a href="#id11"><span class="problematic" id="id12">:codenormal:`is_tuple_expired`</span></a>, which is saying
+“if the second field of the tuple is less than the
+<a class="reference internal" href="../reference_lua/fiber.html#fiber-time"><span class="std std-ref">current time</span></a>  , then return true, otherwise return false”.</p>
+<p>The key for getting the rock rolling is
+<code class="docutils literal notranslate"><span class="pre">expd</span> <span class="pre">=</span> <span class="pre">require('expirationd')</span></code>. The <a class="reference external" href="https://www.lua.org/pil/8.1.html#require">require</a> function is what reads in
+the program; it will appear in many later examples in this manual, when it’s
+necessary to get a module that’s not part of the Tarantool kernel,
+but is on the Lua path (<code class="docutils literal notranslate"><span class="pre">package.path</span></code>) or the C path (<code class="docutils literal notranslate"><span class="pre">package.cpath</span></code>).
+After the
+Lua variable expd has been assigned the value of the <code class="docutils literal notranslate"><span class="pre">expirationd</span></code> module, it’s
+possible to invoke the module’s <code class="docutils literal notranslate"><span class="pre">run_task()</span></code> function.</p>
+<p>After <a class="reference internal" href="../reference_lua/fiber.html#fiber-sleep"><span class="std std-ref">sleeping</span></a> for two seconds, when the task has had time
+to do its iterations through the spaces,
+<code class="docutils literal notranslate"><span class="pre">expd.task_stats()</span></code> will print out a report showing how many tuples have expired –
+“expired_count: 0”.</p>
+<p>After sleeping for two more seconds, <code class="docutils literal notranslate"><span class="pre">expd.task_stats()</span></code> will print out
+a report showing how many tuples have expired –
+“expired_count: 1”.
+This shows that the <code class="docutils literal notranslate"><span class="pre">is_tuple_expired()</span></code> function eventually returned “true”
+for one of the tuples, because its timestamp field was more than
+three seconds old.</p>
+<p>Of course, <code class="docutils literal notranslate"><span class="pre">expirationd</span></code> can be customized to do different things
+by passing different parameters, which will be evident after looking in more detail
+at the source code. Particularly important are <code class="docutils literal notranslate"><span class="pre">{options}</span></code> which can be
+added as a final parameter in <code class="docutils literal notranslate"><span class="pre">expirationd.run_task</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">force</span></code> (boolean) – run task even on replica.
+Default: <code class="docutils literal notranslate"><span class="pre">force=false</span></code> so ordinarily <code class="docutils literal notranslate"><span class="pre">expirationd</span></code> ignores replicas.</li>
+<li><code class="docutils literal notranslate"><span class="pre">tuples_per_iteration</span></code> (integer) – number of tuples that
+will be checked by one iteration
+Default: <code class="docutils literal notranslate"><span class="pre">tuples_per_iteration=1024</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">full_scan_time</span></code> (number) – number of seconds required for full index scan
+Default: <code class="docutils literal notranslate"><span class="pre">full_scan_time=3600</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">vinyl_assumed_space_len</span></code> (integer) – assumed size of vinyl space, for the first
+iteration only.
+Default: <code class="docutils literal notranslate"><span class="pre">vinyl_assumed_space_len=10000000</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">vinyl_assumed_space_len_factor</span></code> (integer) – factor for recalculation
+of size of vinyl space.
+Default: <code class="docutils literal notranslate"><span class="pre">vinyl_assumed_space_len_factor=2</span></code>.
+(The size of a vinyl space cannot be easily calculated, so on the first
+iteration it will be the “assumed” size, on the second iteration it will
+be “assumed” times “factor”, on the third iteration it will be
+“assumed” times “factor” times factor”, and so on.)</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

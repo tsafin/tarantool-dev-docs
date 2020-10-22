@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Preventing duplicate actions &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Preventing duplicate actions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_duplicates.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="preventing-duplicate-actions">
+<span id="replication-duplicates"></span><h1>Preventing duplicate actions<a class="headerlink" href="#preventing-duplicate-actions" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool guarantees that every update is applied only once on every replica.
+However, due to the asynchronous nature of replication, the order of updates is
+not guaranteed. We now analyze this problem with more details, provide
+examples of replication going out of sync, and suggest solutions.</p>
+<div class="section" id="replication-stops">
+<span id="replication-replication-stops"></span><h2>Replication stops<a class="headerlink" href="#replication-stops" title="Permalink to this headline">¶</a></h2>
+<p>In a replica set of two masters, suppose master #1 tries to do something that
+master #2 has already done. For example, try to insert a tuple
+with the same unique key:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:insert{1, &#39;data&#39;}
+</pre></div>
+</div>
+<p>This would cause an error saying <code class="docutils literal notranslate"><span class="pre">Duplicate</span> <span class="pre">key</span> <span class="pre">exists</span> <span class="pre">in</span> <span class="pre">unique</span> <span class="pre">index</span>
+<span class="pre">'primary'</span> <span class="pre">in</span> <span class="pre">space</span> <span class="pre">'tester'</span></code> and the replication would be stopped.
+(This is the behavior when the
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-skip-conflict"><span class="std std-ref">replication_skip_conflict</span></a>
+configuration parameter has its default recommended value, <code class="docutils literal notranslate"><span class="pre">false</span></code>.)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># error messages from master #1</span>
+<span class="go">2017-06-26 21:17:03.233 [30444] main/104/applier/rep_user@100.96.166.1 I&gt; can&#39;t read row</span>
+<span class="go">2017-06-26 21:17:03.233 [30444] main/104/applier/rep_user@100.96.166.1 memtx_hash.cc:226 E&gt; ER_TUPLE_FOUND:</span>
+<span class="go">Duplicate key exists in unique index &#39;primary&#39; in space &#39;tester&#39;</span>
+<span class="go">2017-06-26 21:17:03.233 [30444] relay/[::ffff:100.96.166.178]/101/main I&gt; the replica has closed its socket, exiting</span>
+<span class="go">2017-06-26 21:17:03.233 [30444] relay/[::ffff:100.96.166.178]/101/main C&gt; exiting the relay loop</span>
+
+<span class="gp">$</span> <span class="c1"># error messages from master #2</span>
+<span class="go">2017-06-26 21:17:03.233 [30445] main/104/applier/rep_user@100.96.166.1 I&gt; can&#39;t read row</span>
+<span class="go">2017-06-26 21:17:03.233 [30445] main/104/applier/rep_user@100.96.166.1 memtx_hash.cc:226 E&gt; ER_TUPLE_FOUND:</span>
+<span class="go">Duplicate key exists in unique index &#39;primary&#39; in space &#39;tester&#39;</span>
+<span class="go">2017-06-26 21:17:03.234 [30445] relay/[::ffff:100.96.166.178]/101/main I&gt; the replica has closed its socket, exiting</span>
+<span class="go">2017-06-26 21:17:03.234 [30445] relay/[::ffff:100.96.166.178]/101/main C&gt; exiting the relay loop</span>
+</pre></div>
+</div>
+<p>If we check replication statuses with <code class="docutils literal notranslate"><span class="pre">box.info</span></code>, we will see that replication
+at master #1 is stopped (<code class="docutils literal notranslate"><span class="pre">1.upstream.status</span> <span class="pre">=</span> <span class="pre">stopped</span></code>). Additionally, no data
+is replicated from that master (section <code class="docutils literal notranslate"><span class="pre">1.downstream</span></code> is missing in the
+report), because the downstream has encountered the same error:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># replication statuses (report from master #3)
+tarantool&gt; box.info
+---
+- version: 1.7.4-52-g980d30092
+  id: 3
+  ro: false
+  vclock: {1: 9, 2: 1000000, 3: 3}
+  uptime: 557
+  lsn: 3
+  vinyl: []
+  cluster:
+    uuid: 34d13b1a-f851-45bb-8f57-57489d3b3c8b
+  pid: 30445
+  status: running
+  signature: 1000012
+  replication:
+    1:
+      id: 1
+      uuid: 7ab6dee7-dc0f-4477-af2b-0e63452573cf
+      lsn: 9
+      upstream:
+        peer: replicator@192.168.0.101:3301
+        lag: 0.00050592422485352
+        status: stopped
+        idle: 445.8626639843
+        message: Duplicate key exists in unique index &#39;primary&#39; in space &#39;tester&#39;
+    2:
+      id: 2
+      uuid: 9afbe2d9-db84-4d05-9a7b-e0cbbf861e28
+      lsn: 1000000
+      upstream:
+        status: follow
+        idle: 201.99915885925
+        peer: replicator@192.168.0.102:3301
+        lag: 0.0015020370483398
+      downstream:
+        vclock: {1: 8, 2: 1000000, 3: 3}
+    3:
+      id: 3
+      uuid: e826a667-eed7-48d5-a290-64299b159571
+      lsn: 3
+  uuid: e826a667-eed7-48d5-a290-64299b159571
+...
+</pre></div>
+</div>
+<p>When replication is later manually resumed:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># resuming stopped replication (at all masters)
+tarantool&gt; original_value = box.cfg.replication
+tarantool&gt; box.cfg{replication={}}
+tarantool&gt; box.cfg{replication=original_value}
+</pre></div>
+</div>
+<p>… the faulty row in the write-ahead-log files is skipped.</p>
+</div>
+<div class="section" id="replication-runs-out-of-sync">
+<span id="id1"></span><h2>Replication runs out of sync<a class="headerlink" href="#replication-runs-out-of-sync" title="Permalink to this headline">¶</a></h2>
+<p>In a master-master cluster of two instances, suppose we make the following
+operation:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:upsert({1}, {{&#39;=&#39;, 2, box.info.uuid}})
+</pre></div>
+</div>
+<p>When this operation is applied on both instances in the replica set:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># at master #1
+tarantool&gt; box.space.tester:upsert({1}, {{&#39;=&#39;, 2, box.info.uuid}})
+# at master #2
+tarantool&gt; box.space.tester:upsert({1}, {{&#39;=&#39;, 2, box.info.uuid}})
+</pre></div>
+</div>
+<p>… we can have the following results, depending on the order of execution:</p>
+<ul class="simple">
+<li>each master’s row contains the UUID from master #1,</li>
+<li>each master’s row contains the UUID from master #2,</li>
+<li>master #1 has the UUID of master #2, and vice versa.</li>
+</ul>
+</div>
+<div class="section" id="commutative-changes">
+<span id="replication-commutative-changes"></span><h2>Commutative changes<a class="headerlink" href="#commutative-changes" title="Permalink to this headline">¶</a></h2>
+<p>The cases described in the previous paragraphs represent examples of
+<strong>non-commutative</strong> operations, i.e. operations whose result depends on the
+execution order. On the contrary, for <strong>commutative operations</strong>, the
+execution order does not matter.</p>
+<p>Consider for example the following command:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:upsert{{1, 0}, {{&#39;+&#39;, 2, 1)}
+</pre></div>
+</div>
+<p>This operation is commutative: we get the same result no matter in which order
+the update is applied on the other masters.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

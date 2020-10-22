@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Write-ahead logging &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="WAL file binary format" href="wal-fmt.html" />
+    <link rel="prev" title="Relay" href="relay.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/contributing/index.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tarantool internals</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fiber.html">Fibers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relay.html">Relay</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Write-ahead logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#journal-subsystem">Journal subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wal-thread">WAL thread</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#write-data-to-wal">Write data to WAL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#transactions-processing">Transactions processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#transactions-processing-in-1-x-series">Transactions processing in 1.x series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transactions-processing-in-2-x-series">Transactions processing in 2.x series</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wal-fmt.html">WAL file binary format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tarantool internals</a> &raquo;</li>
+        
+      <li>Write-ahead logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/internals/source/wal.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="write-ahead-logging">
+<h1>Write-ahead logging<a class="headerlink" href="#write-ahead-logging" title="Permalink to this headline">¶</a></h1>
+<p>Write-ahead logging WAL is one of the most important parts of
+databases which implements atomicity and durability. The base
+idea of logging is to write the data to the storage before make
+this data accessible by others.</p>
+<p>We will reference 2.x series of Tarantool source code.</p>
+<div class="section" id="journal-subsystem">
+<h2>Journal subsystem<a class="headerlink" href="#journal-subsystem" title="Permalink to this headline">¶</a></h2>
+<p>The journal subsystem provides the following API calls:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">journal_create</span></code> to create a new journal;</li>
+<li><code class="docutils literal notranslate"><span class="pre">journal_set</span></code> to destroy old journal and set a new one;</li>
+<li><code class="docutils literal notranslate"><span class="pre">journal_entry_new</span></code> to create a new journal entry;</li>
+<li><code class="docutils literal notranslate"><span class="pre">journal_write</span></code> to write a journal entry.</li>
+</ul>
+</div></blockquote>
+<p>There might be only one active journal at a time which is
+referred via <code class="docutils literal notranslate"><span class="pre">current_journal</span></code> variable (thus we can
+create as many journals as we need with <code class="docutils literal notranslate"><span class="pre">journal_create</span></code>
+but only one must be activated via <code class="docutils literal notranslate"><span class="pre">journal_set</span></code>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">journal_entry_new</span></code> requires a callback to be associated
+with the journal entry to be called when entry processing is complete
+(with success or failure). Since we use journal to process database
+transactions we pass <code class="docutils literal notranslate"><span class="pre">txn_entry_complete_cb</span></code> as a callback
+and a pointer to the transaction itself as a data.</p>
+<p>To explain in details how transactions are processed on journal
+level we need to look at transaction structure (short version
+to be precise, only with the memebers we’re interesed in).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">txn</span> <span class="p">{</span>
+    <span class="cm">/* transaction cache */</span>
+    <span class="k">struct</span> <span class="nc">stailq_entry</span> <span class="n">in_txn_cache</span><span class="p">;</span>
+    <span class="cm">/* memory to keep transaction data */</span>
+    <span class="k">struct</span> <span class="nc">region</span> <span class="n">region</span><span class="p">;</span>
+    <span class="cm">/* transaction ID */</span>
+    <span class="kt">int64_t</span> <span class="n">id</span><span class="p">;</span>
+    <span class="cm">/* LSN assigned by WAL or -1 on error */</span>
+    <span class="kt">int64_t</span> <span class="n">signature</span><span class="p">;</span>
+    <span class="cm">/* A fiber initiated the transaction */</span>
+    <span class="k">struct</span> <span class="nc">fiber</span> <span class="o">*</span><span class="n">fiber</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>A transaction is allocated via <code class="docutils literal notranslate"><span class="pre">txn_new</span></code> call. The memory allocation
+is a bit tricky here. We request memory region from the main <code class="docutils literal notranslate"><span class="pre">cord</span></code>
+where we allocate the <code class="docutils literal notranslate"><span class="pre">txn</span></code> itself and may increase memory usage if
+<code class="docutils literal notranslate"><span class="pre">txn</span></code> need additional data to carry. On <code class="docutils literal notranslate"><span class="pre">txn_free</span></code> the additional
+memory get freed and we put <code class="docutils literal notranslate"><span class="pre">txn</span></code> to cache for fast reuse.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">txn_entry_complete_cb</span></code> is basically a wrapper over
+<code class="docutils literal notranslate"><span class="pre">txn_complete</span></code>.</p>
+</div>
+<div class="section" id="wal-thread">
+<h2>WAL thread<a class="headerlink" href="#wal-thread" title="Permalink to this headline">¶</a></h2>
+<p>Because writting data to the real storage such as hardware drive
+is a way too slower than plain memory access the storage operations
+are implemented in a separate thread.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">wal_init</span><span class="p">(</span><span class="k">enum</span> <span class="n">wal_mode</span> <span class="n">wal_mode</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">wal_dirname</span><span class="p">,</span>
+         <span class="kt">int64_t</span> <span class="n">wal_max_size</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="nc">tt_uuid</span> <span class="o">*</span><span class="n">instance_uuid</span><span class="p">,</span>
+         <span class="n">wal_on_garbage_collection_f</span> <span class="n">on_garbage_collection</span><span class="p">,</span>
+         <span class="n">wal_on_checkpoint_threshold_f</span> <span class="n">on_checkpoint_threshold</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* Initialize the state. */</span>
+    <span class="k">struct</span> <span class="nc">wal_writer</span> <span class="o">*</span><span class="n">writer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">wal_writer_singleton</span><span class="p">;</span>
+    <span class="n">wal_writer_create</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">wal_mode</span><span class="p">,</span> <span class="n">wal_dirname</span><span class="p">,</span>
+                      <span class="n">wal_max_size</span><span class="p">,</span> <span class="n">instance_uuid</span><span class="p">,</span>
+                      <span class="n">on_garbage_collection</span><span class="p">,</span>
+                      <span class="n">on_checkpoint_threshold</span><span class="p">);</span>
+
+    <span class="cm">/* Start WAL thread. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cord_costart</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">cord</span><span class="p">,</span> <span class="s">&quot;wal&quot;</span><span class="p">,</span> <span class="n">wal_writer_f</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">-1</span><span class="p">;</span>
+
+    <span class="cm">/* Create a pipe to WAL thread. */</span>
+    <span class="n">cpipe_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">,</span> <span class="s">&quot;wal&quot;</span><span class="p">);</span>
+    <span class="n">cpipe_set_max_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">,</span> <span class="n">IOV_MAX</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">writer-&gt;cord</span></code> points to the statically allocated
+<code class="docutils literal notranslate"><span class="pre">wal_writer_singleton</span></code>. In <code class="docutils literal notranslate"><span class="pre">cord_costart</span></code> we start
+a new cord</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">cord_costart</span>
+    <span class="p">...</span>
+    <span class="n">cord_start</span><span class="p">(</span><span class="n">cord</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cord_costart_thread_func</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+        <span class="p">...</span>
+        <span class="n">cord</span><span class="o">-&gt;</span><span class="n">loop</span> <span class="o">=</span> <span class="n">ev_loop_new</span><span class="p">()</span>
+        <span class="p">...</span>
+        <span class="n">tt_pthread_create</span><span class="p">(</span><span class="n">cord_thread_func</span><span class="p">)</span>
+            <span class="c1">// New thread</span>
+            <span class="n">cord_thread_func</span>
+                <span class="n">cord_create</span>
+                <span class="n">cord_costart_thread_func</span>
+                    <span class="n">fiber_new</span><span class="p">(</span><span class="s">&quot;main&quot;</span><span class="p">,</span> <span class="n">wal_writer_f</span><span class="p">);</span>
+                        <span class="n">wal_writer_f</span>
+</pre></div>
+</div>
+<p>Once the new event loop is allocated this thread runs <code class="docutils literal notranslate"><span class="pre">wal_writer_f</span></code></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">wal_writer_f</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+    <span class="k">struct</span> <span class="nc">wal_writer</span> <span class="o">*</span><span class="n">writer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">wal_writer_singleton</span><span class="p">;</span>
+    <span class="c1">// Init coio in this thread</span>
+    <span class="n">coio_enable</span><span class="p">();</span>
+
+    <span class="c1">// This is new thread and new cord thus</span>
+    <span class="c1">// we need own fiber scheduler, this is</span>
+    <span class="c1">// event consumer.</span>
+    <span class="k">struct</span> <span class="nc">cbus_endpoint</span> <span class="n">endpoint</span><span class="p">;</span>
+    <span class="n">cbus_endpoint_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">endpoint</span><span class="p">,</span> <span class="s">&quot;wal&quot;</span><span class="p">,</span> <span class="n">fiber_schedule_cb</span><span class="p">,</span> <span class="n">fiber</span><span class="p">());</span>
+
+    <span class="c1">// This one is event producer from wal thread to</span>
+    <span class="c1">// the main thread.</span>
+    <span class="n">cpipe_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">tx_prio_pipe</span><span class="p">,</span> <span class="s">&quot;tx_prio&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Enter the event loop</span>
+    <span class="n">cbus_loop</span><span class="p">(</span><span class="o">&amp;</span><span class="n">endpoint</span><span class="p">);</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>We’re running a new thread with own event loop and a fiber scheduler.
+To communicate with this cord we use communication bus (<code class="docutils literal notranslate"><span class="pre">cbus</span></code>) engine
+(the very rought <code class="docutils literal notranslate"><span class="pre">cbus</span></code> arhitecure is the following: there are endpoints
+with names which are event consumers, and cpipe peers which are event producers;
+producer push an event into endpoints and <code class="docutils literal notranslate"><span class="pre">cbus</span></code> deliver a message to
+the destination by specified routes).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cbus_endpoint_create</span></code> creates <code class="docutils literal notranslate"><span class="pre">&quot;wal&quot;</span></code> endpoint which is
+an event consumer (ie inside newly created wal thread).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">cbus_endpoint_create</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cbus_endpoint</span> <span class="o">*</span><span class="n">endpoint</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span>
+                     <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">fetch_cb</span><span class="p">)(...),</span>
+                     <span class="kt">void</span> <span class="o">*</span><span class="n">fetch_data</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">snprintf</span><span class="p">(</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">),</span> <span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+    <span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">consumer</span> <span class="o">=</span> <span class="n">loop</span><span class="p">();</span>
+    <span class="p">...</span>
+    <span class="n">ev_async_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">async</span><span class="p">,</span> <span class="n">fetch_cb</span><span class="p">);</span>
+    <span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">async</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">fetch_data</span><span class="p">;</span>
+    <span class="n">ev_async_start</span><span class="p">(</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">consumer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">async</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Right after creating the consumer we make an event producer
+<code class="docutils literal notranslate"><span class="pre">writer-&gt;tx_prio_pipe</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">cpipe_create</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cpipe</span> <span class="o">*</span><span class="n">pipe</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">consumer</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">pipe</span><span class="o">-&gt;</span><span class="n">producer</span> <span class="o">=</span> <span class="n">cord</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">loop</span><span class="p">;</span>
+
+    <span class="n">ev_async_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">flush_input</span><span class="p">,</span> <span class="n">cpipe_flush_cb</span><span class="p">);</span>
+    <span class="n">pipe</span><span class="o">-&gt;</span><span class="n">flush_input</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="nc">cbus_endpoint</span> <span class="o">*</span><span class="n">endpoint</span> <span class="o">=</span>
+        <span class="n">cbus_find_endpoint_locked</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cbus</span><span class="p">,</span> <span class="n">consumer</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="n">pipe</span><span class="o">-&gt;</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">writer-&gt;tx_prio_pipe</span></code> connects to the endpoint
+allocated in the main tarantool thread.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">box_cfg_xc</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">cbus_endpoint_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx_prio_endpoint</span><span class="p">,</span> <span class="s">&quot;tx_prio&quot;</span><span class="p">,</span> <span class="n">tx_prio_cb</span><span class="p">...);</span>
+</pre></div>
+</div>
+<p>Thus we have two endpoints - <code class="docutils literal notranslate"><span class="pre">&quot;wal&quot;</span></code> which sits in the wal thread and
+<code class="docutils literal notranslate"><span class="pre">&quot;tx_prio&quot;</span></code> which sits in the main tarantool thread. This allows us to
+notify wal thread from main thread via <code class="docutils literal notranslate"><span class="pre">&quot;wal&quot;</span></code> endpoint and reverse
+via <code class="docutils literal notranslate"><span class="pre">&quot;tx_prio&quot;</span></code> endpoint.</p>
+<p>Back to <code class="docutils literal notranslate"><span class="pre">wal_writer_f</span></code> code: we enter the event loop <code class="docutils literal notranslate"><span class="pre">cbus_loop</span></code>
+and wait for events to to appear (via traditional <code class="docutils literal notranslate"><span class="pre">libev</span></code> delivery).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">cbus_loop</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cbus_endpoint</span> <span class="o">*</span><span class="n">endpoint</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cbus_process</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fiber_is_cancelled</span><span class="p">())</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="n">fiber_yield</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cbus_process</span></code> above fetches message from a queue and
+process them (or we call it <code class="docutils literal notranslate"><span class="pre">cmsg_deliver</span></code> which is basically
+a chain of function pointers and cpipes to notify).</p>
+<p>Now back to <code class="docutils literal notranslate"><span class="pre">wal_init</span></code>. The wal thread is running but we need
+to push the messages to it from our side. For this sake we create
+a communication pipe (cpipe).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">wal_init</span>
+    <span class="p">...</span>
+    <span class="cm">/* Create a pipe to WAL thread. */</span>
+    <span class="n">cpipe_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">,</span> <span class="s">&quot;wal&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Since endpoint name is <code class="docutils literal notranslate"><span class="pre">&quot;wal&quot;</span></code> this cpipe will be nofitying
+wal thread.</p>
+<p>In summary we have:</p>
+<blockquote>
+<div><ul class="simple">
+<li>endpoint <code class="docutils literal notranslate"><span class="pre">&quot;tx_prio&quot;</span></code> which listens for events inside
+main tarantool thread;</li>
+<li>endpoint <code class="docutils literal notranslate"><span class="pre">&quot;wal&quot;</span></code> for events inside wal thread;</li>
+<li>cpipe <code class="docutils literal notranslate"><span class="pre">tx_prio_pipe</span></code> to notify main thread from
+inside of wal thread;</li>
+<li>cpipe <code class="docutils literal notranslate"><span class="pre">wal_pipe</span></code> to notify wal thread from
+inside of main thread.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="write-data-to-wal">
+<h3>Write data to WAL<a class="headerlink" href="#write-data-to-wal" title="Permalink to this headline">¶</a></h3>
+<p>When we need to issue a real write we allocate an journal entry
+which has a complete set of data to be written in a one pass.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">journal_entry</span> <span class="p">{</span>
+    <span class="c1">// To link entries</span>
+    <span class="k">struct</span> <span class="nc">stailq_entry</span>         <span class="n">fifo</span><span class="p">;</span>
+    <span class="c1">// vclock or error code</span>
+    <span class="kt">int64_t</span>                     <span class="n">res</span><span class="p">;</span>
+    <span class="c1">// transaction completions</span>
+    <span class="n">journal_entry_complete_cb</span>   <span class="n">on_complete_cb</span><span class="p">;</span>
+    <span class="kt">void</span>                        <span class="o">*</span><span class="n">on_complete_cb_data</span><span class="p">;</span>
+    <span class="c1">// real user data to write</span>
+    <span class="kt">size_t</span>                      <span class="n">approx_len</span><span class="p">;</span>
+    <span class="kt">int</span>                         <span class="n">n_rows</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">xrow_header</span>          <span class="o">*</span><span class="n">rows</span><span class="p">[];</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>We are not interested in specific data associated with the write
+but need to point that entries are chained via <code class="docutils literal notranslate"><span class="pre">fifo</span></code> member
+and comes in strict order to be able to rollback if something goes
+wrong.</p>
+<p>Once allocated the entry is passed to</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">wal_write</span><span class="p">(</span><span class="k">struct</span> <span class="nc">journal</span> <span class="o">*</span><span class="n">journal</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">journal_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">wal_msg</span> <span class="o">*</span><span class="p">)</span><span class="n">mempool_alloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">msg_pool</span><span class="p">);</span>
+    <span class="n">wal_msg_create</span><span class="p">(</span><span class="n">batch</span><span class="p">);</span>
+    <span class="n">stailq_add_tail_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">commit</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">fifo</span><span class="p">);</span>
+    <span class="n">cpipe_push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="n">cpipe_flush_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here we allocate the communication record (<code class="docutils literal notranslate"><span class="pre">wal_msg_create</span></code>)
+then bind journal entry into it, push it into <code class="docutils literal notranslate"><span class="pre">writer-&gt;wal_pipe</span></code>
+and notify the producer that there is data to handle. Note that
+notification does not mean the data gonna be handled immediately
+but get queued into the event loop. The loop here is our main cord
+loop (remember as we create <code class="docutils literal notranslate"><span class="pre">writer-&gt;wal_pipe</span></code> in <code class="docutils literal notranslate"><span class="pre">wal_write</span></code>).</p>
+<p>Once main loop start handling this message it calls a callback
+associated with this wal pipe</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span>
+<span class="n">cpipe_flush_input</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cpipe</span> <span class="o">*</span><span class="n">pipe</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">n_input</span> <span class="o">&lt;</span> <span class="n">pipe</span><span class="o">-&gt;</span><span class="n">max_input</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ev_feed_event</span><span class="p">(</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">producer</span><span class="p">,</span>
+                      <span class="o">&amp;</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">flush_input</span><span class="p">,</span> <span class="n">EV_CUSTOM</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ev_invoke</span><span class="p">(</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">producer</span><span class="p">,</span>
+                  <span class="o">&amp;</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">flush_input</span><span class="p">,</span> <span class="n">EV_CUSTOM</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The associated call is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">cpipe_flush_cb</span><span class="p">(</span><span class="n">ev_loop</span> <span class="o">*</span><span class="n">loop</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">ev_async</span> <span class="o">*</span><span class="n">watcher</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">cbus_endpoint</span> <span class="o">*</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">-&gt;</span><span class="n">endpoint</span><span class="p">;</span>
+    <span class="p">...</span>
+    <span class="n">stailq_concat</span><span class="p">(</span><span class="o">&amp;</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">output</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pipe</span><span class="o">-&gt;</span><span class="n">input</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="n">ev_async_send</span><span class="p">(</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">consumer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">endpoint</span><span class="o">-&gt;</span><span class="n">async</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">endpoint</span></code> belongs to wal-thread event loop to
+which we send the notifcation. Once notification received
+it runs a callback which has been initialized earlier in
+<code class="docutils literal notranslate"><span class="pre">wal_write</span></code></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">wal_write</span><span class="p">(</span><span class="k">struct</span> <span class="nc">journal</span> <span class="o">*</span><span class="n">journal</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">journal_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">wal_msg_create</span><span class="p">(</span><span class="n">batch</span><span class="p">);</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>where</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="k">struct</span> <span class="nc">cmsg_hop</span> <span class="n">wal_request_route</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">{</span><span class="n">wal_write_to_disk</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wal_writer_singleton</span><span class="p">.</span><span class="n">tx_prio_pipe</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">tx_schedule_commit</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">void</span>
+<span class="n">wal_msg_create</span><span class="p">(</span><span class="k">struct</span> <span class="nc">wal_msg</span> <span class="o">*</span><span class="n">batch</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cmsg_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">,</span> <span class="n">wal_request_route</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In other words the <code class="docutils literal notranslate"><span class="pre">cbus_loop</span></code> inside wal thread wakes
+and fetches the message (we’re sharing memory between main
+tarantool thread and wal thread) and manage that named “route”
+functions one by one in direct order.</p>
+<p>The routing functions are a bit tricky: the first argument
+is the function to call and the second is the cpipe to feed
+event to once function is complete.</p>
+<p>First the <code class="docutils literal notranslate"><span class="pre">wal_write_to_disk</span></code> tries to write journal entries
+in a batch to the storage. Actually it does a way more than
+simply write to the disk but we’re not going to consider it right now.
+What is important is that each journal entry gets <code class="docutils literal notranslate"><span class="pre">vclock</span></code> value
+assigned to the <code class="docutils literal notranslate"><span class="pre">journal_entry:res</span></code> member (which is set to
+<code class="docutils literal notranslate"><span class="pre">-1</span></code> on failure).</p>
+<p>Once everything is written the <code class="docutils literal notranslate"><span class="pre">tx_prio_pipe</span></code> is notified
+and then <code class="docutils literal notranslate"><span class="pre">tx_schedule_commit</span></code> is running inside main thread.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">tx_schedule_queue</span><span class="p">(</span><span class="k">struct</span> <span class="nc">stailq</span> <span class="o">*</span><span class="n">queue</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">journal_entry</span> <span class="o">*</span><span class="n">req</span><span class="p">,</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
+    <span class="n">stailq_foreach_entry_safe</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">fifo</span><span class="p">)</span>
+        <span class="n">journal_entry_complete</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span>
+<span class="n">tx_schedule_commit</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cmsg</span> <span class="o">*</span><span class="n">msg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">wal_writer</span> <span class="o">*</span><span class="n">writer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">wal_writer_singleton</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">wal_msg</span> <span class="o">*</span><span class="n">batch</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">wal_msg</span> <span class="o">*</span><span class="p">)</span> <span class="n">msg</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stailq_empty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">rollback</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">stailq_concat</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">rollback</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">rollback</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">tx_schedule_queue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">commit</span><span class="p">);</span>
+    <span class="n">mempool_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">msg_pool</span><span class="p">,</span> <span class="p">...);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here we call a callback associated with journal entry (it is been
+assigned during entry allocation we will talk about it later) and
+then drop the cbus message back to free pool.</p>
+<p>In summary:</p>
+<blockquote>
+<div><ul class="simple">
+<li>we notify the wal thread via <code class="docutils literal notranslate"><span class="pre">wal_pipe</span></code>;</li>
+<li>wal thread runs <code class="docutils literal notranslate"><span class="pre">wal_write_to_disk</span></code> and
+notifies main thread via <code class="docutils literal notranslate"><span class="pre">tx_prio_pipe</span></code>;</li>
+<li>main thread runs <code class="docutils literal notranslate"><span class="pre">tx_schedule_commit</span></code>.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="transactions-processing">
+<h2>Transactions processing<a class="headerlink" href="#transactions-processing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="transactions-processing-in-1-x-series">
+<h3>Transactions processing in 1.x series<a class="headerlink" href="#transactions-processing-in-1-x-series" title="Permalink to this headline">¶</a></h3>
+<p>In this series all transactions are processed in synchronous
+way. The journal entry carries no callbacks. We allocate the
+journal entry and bind the transaction into from inside of
+the main cord</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span>
+<span class="n">txn_begin</span><span class="p">(</span><span class="kt">bool</span> <span class="n">is_autocommit</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="kt">int64_t</span> <span class="n">txn_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span> <span class="o">=</span> <span class="n">region_alloc_object</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fiber</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">gc</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">txn</span><span class="p">);</span>
+    <span class="n">txn</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="o">++</span><span class="n">txn_id</span><span class="p">;</span>
+    <span class="n">txn</span><span class="o">-&gt;</span><span class="n">signature</span> <span class="o">=</span> <span class="mi">-1</span><span class="p">;</span>
+    <span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine_tx</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">fiber_set_txn</span><span class="p">(</span><span class="n">fiber</span><span class="p">(),</span> <span class="n">txn</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">txn</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>which implies that the fiber which issue the trancaction
+must not be freed until the transaction processing is finished.
+The <code class="docutils literal notranslate"><span class="pre">txn-&gt;signature</span></code> is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code> pointing that
+transaction has not yet been processed (same code is used
+in case if transaction has failed though). The <code class="docutils literal notranslate"><span class="pre">signature</span></code>
+is set to vclock upon transaction completion by the wal engine.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">txn_commit</span><span class="p">(</span><span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">engine_prepare</span><span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span><span class="p">,</span> <span class="n">txn</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">goto</span> <span class="n">fail</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">n_rows</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">txn</span><span class="o">-&gt;</span><span class="n">signature</span> <span class="o">=</span> <span class="n">txn_write_to_wal</span><span class="p">(</span><span class="n">txn</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">signature</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">goto</span> <span class="n">fail</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">engine_commit</span><span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span><span class="p">,</span> <span class="n">txn</span><span class="p">);</span>
+
+    <span class="n">fiber_gc</span><span class="p">();</span>
+    <span class="n">fiber_set_txn</span><span class="p">(</span><span class="n">fiber</span><span class="p">(),</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nl">fail</span><span class="p">:</span>
+    <span class="n">txn_rollback</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The key moment here is <code class="docutils literal notranslate"><span class="pre">txn_write_to_wal</span></code> function which
+sends the transaction to the journal engine, which in turn passes
+it to the wal thread.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int64_t</span>
+<span class="n">txn_write_to_wal</span><span class="p">(</span><span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">journal_entry</span> <span class="o">*</span><span class="n">req</span> <span class="o">=</span> <span class="n">journal_entry_new</span><span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">n_rows</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="kt">int64_t</span> <span class="n">res</span> <span class="o">=</span> <span class="n">journal_write</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">txn_rollback</span><span class="p">();</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">journal_write</span></code> sends to wal thread and what is
+important it yields the current fiber. Unlinke 2.x series
+there is no callbacks associated with journal entry we just
+wake up the fiber which has initiated the transaction (the
+fiber initiating the transaction saves pointer to the self
+in <code class="docutils literal notranslate"><span class="pre">journal_entry</span></code> structure.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// main cord thread</span>
+<span class="n">wal_write</span>
+    <span class="c1">// notify wal thread about queued data</span>
+    <span class="n">cpipe_flush_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">wal_pipe</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="kt">bool</span> <span class="n">cancellable</span> <span class="o">=</span> <span class="n">fiber_set_cancellable</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">fiber_yield</span><span class="p">();</span>
+    <span class="n">fiber_set_cancellable</span><span class="p">(</span><span class="n">cancellable</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">res</span><span class="p">;</span>
+
+<span class="c1">// wal thread</span>
+<span class="n">wal_write_to_disk</span>
+    <span class="p">...</span>
+    <span class="c1">// notify main thread</span>
+    <span class="n">wal_writer_singleton</span><span class="p">.</span><span class="n">tx_prio_pipe</span>
+
+<span class="c1">// main thread</span>
+<span class="n">tx_schedule_queue</span>
+    <span class="n">stailq_foreach_entry</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">fifo</span><span class="p">)</span>
+        <span class="n">fiber_wakeup</span><span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">fiber</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Thus the transaction is woken up once wal thread finished
+processing of the transaction and wrote the entry to the
+storage.</p>
+<p>Then the fiber from <code class="docutils literal notranslate"><span class="pre">wal_write</span></code> is woken up and test
+for write result via <code class="docutils literal notranslate"><span class="pre">txn-&gt;signature</span></code> and either
+pass the commit to engine or calls <code class="docutils literal notranslate"><span class="pre">txn_rollback</span></code>
+to rollback the transaction on failure.</p>
+</div>
+<div class="section" id="transactions-processing-in-2-x-series">
+<h3>Transactions processing in 2.x series<a class="headerlink" href="#transactions-processing-in-2-x-series" title="Permalink to this headline">¶</a></h3>
+<p>The transaction processing in 2.x series is almost the same
+as in 1.x with one significant exception - journal writes
+became asynchronous. We bind callback <code class="docutils literal notranslate"><span class="pre">txn_entry_complete_cb</span></code>
+to the journal entry which completes the transaction. This
+has been done in the sake of parallel applier (which is heavily
+used in replication engine).</p>
+<p>Thus the <code class="docutils literal notranslate"><span class="pre">txn_write</span></code> routine does not wait for transaction
+to complete, still for synchrounous transactions we wait explicitly
+until the journal callback finished</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">txn_commit</span><span class="p">(</span><span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">txn</span><span class="o">-&gt;</span><span class="n">fiber</span> <span class="o">=</span> <span class="n">fiber</span><span class="p">();</span>
+
+    <span class="c1">// Async processing</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn_write</span><span class="p">(</span><span class="n">txn</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">-1</span><span class="p">;</span>
+
+    <span class="c1">// Wait for completion</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">txn_has_flag</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="n">TXN_IS_DONE</span><span class="p">))</span> <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">cancellable</span> <span class="o">=</span> <span class="n">fiber_set_cancellable</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+        <span class="n">fiber_yield</span><span class="p">();</span>
+        <span class="n">fiber_set_cancellable</span><span class="p">(</span><span class="n">cancellable</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">txn</span><span class="o">-&gt;</span><span class="n">signature</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">-1</span><span class="p">;</span>
+    <span class="n">txn_free</span><span class="p">(</span><span class="n">txn</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="wal-fmt.html" class="btn btn-neutral float-right" title="WAL file binary format" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="relay.html" class="btn btn-neutral float-left" title="Relay" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

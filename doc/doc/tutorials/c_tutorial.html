@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C tutorial &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>C tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/tutorials/c_tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c-tutorial">
+<h1>C tutorial<a class="headerlink" href="#c-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Here is one C tutorial:
+<a class="reference internal" href="#f-c-tutorial-c-stored-procedures"><span class="std std-ref">C stored procedures</span></a>.</p>
+<div class="section" id="c-stored-procedures">
+<span id="f-c-tutorial-c-stored-procedures"></span><h2>C stored procedures<a class="headerlink" href="#c-stored-procedures" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool can call C code with <a class="reference internal" href="../book/app_server/creating_app.html#app-server-modules"><span class="std std-ref">modules</span></a>,
+or with <a class="reference internal" href="../book/app_server/cookbook.html#cookbook-ffi-printf"><span class="std std-ref">ffi</span></a>,
+or with C stored procedures.
+This tutorial only is about the third option, C stored procedures.
+In fact the routines are always “C functions” but the phrase
+“stored procedure” is commonly used for historical reasons.</p>
+<p>In this tutorial, which can be followed by anyone with a Tarantool
+development package and a C compiler, there are five tasks:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#f-c-tutorial-easy"><span class="std std-ref">easy.c</span></a> – prints “hello world”;</li>
+<li><a class="reference internal" href="#f-c-tutorial-harder"><span class="std std-ref">harder.c</span></a> – decodes a passed parameter value;</li>
+<li><a class="reference internal" href="#f-c-tutorial-hardest"><span class="std std-ref">hardest.c</span></a> – uses the C API to do a DBMS insert;</li>
+<li><a class="reference internal" href="#f-c-tutorial-read"><span class="std std-ref">read.c</span></a> – uses the C API to do a DBMS select;</li>
+<li><a class="reference internal" href="#f-c-tutorial-write"><span class="std std-ref">write.c</span></a> – uses the C API to do a DBMS replace.</li>
+</ol>
+<p>After following the instructions, and seeing that the results
+are what is described here, users should feel confident about
+writing their own stored procedures.</p>
+<p><strong>Preparation</strong></p>
+<p>Check that these items exist on the computer:</p>
+<ul class="simple">
+<li>Tarantool 1.10</li>
+<li>A gcc compiler, any modern version should work</li>
+<li><code class="docutils literal notranslate"><span class="pre">module.h</span></code> and files #included in it</li>
+<li><code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">libmsgpuck.a</span></code> (only for some recent msgpuck versions)</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">module.h</span></code> file will exist if Tarantool was installed from source.
+Otherwise Tarantool’s “developer” package must be installed.
+For example on Ubuntu say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install tarantool-dev
+</pre></div>
+</div>
+<p>or on Fedora say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dnf -y install tarantool-devel
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code> file will exist if Tarantool was installed from source.
+Otherwise the “msgpuck” package must be installed from
+<a class="reference external" href="https://github.com/tarantool/msgpuck">https://github.com/tarantool/msgpuck</a>.</p>
+<p>Both <code class="docutils literal notranslate"><span class="pre">module.h</span></code> and <code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code> must be on the include path for the
+C compiler to see them.
+For example, if <code class="docutils literal notranslate"><span class="pre">module.h</span></code> address is <code class="docutils literal notranslate"><span class="pre">/usr/local/include/tarantool/module.h</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code> address is <code class="docutils literal notranslate"><span class="pre">/usr/local/include/msgpuck/msgpuck.h</span></code>,
+and they are not currently on the include path, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">CPATH</span><span class="o">=</span>/usr/local/include/tarantool:/usr/local/include/msgpuck
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">libmsgpuck.a</span></code> static library is necessary with msgpuck versions
+produced after February 2017. If and only if you encounter linking
+problems when using the gcc statements in the examples for this tutorial, you should
+put <code class="docutils literal notranslate"><span class="pre">libmsgpuck.a</span></code> on the path (<code class="docutils literal notranslate"><span class="pre">libmsgpuck.a</span></code> is produced from both msgpuck
+and Tarantool source downloads so it should be easy to find). For
+example, instead of “<code class="code docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">-shared</span> <span class="pre">-o</span> <span class="pre">harder.so</span> <span class="pre">-fPIC</span> <span class="pre">harder.c</span></code>”
+for the second example below, you will need to say
+“<code class="code docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">-shared</span> <span class="pre">-o</span> <span class="pre">harder.so</span> <span class="pre">-fPIC</span> <span class="pre">harder.c</span> <span class="pre">libmsgpuck.a</span></code>”.</p>
+<p>Requests will be done using Tarantool as a
+<a class="reference internal" href="../book/admin/server_introspection.html#admin-using-tarantool-as-a-client"><span class="std std-ref">client</span></a>.
+Start Tarantool, and enter these requests.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="mi">3306</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;capi_test&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">capi_test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">)</span>
+<span class="n">net_box</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;net.box&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span> <span class="o">=</span> <span class="n">net_box</span><span class="p">:</span><span class="n">new</span><span class="p">(</span><span class="mi">3306</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In plainer language: create a space named <code class="docutils literal notranslate"><span class="pre">capi_test</span></code>,
+and make a connection to self named <code class="docutils literal notranslate"><span class="pre">capi_connection</span></code>.</p>
+<p>Leave the client running. It will be necessary to enter more requests later.</p>
+<p id="f-c-tutorial-easy"><strong>easy.c</strong></p>
+<p>Start another shell. Change directory (<code class="docutils literal notranslate"><span class="pre">cd</span></code>) so that it is
+the same as the directory that the client is running on.</p>
+<p>Create a file. Name it <code class="docutils literal notranslate"><span class="pre">easy.c</span></code>. Put these six lines in it.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;module.h&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">easy</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;hello world</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">easy2</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;hello world -- easy2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile the program, producing a library file named <code class="docutils literal notranslate"><span class="pre">easy.so</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -shared -o easy.so -fPIC easy.c
+</pre></div>
+</div>
+<p>Now go back to the client and execute these requests:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;easy&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;easy&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;easy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If these requests appear unfamiliar,
+re-read the descriptions of
+<a class="reference internal" href="../reference/reference_lua/box_schema.html#box-schema-func-create"><span class="std std-ref">box.schema.func.create()</span></a>,
+<a class="reference internal" href="../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">box.schema.user.grant()</span></a>
+and <a class="reference internal" href="../reference/reference_lua/net_box.html#net-box-call"><span class="std std-ref">conn:call()</span></a>.</p>
+<p>The function that matters is <code class="docutils literal notranslate"><span class="pre">capi_connection:call('easy')</span></code>.</p>
+<p>Its first job is to find the ‘easy’ function, which should
+be easy because by default Tarantool looks on the current
+directory for a file named <code class="docutils literal notranslate"><span class="pre">easy.so</span></code>.</p>
+<p>Its second job is to call the ‘easy’ function.
+Since the <code class="docutils literal notranslate"><span class="pre">easy()</span></code> function in <code class="docutils literal notranslate"><span class="pre">easy.c</span></code> begins with <code class="docutils literal notranslate"><span class="pre">printf(&quot;hello</span> <span class="pre">world\n&quot;)</span></code>,
+the words “hello world” will appear on the screen.</p>
+<p>Its third job is to check that the call was successful.
+Since the <code class="docutils literal notranslate"><span class="pre">easy()</span></code> function in <code class="docutils literal notranslate"><span class="pre">easy.c</span></code> ends with <code class="code docutils literal notranslate"><span class="pre">return</span> <span class="pre">0</span></code>,
+there is no error message to display and the request is over.</p>
+<p>The result should look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; capi_connection:call(&#39;easy&#39;)
+hello world
+---
+- []
+...
+</pre></div>
+</div>
+<p>Now let’s call the other function in easy.c – <code class="docutils literal notranslate"><span class="pre">easy2()</span></code>.
+This is almost the same as the <code class="docutils literal notranslate"><span class="pre">easy()</span></code> function, but there’s a detail:
+when the file name is not the same as the function name,
+then we have to specify
+<code class="samp docutils literal notranslate"><em><span class="pre">file-name</span></em><span class="pre">.</span><em><span class="pre">function-name</span></em></code>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;easy.easy2&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;easy.easy2&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;easy.easy2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>… and this time the result will be “hello world – easy2”.</p>
+<p>Conclusion: calling a C function is easy.</p>
+<p id="f-c-tutorial-harder"><strong>harder.c</strong></p>
+<p>Go back to the shell where the <code class="docutils literal notranslate"><span class="pre">easy.c</span></code> program was created.</p>
+<p>Create a file. Name it <code class="docutils literal notranslate"><span class="pre">harder.c</span></code>. Put these 17 lines in it:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;module.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;msgpuck.h&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">harder</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">uint32_t</span> <span class="n">arg_count</span> <span class="o">=</span> <span class="n">mp_decode_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">args</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;arg_count = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">arg_count</span><span class="p">);</span>
+  <span class="kt">uint32_t</span> <span class="n">field_count</span> <span class="o">=</span> <span class="n">mp_decode_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">args</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;field_count = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">field_count</span><span class="p">);</span>
+  <span class="kt">uint32_t</span> <span class="n">val</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">field_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">mp_decode_uint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">args</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;val=%d.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile the program, producing a library file named <code class="docutils literal notranslate"><span class="pre">harder.so</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -shared -o harder.so -fPIC harder.c
+</pre></div>
+</div>
+<p>Now go back to the client and execute these requests:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;harder&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;harder&#39;</span><span class="p">)</span>
+<span class="n">passable_table</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="nb">table.insert</span><span class="p">(</span><span class="n">passable_table</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">table.insert</span><span class="p">(</span><span class="n">passable_table</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">table.insert</span><span class="p">(</span><span class="n">passable_table</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;harder&#39;</span><span class="p">,</span> <span class="n">passable_table</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This time the call is passing a Lua table (<code class="docutils literal notranslate"><span class="pre">passable_table</span></code>)
+to the <code class="docutils literal notranslate"><span class="pre">harder()</span></code> function. The <code class="docutils literal notranslate"><span class="pre">harder()</span></code> function will see it,
+it’s in the <code class="code docutils literal notranslate"><span class="pre">char</span> <span class="pre">*args</span></code> parameter.</p>
+<p>At this point the <code class="docutils literal notranslate"><span class="pre">harder()</span></code> function will start using functions
+defined in <a class="reference external" href="https://github.com/tarantool/msgpuck">msgpuck.h</a>.
+The routines that begin with “mp” are msgpuck functions that
+handle data formatted according to the <a class="reference external" href="http://msgpack.org/">MsgPack</a> specification.
+Passes and returns are always done with this format so
+one must become acquainted with msgpuck
+to become proficient with the C API.</p>
+<p>For now, though, it’s enough to know that <code class="docutils literal notranslate"><span class="pre">mp_decode_array()</span></code>
+returns the number of elements in an array, and <code class="docutils literal notranslate"><span class="pre">mp_decode_uint</span></code>
+returns an unsigned integer, from <code class="code docutils literal notranslate"><span class="pre">args</span></code>. And there’s a side
+effect: when the decoding finishes, <code class="code docutils literal notranslate"><span class="pre">args</span></code> has changed
+and is now pointing to the next element.</p>
+<p>Therefore the first displayed line will be “arg_count = 1”
+because there was only one item passed: <code class="docutils literal notranslate"><span class="pre">passable_table</span></code>. <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+The second displayed line will be “field_count = 3”
+because there are three items in the table. <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+The next three lines will be “1” and “2” and “3”
+because those are the values in the items in the table.</p>
+<p>And now the screen looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; capi_connection:call(&#39;harder&#39;, passable_table)
+arg_count = 1
+field_count = 3
+val=1.
+val=2.
+val=3.
+---
+- []
+...
+</pre></div>
+</div>
+<p>Conclusion: decoding parameter values passed to a
+C function is not easy at first, but there are routines
+to do the job, and they’re documented, and there aren’t
+very many of them.</p>
+<p id="f-c-tutorial-hardest"><strong>hardest.c</strong></p>
+<p>Go back to the shell where the <code class="docutils literal notranslate"><span class="pre">easy.c</span></code>
+and the <code class="docutils literal notranslate"><span class="pre">harder.c</span></code> programs were created.</p>
+<p>Create a file. Name it <code class="docutils literal notranslate"><span class="pre">hardest.c</span></code>. Put these 13 lines in it:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;module.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;msgpuck.h&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">hardest</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">uint32_t</span> <span class="n">space_id</span> <span class="o">=</span> <span class="n">box_space_id_by_name</span><span class="p">(</span><span class="s">&quot;capi_test&quot;</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="s">&quot;capi_test&quot;</span><span class="p">));</span>
+  <span class="kt">char</span> <span class="n">tuple</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span> <span class="cm">/* Must be big enough for mp_encode results */</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tuple_pointer</span> <span class="o">=</span> <span class="n">tuple</span><span class="p">;</span>
+  <span class="n">tuple_pointer</span> <span class="o">=</span> <span class="n">mp_encode_array</span><span class="p">(</span><span class="n">tuple_pointer</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="n">tuple_pointer</span> <span class="o">=</span> <span class="n">mp_encode_uint</span><span class="p">(</span><span class="n">tuple_pointer</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span>
+  <span class="n">tuple_pointer</span> <span class="o">=</span> <span class="n">mp_encode_str</span><span class="p">(</span><span class="n">tuple_pointer</span><span class="p">,</span> <span class="s">&quot;String 2&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">box_insert</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">tuple</span><span class="p">,</span> <span class="n">tuple_pointer</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile the program, producing a library file named <code class="docutils literal notranslate"><span class="pre">hardest.so</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -shared -o hardest.so -fPIC hardest.c
+</pre></div>
+</div>
+<p>Now go back to the client and execute these requests:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;hardest&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;hardest&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;capi_test&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;hardest&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This time the C function is doing three things:</p>
+<ol class="arabic simple">
+<li>finding the numeric identifier of the <code class="docutils literal notranslate"><span class="pre">capi_test</span></code> space
+by calling <code class="docutils literal notranslate"><span class="pre">box_space_id_by_name()</span></code>;</li>
+<li>formatting a tuple using more <code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code> functions;</li>
+<li>inserting a tuple using <code class="docutils literal notranslate"><span class="pre">box_insert()</span></code>.</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">tuple[1024];</span></code> is used here as just a quick way
+of saying “allocate more than enough bytes”. For serious
+programs the developer must be careful to allow enough space for
+all the bytes that the <code class="docutils literal notranslate"><span class="pre">mp_encode</span></code> routines will use up.</p>
+</div>
+<p>Now, still on the client, execute this request:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">capi_test</span><span class="p">:</span><span class="nb">select</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result should look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.capi_test:select()
+---
+- - [10000, &#39;String 2&#39;]
+...
+</pre></div>
+</div>
+<p>This proves that the <code class="docutils literal notranslate"><span class="pre">hardest()</span></code> function succeeded, but
+where did <a class="reference internal" href="../dev_guide/reference_capi/box.html#box-box-space-id-by-name"><span class="std std-ref">box_space_id_by_name()</span></a> and
+<a class="reference internal" href="../dev_guide/reference_capi/box.html#box-box-insert"><span class="std std-ref">box_insert()</span></a> come from?
+Answer: the <a class="reference internal" href="../dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">C API</span></a>.</p>
+<p id="f-c-tutorial-read"><strong>read.c</strong></p>
+<p>Go back to the shell where the <code class="docutils literal notranslate"><span class="pre">easy.c</span></code>
+and the <code class="docutils literal notranslate"><span class="pre">harder.c</span></code> and the <code class="docutils literal notranslate"><span class="pre">hardest.c</span></code> programs were created.</p>
+<p>Create a file. Name it <code class="docutils literal notranslate"><span class="pre">read.c</span></code>. Put these 43 lines in it:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;module.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;msgpuck.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">read</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">char</span> <span class="n">tuple_buf</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>      <span class="cm">/* where the raw MsgPack tuple will be stored */</span>
+  <span class="kt">uint32_t</span> <span class="n">space_id</span> <span class="o">=</span> <span class="n">box_space_id_by_name</span><span class="p">(</span><span class="s">&quot;capi_test&quot;</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="s">&quot;capi_test&quot;</span><span class="p">));</span>
+  <span class="kt">uint32_t</span> <span class="n">index_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>     <span class="cm">/* The number of the space&#39;s first index */</span>
+  <span class="kt">uint32_t</span> <span class="n">key</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>      <span class="cm">/* The key value that box_insert() used */</span>
+  <span class="n">mp_encode_array</span><span class="p">(</span><span class="n">tuple_buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="cm">/* clear */</span>
+  <span class="n">box_tuple_format_t</span> <span class="o">*</span><span class="n">fmt</span> <span class="o">=</span> <span class="n">box_tuple_format_default</span><span class="p">();</span>
+  <span class="n">box_tuple_t</span> <span class="o">*</span><span class="n">tuple</span> <span class="o">=</span> <span class="n">box_tuple_new</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">tuple_buf</span><span class="p">,</span> <span class="n">tuple_buf</span><span class="o">+</span><span class="mi">512</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">tuple</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="n">key_buf</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>          <span class="cm">/* Pass key_buf = encoded key = 1000 */</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">key_end</span> <span class="o">=</span> <span class="n">key_buf</span><span class="p">;</span>
+  <span class="n">key_end</span> <span class="o">=</span> <span class="n">mp_encode_array</span><span class="p">(</span><span class="n">key_end</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="n">key_end</span> <span class="o">=</span> <span class="n">mp_encode_uint</span><span class="p">(</span><span class="n">key_end</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">key_end</span> <span class="o">&lt;</span> <span class="n">key_buf</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">key_buf</span><span class="p">));</span>
+  <span class="cm">/* Get the tuple. There&#39;s no box_select() but there&#39;s this. */</span>
+  <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">box_index_get</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">index_id</span><span class="p">,</span> <span class="n">key_buf</span><span class="p">,</span> <span class="n">key_end</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tuple</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">tuple</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="cm">/* Get each field of the tuple + display what you get. */</span>
+  <span class="kt">int</span> <span class="n">field_no</span><span class="p">;</span>             <span class="cm">/* The first field number is 0. */</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">field_no</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">field_no</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">field_no</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">field</span> <span class="o">=</span> <span class="n">box_tuple_field</span><span class="p">(</span><span class="n">tuple</span><span class="p">,</span> <span class="n">field_no</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">field</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">MP_STR</span> <span class="o">||</span> <span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">MP_UINT</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">MP_UINT</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="kt">uint32_t</span> <span class="n">uint_value</span> <span class="o">=</span> <span class="n">mp_decode_uint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">field</span><span class="p">);</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;uint value=%u.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">uint_value</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="cm">/* if (mp_typeof(*field) == MP_STR) */</span>
+    <span class="p">{</span>
+      <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str_value</span><span class="p">;</span>
+      <span class="kt">uint32_t</span> <span class="n">str_value_length</span><span class="p">;</span>
+      <span class="n">str_value</span> <span class="o">=</span> <span class="n">mp_decode_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">field</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str_value_length</span><span class="p">);</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;string value=%.*s.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">str_value_length</span><span class="p">,</span> <span class="n">str_value</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile the program, producing a library file named <code class="docutils literal notranslate"><span class="pre">read.so</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -shared -o read.so -fPIC read.c
+</pre></div>
+</div>
+<p>Now go back to the client and execute these requests:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;capi_test&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;read&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This time the C function is doing four things:</p>
+<ol class="arabic simple">
+<li>once again, finding the numeric identifier of the <code class="docutils literal notranslate"><span class="pre">capi_test</span></code> space
+by calling <code class="docutils literal notranslate"><span class="pre">box_space_id_by_name()</span></code>;</li>
+<li>formatting a search key = 10000 using more <code class="docutils literal notranslate"><span class="pre">msgpuck.h</span></code> functions;</li>
+<li>getting a tuple using <code class="docutils literal notranslate"><span class="pre">box_index_get()</span></code>;</li>
+<li>going through the tuple’s fields with <code class="docutils literal notranslate"><span class="pre">box_tuple_get()</span></code> and then
+decoding each field depending on its type. In this case, since
+what we are getting is the tuple that we inserted with <code class="docutils literal notranslate"><span class="pre">hardest.c</span></code>,
+we know in advance that the type is either MP_UINT or MP_STR;
+however, it’s very common to have a case statement here with one
+option for each possible type.</li>
+</ol>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">capi_connection:call('read')</span></code> should look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; capi_connection:call(&#39;read&#39;)
+uint value=10000.
+string value=String 2.
+---
+- []
+...
+</pre></div>
+</div>
+<p>This proves that the <code class="docutils literal notranslate"><span class="pre">read()</span></code> function succeeded.
+Once again the important functions that start with <cite>box</cite>
+– <a class="reference internal" href="../dev_guide/reference_capi/box_index.html#c-api-box-index-box-index-get"><span class="std std-ref">box_index_get()</span></a> and
+<a class="reference internal" href="../dev_guide/reference_capi/tuple.html#c-api-tuple-box-tuple-field"><span class="std std-ref">box_tuple_field()</span></a> –
+came from the <a class="reference internal" href="../dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">C API</span></a>.</p>
+<p id="f-c-tutorial-write"><strong>write.c</strong></p>
+<p>Go back to the shell where the programs <code class="docutils literal notranslate"><span class="pre">easy.c</span></code>, <code class="docutils literal notranslate"><span class="pre">harder.c</span></code>, <code class="docutils literal notranslate"><span class="pre">hardest.c</span></code>
+and <code class="docutils literal notranslate"><span class="pre">read.c</span></code> were created.</p>
+<p>Create a file. Name it <code class="docutils literal notranslate"><span class="pre">write.c</span></code>. Put these 24 lines in it:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;module.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;msgpuck.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">write</span><span class="p">(</span><span class="n">box_function_ctx_t</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">args_end</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">space</span> <span class="o">=</span> <span class="s">&quot;capi_test&quot;</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">tuple_buf</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span> <span class="cm">/* Must be big enough for mp_encode results */</span>
+  <span class="kt">uint32_t</span> <span class="n">space_id</span> <span class="o">=</span> <span class="n">box_space_id_by_name</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">space</span><span class="p">));</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">space_id</span> <span class="o">==</span> <span class="n">BOX_ID_NIL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">box_error_set</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">,</span> <span class="n">ER_PROC_C</span><span class="p">,</span>
+    <span class="s">&quot;Can&#39;t find space %s&quot;</span><span class="p">,</span> <span class="s">&quot;capi_test&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tuple_end</span> <span class="o">=</span> <span class="n">tuple_buf</span><span class="p">;</span>
+  <span class="n">tuple_end</span> <span class="o">=</span> <span class="n">mp_encode_array</span><span class="p">(</span><span class="n">tuple_end</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="n">tuple_end</span> <span class="o">=</span> <span class="n">mp_encode_uint</span><span class="p">(</span><span class="n">tuple_end</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="n">tuple_end</span> <span class="o">=</span> <span class="n">mp_encode_uint</span><span class="p">(</span><span class="n">tuple_end</span><span class="p">,</span> <span class="mi">22</span><span class="p">);</span>
+  <span class="n">box_txn_begin</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">box_replace</span><span class="p">(</span><span class="n">space_id</span><span class="p">,</span> <span class="n">tuple_buf</span><span class="p">,</span> <span class="n">tuple_end</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">-1</span><span class="p">;</span>
+  <span class="n">box_txn_commit</span><span class="p">();</span>
+  <span class="n">fiber_sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">);</span>
+  <span class="k">struct</span> <span class="nc">tuple</span> <span class="o">*</span><span class="n">tuple</span> <span class="o">=</span> <span class="n">box_tuple_new</span><span class="p">(</span><span class="n">box_tuple_format_default</span><span class="p">(),</span>
+                                      <span class="n">tuple_buf</span><span class="p">,</span> <span class="n">tuple_end</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">box_return_tuple</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">tuple</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile the program, producing a library file named <code class="docutils literal notranslate"><span class="pre">write.so</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -shared -o write.so -fPIC write.c
+</pre></div>
+</div>
+<p>Now go back to the client and execute these requests:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;capi_test&#39;</span><span class="p">)</span>
+<span class="n">capi_connection</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This time the C function is doing six things:</p>
+<ol class="arabic simple">
+<li>once again, finding the numeric identifier of the <code class="docutils literal notranslate"><span class="pre">capi_test</span></code> space
+by calling <code class="docutils literal notranslate"><span class="pre">box_space_id_by_name()</span></code>;</li>
+<li>making a new tuple;</li>
+<li>starting a transaction;</li>
+<li>replacing a tuple in <code class="docutils literal notranslate"><span class="pre">box.space.capi_test</span></code></li>
+<li>ending a transaction;</li>
+<li>the final line is a replacement for the loop in <code class="docutils literal notranslate"><span class="pre">read.c</span></code> –
+instead of getting each field and printing it, use the
+<code class="docutils literal notranslate"><span class="pre">box_return_tuple(...)</span></code> function to return the entire tuple
+to the caller and let the caller display it.</li>
+</ol>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">capi_connection:call('write')</span></code> should look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; capi_connection:call(&#39;write&#39;)
+---
+- [[1, 22]]
+...
+</pre></div>
+</div>
+<p>This proves that the <code class="docutils literal notranslate"><span class="pre">write()</span></code> function succeeded.
+Once again the important functions that start with <cite>box</cite>
+– <a class="reference internal" href="../dev_guide/reference_capi/txn.html#txn-box-txn-begin"><span class="std std-ref">box_txn_begin()</span></a>,
+<a class="reference internal" href="../dev_guide/reference_capi/txn.html#txn-box-txn-commit"><span class="std std-ref">box_txn_commit()</span></a> and
+<a class="reference internal" href="../dev_guide/reference_capi/box.html#box-box-return-tuple"><span class="std std-ref">box_return_tuple()</span></a> –
+came from the <a class="reference internal" href="../dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">C API</span></a>.</p>
+<p>Conclusion: the long description of the whole C API is
+there for a good reason.
+All of the functions in it can be called from C functions
+which are called from Lua.
+So C “stored procedures” have full access to the database.</p>
+<p><strong>Cleaning up</strong></p>
+<ul class="simple">
+<li>Get rid of each of the function tuples with
+<a class="reference internal" href="../reference/reference_lua/box_schema.html#box-schema-func-drop"><span class="std std-ref">box.schema.func.drop</span></a>.</li>
+<li>Get rid of the <code class="docutils literal notranslate"><span class="pre">capi_test</span></code> space with
+<a class="reference internal" href="../reference/reference_lua/box_space_index.html#box-space-drop"><span class="std std-ref">box.schema.capi_test:drop()</span></a>.</li>
+<li>Remove the <code class="docutils literal notranslate"><span class="pre">.c</span></code> and <code class="docutils literal notranslate"><span class="pre">.so</span></code> files that were created for this
+tutorial.</li>
+</ul>
+<p><strong>An example in the test suite</strong></p>
+<p>Download the source code of Tarantool. Look in a subdirectory
+<code class="code docutils literal notranslate"><span class="pre">test/box</span></code>. Notice that there is a file named
+<code class="code docutils literal notranslate"><span class="pre">tuple_bench.test.lua</span></code> and another file named
+<code class="code docutils literal notranslate"><span class="pre">tuple_bench.c</span></code>. Examine the Lua file and observe
+that it is calling a function in the C file, using the
+same techniques that this tutorial has shown.</p>
+<p>Conclusion: parts of the standard test suite
+use C stored procedures, and they must work,
+because releases don’t happen if Tarantool doesn’t pass the tests.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

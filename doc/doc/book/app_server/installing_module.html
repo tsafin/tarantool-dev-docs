@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installing a module &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installing a module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/app_server/installing_module.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installing-a-module">
+<span id="app-server-installing-module"></span><h1>Installing a module<a class="headerlink" href="#installing-a-module" title="Permalink to this headline">¶</a></h1>
+<p>Modules in Lua and C that come from Tarantool developers and community
+contributors are available in the following locations:</p>
+<ul class="simple">
+<li>Tarantool modules repository (see <a class="reference internal" href="#app-server-installing-module-luarocks"><span class="std std-ref">below</span></a>)</li>
+<li>Tarantool deb/rpm repositories (see <a class="reference internal" href="#app-server-installing-module-debrpm"><span class="std std-ref">below</span></a>)</li>
+</ul>
+<div class="section" id="installing-a-module-from-a-repository">
+<span id="app-server-installing-module-luarocks"></span><h2>Installing a module from a repository<a class="headerlink" href="#installing-a-module-from-a-repository" title="Permalink to this headline">¶</a></h2>
+<p>See
+<a class="reference external" href="https://github.com/tarantool/rocks#managing-modules-with-tarantool-174">README in tarantool/rocks repository</a>
+for detailed instructions.</p>
+</div>
+<div class="section" id="installing-a-module-from-deb-rpm">
+<span id="app-server-installing-module-debrpm"></span><h2>Installing a module from deb/rpm<a class="headerlink" href="#installing-a-module-from-deb-rpm" title="Permalink to this headline">¶</a></h2>
+<p>Follow these steps:</p>
+<ol class="arabic">
+<li><p class="first">Install Tarantool as recommended on the
+<a class="reference external" href="http://tarantool.org/download.html">download page</a>.</p>
+</li>
+<li><p class="first">Install the module you need. Look up the module’s name on
+<a class="reference external" href="http://tarantool.org/rocks.html">Tarantool rocks page</a> and put the prefix
+“tarantool-” before the module name to avoid ambiguity:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># for Ubuntu/Debian:</span>
+<span class="gp">$</span> sudo apt-get install tarantool-&lt;module-name&gt;
+
+<span class="gp">$</span> <span class="c1"># for RHEL/CentOS/Amazon:</span>
+<span class="gp">$</span> sudo yum install tarantool-&lt;module-name&gt;
+</pre></div>
+</div>
+<p>For example, to install the module
+<a class="reference external" href="http://github.com/tarantool/shard">shard</a> on Ubuntu, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install tarantool-shard
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Once these steps are complete, you can:</p>
+<ul>
+<li><p class="first">load any module with</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; name = require(&#39;module-name&#39;)
+</pre></div>
+</div>
+<p>for example:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; shard = require(&#39;shard&#39;)
+</pre></div>
+</div>
+</li>
+<li><p class="first">search locally for installed modules using <code class="docutils literal notranslate"><span class="pre">package.path</span></code> (Lua) or
+<code class="docutils literal notranslate"><span class="pre">package.cpath</span></code> (C):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; package.path
+---
+- ./?.lua;./?/init.lua; /usr/local/share/tarantool/?.lua;/usr/local/share/
+tarantool/?/init.lua;/usr/share/tarantool/?.lua;/usr/share/tarantool/?/ini
+t.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;/
+usr/share/lua/5.1/?.lua;/usr/share/lua/5.1/?/init.lua;
+...
+
+tarantool&gt; package.cpath
+---
+- ./?.so;/usr/local/lib/x86_64-linux-gnu/tarantool/?.so;/usr/lib/x86_64-li
+nux-gnu/tarantool/?.so;/usr/local/lib/tarantool/?.so;/usr/local/lib/x86_64
+-linux-gnu/lua/5.1/?.so;/usr/lib/x86_64-linux-gnu/lua/5.1/?.so;/usr/local/
+lib/lua/5.1/?.so;
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Question-marks stand for the module name that was specified earlier when
+saying <code class="docutils literal notranslate"><span class="pre">require('module-name')</span></code>.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

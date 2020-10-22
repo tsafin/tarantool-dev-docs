@@ -1,0 +1,1316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module socket &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>socket</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/socket.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-socket">
+<span id="socket-module"></span><h1>Module <cite>socket</cite><a class="headerlink" href="#module-socket" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">socket</span></code> module allows exchanging data via BSD sockets with a local or
+remote host in connection-oriented (TCP) or datagram-oriented (UDP) mode.
+Semantics of the calls in the <code class="docutils literal notranslate"><span class="pre">socket</span></code> API closely follow semantics of the
+corresponding POSIX calls.</p>
+<p>The functions for setting up and connecting are <code class="docutils literal notranslate"><span class="pre">socket</span></code>, <code class="docutils literal notranslate"><span class="pre">sysconnect</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tcp_connect</span></code>. The functions for sending data are <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">sendto</span></code>,
+<code class="docutils literal notranslate"><span class="pre">write</span></code>, <code class="docutils literal notranslate"><span class="pre">syswrite</span></code>. The functions for receiving data are <code class="docutils literal notranslate"><span class="pre">recv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">recvfrom</span></code>, <code class="docutils literal notranslate"><span class="pre">read</span></code>. The functions for waiting before sending/receiving
+data are <code class="docutils literal notranslate"><span class="pre">wait</span></code>, <code class="docutils literal notranslate"><span class="pre">readable</span></code>, <code class="docutils literal notranslate"><span class="pre">writable</span></code>. The functions for setting
+flags are <code class="docutils literal notranslate"><span class="pre">nonblock</span></code>, <code class="docutils literal notranslate"><span class="pre">setsockopt</span></code>. The functions for stopping and
+disconnecting are <code class="docutils literal notranslate"><span class="pre">shutdown</span></code>, <code class="docutils literal notranslate"><span class="pre">close</span></code>. The functions for error checking
+are <code class="docutils literal notranslate"><span class="pre">errno</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">socket</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="65%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#socket-socket"><span class="std std-ref">socket()</span></a></td>
+<td>Create a socket</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-tcp-connect"><span class="std std-ref">socket.tcp_connect()</span></a></td>
+<td>Connect a socket to a remote
+host</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-getaddrinfo"><span class="std std-ref">socket.getaddrinfo()</span></a></td>
+<td>Get information about
+a remote site</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-tcp-server"><span class="std std-ref">socket.tcp_server()</span></a></td>
+<td>Make Tarantool act as a TCP
+server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-sysconnect"><span class="std std-ref">socket_object:sysconnect()</span></a></td>
+<td>Connect a socket to a remote
+host</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-send"><span class="std std-ref">socket_object:send()</span></a> <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+<a class="reference internal" href="#socket-send"><span class="std std-ref">socket_object:write()</span></a></td>
+<td>Send data over a connected
+socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-syswrite"><span class="std std-ref">socket_object:syswrite()</span></a></td>
+<td>Write data to the socket
+buffer if non-blocking</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-recv"><span class="std std-ref">socket_object:recv()</span></a></td>
+<td>Read from a connected socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-sysread"><span class="std std-ref">socket_object:sysread()</span></a></td>
+<td>Read data from the socket
+buffer if non-blocking</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-bind"><span class="std std-ref">socket_object:bind()</span></a></td>
+<td>Bind a socket to the given
+host/port</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-listen"><span class="std std-ref">socket_object:listen()</span></a></td>
+<td>Start listening for
+incoming connections</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-accept"><span class="std std-ref">socket_object:accept()</span></a></td>
+<td>Accept a client connection +
+create a connected socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-sendto"><span class="std std-ref">socket_object:sendto()</span></a></td>
+<td>Send a message on a UDP
+socket to a specified host</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-recvfrom"><span class="std std-ref">socket_object:recvfrom()</span></a></td>
+<td>Receive a message on a UDP
+socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-shutdown"><span class="std std-ref">socket_object:shutdown()</span></a></td>
+<td>Shut down a reading end, a
+writing end, or both</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-close"><span class="std std-ref">socket_object:close()</span></a></td>
+<td>Close a socket</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-error"><span class="std std-ref">socket_object:error()</span></a> <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+<a class="reference internal" href="#socket-error"><span class="std std-ref">socket_object:errno()</span></a></td>
+<td>Get information about the
+last error on a socket</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-setsockopt"><span class="std std-ref">socket_object:setsockopt()</span></a></td>
+<td>Set socket flags</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-getsockopt"><span class="std std-ref">socket_object:getsockopt()</span></a></td>
+<td>Get socket flags</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-linger"><span class="std std-ref">socket_object:linger()</span></a></td>
+<td>Set/clear the SO_LINGER flag</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-nonblock"><span class="std std-ref">socket_object:nonblock()</span></a></td>
+<td>Set/get the flag value</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-readable"><span class="std std-ref">socket_object:readable()</span></a></td>
+<td>Wait until something is
+readable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-writable"><span class="std std-ref">socket_object:writable()</span></a></td>
+<td>Wait until something is
+writable</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-wait"><span class="std std-ref">socket_object:wait()</span></a></td>
+<td>Wait until something is
+either readable or writable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-name"><span class="std std-ref">socket_object:name()</span></a></td>
+<td>Get information about the
+connection’s near side</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-peer"><span class="std std-ref">socket_object:peer()</span></a></td>
+<td>Get information about the
+connection’s far side</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#socket-iowait"><span class="std std-ref">socket.iowait()</span></a></td>
+<td>Wait for read/write activity</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#socket-luasocket"><span class="std std-ref">LuaSocket wrapper functions</span></a></td>
+<td>Several methods for
+emulating the LuaSocket API</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Typically a socket session will begin with the setup functions, will set one
+or more flags, will have a loop with sending and receiving functions, will
+end with the teardown functions – as an example at the end of this section
+will show. Throughout, there may be error-checking and waiting functions for
+synchronization. To prevent a fiber containing socket functions from “blocking”
+other fibers, the <a class="reference internal" href="../../book/box/atomic_index.html#atomic-implicit-yields"><span class="std std-ref">implicit yield rules</span></a>
+will cause a yield so that other processes
+may take over, as is the norm for <a class="reference internal" href="../../book/box/atomic_index.html#atomic-cooperative-multitasking"><span class="std std-ref">cooperative multitasking</span></a>.</p>
+<p>For all examples in this section the socket name will be sock and
+the function invocations will look like <code class="docutils literal notranslate"><span class="pre">sock:function_name(...)</span></code>.</p>
+<span class="target" id="module-socket"></span><span class="target" id="socket-socket"></span><dl class="function">
+<dt id="socket.__call">
+<code class="descclassname">socket.</code><code class="descname">__call</code><span class="sig-paren">(</span><em>domain</em>, <em>type</em>, <em>protocol</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.__call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new TCP or UDP socket. The argument values
+are the same as in the <a class="reference external" href="http://man7.org/linux/man-pages/man2/socket.2.html">Linux socket(2) man page</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an unconnected socket, or nil.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">userdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">(</span><span class="s1">&#39;AF_INET&#39;</span><span class="p">,</span> <span class="s1">&#39;SOCK_STREAM&#39;</span><span class="p">,</span> <span class="s1">&#39;tcp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="socket-tcp-connect"></span><dl class="function">
+<dt id="socket.tcp_connect">
+<code class="descclassname">socket.</code><code class="descname">tcp_connect</code><span class="sig-paren">(</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.tcp_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect a socket to a remote host.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>host</strong> (<em>string</em>) – URL or IP address</li>
+<li><strong>port</strong> (<em>number</em>) – port number</li>
+<li><strong>timeout</strong> (<em>number</em>) – timeout</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a connected socket, if no error.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">userdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">tcp_connect</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="socket-getaddrinfo"></span><dl class="function">
+<dt id="socket.getaddrinfo">
+<code class="descclassname">socket.</code><code class="descname">getaddrinfo</code><span class="sig-paren">(</span><em>host</em>, <em>port</em><span class="optional">[</span>, <em>timeout</em><span class="optional">[</span>, <em>{option-list}</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.getaddrinfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">socket.</code><code class="descname">getaddrinfo</code><span class="sig-paren">(</span><em>host</em>, <em>port</em><span class="optional">[</span>, <em>{option-list}</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">socket.getaddrinfo()</span></code> function is useful for finding information
+about a remote site so that the correct arguments for
+<code class="docutils literal notranslate"><span class="pre">sock:sysconnect()</span></code> can be passed.
+This function may use the <a class="reference internal" href="../configuration/index.html#cfg-basic-worker-pool-threads"><span class="std std-ref">worker_pool_threads</span></a>
+configuration parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>host</strong> (<em>string</em>) – URL or IP address</li>
+<li><strong>port</strong> (<em>number</em>) – port number or a string pointing to a port</li>
+<li><strong>timeout</strong> (<em>number</em>) – maximum number of seconds to wait</li>
+<li><strong>options</strong> (<em>table</em>) – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code> – preferred socket type</li>
+<li><code class="docutils literal notranslate"><span class="pre">family</span></code> – desired address family for the
+returned addresses</li>
+<li><code class="docutils literal notranslate"><span class="pre">protocol</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">flags</span></code> – additional options (see details <a class="reference external" href="https://man7.org/linux/man-pages/man3/getaddrinfo.3.html">here</a>)</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A table containing these fields: “host”, “family”, “type”, “protocol”, “port”.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; socket.getaddrinfo(&#39;tarantool.org&#39;, &#39;http&#39;)
+---
+- - host: 188.93.56.70
+    family: AF_INET
+    type: SOCK_STREAM
+    protocol: tcp
+    port: 80
+  - host: 188.93.56.70
+    family: AF_INET
+    type: SOCK_DGRAM
+    protocol: udp
+    port: 80
+...
+-- To find the available values for the options use the following:
+tarantool&gt; socket.internal.AI_FLAGS -- or SO_TYPE, or DOMAIN
+---
+- AI_ALL: 256
+  AI_PASSIVE: 1
+  AI_NUMERICSERV: 4096
+  AI_NUMERICHOST: 4
+  AI_V4MAPPED: 2048
+  AI_ADDRCONFIG: 1024
+  AI_CANONNAME: 2
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="socket-tcp-server"></span><dl class="function">
+<dt id="socket.tcp_server">
+<code class="descclassname">socket.</code><code class="descname">tcp_server</code><span class="sig-paren">(</span><em>host</em>, <em>port</em>, <em>handler-function-or-table</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.tcp_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">socket.tcp_server()</span></code> function makes Tarantool act as a server that
+can accept connections. Usually the same objective
+is accomplished with <a class="reference internal" href="../configuration/index.html#cfg-basic-listen"><span class="std std-ref">box.cfg{listen=…}</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host</strong> (<em>string</em>) – host name or IP</li>
+<li><strong>port</strong> (<em>number</em>) – host port, may be 0</li>
+<li><strong>handler-function-or-table</strong> (<em>function/table</em>) – what to execute when a
+connection occurs</li>
+<li><strong>timeout</strong> (<em>number</em>) – number of seconds to wait before
+timing out</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The handler-function-or-table parameter may be simply a function name
+/ function declaration:
+<code class="code docutils literal notranslate"><span class="pre">handler_function</span></code>. Or it may be a table:
+<code class="code docutils literal notranslate"><span class="pre">{handler</span> <span class="pre">=</span></code>
+<code class="samp docutils literal notranslate"><em><span class="pre">handler_function</span></em> <span class="pre">[,</span> <span class="pre">prepare</span> <span class="pre">=</span> <em><span class="pre">prepare_function</span></em><span class="pre">]</span> <span class="pre">[,</span> <span class="pre">name</span> <span class="pre">=</span> <em><span class="pre">name</span></em><span class="pre">]</span></code>
+<code class="code docutils literal notranslate"><span class="pre">}</span></code>.
+<code class="docutils literal notranslate"><span class="pre">handler_function</span></code> is mandatory; it may have a
+parameter = the socket;
+it is executed once after accept() happens (once per connection);
+it is for continuous
+operation after the connection is made.
+<code class="docutils literal notranslate"><span class="pre">prepare_function</span></code> is optional;
+it may have parameters = the socket object and a table with client information;
+it should return either a backlog value or nothing;
+it is executed only once before bind() on the listening socket
+(not once per connection).
+Examples:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>socket.tcp_server(&#39;localhost&#39;, 3302, function (s) loop_loop() end)
+socket.tcp_server(&#39;localhost&#39;, 3302, {handler=hfunc, name=&#39;name&#39;})
+socket.tcp_server(&#39;localhost&#39;, 3302, {handler=hfunc, prepare=pfunc})
+</pre></div>
+</div>
+<p>For fuller examples see
+<a class="reference internal" href="#socket-socat"><span class="std std-ref">Use tcp_server to accept file contents sent with socat</span></a>
+and
+<a class="reference internal" href="#socket-handler-prepare"><span class="std std-ref">Use tcp_server with handler and prepare</span></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="socket.socket_object">
+<em class="property">class </em><code class="descclassname">socket.</code><code class="descname">socket_object</code><a class="headerlink" href="#socket.socket_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="socket-sysconnect"></span><dl class="method">
+<dt id="socket.socket_object.sysconnect">
+<code class="descname">sysconnect</code><span class="sig-paren">(</span><em>host</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.sysconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect an existing socket to a remote host. The argument values are the same as
+in <a class="reference internal" href="#socket-tcp-connect"><span class="std std-ref">tcp_connect()</span></a>.
+The host must be an IP address.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Either:</dt>
+<dd><ul class="first last">
+<li>host - a string representation of an IPv4 address
+or an IPv6 address;</li>
+<li>port - a number.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Or:</dt>
+<dd><ul class="first last">
+<li>host - a string containing “unix/”;</li>
+<li>port - a string containing a path to a unix socket.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Or:</dt>
+<dd><ul class="first last">
+<li>host - a number, 0 (zero), meaning “all local
+interfaces”;</li>
+<li>port - a number. If a port number is 0 (zero),
+the socket will be bound to a random local port.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the socket object value may change if sysconnect() succeeds.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">socket</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">)</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="s1">&#39;AF_INET&#39;</span><span class="p">,</span> <span class="s1">&#39;SOCK_STREAM&#39;</span><span class="p">,</span> <span class="s1">&#39;tcp&#39;</span><span class="p">)</span>
+<span class="n">sock</span><span class="p">:</span><span class="n">sysconnect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3301</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="socket-send"></span><dl class="method">
+<dt id="socket.socket_object.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.send" title="Permalink to this definition">¶</a></dt>
+<dt id="socket.socket_object.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send data over a connected socket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>string</em>) – what is to be sent</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the number of bytes sent.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: nil on error.</p>
+</dd></dl>
+
+<span class="target" id="socket-syswrite"></span><dl class="method">
+<dt id="socket.socket_object.syswrite">
+<code class="descname">syswrite</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.syswrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write as much data as possible to the socket buffer if non-blocking.
+Rarely used. For details see <a class="reference external" href="https://github.com/tarantool/tarantool/wiki/sockets%201.6">this description</a>.</p>
+</dd></dl>
+
+<span class="target" id="socket-recv"></span><dl class="method">
+<dt id="socket.socket_object.recv">
+<code class="descname">recv</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read <code class="docutils literal notranslate"><span class="pre">size</span></code> bytes from a connected socket. An internal read-ahead
+buffer is used to reduce the cost of this call.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<em>integer</em>) – maximum number of bytes to receive. See <a class="reference internal" href="#socket-recommended"><span class="std std-ref">Recommended size</span></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a string of the requested length on success.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: On error, returns an empty string, followed by status,
+errno, errstr. In case the writing side has closed its
+end, returns the remainder read from the socket (possibly
+an empty string), followed by “eof” status.</p>
+</dd></dl>
+
+<span class="target" id="socket-read"></span><dl class="method">
+<dt id="socket.socket_object.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>limit</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.read" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>delimiter</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>{options}</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Read from a connected socket until some condition is true, and return
+the bytes that were read.
+Reading goes on until <code class="docutils literal notranslate"><span class="pre">limit</span></code> bytes have been read, or a delimiter
+has been read, or a timeout has expired.
+Unlike <code class="docutils literal notranslate"><span class="pre">socket_object:recv</span></code> (which uses an internal read-ahead buffer),
+<code class="docutils literal notranslate"><span class="pre">socket_object:read</span></code> depends on the socket’s buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>limit</strong> (<em>integer</em>) – maximum number of bytes to read, for
+example 50 means “stop after 50 bytes”</li>
+<li><strong>delimiter</strong> (<em>string</em>) – separator for example
+‘?’ means “stop after a question mark”</li>
+<li><strong>timeout</strong> (<em>number</em>) – maximum number of seconds to wait, for
+example 50 means “stop after 50 seconds”.</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="samp docutils literal notranslate"><span class="pre">chunk=</span><em><span class="pre">limit</span></em></code> and/or
+<code class="samp docutils literal notranslate"><span class="pre">delimiter=</span><em><span class="pre">delimiter</span></em></code>,
+for example <code class="code docutils literal notranslate"><span class="pre">{chunk=5,delimiter='x'}</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an empty string if there is nothing more to read, or a nil
+value if error, or a string up to <code class="docutils literal notranslate"><span class="pre">limit</span></code> bytes long,
+which may include the bytes that matched the <code class="docutils literal notranslate"><span class="pre">delimiter</span></code>
+expression.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-sysread"></span><dl class="method">
+<dt id="socket.socket_object.sysread">
+<code class="descname">sysread</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.sysread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return data from the socket buffer if non-blocking.
+In case the socket is blocking, <code class="docutils literal notranslate"><span class="pre">sysread()</span></code> can block the calling process.
+Rarely used. For details, see also
+<a class="reference external" href="https://github.com/tarantool/tarantool/wiki/sockets%201.6">this description</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<em>integer</em>) – maximum number of bytes to read, for
+example 50 means “stop after 50 bytes”</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">an empty string if there is nothing more to read, or a nil
+value if error, or a string up to <code class="docutils literal notranslate"><span class="pre">size</span></code> bytes long.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-bind"></span><dl class="method">
+<dt id="socket.socket_object.bind">
+<code class="descname">bind</code><span class="sig-paren">(</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.bind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bind a socket to the given host/port. A UDP socket after binding
+can be used to receive data (see <a class="reference internal" href="#socket-recvfrom"><span class="std std-ref">socket_object.recvfrom</span></a>).
+A TCP socket can be used to accept new connections, after it has
+been put in listen mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>host</strong> (<em>string</em>) – URL or IP address</li>
+<li><strong>port</strong> (<em>number</em>) – port number</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true for success, false for error.
+If return is false, use <a class="reference internal" href="#socket-error"><span class="std std-ref">socket_object:errno()</span></a>
+or <a class="reference internal" href="#socket-error"><span class="std std-ref">socket_object:error()</span></a> to see details.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-listen"></span><dl class="method">
+<dt id="socket.socket_object.listen">
+<code class="descname">listen</code><span class="sig-paren">(</span><em>backlog</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start listening for incoming connections.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>backlog</strong> – on Linux the listen <code class="docutils literal notranslate"><span class="pre">backlog</span></code> backlog may be from
+<code class="docutils literal notranslate"><span class="pre">/proc/sys/net/core/somaxconn</span></code>, on BSD the backlog
+may be <code class="docutils literal notranslate"><span class="pre">SOMAXCONN</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true for success, false for error.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-accept"></span><dl class="method">
+<dt id="socket.socket_object.accept">
+<code class="descname">accept</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accept a new client connection and create a new connected socket.
+It is good practice to set the socket’s blocking mode explicitly
+after accepting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">new socket if success.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">userdata</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: nil.</p>
+</dd></dl>
+
+<span class="target" id="socket-sendto"></span><dl class="method">
+<dt id="socket.socket_object.sendto">
+<code class="descname">sendto</code><span class="sig-paren">(</span><em>host</em>, <em>port</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.sendto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message on a UDP socket to a specified host.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>host</strong> (<em>string</em>) – URL or IP address</li>
+<li><strong>port</strong> (<em>number</em>) – port number</li>
+<li><strong>data</strong> (<em>string</em>) – what is to be sent</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the number of bytes sent.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">number</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: on error, returns nil and may return status, errno, errstr.</p>
+</dd></dl>
+
+<span class="target" id="socket-recvfrom"></span><dl class="method">
+<dt id="socket.socket_object.recvfrom">
+<code class="descname">recvfrom</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.recvfrom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive a message on a UDP socket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<em>integer</em>) – maximum number of bytes to receive. See <a class="reference internal" href="#socket-recommended"><span class="std std-ref">Recommended size</span></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">message, a table containing “host”, “family” and “port” fields.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string, table</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: on error, returns status, errno, errstr.</p>
+<p><strong>Example:</strong></p>
+<p>After <code class="docutils literal notranslate"><span class="pre">message_content,</span> <span class="pre">message_sender</span> <span class="pre">=</span> <span class="pre">recvfrom(1)</span></code>
+the value of <code class="docutils literal notranslate"><span class="pre">message_content</span></code> might be a string containing ‘X’ and
+the value of <code class="docutils literal notranslate"><span class="pre">message_sender</span></code> might be a table containing</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">message_sender</span><span class="p">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;18.44.0.1&#39;</span>
+<span class="n">message_sender</span><span class="p">.</span><span class="n">family</span> <span class="o">=</span> <span class="s1">&#39;AF_INET&#39;</span>
+<span class="n">message_sender</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">43065</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="socket-shutdown"></span><dl class="method">
+<dt id="socket.socket_object.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><em>how</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shutdown a reading end, a writing end, or both ends of a socket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>how</strong> – socket.SHUT_RD, socket.SHUT_WR, or socket.SHUT_RDWR.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-close"></span><dl class="method">
+<dt id="socket.socket_object.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close (destroy) a socket. A closed socket should not be used any more.
+A socket is closed automatically when the Lua garbage collector removes
+its user data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true on success, false on error. For example, if
+sock is already closed, sock:close() returns false.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-error"></span><dl class="method">
+<dt id="socket.socket_object.error">
+<code class="descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.error" title="Permalink to this definition">¶</a></dt>
+<dt id="socket.socket_object.errno">
+<code class="descname">errno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.errno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about the last error that occurred on a socket, if any.
+Errors do not cause throwing of exceptions so these functions are usually necessary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">result for <code class="docutils literal notranslate"><span class="pre">sock:errno()</span></code>, result for <code class="docutils literal notranslate"><span class="pre">sock:error()</span></code>.
+If there is no error, then <code class="docutils literal notranslate"><span class="pre">sock:errno()</span></code> will return 0 and <code class="docutils literal notranslate"><span class="pre">sock:error()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">number, string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-setsockopt"></span><dl class="method">
+<dt id="socket.socket_object.setsockopt">
+<code class="descname">setsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.setsockopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set socket flags. The argument values are the same as in the
+<a class="reference external" href="http://man7.org/linux/man-pages/man2/setsockopt.2.html">Linux getsockopt(2) man page</a>.
+The ones that Tarantool accepts are:</p>
+<ul class="simple">
+<li>SO_ACCEPTCONN</li>
+<li>SO_BINDTODEVICE</li>
+<li>SO_BROADCAST</li>
+<li>SO_DEBUG</li>
+<li>SO_DOMAIN</li>
+<li>SO_ERROR</li>
+<li>SO_DONTROUTE</li>
+<li>SO_KEEPALIVE</li>
+<li>SO_MARK</li>
+<li>SO_OOBINLINE</li>
+<li>SO_PASSCRED</li>
+<li>SO_PEERCRED</li>
+<li>SO_PRIORITY</li>
+<li>SO_PROTOCOL</li>
+<li>SO_RCVBUF</li>
+<li>SO_RCVBUFFORCE</li>
+<li>SO_RCVLOWAT</li>
+<li>SO_SNDLOWAT</li>
+<li>SO_RCVTIMEO</li>
+<li>SO_SNDTIMEO</li>
+<li>SO_REUSEADDR</li>
+<li>SO_SNDBUF</li>
+<li>SO_SNDBUFFORCE</li>
+<li>SO_TIMESTAMP</li>
+<li>SO_TYPE</li>
+</ul>
+<p>Setting SO_LINGER is done with <code class="docutils literal notranslate"><span class="pre">sock:linger(active)</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="socket-getsockopt"></span><dl class="method">
+<dt id="socket.socket_object.getsockopt">
+<code class="descname">getsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.getsockopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get socket flags. For a list of possible flags see <code class="docutils literal notranslate"><span class="pre">sock:setsockopt()</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="socket-linger"></span><dl class="method">
+<dt id="socket.socket_object.linger">
+<code class="descname">linger</code><span class="sig-paren">(</span><span class="optional">[</span><em>active</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.linger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or clear the SO_LINGER flag. For a description of the flag, see
+the <a class="reference external" href="http://man7.org/linux/man-pages/man1/loginctl.1.html">Linux man page</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>active</strong> (<em>boolean</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new active and timeout values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-nonblock"></span><dl class="method">
+<dt id="socket.socket_object.nonblock">
+<code class="descname">nonblock</code><span class="sig-paren">(</span><span class="optional">[</span><em>flag</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.nonblock" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">sock:nonblock()</span></code> returns the current flag value.</li>
+<li><code class="docutils literal notranslate"><span class="pre">sock:nonblock(false)</span></code> sets the flag to false and returns false.</li>
+<li><code class="docutils literal notranslate"><span class="pre">sock:nonblock(true)</span></code> sets the flag to true and returns true.</li>
+</ul>
+<p>This function may be useful before invoking a function which might
+otherwise block indefinitely.</p>
+</dd></dl>
+
+<span class="target" id="socket-readable"></span><dl class="method">
+<dt id="socket.socket_object.readable">
+<code class="descname">readable</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.readable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until something is readable, or until a timeout value expires.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if the socket is now readable, false if timeout expired;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-writable"></span><dl class="method">
+<dt id="socket.socket_object.writable">
+<code class="descname">writable</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.writable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until something is writable, or until a timeout value expires.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if the socket is now writable, false if timeout expired;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-wait"></span><dl class="method">
+<dt id="socket.socket_object.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until something is either readable or writable, or until a timeout value expires.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘R’ if the socket is now readable, ‘W’ if the socket is now writable, ‘RW’ if the socket is now both readable and writable, ‘’ (empty string) if timeout expired;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-name"></span><dl class="method">
+<dt id="socket.socket_object.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">sock:name()</span></code> function is used to get information about the
+near side of the connection. If a socket was bound to <code class="docutils literal notranslate"><span class="pre">xyz.com:45</span></code>,
+then <code class="docutils literal notranslate"><span class="pre">sock:name</span></code> will return information about <code class="docutils literal notranslate"><span class="pre">[host:xyz.com,</span> <span class="pre">port:45]</span></code>.
+The equivalent POSIX function is <code class="docutils literal notranslate"><span class="pre">getsockname()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A table containing these fields: “host”, “family”, “type”, “protocol”, “port”.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="socket-peer"></span><dl class="method">
+<dt id="socket.socket_object.peer">
+<code class="descname">peer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket_object.peer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">sock:peer()</span></code> function is used to get information about the far side of a connection.
+If a TCP connection has been made to a distant host <code class="docutils literal notranslate"><span class="pre">tarantool.org:80</span></code>, <code class="docutils literal notranslate"><span class="pre">sock:peer()</span></code>
+will return information about <code class="docutils literal notranslate"><span class="pre">[host:tarantool.org,</span> <span class="pre">port:80]</span></code>.
+The equivalent POSIX function is <code class="docutils literal notranslate"><span class="pre">getpeername()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A table containing these fields: “host”, “family”, “type”, “protocol”, “port”.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="socket-iowait"></span><dl class="function">
+<dt id="socket.iowait">
+<code class="descclassname">socket.</code><code class="descname">iowait</code><span class="sig-paren">(</span><em>fd</em>, <em>read-or-write-flags</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.iowait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">socket.iowait()</span></code> function is used to wait until read-or-write activity
+occurs for a file descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fd</strong> – file descriptor</li>
+<li><strong>read-or-write-flags</strong> – ‘R’ or 1 = read, ‘W’ or 2 = write, ‘RW’ or 3 = read|write.</li>
+<li><strong>timeout</strong> – number of seconds to wait</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the fd parameter is nil, then there will be a sleep until the timeout.
+If the timeout parameter is nil or unspecified, then timeout is infinite.</p>
+<p>Ordinarily the return value is the activity that occurred (‘R’ or ‘W’ or ‘RW’ or 1 or 2 or 3).
+If the timeout period goes by without any reading or writing, the
+return is an error = ETIMEDOUT.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">socket.iowait(sock:fd(),</span> <span class="pre">'r',</span> <span class="pre">1.11)</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="luasocket-wrapper-functions">
+<span id="socket-luasocket"></span><h2>LuaSocket wrapper functions<a class="headerlink" href="#luasocket-wrapper-functions" title="Permalink to this headline">¶</a></h2>
+<p>The LuaSocket API has functions that are equivalent to the ones described above,
+with different names and parameters, for example <code class="docutils literal notranslate"><span class="pre">connect()</span></code>
+rather than <code class="docutils literal notranslate"><span class="pre">tcp_connect()</span></code>,
+as well as <code class="docutils literal notranslate"><span class="pre">getpeername</span></code>, <code class="docutils literal notranslate"><span class="pre">getsockname</span></code>, <code class="docutils literal notranslate"><span class="pre">setoption</span></code>, <code class="docutils literal notranslate"><span class="pre">settimeout</span></code>.
+Tarantool supports these functions so that
+third-party packages which depend on them will work.</p>
+<p>The LuaSocket project is on
+<a class="reference external" href="https://github.com/diegonehab/luasocket">github</a>.
+The API description is in the
+<a class="reference external" href="http://w3.impa.br/~diego/software/luasocket/">LuaSocket manual</a>
+(click the “introduction” and “reference” links at the
+bottom of the manual’s main page).</p>
+<p>A Tarantool example is
+<a class="reference internal" href="#socket-wrapper"><span class="std std-ref">Use of a socket with LuaSocket wrapper functions</span></a>.</p>
+</div>
+<div class="section" id="recommended-size">
+<span id="socket-recommended"></span><h2>Recommended size<a class="headerlink" href="#recommended-size" title="Permalink to this headline">¶</a></h2>
+<p>For <code class="docutils literal notranslate"><span class="pre">recv</span></code> and <code class="docutils literal notranslate"><span class="pre">recvfrom</span></code>: use the
+optional <code class="docutils literal notranslate"><span class="pre">size</span></code> parameter to limit the number of bytes to
+receive. A fixed size such as 512 is often reasonable;
+a pre-calculated size that depends on context – such as the
+message format or the state of the network – is often better.
+For <code class="docutils literal notranslate"><span class="pre">recvfrom</span></code>, be aware that a size greater than the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Maximum_transmission_unit">Maximum Transmission Unit</a>
+can cause inefficient transport.
+For Mac OS X, be aware that the size can be tuned by
+changing <code class="docutils literal notranslate"><span class="pre">sysctl</span> <span class="pre">net.inet.udp.maxdgram</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">size</span></code> is not stated: Tarantool will make an extra
+call to calculate how many bytes are necessary. This extra call
+takes time, therefore not stating <code class="docutils literal notranslate"><span class="pre">size</span></code> may be inefficient.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">size</span></code> is stated: on a UDP socket, excess bytes are discarded.
+On a TCP socket, excess bytes are not discarded and can be
+received by the next call.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="use-of-a-tcp-socket-over-the-internet">
+<h3>Use of a TCP socket over the Internet<a class="headerlink" href="#use-of-a-tcp-socket-over-the-internet" title="Permalink to this headline">¶</a></h3>
+<p>In this example a connection is made over the internet between a Tarantool
+instance and tarantool.org, then an HTTP “head” message is sent, and a response
+is received: “<code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span> <span class="pre">200</span> <span class="pre">OK</span></code>” or something else if the site has moved.
+This is not a useful way to communicate
+with this particular site, but shows that the system works.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; socket = require(&#39;socket&#39;)
+---
+...
+tarantool&gt; sock = socket.tcp_connect(&#39;tarantool.org&#39;, 80)
+---
+...
+tarantool&gt; type(sock)
+---
+- table
+...
+tarantool&gt; sock:error()
+---
+- null
+...
+tarantool&gt; sock:send(&quot;HEAD / HTTP/1.0\r\nHost: tarantool.org\r\n\r\n&quot;)
+---
+- 40
+...
+tarantool&gt; sock:read(17)
+---
+- HTTP/1.1 302 Move
+...
+tarantool&gt; sock:close()
+---
+- true
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-of-a-socket-with-luasocket-wrapper-functions">
+<span id="socket-wrapper"></span><h3>Use of a socket with LuaSocket wrapper functions<a class="headerlink" href="#use-of-a-socket-with-luasocket-wrapper-functions" title="Permalink to this headline">¶</a></h3>
+<p>This is a variation of the earlier example
+“Use of a TCP socket over the Internet”.
+It uses <a class="reference internal" href="#socket-luasocket"><span class="std std-ref">LuaSocket wrapper functions</span></a>,
+with a too-short timeout so that a “Connection timed out” error is likely.
+The more common way to specify timeout is with an option of
+<a class="reference internal" href="#socket-tcp-connect"><span class="std std-ref">tcp_connect()</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; socket = require(&#39;socket&#39;)
+---
+...
+tarantool&gt; sock = socket.connect(&#39;tarantool.org&#39;, 80)
+---
+...
+tarantool&gt; sock:settimeout(0.001)
+---
+- 1
+...
+tarantool&gt; sock:send(&quot;HEAD / HTTP/1.0\r\nHost: tarantool.org\r\n\r\n&quot;)
+---
+- 40
+...
+tarantool&gt; sock:receive(17)
+---
+- null
+- Connection timed out
+...
+tarantool&gt; sock:close()
+---
+- 1
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-of-a-udp-socket-on-localhost">
+<h3>Use of a UDP socket on localhost<a class="headerlink" href="#use-of-a-udp-socket-on-localhost" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example with datagrams. Set up two connections on 127.0.0.1
+(localhost): <code class="docutils literal notranslate"><span class="pre">sock_1</span></code> and <code class="docutils literal notranslate"><span class="pre">sock_2</span></code>. Using <code class="docutils literal notranslate"><span class="pre">sock_2</span></code>, send a message
+to <code class="docutils literal notranslate"><span class="pre">sock_1</span></code>. Using <code class="docutils literal notranslate"><span class="pre">sock_1</span></code>, receive a message. Display the received
+message. Close both connections. <a href="#id5"><span class="problematic" id="id6">|br|</span></a> This is not a useful way for a
+computer to communicate with itself, but shows that the system works.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; socket = require(&#39;socket&#39;)
+---
+...
+tarantool&gt; sock_1 = socket(&#39;AF_INET&#39;, &#39;SOCK_DGRAM&#39;, &#39;udp&#39;)
+---
+...
+tarantool&gt; sock_1:bind(&#39;127.0.0.1&#39;)
+---
+- true
+...
+tarantool&gt; sock_2 = socket(&#39;AF_INET&#39;, &#39;SOCK_DGRAM&#39;, &#39;udp&#39;)
+---
+...
+tarantool&gt; sock_2:sendto(&#39;127.0.0.1&#39;, sock_1:name().port,&#39;X&#39;)
+---
+- 1
+...
+tarantool&gt; message = sock_1:recvfrom(512)
+---
+...
+tarantool&gt; message
+---
+- X
+...
+tarantool&gt; sock_1:close()
+---
+- true
+...
+tarantool&gt; sock_2:close()
+---
+- true
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-tcp-server-to-accept-file-contents-sent-with-socat">
+<span id="socket-socat"></span><h3>Use tcp_server to accept file contents sent with socat<a class="headerlink" href="#use-tcp-server-to-accept-file-contents-sent-with-socat" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example of the tcp_server function, reading
+strings from the client and printing them. On the client
+side, the Linux socat utility will be used to ship a
+whole file for the tcp_server function to read.</p>
+<p>Start two shells. The first shell will be a server instance.
+The second shell will be the client.</p>
+<p>On the first shell, start Tarantool and say:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{}</span>
+<span class="n">socket</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">)</span>
+<span class="n">socket</span><span class="p">.</span><span class="n">tcp_server</span><span class="p">(</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="mi">3302</span><span class="p">,</span>
+<span class="p">{</span>
+  <span class="n">handler</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+      <span class="kd">local</span> <span class="n">request</span>
+      <span class="n">request</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+      <span class="kr">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">request</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+        <span class="kr">break</span>
+      <span class="kr">end</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="kr">end</span>
+  <span class="kr">end</span><span class="p">,</span>
+  <span class="n">prepare</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initialized&#39;</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code means:</p>
+<ol class="arabic simple">
+<li>Use <code class="docutils literal notranslate"><span class="pre">tcp_server()</span></code> to wait for a connection from any host on port 3302.</li>
+<li>When it happens, enter a loop that reads on the socket and prints what it
+reads. The “delimiter” for the read function is “\n” so each <code class="docutils literal notranslate"><span class="pre">read()</span></code>
+will read a string as far as the next line feed, including the line feed.</li>
+</ol>
+<p>On the second shell, create a file that contains a few lines. The contents don’t
+matter. Suppose the first line contains A, the second line contains B, the third
+line contains C. Call this file “tmp.txt”.</p>
+<p>On the second shell, use the socat utility to ship the
+tmp.txt file to the server instance’s host and port:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> socat TCP:localhost:3302 ./tmp.txt
+</pre></div>
+</div>
+<p>Now watch what happens on the first shell.
+The strings “A”, “B”, “C” are printed.</p>
+</div>
+<div class="section" id="use-tcp-server-with-handler-and-prepare">
+<span id="socket-handler-prepare"></span><h3>Use tcp_server with handler and prepare<a class="headerlink" href="#use-tcp-server-with-handler-and-prepare" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example of the tcp_server function
+using <code class="docutils literal notranslate"><span class="pre">handler</span></code> and <code class="docutils literal notranslate"><span class="pre">prepare</span></code>.</p>
+<p>Start two shells. The first shell will be a server instance.
+The second shell will be the client.</p>
+<p>On the first shell, start Tarantool and say:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{}</span>
+<span class="n">socket</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">)</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">.</span><span class="n">tcp_server</span><span class="p">(</span>
+  <span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span>
+  <span class="mi">3302</span><span class="p">,</span>
+  <span class="p">{</span><span class="n">prepare</span> <span class="o">=</span>
+     <span class="kr">function</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+       <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;listening on socket &#39;</span> <span class="o">..</span> <span class="n">sock</span><span class="p">:</span><span class="n">fd</span><span class="p">())</span>
+       <span class="n">sock</span><span class="p">:</span><span class="n">setsockopt</span><span class="p">(</span><span class="s1">&#39;SOL_SOCKET&#39;</span><span class="p">,</span><span class="s1">&#39;SO_REUSEADDR&#39;</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span>
+       <span class="kr">return</span> <span class="mi">5</span>
+     <span class="kr">end</span><span class="p">,</span>
+   <span class="n">handler</span> <span class="o">=</span>
+    <span class="kr">function</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">from</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accepted connection from: &#39;</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  host: &#39;</span> <span class="o">..</span> <span class="n">from</span><span class="p">.</span><span class="n">host</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  family: &#39;</span> <span class="o">..</span> <span class="n">from</span><span class="p">.</span><span class="n">family</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  port: &#39;</span> <span class="o">..</span> <span class="n">from</span><span class="p">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="kr">end</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code means:</p>
+<ol class="arabic simple">
+<li>Use <code class="docutils literal notranslate"><span class="pre">tcp_server()</span></code> to wait for a connection from any host on port 3302.</li>
+<li>Specify that there will be an initial call to <code class="docutils literal notranslate"><span class="pre">prepare</span></code> which displays
+something about the server, then calls <code class="docutils literal notranslate"><span class="pre">setsockopt(...'SO_REUSEADDR'...)</span></code>
+(this is the same option that Tarantool would set if there was no <code class="docutils literal notranslate"><span class="pre">prepare</span></code>),
+and then returns 5 (this is a rather low backlog queue size).</li>
+<li>Specify that there will be per-connection calls to <code class="docutils literal notranslate"><span class="pre">handler</span></code> which display
+something about the client.</li>
+</ol>
+<p>Now watch what happens on the first shell. The display will include something
+like ‘listening on socket 12’.</p>
+<p>On the second shell, start Tarantool and say:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{}</span>
+<span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">).</span><span class="n">tcp_connect</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">3302</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now watch what happens on the first shell.
+The display will include something like
+‘accepted connection from
+host: 127.0.0.1 family: AF_INET port: 37186’.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

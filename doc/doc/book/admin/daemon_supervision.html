@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Daemon supervision &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Daemon supervision</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/daemon_supervision.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="daemon-supervision">
+<span id="admin-daemon-supervision"></span><h1>Daemon supervision<a class="headerlink" href="#daemon-supervision" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="server-signals">
+<span id="admin-server-signals"></span><h2>Server signals<a class="headerlink" href="#server-signals" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool processes these signals during the event loop in the transaction
+processor thread:</p>
+<div class="table docutils container">
+<table border="1" class="right-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Signal</th>
+<th class="head">Effect</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>SIGHUP</td>
+<td>May cause log file rotation. See the
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-logging-logging-example"><span class="std std-ref">example</span></a> in
+reference on Tarantool logging parameters.</td>
+</tr>
+<tr class="row-odd"><td>SIGUSR1</td>
+<td>May cause a database checkpoint. See
+<a class="reference internal" href="../../reference/reference_lua/box_snapshot.html#box-snapshot"><span class="std std-ref">box.snapshot</span></a>.</td>
+</tr>
+<tr class="row-even"><td>SIGTERM</td>
+<td>May cause graceful shutdown (information will be
+saved first).</td>
+</tr>
+<tr class="row-odd"><td>SIGINT
+(also known as
+keyboard interrupt)</td>
+<td>May cause graceful shutdown.</td>
+</tr>
+<tr class="row-even"><td>SIGKILL</td>
+<td>Causes an immediate shutdown.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Other signals will result in behavior defined by the operating system. Signals
+other than SIGKILL may be ignored, especially if Tarantool is executing a
+long-running procedure which prevents return to the event loop in the
+transaction processor thread.</p>
+</div>
+<div class="section" id="automatic-instance-restart">
+<span id="admin-automatic-instance-restart"></span><h2>Automatic instance restart<a class="headerlink" href="#automatic-instance-restart" title="Permalink to this headline">¶</a></h2>
+<p>On <code class="docutils literal notranslate"><span class="pre">systemd</span></code>-enabled platforms, <code class="docutils literal notranslate"><span class="pre">systemd</span></code> automatically restarts all
+Tarantool instances in case of failure. To demonstrate it, let’s try to destroy
+an instance:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> systemctl status tarantool@my_app<span class="p">|</span>grep PID
+<span class="go">Main PID: 5885 (tarantool)</span>
+<span class="gp">$</span> tarantoolctl enter my_app
+<span class="go">/bin/tarantoolctl: Found my_app.lua in /etc/tarantool/instances.available</span>
+<span class="go">/bin/tarantoolctl: Connecting to /var/run/tarantool/my_app.control</span>
+<span class="go">/bin/tarantoolctl: connected to unix/:/var/run/tarantool/my_app.control</span>
+<span class="go">unix/:/var/run/tarantool/my_app.control&gt; os.exit(-1)</span>
+<span class="go">/bin/tarantoolctl: unix/:/var/run/tarantool/my_app.control: Remote host closed connection</span>
+</pre></div>
+</div>
+<p>Now let’s make sure that <code class="docutils literal notranslate"><span class="pre">systemd</span></code> has restarted the instance:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> systemctl status tarantool@my_app<span class="p">|</span>grep PID
+<span class="go">Main PID: 5914 (tarantool)</span>
+</pre></div>
+</div>
+<p>Finally, let’s check the boot logs:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> journalctl -u tarantool@my_app -n <span class="m">8</span>
+<span class="go">-- Logs begin at Fri 2016-01-08 12:21:53 MSK, end at Thu 2016-01-21 21:09:45 MSK. --</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: tarantool@my_app.service: Unit entered failed state.</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: tarantool@my_app.service: Failed with result &#39;exit-code&#39;.</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: tarantool@my_app.service: Service hold-off time over, scheduling restart.</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: Stopped Tarantool Database Server.</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: Starting Tarantool Database Server...</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain tarantoolctl[5910]: /usr/bin/tarantoolctl: Found my_app.lua in /etc/tarantool/instances.available</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain tarantoolctl[5910]: /usr/bin/tarantoolctl: Starting instance...</span>
+<span class="go">Jan 21 21:09:45 localhost.localdomain systemd[1]: Started Tarantool Database Server.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="core-dumps">
+<span id="admin-core-dumps"></span><h2>Core dumps<a class="headerlink" href="#core-dumps" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool makes a core dump if it receives any of the following signals: SIGSEGV,
+SIGFPE, SIGABRT or SIGQUIT. This is automatic if Tarantool crashes.</p>
+<p>On <code class="docutils literal notranslate"><span class="pre">systemd</span></code>-enabled platforms, <code class="docutils literal notranslate"><span class="pre">coredumpctl</span></code> automatically saves core dumps
+and stack traces in case of a crash. Here is a general “how to” for how to
+enable core dumps on a Unix system:</p>
+<ol class="arabic simple">
+<li>Ensure session limits are configured to enable core dumps, i.e. say
+<code class="docutils literal notranslate"><span class="pre">ulimit</span> <span class="pre">-c</span> <span class="pre">unlimited</span></code>. Check  “man 5 core” for other reasons why a core
+dump may not be produced.</li>
+<li>Set a directory for writing core dumps to, and make sure that the directory
+is writable. On Linux, the directory path is set in a kernel parameter
+configurable via <code class="docutils literal notranslate"><span class="pre">/proc/sys/kernel/core_pattern</span></code>.</li>
+<li>Make sure that core dumps include stack trace information. If you use a
+binary Tarantool distribution, this is automatic. If you build Tarantool
+from source, you will not get detailed information if you pass
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Release</span></code> to CMake.</li>
+</ol>
+<p>To simulate a crash, you can execute an illegal command against a Tarantool
+instance:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># !!! please never do this on a production system !!!</span>
+<span class="gp">$</span> tarantoolctl enter my_app
+<span class="go">unix/:/var/run/tarantool/my_app.control&gt; require(&#39;ffi&#39;).cast(&#39;char *&#39;, 0)[0] = 48</span>
+<span class="go">/bin/tarantoolctl: unix/:/var/run/tarantool/my_app.control: Remote host closed connection</span>
+</pre></div>
+</div>
+<p>Alternatively, if you know the process ID of the instance (here we refer to it
+as $PID), you can abort a Tarantool instance by running <code class="docutils literal notranslate"><span class="pre">gdb</span></code> debugger:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gdb -batch -ex <span class="s2">&quot;generate-core-file&quot;</span> -p <span class="nv">$PID</span>
+</pre></div>
+</div>
+<p>or manually sending a SIGABRT signal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">kill</span> -SIGABRT <span class="nv">$PID</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>To find out the process id of the instance ($PID), you can:</p>
+<ul class="last simple">
+<li>look it up in the instance’s <a class="reference internal" href="../../reference/reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info.pid</span></a>,</li>
+<li>find it with <code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">-A</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">tarantool</span></code>, or</li>
+<li>say <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">status</span> <span class="pre">tarantool&#64;my_app|grep</span> <span class="pre">PID</span></code>.</li>
+</ul>
+</div>
+<p>On a <code class="docutils literal notranslate"><span class="pre">systemd-enabled</span></code> system, to see the latest crashes of the Tarantool
+daemon, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> coredumpctl list /usr/bin/tarantool
+<span class="go">MTIME                            PID   UID   GID SIG PRESENT EXE</span>
+<span class="go">Sat 2016-01-23 15:21:24 MSK   20681  1000  1000   6   /usr/bin/tarantool</span>
+<span class="go">Sat 2016-01-23 15:51:56 MSK   21035   995   992   6   /usr/bin/tarantool</span>
+</pre></div>
+</div>
+<p>To save a core dump into a file, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> coredumpctl -o filename.core info &lt;pid&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="stack-traces">
+<span id="admin-stack-traces"></span><h2>Stack traces<a class="headerlink" href="#stack-traces" title="Permalink to this headline">¶</a></h2>
+<p>Since Tarantool stores tuples in memory, core files may be large.
+For investigation, you normally don’t need the whole file, but only a
+“stack trace” or “backtrace”.</p>
+<p>To save a stack trace into a file, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gdb -se <span class="s2">&quot;tarantool&quot;</span> -ex <span class="s2">&quot;bt full&quot;</span> -ex <span class="s2">&quot;thread apply all bt&quot;</span> --batch -c core&gt; /tmp/tarantool_trace.txt
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li>“tarantool” is the path to the Tarantool executable,</li>
+<li>“core” is the path to the core file, and</li>
+<li>“/tmp/tarantool_trace.txt” is a sample path to a file for saving the stack trace.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Occasionally, you may find that the trace file contains output without debug
+symbols – the lines will contain ”??” instead of names. If this happens,
+check the instructions on these Tarantool wiki pages:
+<a class="reference external" href="https://github.com/tarantool/tarantool/wiki/How-to-debug-core-dump-of-stripped-tarantool">How to debug core dump of stripped tarantool</a>
+and
+<a class="reference external" href="https://github.com/tarantool/tarantool/wiki/How-to-debug-core-from-different-OS">How to debug core from different OS</a>.</p>
+</div>
+<p>To see the stack trace and other useful information in console, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> coredumpctl info <span class="m">21035</span>
+<span class="go">          PID: 21035 (tarantool)</span>
+<span class="go">          UID: 995 (tarantool)</span>
+<span class="go">          GID: 992 (tarantool)</span>
+<span class="go">       Signal: 6 (ABRT)</span>
+<span class="go">    Timestamp: Sat 2016-01-23 15:51:42 MSK (4h 36min ago)</span>
+<span class="go"> Command Line: tarantool my_app.lua &lt;running&gt;</span>
+<span class="go">   Executable: /usr/bin/tarantool</span>
+<span class="go">Control Group: /system.slice/system-tarantool.slice/tarantool@my_app.service</span>
+<span class="go">         Unit: tarantool@my_app.service</span>
+<span class="go">        Slice: system-tarantool.slice</span>
+<span class="go">      Boot ID: 7c686e2ef4dc4e3ea59122757e3067e2</span>
+<span class="go">   Machine ID: a4a878729c654c7093dc6693f6a8e5ee</span>
+<span class="go">     Hostname: localhost.localdomain</span>
+<span class="go">      Message: Process 21035 (tarantool) of user 995 dumped core.</span>
+
+<span class="go">               Stack trace of thread 21035:</span>
+<span class="gp">               #</span><span class="m">0</span>  0x00007f84993aa618 raise <span class="o">(</span>libc.so.6<span class="o">)</span>
+<span class="gp">               #</span><span class="m">1</span>  0x00007f84993ac21a abort <span class="o">(</span>libc.so.6<span class="o">)</span>
+<span class="gp">               #</span><span class="m">2</span>  0x0000560d0a9e9233 _ZL12sig_fatal_cbi <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">3</span>  0x00007f849a211220 __restore_rt <span class="o">(</span>libpthread.so.0<span class="o">)</span>
+<span class="gp">               #</span><span class="m">4</span>  0x0000560d0aaa5d9d lj_cconv_ct_ct <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">5</span>  0x0000560d0aaa687f lj_cconv_ct_tv <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">6</span>  0x0000560d0aaabe33 lj_cf_ffi_meta___newindex <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">7</span>  0x0000560d0aaae2f7 lj_BC_FUNCC <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">8</span>  0x0000560d0aa9aabd lua_pcall <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">9</span>  0x0000560d0aa71400 lbox_call <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">10</span> 0x0000560d0aa6ce36 lua_fiber_run_f <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">11</span> 0x0000560d0a9e8d0c _ZL16fiber_cxx_invokePFiP13__va_list_tagES0_ <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">12</span> 0x0000560d0aa7b255 fiber_loop <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="gp">               #</span><span class="m">13</span> 0x0000560d0ab38ed1 coro_init <span class="o">(</span>tarantool<span class="o">)</span>
+<span class="go">               ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="debugger">
+<span id="admin-debugger"></span><h2>Debugger<a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
+<p>To start <code class="docutils literal notranslate"><span class="pre">gdb</span></code> debugger on the core dump, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> coredumpctl gdb &lt;pid&gt;
+</pre></div>
+</div>
+<p>It is highly recommended to install <code class="docutils literal notranslate"><span class="pre">tarantool-debuginfo</span></code> package to improve
+<code class="docutils literal notranslate"><span class="pre">gdb</span></code> experience, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dnf debuginfo-install tarantool
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gdb</span></code> also provides information about the debuginfo packages you need to
+install:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gdb -p &lt;pid&gt;
+<span class="go">...</span>
+<span class="go">Missing separate debuginfos, use: dnf debuginfo-install</span>
+<span class="go">glibc-2.22.90-26.fc24.x86_64 krb5-libs-1.14-12.fc24.x86_64</span>
+<span class="go">libgcc-5.3.1-3.fc24.x86_64 libgomp-5.3.1-3.fc24.x86_64</span>
+<span class="go">libselinux-2.4-6.fc24.x86_64 libstdc++-5.3.1-3.fc24.x86_64</span>
+<span class="go">libyaml-0.1.6-7.fc23.x86_64 ncurses-libs-6.0-1.20150810.fc24.x86_64</span>
+<span class="go">openssl-libs-1.0.2e-3.fc24.x86_64</span>
+</pre></div>
+</div>
+<p>Symbolic names are present in stack traces even if you don’t have
+<code class="docutils literal notranslate"><span class="pre">tarantool-debuginfo</span></code> package installed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module box &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>box</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box">
+<span id="box-module"></span><h1>Module <cite>box</cite><a class="headerlink" href="#module-box" title="Permalink to this headline">¶</a></h1>
+<p>As well as executing Lua chunks or defining your own functions, you can exploit
+Tarantool’s storage functionality with the <code class="docutils literal notranslate"><span class="pre">box</span></code> module and its submodules.</p>
+<p>Every submodule contains one or more Lua functions. A few submodules contain
+members as well as functions. The functions allow data definition (create
+alter drop), data manipulation (insert delete update upsert select replace), and
+introspection (inspecting contents of spaces, accessing server configuration).</p>
+<p>To catch errors that functions in <code class="docutils literal notranslate"><span class="pre">box</span></code> submodules may throw, use <a class="reference internal" href="errcodes.html#error-handling"><span class="std std-ref">pcall</span></a>.</p>
+<p>The contents of the <code class="docutils literal notranslate"><span class="pre">box</span></code> module can be inspected at runtime
+with <code class="docutils literal notranslate"><span class="pre">box</span></code>, with no arguments. The <code class="docutils literal notranslate"><span class="pre">box</span></code> module contains:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="box_backup.html">Submodule box.backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_cfg.html">Submodule <cite>box.cfg</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_ctl.html">Submodule <cite>box.ctl</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_error.html">Submodule <cite>box.error</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_index.html">Submodule <cite>box.index</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_info.html">Submodule <cite>box.info</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_once.html">Function <cite>box.once</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_null.html">Constant <cite>box.NULL</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_schema.html">Submodule <cite>box.schema</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_session.html">Submodule <cite>box.session</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_slab.html">Submodule <cite>box.slab</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_space.html">Submodule <cite>box.space</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_stat.html">Submodule <cite>box.stat</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_snapshot.html">Function <cite>box.snapshot</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_tuple.html">Submodule <cite>box.tuple</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="box_txn_management.html">Functions for transaction management</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

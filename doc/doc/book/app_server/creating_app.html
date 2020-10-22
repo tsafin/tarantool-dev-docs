@@ -1,0 +1,1013 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Creating an application &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Creating an application</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/app_server/creating_app.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="creating-an-application">
+<span id="app-server-creating-app"></span><h1>Creating an application<a class="headerlink" href="#creating-an-application" title="Permalink to this headline">¶</a></h1>
+<p>Further we walk you through key programming practices that will give you a good
+start in writing Lua applications for Tarantool. For an adventure, this is a
+story of implementing… a real microservice based on Tarantool! We implement
+a backend for a simplified version of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Pokémon_Go">Pokémon Go</a>,
+a location-based augmented reality game released in mid-2016. In this game,
+players use a mobile device’s GPS capability to locate, capture, battle and
+train virtual monsters called “pokémon”, who appear on the screen as if they
+were in the same real-world location as the player.</p>
+<p>To stay within the walk-through format, let’s narrow the original gameplay as
+follows. We have a map with pokémon spawn locations. Next, we have multiple
+players who can send catch-a-pokémon requests to the server (which runs our
+Tarantool microservice). The server replies whether the pokémon is caught or not,
+increases the player’s pokémon counter if yes, and triggers the
+respawn-a-pokémon method that spawns a new pokémon at the same location
+in a while.</p>
+<p>We leave client-side applications outside the scope of this story. Yet we
+promise a mini-demo in the end to simulate real users and give us some fun. :-)</p>
+<div align="center" class="align-center"><img alt="../../../../_images/aster.svg" src="../../../../_images/aster.svg" /></div>
+<p>First, what would be the best way to deliver our microservice?</p>
+<div class="section" id="modules-rocks-and-applications">
+<span id="app-server-modules"></span><h2>Modules, rocks and applications<a class="headerlink" href="#modules-rocks-and-applications" title="Permalink to this headline">¶</a></h2>
+<p>To make our game logic available to other developers and Lua applications, let’s
+put it into a Lua module.</p>
+<p>A <strong>module</strong> (called “rock” in Lua) is an optional library which enhances
+Tarantool functionality. So, we can install our logic as a module in Tarantool
+and use it from any Tarantool application or module. Like applications, modules
+in Tarantool can be written in Lua (rocks), C or C++.</p>
+<p>Modules are good for two things:</p>
+<ul class="simple">
+<li>easier <strong>code management</strong> (reuse, packaging, versioning), and</li>
+<li>hot <strong>code reload</strong> without restarting the Tarantool instance.</li>
+</ul>
+<p>Technically, a module is a file with source code that exports its functions in
+an API. For example, here is a Lua module named <code class="docutils literal notranslate"><span class="pre">mymodule.lua</span></code> that exports
+one function named <code class="docutils literal notranslate"><span class="pre">myfun</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">exports</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">exports</span><span class="p">.</span><span class="n">myfun</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">input_string</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="n">input_string</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="kr">return</span> <span class="n">exports</span>
+</pre></div>
+</div>
+<p>To launch the function <code class="docutils literal notranslate"><span class="pre">myfun()</span></code> – from another module, from a Lua application,
+or from Tarantool itself, – we need to save this module as a file, then load
+this module with the <code class="docutils literal notranslate"><span class="pre">require()</span></code> directive and call the exported function.</p>
+<p>For example, here’s a Lua application that uses <code class="docutils literal notranslate"><span class="pre">myfun()</span></code> function from
+<code class="docutils literal notranslate"><span class="pre">mymodule.lua</span></code> module:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- loading the module</span>
+<span class="kd">local</span> <span class="n">mymodule</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;mymodule&#39;</span><span class="p">)</span>
+
+<span class="c1">-- calling myfun() from within test() function</span>
+<span class="kd">local</span> <span class="n">test</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+  <span class="n">mymodule</span><span class="p">.</span><span class="n">myfun</span><span class="p">()</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>A thing to remember here is that the <code class="docutils literal notranslate"><span class="pre">require()</span></code> directive takes load paths
+to Lua modules from the <code class="docutils literal notranslate"><span class="pre">package.path</span></code> variable. This is a semicolon-separated
+string, where a question mark is used to interpolate the module name. By default,
+this variable contains system-wide Lua paths and the working directory.
+But if we put our modules inside a specific folder (e.g. <code class="docutils literal notranslate"><span class="pre">scripts/</span></code>), we need
+to add this folder to <code class="docutils literal notranslate"><span class="pre">package.path</span></code> before any calls to <code class="docutils literal notranslate"><span class="pre">require()</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nb">package.path</span> <span class="o">=</span> <span class="s1">&#39;scripts/?.lua;&#39;</span> <span class="o">..</span> <span class="nb">package.path</span>
+</pre></div>
+</div>
+<p>For our microservice, a simple and convenient solution would be to put all
+methods in a Lua module (say <code class="docutils literal notranslate"><span class="pre">pokemon.lua</span></code>) and to write a Lua application
+(say <code class="docutils literal notranslate"><span class="pre">game.lua</span></code>) that initializes the gaming environment and starts the game
+loop.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/aster.svg" src="../../../../_images/aster.svg" /></div>
+<p>Now let’s get down to implementation details. In our game, we need three entities:</p>
+<ul class="simple">
+<li><strong>map</strong>, which is an array of pokémons with coordinates of respawn locations;
+in this version of the game, let a location be a rectangle identified with two
+points, upper-left and lower-right;</li>
+<li><strong>player</strong>, which has an ID, a name, and coordinates of the player’s location
+point;</li>
+<li><strong>pokémon</strong>, which has the same fields as the player, plus a status
+(active/inactive, that is present on the map or not) and a catch probability
+(well, let’s give our pokémons a chance to escape :-) )</li>
+</ul>
+<p>We’ll store these entities as tuples in Tarantool spaces. But to deliver our
+backend application as a microservice, the good practice would be to send/receive
+our data in the universal JSON format, thus using Tarantool as a document storage.</p>
+</div>
+<div class="section" id="avro-schemas">
+<span id="app-server-avro-schemas"></span><h2>Avro schemas<a class="headerlink" href="#avro-schemas" title="Permalink to this headline">¶</a></h2>
+<p>To store JSON data as tuples, we will apply a savvy practice which reduces data
+footprint and ensures all stored documents are valid. We will use Tarantool
+module <a class="reference external" href="https://github.com/tarantool/avro-schema">avro-schema</a> which checks
+the schema of a JSON document and converts it to a Tarantool tuple. The tuple
+will contain only field values, and thus take a lot less space than the original
+document. In avro-schema terms, converting JSON documents to tuples is
+“flattening”, and restoring the original documents is “unflattening”.</p>
+<p>First you need to
+<a class="reference external" href="https://www.tarantool.io/en/doc/1.10/book/app_server/installing_module/">install</a>
+the module with <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">install</span> <span class="pre">avro-schema</span></code>.</p>
+<p>Further usage is quite straightforward:</p>
+<ol class="arabic simple">
+<li>For each entity, we need to define a schema in
+<a class="reference external" href="https://en.wikipedia.org/wiki/Apache_Avro">Apache Avro schema</a> syntax,
+where we list the entity’s fields with their names and
+<a class="reference external" href="http://avro.apache.org/docs/current/spec.html#schema_primitive">Avro data types</a>.</li>
+<li>At initialization, we call <code class="docutils literal notranslate"><span class="pre">avro-schema.create()</span></code> that creates objects
+in memory for all schema entities, and <code class="docutils literal notranslate"><span class="pre">compile()</span></code> that generates
+flatten/unflatten methods for each entity.</li>
+<li>Further on, we just call flatten/unflatten methods for a respective entity
+on receiving/sending the entity’s data.</li>
+</ol>
+<p>Here’s what our schema definitions for the player and pokémon entities look like:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;record&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;player_schema&quot;</span><span class="p">,</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;long&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+            <span class="p">{</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span> <span class="p">{</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;record&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;player_location&quot;</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+                        <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">pokemon</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;record&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pokemon_schema&quot;</span><span class="p">,</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;long&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;chance&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">},</span>
+            <span class="p">{</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span> <span class="p">{</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;record&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pokemon_location&quot;</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+                        <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And here’s how we create and compile our entities at initialization:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- load avro-schema module with require()</span>
+<span class="kd">local</span> <span class="n">avro</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;avro_schema&#39;</span><span class="p">)</span>
+
+<span class="c1">-- create models</span>
+<span class="kd">local</span> <span class="n">ok_m</span><span class="p">,</span> <span class="n">pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">pokemon</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">ok_p</span><span class="p">,</span> <span class="n">player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">player</span><span class="p">)</span>
+<span class="kr">if</span> <span class="n">ok_m</span> <span class="ow">and</span> <span class="n">ok_p</span> <span class="kr">then</span>
+    <span class="c1">-- compile models</span>
+    <span class="kd">local</span> <span class="n">ok_cm</span><span class="p">,</span> <span class="n">compiled_pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pokemon</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">ok_cp</span><span class="p">,</span> <span class="n">compiled_player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">ok_cm</span> <span class="ow">and</span> <span class="n">ok_cp</span> <span class="kr">then</span>
+        <span class="c1">-- start the game</span>
+        <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+    <span class="kr">else</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Schema compilation failed&#39;</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">else</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Schema creation failed&#39;</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="kr">return</span> <span class="kc">false</span>
+</pre></div>
+</div>
+<p>As for the map entity, it would be an overkill to introduce a schema for it,
+because we have only one map in the game, it has very few fields, and – which
+is most important – we use the map only inside our logic, never exposing it
+to external users.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/aster.svg" src="../../../../_images/aster.svg" /></div>
+<p>Next, we need methods to implement the game logic. To simulate object-oriented
+programming in our Lua code, let’s store all Lua functions and shared variables
+in a single local variable (let’s name it as <code class="docutils literal notranslate"><span class="pre">game</span></code>). This will allow us to
+address functions or variables from within our module as <code class="docutils literal notranslate"><span class="pre">self.func_name</span></code> or
+<code class="docutils literal notranslate"><span class="pre">self.var_name</span></code>. Like this:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">game</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">-- a local variable</span>
+    <span class="n">num_players</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+
+    <span class="c1">-- a method that prints a local variable</span>
+    <span class="n">hello</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello! Your player number is &#39;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">num_players</span> <span class="o">..</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="c1">-- a method that calls another method and returns a local variable</span>
+    <span class="n">sign_in</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">.</span><span class="n">num_players</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">num_players</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="n">self</span><span class="p">:</span><span class="n">hello</span><span class="p">()</span>
+      <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">num_players</span>
+    <span class="kr">end</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In OOP terms, we can now regard local variables inside <code class="docutils literal notranslate"><span class="pre">game</span></code> as object fields,
+and local functions as object methods.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In this manual, Lua examples use <strong>local</strong> variables. Use <strong>global</strong>
+variables with caution, since the module’s users may be unaware of them.</p>
+<p class="last">To enable/disable the use of undeclared global variables in your Lua code,
+use Tarantool’s <a class="reference internal" href="../../reference/reference_lua/strict.html#strict-module"><span class="std std-ref">strict</span></a> module.</p>
+</div>
+<p>So, our game module will have the following methods:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">catch()</span></code> to calculate whether the pokémon was caught (besides the
+coordinates of both the player and pokémon, this method will apply
+a probability factor, so not every pokémon within the player’s reach
+will be caught);</li>
+<li><code class="docutils literal notranslate"><span class="pre">respawn()</span></code> to add missing pokémons to the map, say, every 60 seconds
+(we assume that a frightened pokémon runs away, so we remove a pokémon from
+the map on any catch attempt and add it back to the map in a while);</li>
+<li><code class="docutils literal notranslate"><span class="pre">notify()</span></code> to log information about caught pokémons (like
+“Player 1 caught pokémon A”);</li>
+<li><code class="docutils literal notranslate"><span class="pre">start()</span></code> to initialize the game (it will create database spaces, create
+and compile avro schemas, and launch <code class="docutils literal notranslate"><span class="pre">respawn()</span></code>).</li>
+</ul>
+<p>Besides, it would be convenient to have methods for working with Tarantool
+storage. For example:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">add_pokemon()</span></code> to add a pokémon to the database, and</li>
+<li><code class="docutils literal notranslate"><span class="pre">map()</span></code> to populate the map with all pokémons stored in Tarantool.</li>
+</ul>
+<p>We’ll need these two methods primarily when initializing our game, but we can
+also call them later, for example to test our code.</p>
+</div>
+<div class="section" id="bootstrapping-a-database">
+<span id="app-server-db-bootstrap"></span><h2>Bootstrapping a database<a class="headerlink" href="#bootstrapping-a-database" title="Permalink to this headline">¶</a></h2>
+<p>Let’s discuss game initialization. In <code class="docutils literal notranslate"><span class="pre">start()</span></code> method, we need to populate
+Tarantool spaces with pokémon data. Why not keep all game data in memory?
+Why use a database? The answer is: <a class="reference internal" href="../box/data_model.html#index-box-persistence"><span class="std std-ref">persistence</span></a>.
+Without a database, we risk losing data on power outage, for example.
+But if we store our data in an in-memory database, Tarantool takes care to
+persist it on disk whenever it’s changed. This gives us one more benefit:
+quick startup in case of failure.
+Tarantool has a <a class="reference internal" href="../../dev_guide/internals_index.html#internals-recovery-process"><span class="std std-ref">smart algorithm</span></a> that quickly
+loads all data from disk into memory on startup, so the warm-up takes little time.</p>
+<p>We’ll be using functions from Tarantool built-in <a class="reference internal" href="../../reference/reference_lua/box.html#box-module"><span class="std std-ref">box</span></a> module:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box.schema.create_space('pokemons')</span></code> to create a space named <code class="docutils literal notranslate"><span class="pre">pokemon</span></code> for
+storing information about pokémons (we don’t create a similar space for players,
+because we intend to only send/receive player information via API calls, so we
+needn’t store it);</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.space.pokemons:create_index('primary',</span> <span class="pre">{type</span> <span class="pre">=</span> <span class="pre">'hash',</span> <span class="pre">parts</span> <span class="pre">=</span> <span class="pre">{1,</span> <span class="pre">'unsigned'}})</span></code>
+to create a primary HASH index by pokémon ID;</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.space.pokemons:create_index('status',</span> <span class="pre">{type</span> <span class="pre">=</span> <span class="pre">'tree',</span> <span class="pre">parts</span> <span class="pre">=</span> <span class="pre">{2,</span> <span class="pre">'str'}})</span></code>
+to create a secondary TREE index by pokémon status.</li>
+</ul>
+<p>Notice the <code class="docutils literal notranslate"><span class="pre">parts</span> <span class="pre">=</span></code> argument in the index specification. The pokémon ID is
+the first field in a Tarantool tuple since it’s the first member of the respective
+Avro type. So does the pokémon status. The actual JSON document may have ID or
+status fields at any position of the JSON map.</p>
+<p>The implementation of <code class="docutils literal notranslate"><span class="pre">start()</span></code> method looks like this:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- create game object</span>
+<span class="n">start</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="c1">-- create spaces and indexes</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+        <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">create_space</span><span class="p">(</span><span class="s1">&#39;pokemons&#39;</span><span class="p">)</span>
+        <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span>
+            <span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}}</span>
+        <span class="p">)</span>
+        <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;str&#39;</span><span class="p">}}</span>
+        <span class="p">)</span>
+    <span class="kr">end</span><span class="p">)</span>
+
+    <span class="c1">-- create models</span>
+    <span class="kd">local</span> <span class="n">ok_m</span><span class="p">,</span> <span class="n">pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">pokemon</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">ok_p</span><span class="p">,</span> <span class="n">player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">player</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">ok_m</span> <span class="ow">and</span> <span class="n">ok_p</span> <span class="kr">then</span>
+        <span class="c1">-- compile models</span>
+        <span class="kd">local</span> <span class="n">ok_cm</span><span class="p">,</span> <span class="n">compiled_pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pokemon</span><span class="p">)</span>
+        <span class="kd">local</span> <span class="n">ok_cp</span><span class="p">,</span> <span class="n">compiled_player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="n">ok_cm</span> <span class="ow">and</span> <span class="n">ok_cp</span> <span class="kr">then</span>
+            <span class="c1">-- start the game</span>
+            <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+        <span class="kr">else</span>
+            <span class="n">log</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Schema compilation failed&#39;</span><span class="p">)</span>
+        <span class="kr">end</span>
+    <span class="kr">else</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Schema creation failed&#39;</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="kc">false</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gis">
+<span id="app-server-gis"></span><h2>GIS<a class="headerlink" href="#gis" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s discuss <code class="docutils literal notranslate"><span class="pre">catch()</span></code>, which is the main method in our gaming logic.</p>
+<p>Here we receive the player’s coordinates and the target pokémon’s ID number,
+and we need to answer whether the player has actually caught the pokémon or not
+(remember that each pokémon has a chance to escape).</p>
+<p>First thing, we validate the received player data against its
+<a class="reference internal" href="#app-server-avro-schemas"><span class="std std-ref">Avro schema</span></a>. And we check whether such a pokémon
+exists in our database and is displayed on the map (the pokémon must have the
+active status):</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">catch</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">pokemon_id</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+    <span class="c1">-- check player data</span>
+    <span class="kd">local</span> <span class="n">ok</span><span class="p">,</span> <span class="n">tuple</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">player_model</span><span class="p">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">ok</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="c1">-- get pokemon data</span>
+    <span class="kd">local</span> <span class="n">p_tuple</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="n">pokemon_id</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">p_tuple</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="kd">local</span> <span class="n">ok</span><span class="p">,</span> <span class="n">pokemon</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">pokemon_model</span><span class="p">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">p_tuple</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">ok</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="kr">if</span> <span class="n">pokemon</span><span class="p">.</span><span class="n">status</span> <span class="o">~=</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">ACTIVE</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="c1">-- more catch logic to follow</span>
+    <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Next, we calculate the answer: caught or not.</p>
+<p>To work with geographical coordinates, we use Tarantool
+<a class="reference external" href="https://github.com/tarantool/gis">gis</a> module.</p>
+<p>To keep things simple, we don’t load any specific map, assuming that we deal with
+a world map. And we do not validate incoming coordinates, assuming again that all
+received locations are within the planet Earth.</p>
+<p>We use two geo-specific variables:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">wgs84</span></code>, which stands for the latest revision of the World Geodetic System
+standard, <a class="reference external" href="https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84">WGS84</a>.
+Basically, it comprises a standard coordinate system for the Earth and
+represents the Earth as an ellipsoid.</li>
+<li><code class="docutils literal notranslate"><span class="pre">nationalmap</span></code>, which stands for the
+<a class="reference external" href="https://epsg.io/2163">US National Atlas Equal Area</a>. This is a projected
+coordinates system based on WGS84. It gives us a zero base for location
+projection and allows positioning our players and pokémons in meters.</li>
+</ul>
+<p>Both these systems are listed in the EPSG Geodetic Parameter Registry, where each
+system has a unique number. In our code, we assign these listing numbers to
+respective variables:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">wgs84</span> <span class="o">=</span> <span class="mi">4326</span><span class="p">,</span>
+<span class="n">nationalmap</span> <span class="o">=</span> <span class="mi">2163</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>For our game logic, we need one more variable, <code class="docutils literal notranslate"><span class="pre">catch_distance</span></code>, which defines
+how close a player must get to a pokémon before trying to catch it. Let’s set
+the distance to 100 meters.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">catch_distance</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>Now we’re ready to calculate the answer. We need to project the current location
+of both player (<code class="docutils literal notranslate"><span class="pre">p_pos</span></code>) and pokémon (<code class="docutils literal notranslate"><span class="pre">m_pos</span></code>) on the map, check whether the
+player is close enough to the pokémon (using <code class="docutils literal notranslate"><span class="pre">catch_distance</span></code>), and calculate
+whether the player has caught the pokémon (here we generate some random value and
+let the pokémon escape if the random value happens to be less than 100 minus
+pokémon’s chance value):</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- project locations</span>
+<span class="kd">local</span> <span class="n">m_pos</span> <span class="o">=</span> <span class="n">gis</span><span class="p">.</span><span class="n">Point</span><span class="p">(</span>
+    <span class="p">{</span><span class="n">pokemon</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">y</span><span class="p">},</span> <span class="n">self</span><span class="p">.</span><span class="n">wgs84</span>
+<span class="p">):</span><span class="n">transform</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">nationalmap</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">p_pos</span> <span class="o">=</span> <span class="n">gis</span><span class="p">.</span><span class="n">Point</span><span class="p">(</span>
+    <span class="p">{</span><span class="n">player</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">y</span><span class="p">},</span> <span class="n">self</span><span class="p">.</span><span class="n">wgs84</span>
+<span class="p">):</span><span class="n">transform</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">nationalmap</span><span class="p">)</span>
+
+<span class="c1">-- check catch distance condition</span>
+<span class="kr">if</span> <span class="n">p_pos</span><span class="p">:</span><span class="n">distance</span><span class="p">(</span><span class="n">m_pos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">catch_distance</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="kc">false</span>
+<span class="kr">end</span>
+<span class="c1">-- try to catch pokemon</span>
+<span class="kd">local</span> <span class="n">caught</span> <span class="o">=</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">pokemon</span><span class="p">.</span><span class="n">chance</span>
+<span class="kr">if</span> <span class="n">caught</span> <span class="kr">then</span>
+    <span class="c1">-- update and notify on success</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">pokemon_id</span><span class="p">,</span> <span class="p">{{</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">STATUS</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">CAUGHT</span><span class="p">}}</span>
+    <span class="p">)</span>
+    <span class="n">self</span><span class="p">:</span><span class="n">notify</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="kr">return</span> <span class="n">caught</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="index-iterators">
+<span id="app-server-index-iterators"></span><h2>Index iterators<a class="headerlink" href="#index-iterators" title="Permalink to this headline">¶</a></h2>
+<p>By our gameplay, all caught pokémons are returned back to the map. We do this
+for all pokémons on the map every 60 seconds using <code class="docutils literal notranslate"><span class="pre">respawn()</span></code> method.
+We iterate through pokémons by status using Tarantool index iterator function
+<a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-index-pairs"><span class="std std-ref">index:pairs</span></a> and reset the statuses of all
+“caught” pokémons back to “active” using <code class="docutils literal notranslate"><span class="pre">box.space.pokemons:update()</span></code>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">respawn</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s1">&#39;Respawn fiber&#39;</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tuple</span> <span class="kr">in</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">status</span><span class="p">:</span><span class="nb">pairs</span><span class="p">(</span>
+           <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">CAUGHT</span><span class="p">)</span> <span class="kr">do</span>
+        <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">tuple</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">ID</span><span class="p">],</span>
+            <span class="p">{{</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">STATUS</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">ACTIVE</span><span class="p">}}</span>
+        <span class="p">)</span>
+    <span class="kr">end</span>
+ <span class="kr">end</span>
+</pre></div>
+</div>
+<p>For readability, we introduce named fields:</p>
+<blockquote>
+<div>ID = 1,
+STATUS = 2,</div></blockquote>
+<p>The complete implementation of <code class="docutils literal notranslate"><span class="pre">start()</span></code> now looks like this:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- create game object</span>
+<span class="n">start</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="c1">-- create spaces and indexes</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+       <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">create_space</span><span class="p">(</span><span class="s1">&#39;pokemons&#39;</span><span class="p">)</span>
+       <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span>
+           <span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}}</span>
+       <span class="p">)</span>
+       <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span>
+           <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;str&#39;</span><span class="p">}}</span>
+       <span class="p">)</span>
+    <span class="kr">end</span><span class="p">)</span>
+
+    <span class="c1">-- create models</span>
+    <span class="kd">local</span> <span class="n">ok_m</span><span class="p">,</span> <span class="n">pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">pokemon</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">ok_p</span><span class="p">,</span> <span class="n">player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">schema</span><span class="p">.</span><span class="n">player</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">ok_m</span> <span class="ow">and</span> <span class="n">ok_p</span> <span class="kr">then</span>
+        <span class="c1">-- compile models</span>
+        <span class="kd">local</span> <span class="n">ok_cm</span><span class="p">,</span> <span class="n">compiled_pokemon</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pokemon</span><span class="p">)</span>
+        <span class="kd">local</span> <span class="n">ok_cp</span><span class="p">,</span> <span class="n">compiled_player</span> <span class="o">=</span> <span class="n">avro</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="n">ok_cm</span> <span class="ow">and</span> <span class="n">ok_cp</span> <span class="kr">then</span>
+            <span class="c1">-- start the game</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">pokemon_model</span> <span class="o">=</span> <span class="n">compiled_pokemon</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">player_model</span> <span class="o">=</span> <span class="n">compiled_player</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">respawn</span><span class="p">()</span>
+            <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Started&#39;</span><span class="p">)</span>
+            <span class="kr">return</span> <span class="kc">true</span>
+         <span class="kr">else</span>
+            <span class="n">log</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Schema compilation failed&#39;</span><span class="p">)</span>
+         <span class="kr">end</span>
+    <span class="kr">else</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Schema creation failed&#39;</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="kc">false</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fibers">
+<h2>Fibers<a class="headerlink" href="#fibers" title="Permalink to this headline">¶</a></h2>
+<p>But wait! If we launch it as shown above – <code class="docutils literal notranslate"><span class="pre">self.respawn()</span></code> – the function
+will be executed only once, just like all the other methods. But we need to
+execute <code class="docutils literal notranslate"><span class="pre">respawn()</span></code> every 60 seconds. Creating a <a class="reference internal" href="../../reference/reference_lua/fiber.html#fiber-module"><span class="std std-ref">fiber</span></a>
+is the Tarantool way of making application logic work in the background at all
+times.</p>
+<p>A <strong>fiber</strong> exists for executing instruction sequences but it is not a thread.
+The key difference is that threads use
+preemptive multitasking, while fibers use cooperative multitasking. This gives
+fibers the following two advantages over threads:</p>
+<ul class="simple">
+<li>Better controllability. Threads often depend on the kernel’s thread scheduler
+to preempt a busy thread and resume another thread, so preemption may occur
+unpredictably. Fibers yield themselves to run another fiber while executing,
+so yields are controlled by application logic.</li>
+<li>Higher performance. Threads require more resources to preempt as they need to
+address the system kernel. Fibers are lighter and faster as they don’t need to
+address the kernel to yield.</li>
+</ul>
+<p>Yet fibers have some limitations as compared with threads, the main limitation
+being no multi-core mode. All fibers in an application belong to a single thread,
+so they all use the same CPU core as the parent thread. Meanwhile, this
+limitation is not really serious for Tarantool applications, because a typical
+bottleneck for Tarantool is the HDD, not the CPU.</p>
+<p>A fiber has all the features of a Lua
+<a class="reference external" href="http://www.lua.org/pil/contents.html#9">coroutine</a> and all programming
+concepts that apply for Lua coroutines will apply for fibers as well. However,
+Tarantool has made some enhancements for fibers and has used fibers internally.
+So, although use of coroutines is possible and supported, use of fibers is
+recommended.</p>
+<p>Well, performance or controllability are of little importance in our case. We’ll
+launch <code class="docutils literal notranslate"><span class="pre">respawn()</span></code> in a fiber to make it work in the background all the time.
+To do so, we’ll need to amend <code class="docutils literal notranslate"><span class="pre">respawn()</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">respawn</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="c1">-- let&#39;s give our fiber a name;</span>
+    <span class="c1">-- this will produce neat output in fiber.info()</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s1">&#39;Respawn fiber&#39;</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tuple</span> <span class="kr">in</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">status</span><span class="p">:</span><span class="nb">pairs</span><span class="p">(</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">CAUGHT</span><span class="p">)</span> <span class="kr">do</span>
+            <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">pokemons</span><span class="p">:</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">tuple</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">ID</span><span class="p">],</span>
+                <span class="p">{{</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">STATUS</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">ACTIVE</span><span class="p">}}</span>
+            <span class="p">)</span>
+        <span class="kr">end</span>
+        <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">respawn_time</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>and call it as a fiber in <code class="docutils literal notranslate"><span class="pre">start()</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="c1">-- create spaces and indexes</span>
+        <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+    <span class="c1">-- create models</span>
+        <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+    <span class="c1">-- compile models</span>
+        <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+    <span class="c1">-- start the game</span>
+       <span class="n">self</span><span class="p">.</span><span class="n">pokemon_model</span> <span class="o">=</span> <span class="n">compiled_pokemon</span>
+       <span class="n">self</span><span class="p">.</span><span class="n">player_model</span> <span class="o">=</span> <span class="n">compiled_player</span>
+       <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">respawn</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+       <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Started&#39;</span><span class="p">)</span>
+    <span class="c1">-- errors if schema creation or compilation fails</span>
+       <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>One more helpful function that we used in <code class="docutils literal notranslate"><span class="pre">start()</span></code> was <code class="docutils literal notranslate"><span class="pre">log.infо()</span></code> from
+Tarantool <a class="reference internal" href="../../reference/reference_lua/log.html#log-module"><span class="std std-ref">log</span></a> module. We also need this function in
+<code class="docutils literal notranslate"><span class="pre">notify()</span></code> to add a record to the log file on every successful catch:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- event notification</span>
+<span class="n">notify</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Player &#39;%s&#39; caught &#39;%s&#39;&quot;</span><span class="p">,</span> <span class="n">player</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>We use default Tarantool <a class="reference internal" href="../../reference/configuration/index.html#cfg-logging"><span class="std std-ref">log settings</span></a>, so we’ll see the log
+output in console when we launch our application in script mode.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/aster.svg" src="../../../../_images/aster.svg" /></div>
+<p>Great! We’ve discussed all programming practices used in our Lua module (see
+<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/src/pokemon.lua">pokemon.lua</a>).</p>
+<p>Now let’s prepare the test environment. As planned, we write a Lua application
+(see <a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/game.lua">game.lua</a>) to
+initialize Tarantool’s database module, initialize our game, call the game loop
+and simulate a couple of player requests.</p>
+<p>To launch our microservice, we put both <code class="docutils literal notranslate"><span class="pre">pokemon.lua</span></code> module and <code class="docutils literal notranslate"><span class="pre">game.lua</span></code>
+application in the current directory, install all external modules, and launch
+the Tarantool instance running our <code class="docutils literal notranslate"><span class="pre">game.lua</span></code> application (this example is for
+Ubuntu):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ls
+<span class="go">game.lua  pokemon.lua</span>
+<span class="gp">$</span> sudo apt-get install tarantool-gis
+<span class="gp">$</span> sudo apt-get install tarantool-avro-schema
+<span class="gp">$</span> tarantool game.lua
+</pre></div>
+</div>
+<p>Tarantool starts and initializes the database. Then Tarantool executes the demo
+logic from <code class="docutils literal notranslate"><span class="pre">game.lua</span></code>: adds a pokémon named Pikachu (its chance to be caught
+is very high, 99.1), displays the current map (it contains one active pokémon,
+Pikachu) and processes catch requests from two players. Player1 is located just
+near the lonely Pikachu pokémon and Player2 is located far away from it.
+As expected, the catch results in this output are “true” for Player1 and “false”
+for Player2. Finally, Tarantool displays the current map which is empty, because
+Pikachu is caught and temporarily inactive:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantool game.lua
+<span class="go">2017-01-09 20:19:24.605 [6282] main/101/game.lua C&gt; version 1.7.3-43-gf5fa1e1</span>
+<span class="go">2017-01-09 20:19:24.605 [6282] main/101/game.lua C&gt; log level 5</span>
+<span class="go">2017-01-09 20:19:24.605 [6282] main/101/game.lua I&gt; mapping 1073741824 bytes for tuple arena...</span>
+<span class="go">2017-01-09 20:19:24.609 [6282] main/101/game.lua I&gt; initializing an empty data directory</span>
+<span class="go">2017-01-09 20:19:24.634 [6282] snapshot/101/main I&gt; saving snapshot `./00000000000000000000.snap.inprogress&#39;</span>
+<span class="go">2017-01-09 20:19:24.635 [6282] snapshot/101/main I&gt; done</span>
+<span class="go">2017-01-09 20:19:24.641 [6282] main/101/game.lua I&gt; ready to accept requests</span>
+<span class="go">2017-01-09 20:19:24.786 [6282] main/101/game.lua I&gt; Started</span>
+<span class="go">---</span>
+<span class="go">- {&#39;id&#39;: 1, &#39;status&#39;: &#39;active&#39;, &#39;location&#39;: {&#39;y&#39;: 2, &#39;x&#39;: 1}, &#39;name&#39;: &#39;Pikachu&#39;, &#39;chance&#39;: 99.1}</span>
+<span class="go">...</span>
+
+<span class="go">2017-01-09 20:19:24.789 [6282] main/101/game.lua I&gt; Player &#39;Player1&#39; caught &#39;Pikachu&#39;</span>
+<span class="go">true</span>
+<span class="go">false</span>
+<span class="go">--- []</span>
+<span class="go">...</span>
+
+<span class="go">2017-01-09 20:19:24.789 [6282] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nginx">
+<h2>nginx<a class="headerlink" href="#nginx" title="Permalink to this headline">¶</a></h2>
+<p>In the real life, this microservice would work over HTTP. Let’s add
+<a class="reference external" href="https://nginx.org/en/">nginx</a> web server to our environment and make a similar
+demo. But how do we make Tarantool methods callable via REST API? We use nginx
+with <a class="reference external" href="https://github.com/tarantool/nginx_upstream_module">Tarantool nginx upstream</a>
+module and create one more Lua script
+(<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/src/app.lua">app.lua</a>) that
+exports three of our game methods – <code class="docutils literal notranslate"><span class="pre">add_pokemon()</span></code>, <code class="docutils literal notranslate"><span class="pre">map()</span></code> and <code class="docutils literal notranslate"><span class="pre">catch()</span></code>
+– as REST endpoints of the nginx upstream module:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">game</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;pokemon&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="mi">3301</span><span class="p">}</span>
+<span class="n">game</span><span class="p">:</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1">-- add, map and catch functions exposed to REST API</span>
+<span class="kr">function</span> <span class="nf">add</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span>
+        <span class="n">result</span><span class="o">=</span><span class="n">game</span><span class="p">:</span><span class="n">add_pokemon</span><span class="p">(</span><span class="n">pokemon</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">map</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span>
+        <span class="n">map</span><span class="o">=</span><span class="n">game</span><span class="p">:</span><span class="n">map</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">catch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">id</span> <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">id</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="p">{</span><span class="n">result</span><span class="o">=</span><span class="kc">false</span><span class="p">}</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="p">{</span>
+        <span class="n">result</span><span class="o">=</span><span class="n">game</span><span class="p">:</span><span class="n">catch</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>An easy way to configure and launch nginx would be to create a Docker container
+based on a <a class="reference external" href="https://hub.docker.com/r/tarantool/tarantool-nginx/">Docker image</a>
+with nginx and the upstream module already installed (see
+<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/http/Dockerfile">http/Dockerfile</a>).
+We take a standard
+<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/http/nginx.conf">nginx.conf</a>,
+where we define an upstream with our Tarantool backend running (this is another
+Docker container, see details below):</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">upstream</span> <span class="s">tnt</span> <span class="p">{</span>
+      <span class="kn">server</span> <span class="n">pserver</span><span class="p">:</span><span class="mi">3301</span> <span class="s">max_fails=1</span> <span class="s">fail_timeout=60s</span><span class="p">;</span>
+      <span class="kn">keepalive</span> <span class="mi">250000</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and add some Tarantool-specific parameters (see descriptions in the upstream
+module’s <a class="reference external" href="https://github.com/tarantool/nginx_upstream_module#directives">README</a>
+file):</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
+  <span class="kn">server_name</span> <span class="s">tnt_test</span><span class="p">;</span>
+
+  <span class="kn">listen</span> <span class="mi">80</span> <span class="s">default</span> <span class="s">deferred</span> <span class="s">reuseport</span> <span class="s">so_keepalive=on</span> <span class="s">backlog=65535</span><span class="p">;</span>
+
+  <span class="kn">location</span> <span class="p">=</span> <span class="s">/</span> <span class="p">{</span>
+      <span class="kn">root</span> <span class="s">/usr/local/nginx/html</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kn">location</span> <span class="s">/api</span> <span class="p">{</span>
+    <span class="c1"># answers check infinity timeout</span>
+    <span class="kn">tnt_read_timeout</span> <span class="mi">60m</span><span class="p">;</span>
+    <span class="kn">if</span> <span class="s">(</span> <span class="nv">$request_method</span> <span class="p">=</span> <span class="s">GET</span> <span class="s">)</span> <span class="p">{</span>
+       <span class="kn">tnt_method</span> <span class="s">&quot;map&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kn">tnt_http_rest_methods</span> <span class="s">get</span><span class="p">;</span>
+    <span class="kn">tnt_http_methods</span> <span class="s">all</span><span class="p">;</span>
+    <span class="kn">tnt_multireturn_skip_count</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kn">tnt_pure_result</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">tnt_pass_http_request</span> <span class="no">on</span> <span class="s">parse_args</span><span class="p">;</span>
+    <span class="kn">tnt_pass</span> <span class="s">tnt</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Likewise, we put Tarantool server and all our game logic in a second Docker
+container based on the
+<a class="reference external" href="https://github.com/tarantool/docker">official Tarantool 1.9 image</a> (see
+<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/src/Dockerfile">src/Dockerfile</a>)
+and set the container’s default command to <code class="docutils literal notranslate"><span class="pre">tarantool</span> <span class="pre">app.lua</span></code>.
+This is the backend.</p>
+</div>
+<div class="section" id="non-blocking-io">
+<h2>Non-blocking IO<a class="headerlink" href="#non-blocking-io" title="Permalink to this headline">¶</a></h2>
+<p>To test the REST API, we create a new script
+(<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/client/client.lua">client.lua</a>),
+which is similar to our <code class="docutils literal notranslate"><span class="pre">game.lua</span></code> application, but makes HTTP POST and GET
+requests rather than calling Lua functions:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">http</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;curl&#39;</span><span class="p">).</span><span class="n">http</span><span class="p">()</span>
+<span class="kd">local</span> <span class="n">json</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">URI</span> <span class="o">=</span> <span class="nb">os.getenv</span><span class="p">(</span><span class="s1">&#39;SERVER_URI&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">player1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Player1&quot;</span><span class="p">,</span>
+    <span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">1.0001</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">2.0003</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">local</span> <span class="n">player2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Player2&quot;</span><span class="p">,</span>
+    <span class="n">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">30.123</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">40.456</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">local</span> <span class="n">pokemon</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Pikachu&quot;</span><span class="p">,</span>
+    <span class="n">chance</span><span class="o">=</span><span class="mf">99.1</span><span class="p">,</span>
+    <span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">status</span><span class="o">=</span><span class="s2">&quot;active&quot;</span><span class="p">,</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">function</span> <span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">id</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">resp</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="n">request</span><span class="p">(</span>
+        <span class="n">method</span><span class="p">,</span> <span class="n">URI</span><span class="p">,</span> <span class="n">body</span>
+    <span class="p">)</span>
+    <span class="kr">if</span> <span class="n">id</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;Player %d result: %s&#39;</span><span class="p">,</span>
+            <span class="n">id</span><span class="p">,</span> <span class="n">resp</span><span class="p">.</span><span class="n">body</span><span class="p">))</span>
+    <span class="kr">else</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">players</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kr">function</span> <span class="nf">catch</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">math.random</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Catch pokemon by player &#39;</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">id</span><span class="p">))</span>
+    <span class="n">request</span><span class="p">(</span>
+        <span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;{&quot;method&quot;: &quot;catch&quot;,</span>
+<span class="s1">        &quot;params&quot;: [1, &#39;</span><span class="o">..</span><span class="n">json</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="o">..</span><span class="s1">&#39;]}&#39;</span><span class="p">,</span>
+        <span class="nb">tostring</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">table.insert</span><span class="p">(</span><span class="n">players</span><span class="p">,</span> <span class="n">player</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create pokemon&#39;</span><span class="p">)</span>
+<span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;{&quot;method&quot;: &quot;add&quot;,</span>
+<span class="s1">    &quot;params&quot;: [&#39;</span><span class="o">..</span><span class="n">json</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">pokemon</span><span class="p">)</span><span class="o">..</span><span class="s1">&#39;]}&#39;</span><span class="p">)</span>
+<span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">catch</span><span class="p">,</span> <span class="n">player1</span><span class="p">)</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">catch</span><span class="p">,</span> <span class="n">player2</span><span class="p">)</span>
+
+<span class="c1">-- wait for players</span>
+<span class="kr">while</span> <span class="o">#</span><span class="n">players</span> <span class="o">~=</span> <span class="mi">2</span> <span class="kr">do</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="nb">os.exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>When you run this script, you’ll notice that both players have equal chances to
+make the first attempt at catching the pokémon. In a classical Lua script,
+a networked call blocks the script until it’s finished, so the first catch
+attempt can only be done by the player who entered the game first. In Tarantool,
+both players play concurrently, since all modules are integrated with Tarantool
+<a class="reference internal" href="../box/atomic_index.html#atomic-cooperative-multitasking"><span class="std std-ref">cooperative multitasking</span></a> and use
+non-blocking I/O.</p>
+<p>Indeed, when Player1 makes its first REST call, the script doesn’t block.
+The fiber running <code class="docutils literal notranslate"><span class="pre">catch()</span></code> function on behalf of Player1 issues a non-blocking
+call to the operating system and yields control to the next fiber, which happens
+to be the fiber of Player2. Player2’s fiber does the same. When the network
+response is received, Player1’s fiber is activated by Tarantool cooperative
+scheduler, and resumes its work. All Tarantool <a class="reference internal" href="../../reference/reference_lua/index.html#built-in-modules"><span class="std std-ref">modules</span></a>
+use non-blocking I/O and are integrated with Tarantool cooperative scheduler.
+For module developers, Tarantool provides an <a class="reference internal" href="../../dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">API</span></a>.</p>
+<p>For our HTTP test, we create a third container based on the
+<a class="reference external" href="https://github.com/tarantool/docker">official Tarantool 1.9 image</a> (see
+<a class="reference external" href="https://github.com/tarantool/pokemon/blob/1.9/client/Dockerfile">client/Dockerfile</a>)
+and set the container’s default command to <code class="docutils literal notranslate"><span class="pre">tarantool</span> <span class="pre">client.lua</span></code>.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/aster.svg" src="../../../../_images/aster.svg" /></div>
+<p>To run this test locally, download our <a class="reference external" href="https://github.com/tarantool/pokemon">pokemon</a>
+project from GitHub and say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker-compose build
+<span class="gp">$</span> docker-compose up
+</pre></div>
+</div>
+<p>Docker Compose builds and runs all the three containers: <code class="docutils literal notranslate"><span class="pre">pserver</span></code> (Tarantool
+backend), <code class="docutils literal notranslate"><span class="pre">phttp</span></code> (nginx) and <code class="docutils literal notranslate"><span class="pre">pclient</span></code> (demo client). You can see log
+messages from all these containers in the console, pclient saying that it made
+an HTTP request to create a pokémon, made two catch requests, requested the map
+(empty since the pokémon is caught and temporarily inactive) and exited:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pclient_1  | Create pokemon</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">pclient_1  | {&quot;result&quot;:true}</span>
+<span class="go">pclient_1  | {&quot;map&quot;:[{&quot;id&quot;:1,&quot;status&quot;:&quot;active&quot;,&quot;location&quot;:{&quot;y&quot;:2,&quot;x&quot;:1},&quot;name&quot;:&quot;Pikachu&quot;,&quot;chance&quot;:99.100000}]}</span>
+<span class="go">pclient_1  | Catch pokemon by player 2</span>
+<span class="go">pclient_1  | Catch pokemon by player 1</span>
+<span class="go">pclient_1  | Player 1 result: {&quot;result&quot;:true}</span>
+<span class="go">pclient_1  | Player 2 result: {&quot;result&quot;:false}</span>
+<span class="go">pclient_1  | {&quot;map&quot;:[]}</span>
+<span class="go">pokemon_pclient_1 exited with code 0</span>
+</pre></div>
+</div>
+<p>Congratulations! Here’s the end point of our walk-through. As further reading,
+see more about <a class="reference internal" href="installing_module.html#app-server-installing-module"><span class="std std-ref">installing</span></a> and
+<a class="reference internal" href="contributing_module.html#app-server-contributing-module"><span class="std std-ref">contributing</span></a> a module.</p>
+<p>See also reference on <a class="reference internal" href="../../reference/reference_lua/index.html#built-in-modules"><span class="std std-ref">Tarantool modules</span></a> and
+<a class="reference internal" href="../../dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">C API</span></a>, and don’t miss our
+<a class="reference internal" href="cookbook.html#cookbook"><span class="std std-ref">Lua cookbook recipes</span></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

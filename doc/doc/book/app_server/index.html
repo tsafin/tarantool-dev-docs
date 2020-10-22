@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Application server &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Application server</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/app_server/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="application-server">
+<span id="app-server"></span><h1>Application server<a class="headerlink" href="#application-server" title="Permalink to this headline">¶</a></h1>
+<p>Here we introduce the basics of working with Tarantool as a Lua
+application server.</p>
+<p>This chapter contains the following sections:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="launching_app.html">Launching an application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="launching_app.html#launching-in-docker">Launching in Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="launching_app.html#launching-a-binary-program">Launching a binary program</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="creating_app.html">Creating an application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#modules-rocks-and-applications">Modules, rocks and applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#avro-schemas">Avro schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#bootstrapping-a-database">Bootstrapping a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#gis">GIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#index-iterators">Index iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#fibers">Fibers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#nginx">nginx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_app.html#non-blocking-io">Non-blocking IO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installing_module.html">Installing a module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installing_module.html#installing-a-module-from-a-repository">Installing a module from a repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing_module.html#installing-a-module-from-deb-rpm">Installing a module from deb/rpm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing_module.html">Contributing a module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing_module.html#contributing-a-module-in-lua">Contributing a module in Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing_module.html#contributing-a-module-in-c">Contributing a module in C</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reloading_module.html">Reloading a module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reloading_module.html#reloading-a-module-in-lua">Reloading a module in Lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reloading_module.html#reloading-a-module-in-c">Reloading a module in C</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_ide.html">Developing with an IDE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook recipes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#hello-world-lua">hello_world.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#console-start-lua">console_start.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#fio-read-lua">fio_read.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#fio-write-lua">fio_write.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#ffi-printf-lua">ffi_printf.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#ffi-gettimeofday-lua">ffi_gettimeofday.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#ffi-zlib-lua">ffi_zlib.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#ffi-meta-lua">ffi_meta.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#print-arrays-lua">print_arrays.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#count-array-lua">count_array.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#count-array-with-nils-lua">count_array_with_nils.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#count-array-with-nulls-lua">count_array_with_nulls.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#count-map-lua">count_map.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#swap-lua">swap.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#class-lua">class.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#garbage-lua">garbage.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#fiber-producer-and-consumer-lua">fiber_producer_and_consumer.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#socket-tcpconnect-lua">socket_tcpconnect.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#socket-tcp-echo-lua">socket_tcp_echo.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#getaddrinfo-lua">getaddrinfo.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#socket-udp-echo-lua">socket_udp_echo.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#http-get-lua">http_get.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#http-send-lua">http_send.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#http-server-lua">http_server.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#http-generate-html-lua">http_generate_html.lua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#select-all-go">select_all.go</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

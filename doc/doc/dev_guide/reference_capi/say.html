@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module say (logging) &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module schema" href="schema.html" />
+    <link rel="prev" title="Module lua/utils" href="utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>say</cite> (logging)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/say.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-say-logging">
+<h1>Module <cite>say</cite> (logging)<a class="headerlink" href="#module-say-logging" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="c-api-say-say-level"></span><dl class="enum">
+<dt id="_CPPv49say_level">
+<span id="_CPPv39say_level"></span><span id="_CPPv29say_level"></span><em class="property">enum </em><code class="descname">say_level</code><a class="headerlink" href="#_CPPv49say_level" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv47S_FATAL">
+<span id="_CPPv37S_FATAL"></span><span id="_CPPv27S_FATAL"></span><em class="property">enumerator </em><code class="descname">S_FATAL</code><a class="headerlink" href="#_CPPv47S_FATAL" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>do not use this value directly</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv410S_SYSERROR">
+<span id="_CPPv310S_SYSERROR"></span><span id="_CPPv210S_SYSERROR"></span><em class="property">enumerator </em><code class="descname">S_SYSERROR</code><a class="headerlink" href="#_CPPv410S_SYSERROR" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47S_ERROR">
+<span id="_CPPv37S_ERROR"></span><span id="_CPPv27S_ERROR"></span><em class="property">enumerator </em><code class="descname">S_ERROR</code><a class="headerlink" href="#_CPPv47S_ERROR" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv46S_CRIT">
+<span id="_CPPv36S_CRIT"></span><span id="_CPPv26S_CRIT"></span><em class="property">enumerator </em><code class="descname">S_CRIT</code><a class="headerlink" href="#_CPPv46S_CRIT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv46S_WARN">
+<span id="_CPPv36S_WARN"></span><span id="_CPPv26S_WARN"></span><em class="property">enumerator </em><code class="descname">S_WARN</code><a class="headerlink" href="#_CPPv46S_WARN" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv46S_INFO">
+<span id="_CPPv36S_INFO"></span><span id="_CPPv26S_INFO"></span><em class="property">enumerator </em><code class="descname">S_INFO</code><a class="headerlink" href="#_CPPv46S_INFO" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv49S_VERBOSE">
+<span id="_CPPv39S_VERBOSE"></span><span id="_CPPv29S_VERBOSE"></span><em class="property">enumerator </em><code class="descname">S_VERBOSE</code><a class="headerlink" href="#_CPPv49S_VERBOSE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47S_DEBUG">
+<span id="_CPPv37S_DEBUG"></span><span id="_CPPv27S_DEBUG"></span><em class="property">enumerator </em><code class="descname">S_DEBUG</code><a class="headerlink" href="#_CPPv47S_DEBUG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.say">
+<code class="descname">say</code><span class="sig-paren">(</span>level, format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format and print a message to Tarantool log file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> (<em>int</em>) – <a class="reference internal" href="#c-api-say-say-level"><span class="std std-ref">log level</span></a></li>
+<li><strong>char* format</strong> (<em>const</em>) – <code class="docutils literal notranslate"><span class="pre">printf()</span></code>-like format string</li>
+<li><strong>...</strong> – format arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <em class="manpage">printf(3)</em>, <a class="reference internal" href="#c-api-say-say-level"><span class="std std-ref">say_level</span></a></p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.say_error">
+<code class="descname">say_error</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_error" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_crit">
+<code class="descname">say_crit</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_crit" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_warn">
+<code class="descname">say_warn</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_warn" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_info">
+<code class="descname">say_info</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_info" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_verbose">
+<code class="descname">say_verbose</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_verbose" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_debug">
+<code class="descname">say_debug</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_debug" title="Permalink to this definition">¶</a></dt>
+<dt id="c.say_syserror">
+<code class="descname">say_syserror</code><span class="sig-paren">(</span>format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.say_syserror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format and print a message to Tarantool log file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>char* format</strong> (<em>const</em>) – <code class="docutils literal notranslate"><span class="pre">printf()</span></code>-like format string</li>
+<li><strong>...</strong> – format arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <em class="manpage">printf(3)</em>, <a class="reference internal" href="#c-api-say-say-level"><span class="std std-ref">say_level</span></a></p>
+<p><strong>Example:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">say_info</span><span class="p">(</span><span class="s">&quot;Some useful information: %s&quot;</span><span class="p">,</span> <span class="n">status</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="schema.html" class="btn btn-neutral float-right" title="Module schema" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="utils.html" class="btn btn-neutral float-left" title="Module lua/utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

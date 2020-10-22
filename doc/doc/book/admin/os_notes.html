@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Notes for operating systems &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Notes for operating systems</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/os_notes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="notes-for-operating-systems">
+<span id="admin-os-notes"></span><h1>Notes for operating systems<a class="headerlink" href="#notes-for-operating-systems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mac-os">
+<span id="admin-os-notes-mac"></span><h2>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h2>
+<p>On Mac OS, you can administer Tarantool instances only with <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.
+No native system tools are supported.</p>
+</div>
+<div class="section" id="freebsd">
+<span id="admin-os-notes-freebsd"></span><h2>FreeBSD<a class="headerlink" href="#freebsd" title="Permalink to this headline">¶</a></h2>
+<p>To make <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> work along with <code class="docutils literal notranslate"><span class="pre">init.d</span></code> utilities on FreeBSD, use
+paths other than those suggested in
+<a class="reference internal" href="instance_config.html#admin-instance-config"><span class="std std-ref">Instance configuration</span></a>. Instead of
+<code class="docutils literal notranslate"><span class="pre">/usr/share/tarantool/</span></code> directory, use <code class="docutils literal notranslate"><span class="pre">/usr/local/etc/tarantool/</span></code> and
+create the following subdirectories:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">default</span></code> for <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> defaults (see example below),</li>
+<li><code class="docutils literal notranslate"><span class="pre">instances.available</span></code> for all available instance files, and</li>
+<li><code class="docutils literal notranslate"><span class="pre">instances.enabled</span></code> for instance files to be auto-started by sysvinit.</li>
+</ul>
+<p>Here is an example of <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> defaults on FreeBSD:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">default_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">pid_file</span>   <span class="o">=</span> <span class="s2">&quot;/var/run/tarantool&quot;</span><span class="p">,</span> <span class="c1">-- /var/run/tarantool/${INSTANCE}.pid</span>
+    <span class="n">wal_dir</span>    <span class="o">=</span> <span class="s2">&quot;/var/db/tarantool&quot;</span><span class="p">,</span> <span class="c1">-- /var/db/tarantool/${INSTANCE}/</span>
+    <span class="n">snap_dir</span>   <span class="o">=</span> <span class="s2">&quot;/var/db/tarantool&quot;</span><span class="p">,</span> <span class="c1">-- /var/db/tarantool/${INSTANCE}</span>
+    <span class="n">vinyl_dir</span> <span class="o">=</span> <span class="s2">&quot;/var/db/tarantool&quot;</span><span class="p">,</span> <span class="c1">-- /var/db/tarantool/${INSTANCE}</span>
+    <span class="n">logger</span>     <span class="o">=</span> <span class="s2">&quot;/var/log/tarantool&quot;</span><span class="p">,</span> <span class="c1">-- /var/log/tarantool/${INSTANCE}.log</span>
+    <span class="n">username</span>   <span class="o">=</span> <span class="s2">&quot;tarantool&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">-- instances.available - all available instances</span>
+<span class="c1">-- instances.enabled - instances to autostart by sysvinit</span>
+<span class="n">instance_dir</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/etc/tarantool/instances.available&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gentoo-linux">
+<span id="admin-os-notes-gentoo"></span><h2>Gentoo Linux<a class="headerlink" href="#gentoo-linux" title="Permalink to this headline">¶</a></h2>
+<p>The section below is about a dev-db/tarantool package installed from the
+official layman overlay (named <code class="docutils literal notranslate"><span class="pre">tarantool</span></code>).</p>
+<p>The default instance directory is <code class="docutils literal notranslate"><span class="pre">/etc/tarantool/instances.available</span></code>, can be
+redefined in <code class="docutils literal notranslate"><span class="pre">/etc/default/tarantool</span></code>.</p>
+<p>Tarantool instances can be managed (start/stop/reload/status/…) using OpenRC.
+Consider the example how to create an OpenRC-managed instance:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> /etc/init.d
+<span class="gp">$</span> ln -s tarantool your_service_name
+<span class="gp">$</span> ln -s /usr/share/tarantool/your_service_name.lua /etc/tarantool/instances.available/your_service_name.lua
+</pre></div>
+</div>
+<p>Checking that it works:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> /etc/init.d/your_service_name start
+<span class="gp">$</span> tail -f -n <span class="m">100</span> /var/log/tarantool/your_service_name.log
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

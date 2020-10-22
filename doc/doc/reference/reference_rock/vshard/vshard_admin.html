@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Administration &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../../_sources/doc/doc/reference/reference_rock/vshard/vshard_admin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="administration">
+<span id="vshard-admin"></span><h1>Administration<a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<span id="vshard-install"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">vshard</span></code> module is distributed separately from the main Tarantool package.
+To install it, say this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl rocks install vshard
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">vshard</span></code> module requires Tarantool version 1.9+,
+<a class="reference external" href="https://www.tarantool.io/en/doc/1.10/tutorials/c_tutorial/#c-stored-procedures">Tarantool development package</a>,
+<code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">cmake</span></code> and <code class="docutils literal notranslate"><span class="pre">gcc</span></code> packages installed.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<span id="vshard-config-cluster"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Any viable sharded cluster consists of:</p>
+<ul class="simple">
+<li>one or more replica sets, each containing two or more
+<a class="reference internal" href="vshard_architecture.html#vshard-storage"><span class="std std-ref">storage</span></a> instances,</li>
+<li>one or more <a class="reference internal" href="vshard_architecture.html#vshard-router"><span class="std std-ref">router</span></a> instances.</li>
+</ul>
+<p>The number of <code class="docutils literal notranslate"><span class="pre">storage</span></code> instances in a replica set defines the redundancy factor
+of the data. The recommended value is 3 or more. The number of <code class="docutils literal notranslate"><span class="pre">router</span></code> instances
+is not limited, because routers are completely stateless. We recommend increasing
+the number of routers when an existing <code class="docutils literal notranslate"><span class="pre">router</span></code> instance becomes CPU or I/O bound.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vshard</span></code> supports multiple <code class="docutils literal notranslate"><span class="pre">router</span></code> instances on a single Tarantool
+instance. Each <code class="docutils literal notranslate"><span class="pre">router</span></code> can be connected to any <code class="docutils literal notranslate"><span class="pre">vshard</span></code> cluster. Multiple
+<code class="docutils literal notranslate"><span class="pre">router</span></code> instances can be connected to the same cluster.</p>
+<p>As the <code class="docutils literal notranslate"><span class="pre">router</span></code> and <code class="docutils literal notranslate"><span class="pre">storage</span></code> applications perform completely different sets of functions,
+they should be deployed to different Tarantool instances. Although it is technically
+possible to place the router application on every <code class="docutils literal notranslate"><span class="pre">storage</span></code> node, this approach is
+highly discouraged and should be avoided on production deployments.</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">storage</span></code> instances can be deployed using identical instance (configuration)
+files.</p>
+<p>Self-identification is currently performed using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl instance_name
+</pre></div>
+</div>
+<p>All <code class="docutils literal notranslate"><span class="pre">router</span></code> instances can also be deployed using identical instance (configuration)
+files.</p>
+<p>All cluster nodes must share a common topology. An administrator must
+ensure that the configurations are identical. We suggest using a configuration
+management tool like Ansible or Puppet to deploy the cluster.</p>
+<p>Sharding is not integrated into any system for centralized configuration management.
+It is expected that the application itself is responsible for interacting with such
+a system and passing the sharding parameters.</p>
+<p>The configuration example of a simple sharded cluster is available
+<a class="reference internal" href="vshard_quick.html#vshard-config-cluster-example"><span class="std std-ref">here</span></a>.</p>
+<div class="section" id="replica-weights">
+<span id="vshard-replica-weights"></span><h3>Replica weights<a class="headerlink" href="#replica-weights" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">router</span></code> sends all read-write requests to the master instance only. Setting replica
+weights allows sending read-only requests not only to the master instance, but to any
+available replica that is the ‘nearest’ to the <code class="docutils literal notranslate"><span class="pre">router</span></code>. Weights are used to define
+distances between replicas within a replica set.</p>
+<p>Weights can be used, for example, to define the physical distance between the
+<code class="docutils literal notranslate"><span class="pre">router</span></code> and each replica in each replica set. In this case read requests
+are sent to the nearest replica (with the lowest weight).</p>
+<p>Setting weights can also help to define the most powerful replicas: the ones that
+can process the largest number of requests per second.</p>
+<p>The idea is to specify the zone for every <code class="docutils literal notranslate"><span class="pre">router</span></code> and every replica, therefore
+filling a matrix of relative zone weights. This approach allows setting different
+weights in different zones for the same replica set.</p>
+<p>To set weights, use the zone attribute for each replica during configuration:</p>
+<div class="highlight-kconfig notranslate"><div class="highlight"><pre><span></span>local cfg <span class="o">=</span> {
+   sharding <span class="o">=</span> {
+      [&#39;...replicaset_uuid...&#39;] <span class="o">=</span> {
+         replicas <span class="o">=</span> {
+            [&#39;...replica_uuid...&#39;] <span class="o">=</span> {
+                 ...,
+                 zone <span class="o">=</span> &lt;number or <span class="nb">string</span>&gt;
+            }
+         }
+      }
+   }
+}
+</pre></div>
+</div>
+<p>Then, specify relative weights for each zone pair in the <code class="docutils literal notranslate"><span class="pre">weights</span></code> parameter of
+<code class="docutils literal notranslate"><span class="pre">vshard.router.cfg</span></code>. For example:</p>
+<div class="highlight-kconfig notranslate"><div class="highlight"><pre><span></span>weights <span class="o">=</span> {
+    [1] <span class="o">=</span> {
+        [2] <span class="o">=</span> <span class="mi">1</span>, -- Routers of the <span class="mi">1</span>st zone see the weight of the <span class="mi">2</span>nd zone as <span class="mi">1</span>.
+        [3] <span class="o">=</span> <span class="mi">2</span>, -- Routers of the <span class="mi">1</span>st zone see the weight of the <span class="mi">3</span>rd zone as <span class="mi">2</span>.
+        [4] <span class="o">=</span> <span class="mi">3</span>, -- ...
+    },
+    [2] <span class="o">=</span> {
+        [1] <span class="o">=</span> <span class="mi">10</span>,
+        [2] <span class="o">=</span> <span class="mi">0</span>,
+        [3] <span class="o">=</span> <span class="mi">10</span>,
+        [4] <span class="o">=</span> <span class="mi">20</span>,
+    },
+    [3] <span class="o">=</span> {
+        [1] <span class="o">=</span> <span class="mi">100</span>,
+        [2] <span class="o">=</span> <span class="mi">200</span>, -- Routers of the <span class="mi">3</span>rd zone see the weight of the <span class="mi">2</span>nd zone as <span class="mi">200</span>.
+                   -- Mind that it is not equal to the weight of the <span class="mi">2</span>nd zone visible
+                   -- from the <span class="mi">1</span>st zone <span class="p">(</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>.
+        [4] <span class="o">=</span> <span class="mi">1000</span>,
+    }
+}
+
+local cfg <span class="o">=</span> vshard.router.cfg({weights <span class="o">=</span> weights, sharding <span class="o">=</span> ...})
+</pre></div>
+</div>
+</div>
+<div class="section" id="replica-set-weights">
+<span id="vshard-replica-set-weights"></span><h3>Replica set weights<a class="headerlink" href="#replica-set-weights" title="Permalink to this headline">¶</a></h3>
+<p>A replica set weight is not the same as the replica weight. The weight of a replica
+set defines the capacity of the replica set: the larger the weight, the more
+buckets the replica set can store. The total size of all sharded spaces in the
+replica set is also its capacity metric.</p>
+<p>You can consider replica set weights as the relative amount of data within a
+replica set. For example, if <code class="docutils literal notranslate"><span class="pre">replicaset_1</span> <span class="pre">=</span> <span class="pre">100</span></code>, and <code class="docutils literal notranslate"><span class="pre">replicaset_2</span> <span class="pre">=</span> <span class="pre">200</span></code>,
+the second replica set stores twice as many buckets as the first one. By default,
+all weights of all replica sets are equal.</p>
+<p>You can use weights, for example, to store the prevailing amount of data on a
+replica set with more memory space.</p>
+</div>
+<div class="section" id="rebalancing-process">
+<span id="vshard-rebalancing"></span><h3>Rebalancing process<a class="headerlink" href="#rebalancing-process" title="Permalink to this headline">¶</a></h3>
+<p>There is an <strong>etalon number</strong> of buckets for a replica set.
+(Etalon in this context means “ideal”.)
+If there is no deviation
+from this number in the whole replica set, then the buckets are distributed evenly.</p>
+<p>The etalon number is calculated automatically considering the number of buckets
+in the cluster and weights of the replica sets.</p>
+<p>Rebalancing starts if the <strong>disbalance threshold of a replica set</strong>
+exceeds the disbalance threshold
+<a class="reference internal" href="vshard_ref.html#cfg-basic-rebalancer-disbalance-threshold"><span class="std std-ref">specified in the configuration</span></a>.</p>
+<p>The disbalance threshold of a replica set is calculated as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|etalon_bucket_number - real_bucket_number| / etalon_bucket_number * 100
+</pre></div>
+</div>
+<p>For example: The user specified the number of buckets is 3000, and weights
+of 3 replica sets are 1, 0.5, and 1.5. The resulting etalon numbers of buckets
+for the replica sets are: 1st replica set – 1000, 2nd replica set – 500, 3rd
+replica set – 1500.</p>
+<p>This approach allows assigning a zero weight to a replica set, which initiates
+migration of its buckets to the remaining cluster nodes. It also allows adding
+a new zero-load replica set, which initiates migration of the buckets from the
+loaded replica sets to the zero-load replica set.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A new zero-load replica set should be assigned a weight for rebalancing to start.</p>
+</div>
+<p>When a new shard is added, the configuration can be updated dynamically:</p>
+<ol class="arabic simple">
+<li>The configuration should be updated on all the <code class="docutils literal notranslate"><span class="pre">routers</span></code> first, and then on all
+the <code class="docutils literal notranslate"><span class="pre">storages</span></code>.</li>
+<li>The new shard becomes available for rebalancing in the <code class="docutils literal notranslate"><span class="pre">storage</span></code> layer.</li>
+<li>As a result of rebalancing, buckets are migrated to the new shard.</li>
+<li>If a migrated bucket is requested, <code class="docutils literal notranslate"><span class="pre">router</span></code> receives an error code containing
+information about the new location of the bucket.</li>
+</ol>
+<p>At this time, the new shard is already present in the <code class="docutils literal notranslate"><span class="pre">router</span></code>’s pool of
+connections, so redirection is transparent for the application.</p>
+</div>
+<div class="section" id="parallel-rebalancing">
+<span id="vshard-parallel-rebalancing"></span><h3>Parallel rebalancing<a class="headerlink" href="#parallel-rebalancing" title="Permalink to this headline">¶</a></h3>
+<p>Originally, <code class="docutils literal notranslate"><span class="pre">vshard</span></code> had quite a simple <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> –
+one process on one node that calculated <em>routes</em> which should send buckets, how
+many, and to whom. The nodes applied these routes one by
+one sequentially.</p>
+<p>Unfortunately, such a simple schema worked not fast enough,
+especially for Vinyl, where costs of reading disk were comparable
+with network costs. In fact, with Vinyl the <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> routes
+applier was sleeping most of the time.</p>
+<p>Now each node can send multiple buckets in parallel in a
+round-robin manner to multiple destinations, or to just one.</p>
+<p>To set the degree of parallelism, a new option was added –
+<a class="reference internal" href="vshard_ref.html#cfg-basic-rebalancer-max-sending"><span class="std std-ref">rebalancer_max_sending</span></a>.
+You can specify it in a storage configuration in the root table:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">cfg</span><span class="p">.</span><span class="n">rebalancer_max_sending</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="n">cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">box</span><span class="p">.</span><span class="n">info</span><span class="p">.</span><span class="n">uuid</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In routers, this option is ignored.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Specifying <code class="docutils literal notranslate"><span class="pre">cfg.rebalancer_max_sending</span> <span class="pre">=</span> <span class="pre">N</span></code> probably won’t give N times
+speed up. It depends on network, disk, number of other fibers in the system.</p>
+</div>
+<p><strong>Example #1:</strong></p>
+<blockquote>
+<div><p>You have 10 replica sets and a new one is added.
+Now all the 10 replica sets will try to send buckets to the new one.</p>
+<p>Assume that each replica set can send up to 5 buckets at once. In that case,
+the new replica set will experience a rather big load of 50 buckets
+being downloaded at once. If the node needs to do some other
+work, perhaps such a big load is undesirable. Also too many
+parallel buckets can cause timeouts in the rebalancing process
+itself.</p>
+<p>To fix the problem, you can set a lower value for <code class="docutils literal notranslate"><span class="pre">rebalancer_max_sending</span></code>
+for old replica sets, or decrease <code class="docutils literal notranslate"><span class="pre">rebalancer_max_receiving</span></code> for the new one.
+In the latter case some workers on old nodes will be throttled,
+and you will see that in the logs.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">rebalancer_max_sending</span></code> is important, if you have restrictions for
+the maximal number of buckets that can be read-only at once in the cluster. As you
+remember, when a bucket is being sent, it does not accept new
+write requests.</p>
+<p><strong>Example #2:</strong></p>
+<blockquote>
+<div>You have 100000 buckets and each
+bucket stores ~0.001% of your data. The cluster has 10
+replica sets. And you never can afford &gt; 0.1% of data locked on
+write. Then you should not set <code class="docutils literal notranslate"><span class="pre">rebalancer_max_sending</span></code> &gt; 10 on
+these nodes. It guarantees that the rebalancer won’t send more
+than 100 buckets at once in the whole cluster.</div></blockquote>
+<p>If <code class="docutils literal notranslate"><span class="pre">max_sending</span></code> is too high and <code class="docutils literal notranslate"><span class="pre">max_receiving</span></code> is too low,
+then some buckets will try to get relocated – and will fail with that.
+This problem will consume network resources and time. It is important to
+configure these parameters to not conflict with each other.</p>
+</div>
+<div class="section" id="replica-set-lock-and-bucket-pin">
+<span id="vshard-lock-pin"></span><h3>Replica set lock and bucket pin<a class="headerlink" href="#replica-set-lock-and-bucket-pin" title="Permalink to this headline">¶</a></h3>
+<p>A replica set lock makes a replica set invisible to the <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code>: a locked
+replica set can neither receive new buckets nor migrate its own buckets.</p>
+<p>A bucket pin blocks a specific bucket from migrating: a pinned bucket stays on
+the replica set to which it is pinned, until it is unpinned.</p>
+<p>Pinning all replica set buckets is not equivalent to locking a replica set. Even if
+you pin all buckets, a non-locked replica set can still receive new buckets.</p>
+<p>Replica set lock is helpful, for example, to separate a replica set from production
+replica sets for testing, or to preserve some application metadata that must not
+be sharded for a while. A bucket pin is used for similar cases but in a smaller
+scope.</p>
+<p>By both locking a replica set and pinning all buckets, one can
+isolate an entire replica set.</p>
+<p>Locked replica sets and pinned buckets affect the rebalancing algorithm as the
+<code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> must ignore locked replica sets and consider pinned buckets when
+attempting to reach the best possible balance.</p>
+<p>The issue is not trivial as a user can pin too many buckets to a replica set,
+so a perfect balance becomes unreachable. For example, consider the following
+cluster (assume all replica set weights are equal to 1).</p>
+<p>The initial configuration:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rs1: bucket_count = 150
+rs2: bucket_count = 150, pinned_count = 120
+</pre></div>
+</div>
+<p>Adding a new replica set:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rs1: bucket_count = 150
+rs2: bucket_count = 150, pinned_count = 120
+rs3: bucket_count = 0
+</pre></div>
+</div>
+<p>The perfect balance would be <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">-</span> <span class="pre">100</span> <span class="pre">-</span> <span class="pre">100</span></code>, which is impossible since the
+<code class="docutils literal notranslate"><span class="pre">rs2</span></code> replica set has 120 pinned buckets. The best possible balance here is the
+following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rs1: bucket_count = 90
+rs2: bucket_count = 120, pinned_count 120
+rs3: bucket_count = 90
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> moved as many buckets as possible from <code class="docutils literal notranslate"><span class="pre">rs2</span></code> to decrease the
+disbalance. At the same time it respected equal weights of <code class="docutils literal notranslate"><span class="pre">rs1</span></code> and <code class="docutils literal notranslate"><span class="pre">rs3</span></code>.</p>
+<p>The algorithms for implementing locks and pins are completely different, although
+they look similar in terms of functionality.</p>
+<div class="section" id="replica-set-lock-and-rebalancing">
+<span id="vshard-lock-and-rebalancing"></span><h4>Replica set lock and rebalancing<a class="headerlink" href="#replica-set-lock-and-rebalancing" title="Permalink to this headline">¶</a></h4>
+<p>Locked replica sets simply do not participate in rebalancing. This means that
+even if the actual total number of buckets is not equal to the etalon number,
+the disbalance cannot be fixed due to the lock. When the rebalancer detects that
+one of the replica sets is locked, it recalculates the etalon number of buckets
+of the non-locked replica sets as if the locked replica set and its buckets did
+not exist at all.</p>
+</div>
+<div class="section" id="bucket-pin-and-rebalancing">
+<span id="vshard-pin-and-rebalancing"></span><h4>Bucket pin and rebalancing<a class="headerlink" href="#bucket-pin-and-rebalancing" title="Permalink to this headline">¶</a></h4>
+<p>Rebalancing replica sets with pinned buckets requires a more complex algorithm.
+Here <code class="docutils literal notranslate"><span class="pre">pinned_count[o]</span></code> is the number of pinned buckets, and <code class="docutils literal notranslate"><span class="pre">etalon_count</span></code> is
+the etalon number of buckets for a replica set:</p>
+<ol class="arabic simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> calculates the etalon number of buckets as if all buckets
+were not pinned. Then the rebalancer checks each replica set and compares the
+etalon number of buckets with the number of pinned buckets in a replica set.
+If <code class="docutils literal notranslate"><span class="pre">pinned_count</span> <span class="pre">&lt;</span> <span class="pre">etalon_count</span></code>, non-locked replica sets (at this point all
+locked replica sets already are filtered out) with pinned buckets can receive
+new buckets.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">pinned_count</span> <span class="pre">&gt;</span> <span class="pre">etalon_count</span></code>, the disbalance cannot be fixed, as the
+<code class="docutils literal notranslate"><span class="pre">rebalancer</span></code> cannot move pinned buckets out of this replica set. In such a case
+the etalon number is updated and set equal to the number of pinned buckets.
+The replica sets with <code class="docutils literal notranslate"><span class="pre">pinned_count</span> <span class="pre">&gt;</span> <span class="pre">etalon_count</span></code> are not processed by
+the <code class="docutils literal notranslate"><span class="pre">rebalancer</span></code>, and the number of pinned buckets is subtracted from the
+total number of buckets. The rebalancer tries to move out as many buckets as
+possible from such replica sets.</li>
+<li>This procedure is restarted from step 1 for replica sets with
+<code class="docutils literal notranslate"><span class="pre">pinned_count</span> <span class="pre">&gt;=</span> <span class="pre">etalon_count</span></code> until <code class="docutils literal notranslate"><span class="pre">pinned_count</span> <span class="pre">&lt;=</span> <span class="pre">etalon_count</span></code> on
+all replica sets. The procedure is also restarted when the total number of
+buckets is changed.</li>
+</ol>
+<p>Here is the pseudocode for the algorithm:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">cluster_calculate_perfect_balance</span><span class="p">(</span><span class="n">replicasets</span><span class="p">,</span> <span class="n">bucket_count</span><span class="p">)</span>
+        <span class="c1">-- rebalance the buckets using weights of the still viable replica sets --</span>
+<span class="kr">end</span><span class="p">;</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">all</span> <span class="n">of</span> <span class="n">the</span> <span class="n">non</span><span class="o">-</span><span class="n">locked</span> <span class="n">replica</span> <span class="n">sets</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">bucket_count</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">total</span> <span class="n">number</span> <span class="n">of</span> <span class="n">buckets</span> <span class="kr">in</span> <span class="n">the</span> <span class="n">cluster</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">can_reach_balance</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="kr">while</span> <span class="ow">not</span> <span class="n">can_reach_balance</span> <span class="kr">do</span>
+        <span class="n">can_reach_balance</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="n">cluster_calculate_perfect_balance</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">bucket_count</span><span class="p">);</span>
+        <span class="n">foreach</span> <span class="n">replicaset</span> <span class="kr">in</span> <span class="n">cluster</span> <span class="kr">do</span>
+                <span class="kr">if</span> <span class="n">replicaset</span><span class="p">.</span><span class="n">perfect_bucket_count</span> <span class="o">&lt;</span>
+                   <span class="n">replicaset</span><span class="p">.</span><span class="n">pinned_bucket_count</span> <span class="kr">then</span>
+                        <span class="n">can_reach_balance</span> <span class="o">=</span> <span class="kc">false</span>
+                        <span class="n">bucket_count</span> <span class="o">-=</span> <span class="n">replicaset</span><span class="p">.</span><span class="n">pinned_bucket_count</span><span class="p">;</span>
+                        <span class="n">replicaset</span><span class="p">.</span><span class="n">perfect_bucket_count</span> <span class="o">=</span>
+                                <span class="n">replicaset</span><span class="p">.</span><span class="n">pinned_bucket_count</span><span class="p">;</span>
+                <span class="kr">end</span><span class="p">;</span>
+        <span class="kr">end</span><span class="p">;</span>
+<span class="kr">end</span><span class="p">;</span>
+<span class="n">cluster_calculate_perfect_balance</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">bucket_count</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The complexity of the algorithm is <code class="docutils literal notranslate"><span class="pre">O(N^2)</span></code>, where N is the number of replica sets.
+On each step, the algorithm either finishes the calculation, or ignores at least
+one new replica set overloaded with the pinned buckets, and updates the etalon
+number of buckets on other replica sets.</p>
+</div>
+</div>
+<div class="section" id="bucket-ref">
+<span id="vshard-ref"></span><h3>Bucket ref<a class="headerlink" href="#bucket-ref" title="Permalink to this headline">¶</a></h3>
+<p>Bucket ref is an in-memory counter that is similar to the
+<a class="reference internal" href="#vshard-lock-pin"><span class="std std-ref">bucket pin</span></a>, but has the following differences:</p>
+<ol class="arabic">
+<li><p class="first">Bucket ref is not persistent. Refs are intended for forbidding bucket transfer
+during request execution, but on restart all requests are dropped.</p>
+</li>
+<li><p class="first">There are two types of bucket refs: read-only (RO) and read-write (RW).</p>
+<p>If a bucket has RW refs, it cannot be moved. However, when the rebalancer
+needs it to be sent, it locks the bucket for new write requests, waits
+until all current requests are finished, and then sends the bucket.</p>
+<p>If a bucket has RO refs, it can be sent, but cannot be dropped. Such a
+bucket can even enter GARBAGE or SENT state, but its data is kept until
+the last reader is gone.</p>
+<p>A single bucket can have both RO and RW refs.</p>
+</li>
+<li><p class="first">Bucket ref is countable.</p>
+</li>
+</ol>
+<p>The <a class="reference internal" href="vshard_ref.html#storage-api-bucket-ref"><span class="std std-ref">vshard.storage.bucket_ref/unref()</span></a> methods
+are called automatically when <a class="reference internal" href="vshard_ref.html#router-api-call"><span class="std std-ref">vshard.router.call()</span></a>
+or <a class="reference internal" href="vshard_ref.html#storage-api-call"><span class="std std-ref">vshard.storage.call()</span></a> is used.
+For raw API like <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">vshard.router.route()</span> <span class="pre">r:callro/callrw</span></code> you should
+explicitly call the <code class="docutils literal notranslate"><span class="pre">bucket_ref()</span></code> method inside the function. Also, make sure
+that you call <code class="docutils literal notranslate"><span class="pre">bucket_unref()</span></code> after <code class="docutils literal notranslate"><span class="pre">bucket_ref()</span></code>, otherwise the bucket
+cannot be moved from the storage until the instance restart.</p>
+<p>To see how many refs there are for a bucket, use
+<a class="reference internal" href="vshard_ref.html#storage-api-buckets-info"><span class="std std-ref">vshard.storage.buckets_info([bucket_id])</span></a>
+(the <code class="docutils literal notranslate"><span class="pre">bucket_id</span></code> parameter is optional).</p>
+<p>For example:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>vshard.storage.buckets_info(1)
+---
+- 1:
+    status: active
+    ref_rw: 1
+    ref_ro: 1
+    ro_lock: true
+    rw_lock: true
+    id: 1
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-spaces">
+<span id="vshard-define-spaces"></span><h3>Defining spaces<a class="headerlink" href="#defining-spaces" title="Permalink to this headline">¶</a></h3>
+<p>Database Schema is stored on <code class="docutils literal notranslate"><span class="pre">storages</span></code>, while <code class="docutils literal notranslate"><span class="pre">routers</span></code> know nothing about
+spaces and tuples.</p>
+<p>Spaces should be defined within a storage application using <code class="docutils literal notranslate"><span class="pre">box.once()</span></code>.
+For example:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;testapp:schema:1&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">customer</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;customer&#39;</span><span class="p">)</span>
+    <span class="n">customer</span><span class="p">:</span><span class="n">format</span><span class="p">({</span>
+        <span class="p">{</span><span class="s1">&#39;customer_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span>
+    <span class="p">})</span>
+    <span class="n">customer</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;customer_id&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;customer_id&#39;</span><span class="p">}})</span>
+    <span class="n">customer</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">},</span> <span class="n">unique</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+
+    <span class="kd">local</span> <span class="n">account</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;account&#39;</span><span class="p">)</span>
+    <span class="n">account</span><span class="p">:</span><span class="n">format</span><span class="p">({</span>
+        <span class="p">{</span><span class="s1">&#39;account_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;customer_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;balance&#39;</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span>
+    <span class="p">})</span>
+    <span class="n">account</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;account_id&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account_id&#39;</span><span class="p">}})</span>
+    <span class="n">account</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;customer_id&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;customer_id&#39;</span><span class="p">},</span> <span class="n">unique</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+    <span class="n">account</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bucket_id&#39;</span><span class="p">},</span> <span class="n">unique</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">snapshot</span><span class="p">()</span>
+
+    <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;customer_lookup&#39;</span><span class="p">)</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;customer_lookup&#39;</span><span class="p">)</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;customer_add&#39;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Every space you plan to shard must have a field with
+<a class="reference internal" href="vshard_architecture.html#vshard-vbuckets"><span class="std std-ref">bucket id</span></a> numbers, indexed by the
+<a class="reference internal" href="vshard_ref.html#cfg-basic-shard-index"><span class="std std-ref">shard index</span></a>.</p>
+</div>
+</div>
+<div class="section" id="adding-data">
+<span id="vshard-adding-data"></span><h3>Adding data<a class="headerlink" href="#adding-data" title="Permalink to this headline">¶</a></h3>
+<p>All DML operations with data should be performed via <code class="docutils literal notranslate"><span class="pre">router</span></code>. The
+only operation supported by <code class="docutils literal notranslate"><span class="pre">router</span></code> is <cite>CALL</cite> via <code class="docutils literal notranslate"><span class="pre">bucket_id</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">bucket_id</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">vshard.router.call()</span></code> routes <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">func(unpack(args))</span></code> call to a shard
+which serves <code class="docutils literal notranslate"><span class="pre">bucket_id</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bucket_id</span></code> is just a regular number in the range
+<code class="docutils literal notranslate"><span class="pre">1..</span></code><a class="reference internal" href="vshard_ref.html#cfg-basic-bucket-count"><span class="std std-ref">bucket_count</span></a>. This number can be assigned in
+an arbitrary way by the client application. A sharded Tarantool cluster uses this
+number as an opaque unique identifier to distribute data across replica sets. It
+is guaranteed that all records with the same <code class="docutils literal notranslate"><span class="pre">bucket_id</span></code> will be stored on the
+same replica set.</p>
+</div>
+<div class="section" id="bootstrapping-and-restarting-a-storage">
+<span id="vshard-bootstrap"></span><h3>Bootstrapping and restarting a storage<a class="headerlink" href="#bootstrapping-and-restarting-a-storage" title="Permalink to this headline">¶</a></h3>
+<p>If a replica set master fails, it is recommended to:</p>
+<ol class="arabic simple">
+<li>Switch one of the replicas into the master mode. This allows the new master
+to process all the incoming requests.</li>
+<li>Update the configuration of all the cluster members. This forwards all the
+requests to the new master.</li>
+</ol>
+<p>Monitoring the master and switching the instance modes can be handled by any
+external utility.</p>
+<p>To perform a scheduled downtime of a replica set master, it is recommended to:</p>
+<ol class="arabic simple">
+<li>Update the configuration of the master and wait for the replicas to get into
+sync. All the requests then are forwarded to a new master.</li>
+<li>Switch another instance into the master mode.</li>
+<li>Update the configuration of all the nodes.</li>
+<li>Shut down the old master.</li>
+</ol>
+<p>To perform a scheduled downtime of a replica set, it is recommended to:</p>
+<ol class="arabic simple">
+<li>Migrate all the buckets to the other cluster storages.</li>
+<li>Update the configuration of all the nodes.</li>
+<li>Shut down the replica set.</li>
+</ol>
+<p>In case a whole replica set fails, some part of the dataset becomes inaccessible.
+Meanwhile, the <code class="docutils literal notranslate"><span class="pre">router</span></code> tries to reconnect to the master of the failed replica
+set. This way, once the replica set is up and running again, the cluster is
+automatically restored.</p>
+</div>
+<div class="section" id="fibers">
+<span id="vshard-fibers"></span><h3>Fibers<a class="headerlink" href="#fibers" title="Permalink to this headline">¶</a></h3>
+<p>Searches for buckets, buckets recovery, and buckets rebalancing are performed
+automatically and do not require manual intervention.</p>
+<p>Technically, there are multiple fibers responsible for different types of
+operations:</p>
+<ul class="simple">
+<li>a <strong>discovery</strong> fiber on the <code class="docutils literal notranslate"><span class="pre">router</span></code> searches for buckets in the background</li>
+<li>a <strong>failover</strong> fiber on the <code class="docutils literal notranslate"><span class="pre">router</span></code> maintains replica connections</li>
+<li>a <strong>garbage collector</strong> fiber on each master <code class="docutils literal notranslate"><span class="pre">storage</span></code> removes the contents
+of buckets that were moved</li>
+<li>a <strong>bucket recovery</strong> fiber on each master <code class="docutils literal notranslate"><span class="pre">storage</span></code> recovers buckets in the
+SENDING and RECEIVING states in case of reboot</li>
+<li>a <strong>rebalancer</strong> on a single master <code class="docutils literal notranslate"><span class="pre">storage</span></code> among all replica sets executes
+the rebalancing process.</li>
+</ul>
+<p>See the <a class="reference internal" href="#vshard-rebalancing"><span class="std std-ref">Rebalancing process</span></a> and
+<a class="reference internal" href="vshard_architecture.html#vshard-migrate-buckets"><span class="std std-ref">Migration of buckets</span></a> sections for details.</p>
+<div class="section" id="garbage-collector">
+<span id="vshard-gc"></span><h4>Garbage collector<a class="headerlink" href="#garbage-collector" title="Permalink to this headline">¶</a></h4>
+<p>A <strong>garbage collector</strong> fiber runs in the background on the master storages
+of each replica set. It starts deleting the contents of the bucket in the GARBAGE
+state part by part. Once the bucket is empty, its record is deleted from the
+<code class="docutils literal notranslate"><span class="pre">_bucket</span></code> system space.</p>
+</div>
+<div class="section" id="bucket-recovery">
+<span id="vshard-bucket-recovery"></span><h4>Bucket recovery<a class="headerlink" href="#bucket-recovery" title="Permalink to this headline">¶</a></h4>
+<p>A <strong>bucket recovery</strong> fiber runs on the master storages. It helps to recover
+buckets in the SENDING and RECEIVING states in case of reboot.</p>
+<p>Buckets in the SENDING state are recovered as follows:</p>
+<ol class="arabic simple">
+<li>The system first searches for buckets in the SENDING state.</li>
+<li>If such a bucket is found, the system sends a request to the destination
+replica set.</li>
+<li>If the bucket on the destination replica set is ACTIVE, the original bucket
+is deleted from the source node.</li>
+</ol>
+<p>Buckets in the RECEIVING state are deleted without extra checks.</p>
+</div>
+<div class="section" id="failover">
+<span id="vshard-failover"></span><h4>Failover<a class="headerlink" href="#failover" title="Permalink to this headline">¶</a></h4>
+<p>A <strong>failover</strong> fiber runs on every <code class="docutils literal notranslate"><span class="pre">router</span></code>. If a master of a replica set
+becomes unavailable, the failover fiber redirects read requests to the replicas.
+Write requests are rejected with an error until the master becomes available.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

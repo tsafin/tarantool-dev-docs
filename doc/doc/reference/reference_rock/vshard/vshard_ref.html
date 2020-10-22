@@ -1,0 +1,1550 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration reference &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Configuration reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../../_sources/doc/doc/reference/reference_rock/vshard/vshard_ref.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration-reference">
+<span id="vshard-config-reference"></span><h1>Configuration reference<a class="headerlink" href="#configuration-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-parameters">
+<span id="vshard-config-basic-params"></span><h2>Basic parameters<a class="headerlink" href="#basic-parameters" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-basic-sharding"><span class="std std-ref">sharding</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-weights"><span class="std std-ref">weights</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-shard-index"><span class="std std-ref">shard_index</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-bucket-count"><span class="std std-ref">bucket_count</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-collect-bucket-garbage-interval"><span class="std std-ref">collect_bucket_garbage_interval</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-collect-lua-garbage"><span class="std std-ref">collect_lua_garbage</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-sync-timeout"><span class="std std-ref">sync_timeout</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-rebalancer-disbalance-threshold"><span class="std std-ref">rebalancer_disbalance_threshold</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-rebalancer-max-receiving"><span class="std std-ref">rebalancer_max_receiving</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-rebalancer-max-sending"><span class="std std-ref">rebalancer_max_sending</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-discovery-mode"><span class="std std-ref">discovery_mode</span></a></li>
+</ul>
+</div>
+<div class="section" id="replica-set-functions">
+<span id="vshard-config-replica-set-funcs"></span><h2>Replica set functions<a class="headerlink" href="#replica-set-functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-replica-set-uuid"><span class="std std-ref">uuid</span></a></li>
+<li><a class="reference internal" href="#cfg-replica-set-weight"><span class="std std-ref">weight</span></a></li>
+</ul>
+</div>
+<div class="section" id="api-reference">
+<span id="vshard-api-reference"></span><h2>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="router-public-api">
+<span id="vshard-api-reference-router-public-api"></span><h3>Router public API<a class="headerlink" href="#router-public-api" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#router-api-bootstrap"><span class="std std-ref">vshard.router.bootstrap()</span></a></li>
+<li><a class="reference internal" href="#router-api-cfg"><span class="std std-ref">vshard.router.cfg(cfg)</span></a></li>
+<li><a class="reference internal" href="#router-api-new"><span class="std std-ref">vshard.router.new(name, cfg)</span></a></li>
+<li><a class="reference internal" href="#router-api-call"><span class="std std-ref">vshard.router.call(bucket_id, mode, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-callro"><span class="std std-ref">vshard.router.callro(bucket_id, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-callrw"><span class="std std-ref">vshard.router.callrw(bucket_id, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-callre"><span class="std std-ref">vshard.router.callre(bucket_id, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-callbro"><span class="std std-ref">vshard.router.callbro(bucket_id, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-callbre"><span class="std std-ref">vshard.router.callbre(bucket_id, function_name, {argument_list}, {options})</span></a></li>
+<li><a class="reference internal" href="#router-api-route"><span class="std std-ref">vshard.router.route(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#router-api-routeall"><span class="std std-ref">vshard.router.routeall()</span></a></li>
+<li><a class="reference internal" href="#router-api-bucket-id-strcrc32"><span class="std std-ref">vshard.router.bucket_id_strcrc32(key)</span></a></li>
+<li><a class="reference internal" href="#router-api-bucket-id-mpcrc32"><span class="std std-ref">vshard.router.bucket_id_mpcrc32(key)</span></a></li>
+<li><a class="reference internal" href="#router-api-bucket-count"><span class="std std-ref">vshard.router.bucket_count()</span></a></li>
+<li><a class="reference internal" href="#router-api-sync"><span class="std std-ref">vshard.router.sync(timeout)</span></a></li>
+<li><a class="reference internal" href="#router-api-discovery-wakeup"><span class="std std-ref">vshard.router.discovery_wakeup()</span></a></li>
+<li><a class="reference internal" href="#router-api-discovery-set"><span class="std std-ref">vshard.router.discovery_set()</span></a></li>
+<li><a class="reference internal" href="#router-api-info"><span class="std std-ref">vshard.router.info()</span></a></li>
+<li><a class="reference internal" href="#router-api-buckets-info"><span class="std std-ref">vshard.router.buckets_info()</span></a></li>
+<li><a class="reference internal" href="#router-api-replicaset-call"><span class="std std-ref">replicaset_object:call()</span></a></li>
+<li><a class="reference internal" href="#router-api-replicaset-callro"><span class="std std-ref">replicaset_object:callro()</span></a></li>
+<li><a class="reference internal" href="#router-api-replicaset-callrw"><span class="std std-ref">replicaset_object:callrw()</span></a></li>
+<li><a class="reference internal" href="#router-api-replicaset-callre"><span class="std std-ref">replicaset_object:callre()</span></a></li>
+</ul>
+<span class="target" id="router-api-bootstrap"></span><dl class="function">
+<dt id="vshard.router.bootstrap">
+<code class="descclassname">vshard.router.</code><code class="descname">bootstrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bootstrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the initial cluster bootstrap and distribute all buckets across the
+replica sets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timeout</strong> – a number of seconds before ending a bootstrap attempt as
+unsuccessful.
+Recreate the cluster in case of bootstrap timeout.</li>
+<li><strong>if_not_bootstrapped</strong> – by default is set to <code class="docutils literal notranslate"><span class="pre">false</span></code> that means raise
+an error, when the cluster is already
+bootstrapped. <code class="docutils literal notranslate"><span class="pre">True</span></code> means consider an already
+bootstrapped cluster a success.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">bootstrap</span><span class="p">({</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">if_not_bootstrapped</span> <span class="o">=</span> <span class="kc">true</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To detect whether a cluster is bootstrapped, <code class="docutils literal notranslate"><span class="pre">vshard</span></code> looks for at least
+one bucket in the whole cluster. If the cluster was bootstrapped only
+partially (for example, due to an error during the first bootstrap), then
+it will be considered a bootstrapped cluster on a next bootstrap call
+with <code class="docutils literal notranslate"><span class="pre">if_not_bootstrapped</span></code>. So this is still a bad practice. Avoid
+calling <code class="docutils literal notranslate"><span class="pre">bootstrap()</span></code> multiple times.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-cfg"></span><dl class="function">
+<dt id="vshard.router.cfg">
+<code class="descclassname">vshard.router.</code><code class="descname">cfg</code><span class="sig-paren">(</span><em>cfg</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the database and start sharding for the specified <code class="docutils literal notranslate"><span class="pre">router</span></code>
+instance. See the <a class="reference internal" href="vshard_quick.html#vshard-config-cluster-example"><span class="std std-ref">sample configuration</span></a>
+above.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cfg</strong> – a configuration table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-new"></span><dl class="function">
+<dt id="vshard.router.new">
+<code class="descclassname">vshard.router.</code><code class="descname">new</code><span class="sig-paren">(</span><em>name</em>, <em>cfg</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new router instance. <code class="docutils literal notranslate"><span class="pre">vshard</span></code> supports multiple routers in a
+single Tarantool instance. Each router can be connected to any <code class="docutils literal notranslate"><span class="pre">vshard</span></code>
+cluster, and multiple routers can be connected to the same cluster.</p>
+<p>A router created via <code class="docutils literal notranslate"><span class="pre">vshard.router.new()</span></code> works in the same way as
+a static router, but the method name is preceded by a colon
+(<code class="docutils literal notranslate"><span class="pre">vshard.router:method_name(...)</span></code>), while for a static router
+the method name is preceded by a period (<code class="docutils literal notranslate"><span class="pre">vshard.router.method_name(...)</span></code>).</p>
+<p>A static router can be obtained via the <code class="docutils literal notranslate"><span class="pre">vshard.router.static()</span></code> method
+and then used like a router created via the <code class="docutils literal notranslate"><span class="pre">vshard.router.new()</span></code>
+method.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> is shared among all the routers of a single instance.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> – a router instance name. This name is used as a prefix in logs of
+the router and must be unique within the instance</li>
+<li><strong>cfg</strong> – a configuration table. The
+<a class="reference internal" href="vshard_quick.html#vshard-config-cluster-example"><span class="std std-ref">sample configuration</span></a> is
+described above.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">a router instance, if created successfully; otherwise, nil and an
+error object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-call"></span><dl class="function">
+<dt id="vshard.router.call">
+<code class="descclassname">vshard.router.</code><code class="descname">call</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>mode</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the function identified by function-name on the shard storing the bucket
+identified by bucket_id.
+See the <a class="reference internal" href="vshard_architecture.html#vshard-process-requests"><span class="std std-ref">Processing requests</span></a> section
+for details on function operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>mode</strong> – either a string = ‘read’|’write’, or a map with mode=’read’|’write’ and/or prefer_replica=true|false and/or balance=true|false.</li>
+<li><strong>function_name</strong> – a function to execute</li>
+<li><strong>argument_list</strong> – an array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. If the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the specified <code class="docutils literal notranslate"><span class="pre">bucket_id</span></code>, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The mode parameter has two possible forms: a string or a map. Examples of the string form are:
+<code class="docutils literal notranslate"><span class="pre">'read'</span></code>, <code class="docutils literal notranslate"><span class="pre">'write'</span></code>. Examples of the map form are: <code class="docutils literal notranslate"><span class="pre">{mode='read'}</span></code>, <code class="docutils literal notranslate"><span class="pre">{mode='write'}</span></code>,
+<code class="docutils literal notranslate"><span class="pre">{mode='read',</span> <span class="pre">prefer_replica=true}</span></code>, <code class="docutils literal notranslate"><span class="pre">{mode='read',</span> <span class="pre">balance=true}</span></code>,
+<code class="docutils literal notranslate"><span class="pre">{mode='read',</span> <span class="pre">prefer_replica=true,</span> <span class="pre">balance=true}</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">'write'</span></code> is specified then the target is the master.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">prefer_replica=true</span></code> is specified then the preferred target is one of the replicas, but
+the target is the master if there is no conveniently available replica.</p>
+<p>It may be good to specify prefer_replica=true for functions which are expensive in terms
+of resource use, to avoid slowing down the master.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">balance=true</span></code> then there is load balancing – reads are distributed over all the nodes
+in the replica set in round-robin fashion, with a preference for replicas if
+prefer_replica=true is also set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first">The original return value of the executed function, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+error object. The error object has a type attribute equal to
+<code class="docutils literal notranslate"><span class="pre">ShardingError</span></code> or one of the regular Tarantool errors
+(<code class="docutils literal notranslate"><span class="pre">ClientError</span></code>, <code class="docutils literal notranslate"><span class="pre">OutOfMemory</span></code>, <code class="docutils literal notranslate"><span class="pre">SocketError</span></code>, etc.).</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">ShardingError</span></code> is returned on errors specific for sharding:
+the master is missing, wrong bucket id, etc. It has an attribute code
+containing one of the values from the <code class="docutils literal notranslate"><span class="pre">vshard.error.code.*</span></code> LUA table, an
+optional attribute containing a message with the human-readable error description,
+and other attributes specific for the error code.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<p>To call <code class="docutils literal notranslate"><span class="pre">customer_add</span></code> function from <code class="docutils literal notranslate"><span class="pre">vshard/example</span></code>, say:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;customer_add&#39;</span><span class="p">,</span> <span class="p">{{</span><span class="n">customer_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bucket_id</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;name2&#39;</span><span class="p">,</span> <span class="n">accounts</span> <span class="o">=</span> <span class="p">{}}},</span> <span class="p">{</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">100</span><span class="p">})</span>
+<span class="c1">-- or, the same thing but with a map for the second argument</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="p">{</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;write&#39;</span><span class="p">},</span> <span class="s1">&#39;customer_add&#39;</span><span class="p">,</span> <span class="p">{{</span><span class="n">customer_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bucket_id</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;name2&#39;</span><span class="p">,</span> <span class="n">accounts</span> <span class="o">=</span> <span class="p">{}}},</span> <span class="p">{</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">100</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-callro"></span><dl class="function">
+<dt id="vshard.router.callro">
+<code class="descclassname">vshard.router.</code><code class="descname">callro</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.callro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the function identified by function-name on the shard storing the bucket identified by bucket_id,
+in read-only mode (similar to calling vshard.router.call
+with mode=’read’). See the
+<a class="reference internal" href="vshard_architecture.html#vshard-process-requests"><span class="std std-ref">Processing requests</span></a> section for details on
+function operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>function_name</strong> – a function to execute</li>
+<li><strong>argument_list</strong> – an array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The original return value of the executed function, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+error object. The error object has a type attribute equal to <code class="docutils literal notranslate"><span class="pre">ShardingError</span></code>
+or one of the regular Tarantool errors (<code class="docutils literal notranslate"><span class="pre">ClientError</span></code>, <code class="docutils literal notranslate"><span class="pre">OutOfMemory</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SocketError</span></code>, etc.).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ShardingError</span></code> is returned on errors specific for sharding: the replica
+set is not available, the master is missing, wrong bucket id, etc. It has an
+attribute code containing one of the values from the <code class="docutils literal notranslate"><span class="pre">vshard.error.code.*</span></code> LUA table, an
+optional attribute containing a message with the human-readable error description,
+and other attributes specific for this error code.</p>
+</dd></dl>
+
+<span class="target" id="router-api-callrw"></span><dl class="function">
+<dt id="vshard.router.callrw">
+<code class="descclassname">vshard.router.</code><code class="descname">callrw</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.callrw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the function identified by function-name on the shard storing the bucket identified by bucket_id,
+in read-write mode (similar to calling vshard.router.call
+with mode=’write’). See the <a class="reference internal" href="vshard_architecture.html#vshard-process-requests"><span class="std std-ref">Processing requests</span></a> section
+for details on function operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>function_name</strong> – a function to execute</li>
+<li><strong>argument_list</strong> – an array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The original return value of the executed function, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+error object. The error object has a type attribute equal to <code class="docutils literal notranslate"><span class="pre">ShardingError</span></code>
+or one of the regular Tarantool errors (<code class="docutils literal notranslate"><span class="pre">ClientError</span></code>, <code class="docutils literal notranslate"><span class="pre">OutOfMemory</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SocketError</span></code>, etc.).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ShardingError</span></code> is returned on errors specific for sharding: the replica
+set is not available, the master is missing, wrong bucket id, etc. It has an
+attribute code containing one of the values from the <code class="docutils literal notranslate"><span class="pre">vshard.error.code.*</span></code> LUA table, an
+optional attribute containing a message with the human-readable error description,
+and other attributes specific for this error code.</p>
+</dd></dl>
+
+<span class="target" id="router-api-callre"></span><dl class="function">
+<dt id="vshard.router.callre">
+<code class="descclassname">vshard.router.</code><code class="descname">callre</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.callre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the function identified by function-name on the shard storing the bucket identified by bucket_id,
+in read-only mode (similar to calling <code class="docutils literal notranslate"><span class="pre">vshard.router.call</span></code>
+with <code class="docutils literal notranslate"><span class="pre">mode='read'</span></code>), with preference for a replica rather than a master
+(similar to calling <code class="docutils literal notranslate"><span class="pre">vshard.router.call</span></code> with <code class="docutils literal notranslate"><span class="pre">prefer_replica</span> <span class="pre">=</span> <span class="pre">true</span></code>). See the
+<a class="reference internal" href="vshard_architecture.html#vshard-process-requests"><span class="std std-ref">Processing requests</span></a> section for details on
+function operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>function_name</strong> – a function to execute</li>
+<li><strong>argument_list</strong> – an array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The original return value of the executed function, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+error object. The error object has a type attribute equal to <code class="docutils literal notranslate"><span class="pre">ShardingError</span></code>
+or one of the regular Tarantool errors (<code class="docutils literal notranslate"><span class="pre">ClientError</span></code>, <code class="docutils literal notranslate"><span class="pre">OutOfMemory</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SocketError</span></code>, etc.).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ShardingError</span></code> is returned on errors specific for sharding: the replica
+set is not available, the master is missing, wrong bucket id, etc. It has an
+attribute code containing one of the values from the <code class="docutils literal notranslate"><span class="pre">vshard.error.code.*</span></code> LUA table, an
+optional attribute containing a message with the human-readable error description,
+and other attributes specific for this error code.</p>
+</dd></dl>
+
+<span class="target" id="router-api-callbro"></span><dl class="function">
+<dt id="vshard.router.callbro">
+<code class="descclassname">vshard.router.</code><code class="descname">callbro</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.callbro" title="Permalink to this definition">¶</a></dt>
+<dd><p>This has the same effect as
+<a class="reference internal" href="#router-api-call"><span class="std std-ref">vshard.router.call()</span></a>
+with mode parameter = <code class="docutils literal notranslate"><span class="pre">{mode='read',</span> <span class="pre">balance=true}</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="router-api-callbre"></span><dl class="function">
+<dt id="vshard.router.callbre">
+<code class="descclassname">vshard.router.</code><code class="descname">callbre</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.callbre" title="Permalink to this definition">¶</a></dt>
+<dd><p>This has the same effect as
+<a class="reference internal" href="#router-api-call"><span class="std std-ref">vshard.router.call()</span></a>
+with mode parameter = <code class="docutils literal notranslate"><span class="pre">{mode='read',</span> <span class="pre">balance=true,</span> <span class="pre">prefer_replica=true}</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="router-api-route"></span><dl class="function">
+<dt id="vshard.router.route">
+<code class="descclassname">vshard.router.</code><code class="descname">route</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the replica set object for the bucket with the specified bucket id value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">a replica set object</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset</span> <span class="o">=</span> <span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">route</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-routeall"></span><dl class="function">
+<dt id="vshard.router.routeall">
+<code class="descclassname">vshard.router.</code><code class="descname">routeall</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.routeall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all available replica set objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">a map of the following type: <code class="docutils literal notranslate"><span class="pre">{UUID</span> <span class="pre">=</span> <span class="pre">replicaset}</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">a map of replica set objects</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">replicasets</span> <span class="o">=</span> <span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">routeall</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-bucket-id"></span><dl class="function">
+<dt id="vshard.router.bucket_id">
+<code class="descclassname">vshard.router.</code><code class="descname">bucket_id</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bucket_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong>. Logs a warning when used because it is not consistent
+for cdata numbers.</p>
+<p>In particular, it returns 3 different values for normal Lua numbers
+like 123, for unsigned long long cdata (like <code class="docutils literal notranslate"><span class="pre">123ULL</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">ffi.cast('unsigned</span> <span class="pre">long</span> <span class="pre">long',123)</span></code>), and for signed long long cdata
+(like <code class="docutils literal notranslate"><span class="pre">123LL</span></code>, or <code class="docutils literal notranslate"><span class="pre">ffi.cast('long</span> <span class="pre">long',</span> <span class="pre">123)</span></code>). And it is important.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">bucket_id</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">bucket_id</span><span class="p">(</span><span class="mi">123</span><span class="n">LL</span><span class="p">)</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">bucket_id</span><span class="p">(</span><span class="mi">123</span><span class="n">ULL</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For float and double cdata
+(<code class="docutils literal notranslate"><span class="pre">ffi.cast('float',</span> <span class="pre">number)</span></code>, <code class="docutils literal notranslate"><span class="pre">ffi.cast('double',</span> <span class="pre">number)</span></code>) these functions
+return different values even for the same numbers of the same floating point
+type. This is because <code class="docutils literal notranslate"><span class="pre">tostring()</span></code> on a floating point cdata number returns not
+the number, but a pointer at it. Different on each call.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vshard.router.bucket_id_strcrc32()</span></code> behaves exactly the same, but
+does not log a warning. In case you need that behavior.</p>
+</dd></dl>
+
+<span class="target" id="router-api-bucket-id-strcrc32"></span><dl class="function">
+<dt id="vshard.router.bucket_id_strcrc32">
+<code class="descclassname">vshard.router.</code><code class="descname">bucket_id_strcrc32</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bucket_id_strcrc32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the bucket id using a simple built-in hash function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – a hash key. This can be any Lua object (number, table, string).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">a bucket identifier</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">bucket_id</span> <span class="o">=</span> <span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">bucket_id_strcrc32</span><span class="p">(</span><span class="mi">18374927634039</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember that it is not safe. See details in <a class="reference internal" href="#router-api-bucket-id"><span class="std std-ref">bucket_id()</span></a></p>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-bucket-id-mpcrc32"></span><dl class="function">
+<dt id="vshard.router.bucket_id_mpcrc32">
+<code class="descclassname">vshard.router.</code><code class="descname">bucket_id_mpcrc32</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bucket_id_mpcrc32" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is safer than <code class="docutils literal notranslate"><span class="pre">bucket_id_strcrc32</span></code>. It takes a CRC32 from
+a MessagePack encoded value. That is, bucket id of integers does not
+depend on their Lua type. In case of a string key, it does not encode it into
+MessagePack, but takes a hash right from the string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – a hash key. This can be any Lua object (number, table, string).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">a bucket identifier</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p>However it still may return different values for not equal floating point
+types. That is, <code class="docutils literal notranslate"><span class="pre">ffi.cast('float',</span> <span class="pre">number)</span></code> may be reflected into a bucket id
+not equal to <code class="docutils literal notranslate"><span class="pre">ffi.cast('double',</span> <span class="pre">number)</span></code>. This can’t be fixed, because a
+float value, even being casted to double, may have a garbage tail in its fraction.</p>
+<p>Floating point keys should not be used to calculate a bucket id,
+usually.</p>
+<p>Be very careful in case you store floating point types in a space. When data
+is returned from a space, it is cast to Lua number. And if that value had
+an empty fraction part, it will be treated as an integer by <code class="docutils literal notranslate"><span class="pre">bucket_id_mpcrc32()</span></code>.
+So you need to do explicit casts in such cases. Here is an example of the problem:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; s = box.schema.create_space(&#39;test&#39;, {format = {{&#39;id&#39;, &#39;double&#39;}}}); _ = s:create_index(&#39;pk&#39;)
+---
+...
+
+tarantool&gt; inserted = ffi.cast(&#39;double&#39;, 1)
+---
+...
+
+-- Value is stored as double
+tarantool&gt; s:replace({inserted})
+---
+- [1]
+...
+
+-- But when returned to Lua, stored as Lua number, not cdata.
+tarantool&gt; returned = s:get({inserted}).id
+---
+...
+
+tarantool&gt; type(returned), returned
+---
+- number
+- 1
+...
+
+tarantool&gt; vshard.router.bucket_id_mpcrc32(inserted)
+---
+- 1411
+...
+tarantool&gt; vshard.router.bucket_id_mpcrc32(returned)
+---
+- 1614
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-bucket-count"></span><dl class="function">
+<dt id="vshard.router.bucket_count">
+<code class="descclassname">vshard.router.</code><code class="descname">bucket_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bucket_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the total number of buckets specified in <code class="docutils literal notranslate"><span class="pre">vshard.router.cfg()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">the total number of buckets</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-sync"></span><dl class="function">
+<dt id="vshard.router.sync">
+<code class="descclassname">vshard.router.</code><code class="descname">sync</code><span class="sig-paren">(</span><em>timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the dataset is synchronized on replicas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> – a timeout, in seconds</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the dataset was synchronized successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the dataset cannot be synchronized.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-discovery-wakeup"></span><dl class="function">
+<dt id="vshard.router.discovery_wakeup">
+<code class="descclassname">vshard.router.</code><code class="descname">discovery_wakeup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.discovery_wakeup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force wakeup of the bucket discovery fiber.</p>
+</dd></dl>
+
+<span class="target" id="router-api-discovery-set"></span><dl class="function">
+<dt id="vshard.router.discovery_set">
+<code class="descclassname">vshard.router.</code><code class="descname">discovery_set</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.discovery_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on/off the background discovery fiber used by the router to
+find buckets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode</strong> – working mode of a discovery fiber. There are three modes: <code class="docutils literal notranslate"><span class="pre">on</span></code>,
+<code class="docutils literal notranslate"><span class="pre">off</span></code> and <code class="docutils literal notranslate"><span class="pre">once</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>When the mode is <code class="docutils literal notranslate"><span class="pre">on</span></code> (default), the discovery fiber works during all the lifetime
+of the router. Even after all buckets are discovered, it will
+still come to storages and download their buckets with some big
+period (<a class="reference external" href="https://github.com/tarantool/vshard/blob/master/vshard/consts.lua">DISCOVERY_IDLE_INTERVAL</a>).
+This is useful if the bucket topology changes often and the number of
+buckets is not big. The router will keep its route table up to
+date even when no requests are processed.</p>
+<p>When the mode is <code class="docutils literal notranslate"><span class="pre">off</span></code>, discovery is disabled completely.</p>
+<p>When the mode is <code class="docutils literal notranslate"><span class="pre">once</span></code>, discovery starts and finds the locations of
+all buckets, and then the discovery fiber is terminated. This
+is good for a large bucket count and for clusters, where rebalancing is rare.</p>
+<p>The method is good to enable/disable discovery after the router is
+already started, but discovery is enabled by default. You may want
+to never enable it even for a short time – then specify the
+<code class="docutils literal notranslate"><span class="pre">discovery_mode</span></code> option in the <a class="reference internal" href="#cfg-basic-discovery-mode"><span class="std std-ref">configuration</span></a>.
+It takes the same values as <code class="samp docutils literal notranslate"><span class="pre">vshard.router.discovery_set(</span><em><span class="pre">mode</span></em><span class="pre">)</span></code>.</p>
+<p>You may decide to turn off discovery or make it <code class="docutils literal notranslate"><span class="pre">once</span></code> if you have
+many routers, or tons of buckets (hundreds of thousands and more),
+and you see that the discovery process consumes notable CPU % on
+routers and storages. In that case it may be wise to turn off the
+discovery when there is no rebalancing in the cluster. And turn it
+on for new routers, as well as for all routers when rebalancing is
+started.</p>
+</dd></dl>
+
+<span class="target" id="router-api-info"></span><dl class="function">
+<dt id="vshard.router.info">
+<code class="descclassname">vshard.router.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about each instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Replica set parameters:</p>
+<ul class="simple">
+<li>replica set uuid</li>
+<li>master instance parameters</li>
+<li>replica instance parameters</li>
+</ul>
+<p>Instance parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">uri</span></code> — URI of the instance</li>
+<li><code class="docutils literal notranslate"><span class="pre">uuid</span></code> — UUID of the instance</li>
+<li><code class="docutils literal notranslate"><span class="pre">status</span></code> – status of the instance (<code class="docutils literal notranslate"><span class="pre">available</span></code>, <code class="docutils literal notranslate"><span class="pre">unreachable</span></code>, <code class="docutils literal notranslate"><span class="pre">missing</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">network_timeout</span></code> – a timeout for the request. The value is updated automatically
+on each 10th successful request and each 2nd failed request.</li>
+</ul>
+<p>Bucket parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">available_ro</span></code> – the number of buckets known to the <code class="docutils literal notranslate"><span class="pre">router</span></code> and available for read requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">available_rw</span></code> – the number of buckets known to the <code class="docutils literal notranslate"><span class="pre">router</span></code> and available for read and write requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">unavailable</span></code> – the number of buckets known to the <code class="docutils literal notranslate"><span class="pre">router</span></code> but unavailable for any requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">unreachable</span></code> – the number of buckets whose replica sets are not known to the <code class="docutils literal notranslate"><span class="pre">router</span></code></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; vshard.router.info()
+---
+- replicasets:
+    ac522f65-aa94-4134-9f64-51ee384f1a54:
+      replica: &amp;0
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3303
+        uuid: 1e02ae8a-afc0-4e91-ba34-843a356b8ed7
+      uuid: ac522f65-aa94-4134-9f64-51ee384f1a54
+      master: *0
+    cbf06940-0790-498b-948d-042b62cf3d29:
+      replica: &amp;1
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3301
+        uuid: 8a274925-a26d-47fc-9e1b-af88ce939412
+      uuid: cbf06940-0790-498b-948d-042b62cf3d29
+      master: *1
+  bucket:
+    unreachable: 0
+    available_ro: 0
+    unknown: 0
+    available_rw: 3000
+  status: 0
+  alerts: []
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="router-api-buckets-info"></span><dl class="function">
+<dt id="vshard.router.buckets_info">
+<code class="descclassname">vshard.router.</code><code class="descname">buckets_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.buckets_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about each bucket. Since a bucket map can be huge,
+only the required range of buckets can be specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>offset</strong> – the offset in a bucket map of the first bucket to show</li>
+<li><strong>limit</strong> – the maximum number of buckets to show</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">a map of the following type: <code class="docutils literal notranslate"><span class="pre">{bucket_id</span> <span class="pre">=</span> <span class="pre">'unknown'/replicaset_uuid}</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="replicaset_object">
+<em class="property">class </em><code class="descname">replicaset_object</code><a class="headerlink" href="#replicaset_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="router-api-replicaset-call"></span><dl class="method">
+<dt id="replicaset_object.call">
+<code class="descname">call</code><span class="sig-paren">(</span><em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#replicaset_object.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a function on a nearest available master (distances are defined using
+<code class="docutils literal notranslate"><span class="pre">replica.zone</span></code> and <code class="docutils literal notranslate"><span class="pre">cfg.weights</span></code> matrix) with specified
+arguments.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">replicaset_object:call</span></code> method is similar to <code class="docutils literal notranslate"><span class="pre">replicaset_object:callrw</span></code>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function_name</strong> – function to execute</li>
+<li><strong>argument_list</strong> – array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>result of <code class="docutils literal notranslate"><span class="pre">function_name</span></code> on success</li>
+<li>nill, err otherwise</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-replicaset-callrw"></span><dl class="method">
+<dt id="replicaset_object.callrw">
+<code class="descname">callrw</code><span class="sig-paren">(</span><em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#replicaset_object.callrw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a function on a nearest available master (distances are defined using
+<code class="docutils literal notranslate"><span class="pre">replica.zone</span></code> and <code class="docutils literal notranslate"><span class="pre">cfg.weights</span></code> matrix) with a specified
+arguments.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">replicaset_object:callrw</span></code> method is similar to <code class="docutils literal notranslate"><span class="pre">replicaset_object:call</span></code>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function_name</strong> – function to execute</li>
+<li><strong>argument_list</strong> – array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>result of <code class="docutils literal notranslate"><span class="pre">function_name</span></code> on success</li>
+<li>nill, err otherwise</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-replicaset-callro"></span><dl class="method">
+<dt id="replicaset_object.callro">
+<code class="descname">callro</code><span class="sig-paren">(</span><em>function_name</em>, <em>{argument_list}</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#replicaset_object.callro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a function on the nearest available replica (distances are defined
+using <code class="docutils literal notranslate"><span class="pre">replica.zone</span></code> and <code class="docutils literal notranslate"><span class="pre">cfg.weights</span></code> matrix) with specified
+arguments. It is recommended to use
+<code class="docutils literal notranslate"><span class="pre">replicaset_object:callro()</span></code> for calling only read-only functions, as the called functions can be executed not only
+on a master, but also on replicas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function_name</strong> – function to execute</li>
+<li><strong>argument_list</strong> – array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>result of <code class="docutils literal notranslate"><span class="pre">function_name</span></code> on success</li>
+<li>nill, err otherwise</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="router-api-replicaset-callre"></span><dl class="method">
+<dt>
+<code class="descname">replicaset:callre(function_name, {argument_list}, {options})</code></dt>
+<dd><p>Call a function on the nearest available replica (distances are defined using
+<code class="docutils literal notranslate"><span class="pre">replica.zone</span></code> and <code class="docutils literal notranslate"><span class="pre">cfg.weights</span></code> matrix) with specified
+arguments,
+with preference for a replica rather than a master
+(similar to calling <code class="docutils literal notranslate"><span class="pre">vshard.router.call</span></code> with <code class="docutils literal notranslate"><span class="pre">prefer_replica</span> <span class="pre">=</span> <span class="pre">true</span></code>).
+It is recommended to use
+<code class="docutils literal notranslate"><span class="pre">replicaset_object:callre()</span></code> for calling only read-only functions, as the called function can be executed not
+only on a master, but also on replicas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function_name</strong> – function to execute</li>
+<li><strong>argument_list</strong> – array of the function’s arguments</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – a request timeout, in seconds. In case the <code class="docutils literal notranslate"><span class="pre">router</span></code> cannot identify a
+shard with the bucket id, the operation will be repeated until the
+timeout is reached.</li>
+<li>other <a class="reference internal" href="../../reference_lua/net_box.html#net-box-options"><span class="std std-ref">net.box options</span></a>, such as <code class="docutils literal notranslate"><span class="pre">is_async</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buffer</span></code>, <code class="docutils literal notranslate"><span class="pre">on_push</span></code> are also supported.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>result of <code class="docutils literal notranslate"><span class="pre">function_name</span></code> on success</li>
+<li>nill, err otherwise</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="router-internal-api">
+<span id="vshard-api-reference-router-internal-api"></span><h3>Router internal API<a class="headerlink" href="#router-internal-api" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#router-api-bucket-discovery"><span class="std std-ref">vshard.router.bucket_discovery(bucket_id)</span></a></li>
+</ul>
+<span class="target" id="router-api-bucket-discovery"></span><dl class="function">
+<dt id="vshard.router.bucket_discovery">
+<code class="descclassname">vshard.router.</code><code class="descname">bucket_discovery</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.router.bucket_discovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for the bucket in the whole cluster. If the bucket is not
+found, it is likely that it does not exist. The bucket might also be
+moved during rebalancing and currently is in the RECEIVING state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="storage-public-api">
+<span id="vshard-storage-public-api"></span><h3>Storage public API<a class="headerlink" href="#storage-public-api" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#storage-api-cfg"><span class="std std-ref">vshard.storage.cfg(cfg, name)</span></a></li>
+<li><a class="reference internal" href="#storage-api-info"><span class="std std-ref">vshard.storage.info()</span></a></li>
+<li><a class="reference internal" href="#storage-api-call"><span class="std std-ref">vshard.storage.call(bucket_id, mode, function_name, {argument_list})</span></a></li>
+<li><a class="reference internal" href="#storage-api-sync"><span class="std std-ref">vshard.storage.sync(timeout)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-pin"><span class="std std-ref">vshard.storage.bucket_pin(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-unpin"><span class="std std-ref">vshard.storage.bucket_unpin(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-ref"><span class="std std-ref">vshard.storage.bucket_ref(bucket_id, mode)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-refro"><span class="std std-ref">vshard.storage.bucket_refro()</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-refrw"><span class="std std-ref">vshard.storage.bucket_refrw()</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-unref"><span class="std std-ref">vshard.storage.bucket_unref(bucket_id, mode)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-unrefro"><span class="std std-ref">vshard.storage.bucket_unrefro()</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-unrefrw"><span class="std std-ref">vshard.storage.bucket_unrefrw()</span></a></li>
+<li><a class="reference internal" href="#storage-api-find-garbage-bucket"><span class="std std-ref">vshard.storage.find_garbage_bucket(bucket_index, control)</span></a></li>
+<li><a class="reference internal" href="#storage-api-rebalancer-disable"><span class="std std-ref">vshard.storage.rebalancer_disable()</span></a></li>
+<li><a class="reference internal" href="#storage-api-rebalancer-enable"><span class="std std-ref">vshard.storage.rebalancer_enable()</span></a></li>
+<li><a class="reference internal" href="#storage-api-is-locked"><span class="std std-ref">vshard.storage.is_locked()</span></a></li>
+<li><a class="reference internal" href="#storage-api-rebalancing-is-in-progress"><span class="std std-ref">vshard.storage.rebalancing_is_in_progress()</span></a></li>
+<li><a class="reference internal" href="#storage-api-buckets-info"><span class="std std-ref">vshard.storage.buckets_info()</span></a></li>
+<li><a class="reference internal" href="#storage-api-buckets-count"><span class="std std-ref">vshard.storage.buckets_count()</span></a></li>
+<li><a class="reference internal" href="#storage-api-sharded-spaces"><span class="std std-ref">vshard.storage.sharded_spaces()</span></a></li>
+</ul>
+<span class="target" id="storage-api-cfg"></span><dl class="function">
+<dt id="vshard.storage.cfg">
+<code class="descclassname">vshard.storage.</code><code class="descname">cfg</code><span class="sig-paren">(</span><em>cfg</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the database and start sharding for the specified <code class="docutils literal notranslate"><span class="pre">storage</span></code>
+instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cfg</strong> – a <code class="docutils literal notranslate"><span class="pre">storage</span></code> configuration</li>
+<li><strong>instance_uuid</strong> – UUID of the instance</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-info"></span><dl class="function">
+<dt id="vshard.storage.info">
+<code class="descclassname">vshard.storage.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about the storage instance in the following format:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; vshard.storage.info()
+---
+- buckets:
+    2995:
+      status: active
+      id: 2995
+    2997:
+      status: active
+      id: 2997
+    2999:
+      status: active
+      id: 2999
+  replicasets:
+    2dd0a343-624e-4d3a-861d-f45efc571cd3:
+      uuid: 2dd0a343-624e-4d3a-861d-f45efc571cd3
+      master:
+        state: active
+        uri: storage:storage@127.0.0.1:3301
+        uuid: 2ec29309-17b6-43df-ab07-b528e1243a79
+    c7ad642f-2cd8-4a8c-bb4e-4999ac70bba1:
+      uuid: c7ad642f-2cd8-4a8c-bb4e-4999ac70bba1
+      master:
+        state: active
+        uri: storage:storage@127.0.0.1:3303
+        uuid: 810d85ef-4ce4-4066-9896-3c352fec9e64
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="storage-api-call"></span><dl class="function">
+<dt id="vshard.storage.call">
+<code class="descclassname">vshard.storage.</code><code class="descname">call</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>mode</em>, <em>function_name</em>, <em>{argument_list}</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the specified function on the current <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>mode</strong> – a type of the function: ‘read’ or ‘write’</li>
+<li><strong>function_name</strong> – function to execute</li>
+<li><strong>argument_list</strong> – array of the function’s arguments</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The original return value of the executed function, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+error object.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-sync"></span><dl class="function">
+<dt id="vshard.storage.sync">
+<code class="descclassname">vshard.storage.</code><code class="descname">sync</code><span class="sig-paren">(</span><em>timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the dataset is synchronized on replicas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> – a timeout, in seconds</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the dataset was synchronized successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the dataset cannot be synchronized.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-pin"></span><dl class="function">
+<dt id="vshard.storage.bucket_pin">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_pin</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pin a bucket to a replica set. A pinned bucket cannot be moved
+even if it breaks the cluster balance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the bucket is pinned successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the bucket cannot be pinned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-unpin"></span><dl class="function">
+<dt id="vshard.storage.bucket_unpin">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_unpin</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_unpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pinned bucket back into the active state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the bucket is unpinned successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the bucket cannot be unpinned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-ref"></span><dl class="function">
+<dt id="vshard.storage.bucket_ref">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_ref</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an RO or RW <a class="reference internal" href="vshard_admin.html#vshard-ref"><span class="std std-ref">ref</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>mode</strong> – ‘read’ or ‘write’</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the bucket ref is created successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the ref cannot be created</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-refro"></span><dl class="function">
+<dt id="vshard.storage.bucket_refro">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_refro</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_refro" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#storage-api-bucket-ref"><span class="std std-ref">vshard.storage.bucket_ref</span></a> in
+the RO mode.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-refrw"></span><dl class="function">
+<dt id="vshard.storage.bucket_refrw">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_refrw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_refrw" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#storage-api-bucket-ref"><span class="std std-ref">vshard.storage.bucket_ref</span></a> in
+the RW mode.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-unref"></span><dl class="function">
+<dt id="vshard.storage.bucket_unref">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_unref</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_unref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a RO/RW <a class="reference internal" href="vshard_admin.html#vshard-ref"><span class="std std-ref">ref</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>mode</strong> – ‘read’ or ‘write’</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the bucket ref is removed successfully; or <code class="docutils literal notranslate"><span class="pre">nil</span></code> and
+<code class="docutils literal notranslate"><span class="pre">err</span></code> explaining why the ref cannot be removed</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-unrefro"></span><dl class="function">
+<dt id="vshard.storage.bucket_unrefro">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_unrefro</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_unrefro" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#storage-api-bucket-unref"><span class="std std-ref">vshard.storage.bucket_unref</span></a> in
+the RO mode.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-unrefrw"></span><dl class="function">
+<dt id="vshard.storage.bucket_unrefrw">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_unrefrw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_unrefrw" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#storage-api-bucket-unref"><span class="std std-ref">vshard.storage.bucket_unref</span></a> in
+the RW mode.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-find-garbage-bucket"></span><dl class="function">
+<dt id="vshard.storage.find_garbage_bucket">
+<code class="descclassname">vshard.storage.</code><code class="descname">find_garbage_bucket</code><span class="sig-paren">(</span><em>bucket_index</em>, <em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.find_garbage_bucket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a bucket which has data in a space but is not stored
+in a <code class="docutils literal notranslate"><span class="pre">_bucket</span></code> space; or is in a GARBAGE state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucket_index</strong> – index of a space with the part of a bucket id</li>
+<li><strong>control</strong> – a garbage collector controller. If there is an increased
+buckets generation, then the search should be interrupted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an identifier of the bucket in the garbage state, if found; otherwise,
+nil</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-buckets-info"></span><dl class="function">
+<dt id="vshard.storage.buckets_info">
+<code class="descclassname">vshard.storage.</code><code class="descname">buckets_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.buckets_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about each bucket located in storage. For example:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>vshard.storage.buckets_info(1)
+---
+- 1:
+    status: active
+    ref_rw: 1
+    ref_ro: 1
+    ro_lock: true
+    rw_lock: true
+    id: 1
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="storage-api-buckets-count"></span><dl class="function">
+<dt id="vshard.storage.buckets_count">
+<code class="descclassname">vshard.storage.</code><code class="descname">buckets_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.buckets_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of buckets located in storage.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-recovery-wakeup"></span><dl class="function">
+<dt id="vshard.storage.recovery_wakeup">
+<code class="descclassname">vshard.storage.</code><code class="descname">recovery_wakeup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.recovery_wakeup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immediately wake up a recovery fiber, if it exists.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-rebalancing-is-in-progress"></span><dl class="function">
+<dt id="vshard.storage.rebalancing_is_in_progress">
+<code class="descclassname">vshard.storage.</code><code class="descname">rebalancing_is_in_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.rebalancing_is_in_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a flag indicating whether rebalancing is in progress. The result is true
+if the node is currently applying routes received from a rebalancer node in
+the special fiber.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-is-locked"></span><dl class="function">
+<dt id="vshard.storage.is_locked">
+<code class="descclassname">vshard.storage.</code><code class="descname">is_locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.is_locked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a flag indicating whether storage is invisible to the rebalancer.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-rebalancer-disable"></span><dl class="function">
+<dt id="vshard.storage.rebalancer_disable">
+<code class="descclassname">vshard.storage.</code><code class="descname">rebalancer_disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.rebalancer_disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable rebalancing. A disabled rebalancer sleeps until it
+is enabled again with vshard.storage.rebalancer_enable().</p>
+</dd></dl>
+
+<span class="target" id="storage-api-rebalancer-enable"></span><dl class="function">
+<dt id="vshard.storage.rebalancer_enable">
+<code class="descclassname">vshard.storage.</code><code class="descname">rebalancer_enable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.rebalancer_enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable rebalancing.</p>
+</dd></dl>
+
+<span class="target" id="storage-api-sharded-spaces"></span><dl class="function">
+<dt id="vshard.storage.sharded_spaces">
+<code class="descclassname">vshard.storage.</code><code class="descname">sharded_spaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.sharded_spaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the spaces that are visible to rebalancer and garbage collector fibers.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="storage-internal-api">
+<span id="vshard-storage-internal-api"></span><h3>Storage internal API<a class="headerlink" href="#storage-internal-api" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#storage-api-bucket-stat"><span class="std std-ref">vshard.storage.bucket_stat(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-recv"><span class="std std-ref">vshard.storage.bucket_recv(bucket_id, from, data)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-delete-garbage"><span class="std std-ref">vshard.storage.bucket_delete_garbage(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-collect"><span class="std std-ref">vshard.storage.bucket_collect(bucket_id)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-force-create"><span class="std std-ref">vshard.storage.bucket_force_create(first_bucket_id, count)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-force-drop"><span class="std std-ref">vshard.storage.bucket_force_drop(bucket_id, to)</span></a></li>
+<li><a class="reference internal" href="#storage-api-bucket-send"><span class="std std-ref">vshard.storage.bucket_send(bucket_id, to)</span></a></li>
+<li><a class="reference internal" href="#storage-api-buckets-discovery"><span class="std std-ref">vshard.storage.buckets_discovery()</span></a></li>
+<li><a class="reference internal" href="#storage-api-rebalancer-request-state"><span class="std std-ref">vshard.storage.rebalancer_request_state()</span></a></li>
+</ul>
+<span class="target" id="storage-api-bucket-recv"></span><dl class="function">
+<dt id="vshard.storage.bucket_recv">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_recv</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>from</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive a bucket identified by bucket id from a remote replica set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bucket_id</strong> – a bucket identifier</li>
+<li><strong>from</strong> – UUID of source replica set</li>
+<li><strong>data</strong> – data logically stored in a bucket identified by bucket_id, in the same format as
+the return value from <code class="docutils literal notranslate"><span class="pre">bucket_collect()</span> <span class="pre">&lt;storage_api-bucket_collect&gt;</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-stat"></span><dl class="function">
+<dt id="vshard.storage.bucket_stat">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_stat</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about the bucket id:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; vshard.storage.bucket_stat(1)
+---
+- 0
+- status: active
+  id: 1
+...
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-delete-garbage"></span><dl class="function">
+<dt id="vshard.storage.bucket_delete_garbage">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_delete_garbage</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_delete_garbage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force garbage collection for the bucket identified by bucket_id in case the bucket was
+transferred to a different replica set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-collect"></span><dl class="function">
+<dt id="vshard.storage.bucket_collect">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_collect</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_collect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect all the data that is logically stored in the bucket identified by bucket_id:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; vshard.storage.bucket_collect(1)
+---
+- 0
+- - - 514
+    - - [10, 1, 1, 100, &#39;Account 10&#39;]
+      - [11, 1, 1, 100, &#39;Account 11&#39;]
+      - [12, 1, 1, 100, &#39;Account 12&#39;]
+      - [50, 5, 1, 100, &#39;Account 50&#39;]
+      - [51, 5, 1, 100, &#39;Account 51&#39;]
+      - [52, 5, 1, 100, &#39;Account 52&#39;]
+  - - 513
+    - - [1, 1, &#39;Customer 1&#39;]
+      - [5, 1, &#39;Customer 5&#39;]
+...
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-force-create"></span><dl class="function">
+<dt id="vshard.storage.bucket_force_create">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_force_create</code><span class="sig-paren">(</span><em>first_bucket_id</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_force_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force creation of the buckets (single or multiple) on the current replica
+set. Use only for manual emergency recovery or for initial bootstrap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>first_bucket_id</strong> – an identifier of the first bucket in a range</li>
+<li><strong>count</strong> – the number of buckets to insert (default = 1)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-force-drop"></span><dl class="function">
+<dt id="vshard.storage.bucket_force_drop">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_force_drop</code><span class="sig-paren">(</span><em>bucket_id</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_force_drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop a bucket manually for tests or emergency cases.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bucket_id</strong> – a bucket identifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-bucket-send"></span><dl class="function">
+<dt id="vshard.storage.bucket_send">
+<code class="descclassname">vshard.storage.</code><code class="descname">bucket_send</code><span class="sig-paren">(</span><em>bucket_id</em>, <em>to</em><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.bucket_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a specified bucket from the current replica set to a remote replica set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bucket_id</strong> – bucket identifier</li>
+<li><strong>to</strong> – UUID of a remote replica set</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-rebalancer-request-state"></span><dl class="function">
+<dt id="vshard.storage.rebalancer_request_state">
+<code class="descclassname">vshard.storage.</code><code class="descname">rebalancer_request_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.rebalancer_request_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check all buckets of the host storage that have the SENT or ACTIVE
+state, return the number of active buckets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of buckets in the active state, if found; otherwise, nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="storage-api-buckets-discovery"></span><dl class="function">
+<dt id="vshard.storage.buckets_discovery">
+<code class="descclassname">vshard.storage.</code><code class="descname">buckets_discovery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vshard.storage.buckets_discovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect an array of active bucket identifiers for discovery.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

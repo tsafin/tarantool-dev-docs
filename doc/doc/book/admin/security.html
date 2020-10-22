@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Security &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Security</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/security.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="security">
+<span id="admin-security"></span><h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool allows for two types of connections:</p>
+<ul class="simple">
+<li>With <a class="reference internal" href="../../reference/reference_lua/console.html#console-listen"><span class="std std-ref">console.listen()</span></a> function from <code class="docutils literal notranslate"><span class="pre">console</span></code> module,
+you can set up a port which can be used to open an administrative console to
+the server. This is for administrators to connect to a running instance and
+make requests. <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> invokes <code class="docutils literal notranslate"><span class="pre">console.listen()</span></code> to create a
+control socket for each started instance.</li>
+<li>With <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">box.cfg{listen=…}</span></a> parameter from <code class="docutils literal notranslate"><span class="pre">box</span></code>
+module, you can set up a binary port for connections which read and write to
+the database or invoke stored procedures.</li>
+</ul>
+<p>When you connect to an admin console:</p>
+<ul class="simple">
+<li>The client-server protocol is plain text.</li>
+<li>No password is necessary.</li>
+<li>The user is automatically ‘admin’.</li>
+<li>Each command is fed directly to the built-in Lua interpreter.</li>
+</ul>
+<p>Therefore you must set up ports for the admin console very cautiously. If it is
+a TCP port, it should only be opened for a specific IP. Ideally, it should not
+be a TCP port at all, it should be a Unix domain socket, so that access to the
+server machine is required. Thus a typical port setup for admin console is:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">console</span><span class="p">.</span><span class="n">listen</span><span class="p">(</span><span class="s1">&#39;/var/lib/tarantool/socket_name.sock&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and a typical connection <a class="reference internal" href="../../reference/configuration/index.html#index-uri"><span class="std std-ref">URI</span></a> is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/var/lib/tarantool/socket_name.sock
+</pre></div>
+</div>
+<p>if the listener has the privilege to write on <code class="docutils literal notranslate"><span class="pre">/var/lib/tarantool</span></code> and the
+connector has the privilege to read on <code class="docutils literal notranslate"><span class="pre">/var/lib/tarantool</span></code>. Alternatively,
+to connect to an admin console of an instance started with <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>, use
+<a class="reference internal" href="server_introspection.html#admin-executing-code-on-an-instance"><span class="std std-ref">tarantoolctl enter</span></a>.</p>
+<p>To find out whether a TCP port is a port for admin console, use <code class="docutils literal notranslate"><span class="pre">telnet</span></code>.
+For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> telnet <span class="m">0</span> <span class="m">3303</span>
+<span class="go">Trying 0.0.0.0...</span>
+<span class="go">Connected to 0.</span>
+<span class="go">Escape character is &#39;^]&#39;.</span>
+<span class="go">Tarantool 1.10.0 (Lua console)</span>
+<span class="go">type &#39;help&#39; for interactive help</span>
+</pre></div>
+</div>
+<p>In this example, the response does not include the word “binary” and does
+include the words “Lua console”. Therefore it is clear that this is a successful
+connection to a port for admin console, and you can now enter admin requests on
+this terminal.</p>
+<p>When you connect to a binary port:</p>
+<ul class="simple">
+<li>The client-server protocol is <a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">binary</span></a>.</li>
+<li>The user is automatically ‘<a class="reference internal" href="../box/authentication_index.html#authentication-users"><span class="std std-ref">guest</span></a>’.</li>
+<li>To change the user, it’s necessary to authenticate.</li>
+</ul>
+<p>For ease of use, <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">connect</span></code> command automatically detects the type
+of connection during handshake and uses <a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-eval"><span class="std std-ref">EVAL</span></a>
+binary protocol command when it’s necessary to execute Lua commands over a binary
+connection. To execute EVAL, the authenticated user must have global “EXECUTE”
+privilege.</p>
+<p>Therefore, when <code class="docutils literal notranslate"><span class="pre">ssh</span></code> access to the machine is not available, creating a
+Tarantool user with global “EXECUTE” privilege and non-empty password can be
+used to provide a system administrator <strong>remote</strong> access to an instance.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

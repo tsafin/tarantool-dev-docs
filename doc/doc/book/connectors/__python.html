@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Python &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Python</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/connectors/__python.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="python">
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://github.com/tarantool/tarantool-python">tarantool-python</a>
+is the official Python connector for Tarantool. It is not supplied as part
+of the Tarantool repository and must be installed separately (see below for details).</p>
+<p>Here is a complete Python program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'Value','Value']</span></code> into
+space <code class="docutils literal notranslate"><span class="pre">examples</span></code> via the high-level Python API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">tarantool</span> <span class="kn">import</span> <span class="n">Connection</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">(</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;examples&quot;</span><span class="p">,(</span><span class="mi">99999</span><span class="p">,</span><span class="s1">&#39;Value&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">))</span>
+<span class="nb">print</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>To prepare, paste the code into a file named <code class="file docutils literal notranslate"><span class="pre">example.py</span></code> and install
+the <code class="docutils literal notranslate"><span class="pre">tarantool-python</span></code> connector with either <code class="samp docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tarantool&gt;0.4</span></code>
+to install in <code class="file docutils literal notranslate"><span class="pre">/usr</span></code> (requires <strong>root</strong> privilege) or
+<code class="samp docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tarantool&gt;0.4</span> <span class="pre">--user</span></code> to install in <code class="file docutils literal notranslate"><span class="pre">~</span></code> i.e. user’s
+default directory.</p>
+<p>Before trying to run, check that the server instance is <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listening</span></a> at
+<code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="index.html#index-connector-setting"><span class="std std-ref">described earlier</span></a>.
+To run the program, say <code class="samp docutils literal notranslate"><span class="pre">python</span> <span class="pre">example.py</span></code>. The program will connect
+to the Tarantool server, will send the <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a> request, and will not throw any exception if
+all went well. If the tuple already exists, the program will throw
+<code class="docutils literal notranslate"><span class="pre">tarantool.error.DatabaseError:</span> <span class="pre">(3,</span> <span class="pre">&quot;Duplicate</span> <span class="pre">key</span> <span class="pre">exists</span> <span class="pre">in</span> <span class="pre">unique</span> <span class="pre">index</span> <span class="pre">'primary'</span> <span class="pre">in</span> <span class="pre">space</span> <span class="pre">'examples'&quot;)</span></code>.</p>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see
+<a class="reference external" href="http://github.com/tarantool/tarantool-python">tarantool-python</a> project at GitHub.
+For an example of using Python API with
+<a class="reference external" href="https://github.com/tarantool/queue">queue managers for Tarantool</a>, see
+<a class="reference external" href="https://github.com/tarantool/queue-python">queue-python</a> project at GitHub.</p>
+<p>Also there are several community-driven Python connectors:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/igorcoding/asynctnt">asynctnt</a> with asyncio support</li>
+<li><a class="reference external" href="https://github.com/shveenkov/aiotarantool">aiotarantool</a> also with asyncio support</li>
+<li><a class="reference external" href="https://github.com/shveenkov/gtarantool">gtarantool</a> with gevent support <strong>no active maintenance</strong></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

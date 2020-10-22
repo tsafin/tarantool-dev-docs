@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Backups &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Backups</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/backups.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="backups">
+<span id="admin-backups"></span><h1>Backups<a class="headerlink" href="#backups" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool has an append-only storage architecture: it appends data to files but
+it never overwrites earlier data. The
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-checkpoint-daemon-garbage-collector"><span class="std std-ref">Tarantool garbage collector</span></a>
+removes old files after a
+checkpoint. You can prevent or delay the garbage collector’s action
+by configuring the
+<a class="reference internal" href="../../reference/configuration/index.html#book-cfg-checkpoint-daemon"><span class="std std-ref">checkpoint daemon</span></a>. Backups can be taken at
+any time, with minimal overhead on database performance.</p>
+<p>Two functions are helpful for backups in certain situations:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-start"><span class="std std-ref">box.backup.start()</span></a> informs
+the server that activities related to the removal of outdated backups must
+be suspended and returns a table with the names of snapshot and vinyl files
+that should be copied.</li>
+<li><a class="reference internal" href="../../reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-stop"><span class="std std-ref">box.backup.stop()</span></a> later informs
+the server that normal operations may resume.</li>
+</ul>
+<div class="section" id="hot-backup-memtx">
+<span id="admin-backups-hot-backup-memtx"></span><h2>Hot backup (memtx)<a class="headerlink" href="#hot-backup-memtx" title="Permalink to this headline">¶</a></h2>
+<p>This is a special case when there are only in-memory tables.</p>
+<p>The last <a class="reference internal" href="../box/data_model.html#index-box-persistence"><span class="std std-ref">snapshot file</span></a> is a backup of the entire
+database; and the <a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">WAL</span></a> files
+that are made after the last snapshot are incremental backups. Therefore taking
+a backup is a matter of copying the snapshot and WAL files.</p>
+<ol class="arabic simple">
+<li>Use <code class="docutils literal notranslate"><span class="pre">tar</span></code> to make a (possibly compressed) copy of the latest .snap and .xlog
+files on the <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-memtx-dir"><span class="std std-ref">memtx_dir</span></a> and
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-wal-dir"><span class="std std-ref">wal_dir</span></a> directories.</li>
+<li>If there is a security policy, encrypt the .tar file.</li>
+<li>Copy the .tar file to a safe place.</li>
+</ol>
+<p>Later, restoring the database is a matter of taking the .tar file and putting
+its contents back in the <code class="docutils literal notranslate"><span class="pre">memtx_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">wal_dir</span></code> directories.</p>
+</div>
+<div class="section" id="hot-backup-vinyl-memtx">
+<span id="admin-backups-hot-backup-vinyl-memtx"></span><h2>Hot backup (vinyl/memtx)<a class="headerlink" href="#hot-backup-vinyl-memtx" title="Permalink to this headline">¶</a></h2>
+<p>Vinyl stores its files in <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-vinyl-dir"><span class="std std-ref">vinyl_dir</span></a>, and creates a
+folder for each database space. Dump and compaction processes are append-only and
+create new files. The Tarantool garbage collector may remove old files after each
+checkpoint.</p>
+<p>To take a mixed backup:</p>
+<ol class="arabic simple">
+<li>Issue <a class="reference internal" href="../../reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-start"><span class="std std-ref">box.backup.start()</span></a> on the
+<a class="reference internal" href="security.html#admin-security"><span class="std std-ref">administrative console</span></a>. This will return a list of
+files to back up and suspend garbage collection for them till the next <code class="docutils literal notranslate"><span class="pre">box.backup.stop()</span></code>.</li>
+<li>Copy the files from the list to a safe location. This will include memtx
+snapshot files, vinyl run and index files, at a state consistent with the
+last checkpoint.</li>
+<li>Issue <code class="docutils literal notranslate"><span class="pre">box.backup.stop()</span></code> so the garbage collector can continue as usual.</li>
+</ol>
+</div>
+<div class="section" id="continuous-remote-backup-memtx">
+<span id="admin-backups-cont-remote-backup-memtx"></span><h2>Continuous remote backup (memtx)<a class="headerlink" href="#continuous-remote-backup-memtx" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../replication/index.html#replication"><span class="std std-ref">replication</span></a> feature is useful for backup as
+well as for load balancing.</p>
+<p>Therefore taking a backup is a matter of ensuring that any given replica is
+up to date, and doing a cold backup on it. Since all the other replicas continue
+to operate, this is not a cold backup from the end user’s point of view. This
+could be done on a regular basis, with a <code class="docutils literal notranslate"><span class="pre">cron</span></code> job or with a Tarantool fiber.</p>
+</div>
+<div class="section" id="continuous-backup-memtx">
+<span id="admin-backups-cont-backup-memtx"></span><h2>Continuous backup (memtx)<a class="headerlink" href="#continuous-backup-memtx" title="Permalink to this headline">¶</a></h2>
+<p>The logged changes done since the last cold backup must be secured, while the
+system is running.</p>
+<p>For this purpose, you need a file copy utility that will do the copying
+remotely and continuously, copying only the parts of a write ahead log file
+that are changing.
+One such utility is <a class="reference external" href="https://en.wikipedia.org/wiki/Rsync">rsync</a>.</p>
+<p>Alternatively, you need an ordinary file copy utility, but there should be
+frequent production of new snapshot files or new WAL files as changes occur,
+so that only the new files need to be copied.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,593 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Debug facilities &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Debug facilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/debug_facilities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="debug-facilities">
+<span id="debug-module"></span><h1>Debug facilities<a class="headerlink" href="#debug-facilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool users can benefit from built-in debug facilities that are part of:</p>
+<ul class="simple">
+<li>Lua (<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#5.9">debug</a> library,
+see details below) and</li>
+<li>LuaJit (<a class="reference external" href="http://luajit.org/extensions.html">debug.*</a> functions).</li>
+</ul>
+<span class="target" id="module-debug"></span><p>The <code class="docutils literal notranslate"><span class="pre">debug</span></code> library provides an interface for debugging Lua programs. All
+functions in this library reside in the <code class="docutils literal notranslate"><span class="pre">debug</span></code> table. Those functions that
+operate on a thread have an optional first parameter that specifies the thread
+to operate on. The default is always the current thread.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This library should be used only for debugging and profiling and not as a
+regular programming tool, as the functions provided here can take too long
+to run. Besides, several of these functions can compromise otherwise
+secure code.</p>
+</div>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">debug</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#debug-debug"><span class="std std-ref">debug.debug()</span></a></td>
+<td>Enter an interactive mode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-getfenv"><span class="std std-ref">debug.getfenv()</span></a></td>
+<td>Get an object’s environment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-gethook"><span class="std std-ref">debug.gethook()</span></a></td>
+<td>Get a thread’s current hook
+settings</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-getinfo"><span class="std std-ref">debug.getinfo()</span></a></td>
+<td>Get information about a
+function</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-getlocal"><span class="std std-ref">debug.getlocal()</span></a></td>
+<td>Get a local variable’s name and
+value</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-getmetatable"><span class="std std-ref">debug.getmetatable()</span></a></td>
+<td>Get an object’s metatable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-getregistry"><span class="std std-ref">debug.getregistry()</span></a></td>
+<td>Get the registry table</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-getupvalue"><span class="std std-ref">debug.getupvalue()</span></a></td>
+<td>Get an upvalue’s name and value</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-setfenv"><span class="std std-ref">debug.setfenv()</span></a></td>
+<td>Set an object’s environment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-sethook"><span class="std std-ref">debug.sethook()</span></a></td>
+<td>Set a given function as a hook</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-setlocal"><span class="std std-ref">debug.setlocal()</span></a></td>
+<td>Assign a value to a local
+variable</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-setmetatable"><span class="std std-ref">debug.setmetatable()</span></a></td>
+<td>Set an object’s metatable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#debug-setupvalue"><span class="std std-ref">debug.setupvalue()</span></a></td>
+<td>Assign a value to an upvalue</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#debug-traceback"><span class="std std-ref">debug.traceback()</span></a></td>
+<td>Get a traceback of the call
+stack</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="debug-debug"></span><dl class="function">
+<dt id="debug.debug">
+<code class="descclassname">debug.</code><code class="descname">debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enters an interactive mode and runs each string that the user types in. The
+user can, among other things, inspect global and local variables, change
+their values and evaluate expressions.</p>
+<p>Enter <code class="docutils literal notranslate"><span class="pre">cont</span></code> to exit this function, so that the caller can continue
+its execution.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Commands for <code class="docutils literal notranslate"><span class="pre">debug.debug()</span></code> are not lexically nested within any
+function and so have no direct access to local variables.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="debug-getfenv"></span><dl class="function">
+<dt id="debug.getfenv">
+<code class="descclassname">debug.</code><code class="descname">getfenv</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.getfenv" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> (<em>table</em><em>, </em><em>userdata</em><em>, </em><em>thread</em><em> or </em><em>function</em>) – object to get the environment of</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the environment of the <code class="docutils literal notranslate"><span class="pre">object</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-gethook"></span><dl class="function">
+<dt id="debug.gethook">
+<code class="descclassname">debug.</code><code class="descname">gethook</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.gethook" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the current hook settings of the <code class="docutils literal notranslate"><span class="pre">thread</span></code> as three values:<ul class="simple">
+<li>the current hook function</li>
+<li>the current hook mask</li>
+<li>the current hook count as set by the <code class="docutils literal notranslate"><span class="pre">debug.sethook()</span></code> function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-getinfo"></span><dl class="function">
+<dt id="debug.getinfo">
+<code class="descclassname">debug.</code><code class="descname">getinfo</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em>, <span class="optional">]</span><em>function</em><span class="optional">[</span>, <em>what</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.getinfo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> (<em>function</em><em> or </em><em>number</em>) – function to get information on</li>
+<li><strong>what</strong> (<em>string</em>) – what information on the <code class="docutils literal notranslate"><span class="pre">function</span></code> to return</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a table with information about the <code class="docutils literal notranslate"><span class="pre">function</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can pass in a <code class="docutils literal notranslate"><span class="pre">function</span></code> directly, or you can give a number that
+specifies a function running at level <code class="docutils literal notranslate"><span class="pre">function</span></code> of the call stack of
+the given <code class="docutils literal notranslate"><span class="pre">thread</span></code>: level 0 is the current function (<code class="docutils literal notranslate"><span class="pre">getinfo()</span></code> itself),
+level 1 is the function that called <code class="docutils literal notranslate"><span class="pre">getinfo()</span></code>, and so on. If <code class="docutils literal notranslate"><span class="pre">function</span></code>
+is a number larger than the number of active functions, <code class="docutils literal notranslate"><span class="pre">getinfo()</span></code> returns
+<code class="docutils literal notranslate"><span class="pre">nil</span></code>.</p>
+<p>The default for <code class="docutils literal notranslate"><span class="pre">what</span></code> is to get all information available, except the table
+of valid lines. If present, the option <code class="docutils literal notranslate"><span class="pre">f</span></code> adds a field named <code class="docutils literal notranslate"><span class="pre">func</span></code> with
+the function itself. If present, the option <code class="docutils literal notranslate"><span class="pre">L</span></code> adds a field named
+<code class="docutils literal notranslate"><span class="pre">activelines</span></code> with the table of valid lines.</p>
+</dd></dl>
+
+<span class="target" id="debug-getlocal"></span><dl class="function">
+<dt id="debug.getlocal">
+<code class="descclassname">debug.</code><code class="descname">getlocal</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em>, <span class="optional">]</span><em>level</em>, <em>local</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.getlocal" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>level</strong> (<em>number</em>) – level of the stack</li>
+<li><strong>local</strong> (<em>number</em>) – index of the local variable</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name and the value of the local variable with the index <code class="docutils literal notranslate"><span class="pre">local</span></code>
+of the function at level <code class="docutils literal notranslate"><span class="pre">level</span></code> of the stack or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if there
+is no local variable with the given index; raises an error if
+<code class="docutils literal notranslate"><span class="pre">level</span></code> is out of range</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can call <code class="docutils literal notranslate"><span class="pre">debug.getinfo()</span></code> to check whether the level is valid.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="debug-getmetatable"></span><dl class="function">
+<dt id="debug.getmetatable">
+<code class="descclassname">debug.</code><code class="descname">getmetatable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.getmetatable" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> (<em>table</em><em>, </em><em>userdata</em><em>, </em><em>thread</em><em> or </em><em>function</em>) – object to get the metatable of</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a metatable of the <code class="docutils literal notranslate"><span class="pre">object</span></code> or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if it does not have
+a metatable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-getregistry"></span><dl class="function">
+<dt id="debug.getregistry">
+<code class="descclassname">debug.</code><code class="descname">getregistry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.getregistry" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the registry table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-getupvalue"></span><dl class="function">
+<dt id="debug.getupvalue">
+<code class="descclassname">debug.</code><code class="descname">getupvalue</code><span class="sig-paren">(</span><em>func</em>, <em>up</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.getupvalue" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<em>function</em>) – function to get the upvalue of</li>
+<li><strong>up</strong> (<em>number</em>) – index of the function upvalue</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name and the value of the upvalue with the index <code class="docutils literal notranslate"><span class="pre">up</span></code> of
+the function <code class="docutils literal notranslate"><span class="pre">func</span></code> or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if there is no upvalue with
+the given index</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-setfenv"></span><dl class="function">
+<dt id="debug.setfenv">
+<code class="descclassname">debug.</code><code class="descname">setfenv</code><span class="sig-paren">(</span><em>object</em>, <em>table</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.setfenv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the environment of the <code class="docutils literal notranslate"><span class="pre">object</span></code> to the <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object</strong> (<em>table</em><em>, </em><em>userdata</em><em>, </em><em>thread</em><em> or </em><em>function</em>) – object to change the environment of</li>
+<li><strong>table</strong> (<em>table</em>) – table to set the object environment to</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <code class="docutils literal notranslate"><span class="pre">object</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-sethook"></span><dl class="function">
+<dt id="debug.sethook">
+<code class="descclassname">debug.</code><code class="descname">sethook</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em>, <span class="optional">]</span><em>hook</em>, <em>mask</em><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.sethook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the given function as a hook.  When called without arguments,
+turns the hook off.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hook</strong> (<em>function</em>) – function to set as a hook</li>
+<li><strong>mask</strong> (<em>string</em>) – <p>describes when the <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be called;
+may have the following values:</p>
+<ul>
+<li><code class="docutils literal notranslate"><span class="pre">c</span></code> - the <code class="docutils literal notranslate"><span class="pre">hook</span></code> is called every time Lua calls a function</li>
+<li><code class="docutils literal notranslate"><span class="pre">r</span></code> - the <code class="docutils literal notranslate"><span class="pre">hook</span></code> is called every time Lua returns from a function</li>
+<li><code class="docutils literal notranslate"><span class="pre">l</span></code> - the <code class="docutils literal notranslate"><span class="pre">hook</span></code> is called every time Lua enters a new line of code</li>
+</ul>
+</li>
+<li><strong>count</strong> (<em>number</em>) – describes when the <code class="docutils literal notranslate"><span class="pre">hook</span></code> will be called; when
+different from zero, the <code class="docutils literal notranslate"><span class="pre">hook</span></code> is called after
+every <code class="docutils literal notranslate"><span class="pre">count</span></code> instructions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-setlocal"></span><dl class="function">
+<dt id="debug.setlocal">
+<code class="descclassname">debug.</code><code class="descname">setlocal</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em>, <span class="optional">]</span><em>level</em>, <em>local</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.setlocal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the value <code class="docutils literal notranslate"><span class="pre">value</span></code> to the local variable with the index <code class="docutils literal notranslate"><span class="pre">local</span></code>
+of the function at level <code class="docutils literal notranslate"><span class="pre">level</span></code> of the stack.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>level</strong> (<em>number</em>) – level of the stack</li>
+<li><strong>local</strong> (<em>number</em>) – index of the local variable</li>
+<li><strong>value</strong> (<em>boolean</em><em>, </em><em>number</em><em>, </em><em>string</em><em> or </em><em>userdata</em>) – value to assign to the local variable</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name of the local variable or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if there is no local
+variable with the given index; raises an error if <code class="docutils literal notranslate"><span class="pre">level</span></code> is
+out of range</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can call <code class="docutils literal notranslate"><span class="pre">debug.getinfo()</span></code> to check whether the level is valid.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="debug-setmetatable"></span><dl class="function">
+<dt id="debug.setmetatable">
+<code class="descclassname">debug.</code><code class="descname">setmetatable</code><span class="sig-paren">(</span><em>object</em>, <em>table</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.setmetatable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the metatable of the <code class="docutils literal notranslate"><span class="pre">object</span></code> to the <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>object</strong> (<em>table</em><em>, </em><em>userdata</em><em>, </em><em>thread</em><em> or </em><em>function</em>) – object to change the metatable of</li>
+<li><strong>table</strong> (<em>table</em>) – table to set the object metatable to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-setupvalue"></span><dl class="function">
+<dt id="debug.setupvalue">
+<code class="descclassname">debug.</code><code class="descname">setupvalue</code><span class="sig-paren">(</span><em>func</em>, <em>up</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#debug.setupvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the value <code class="docutils literal notranslate"><span class="pre">value</span></code> to the upvalue with the index <code class="docutils literal notranslate"><span class="pre">up</span></code>
+of the function <code class="docutils literal notranslate"><span class="pre">func</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<em>function</em>) – function to set the upvalue of</li>
+<li><strong>up</strong> (<em>number</em>) – index of the function upvalue</li>
+<li><strong>value</strong> (<em>boolean</em><em>, </em><em>number</em><em>, </em><em>string</em><em> or </em><em>userdata</em>) – value to assign to the function upvalue</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name of the upvalue or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if there is no
+upvalue with the given index</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="debug-traceback"></span><dl class="function">
+<dt id="debug.traceback">
+<code class="descclassname">debug.</code><code class="descname">traceback</code><span class="sig-paren">(</span><span class="optional">[</span><em>thread</em>, <span class="optional">]</span><em>[message]</em><span class="optional">[</span>, <em>level</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#debug.traceback" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>message</strong> (<em>string</em>) – an optional message prepended to the traceback</li>
+<li><strong>level</strong> (<em>number</em>) – specifies at which level to start the traceback
+(default is 1)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a string with a traceback of the call stack</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

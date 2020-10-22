@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Monitoring a replica set &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Monitoring a replica set</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_monitoring.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="monitoring-a-replica-set">
+<span id="replication-monitoring"></span><h1>Monitoring a replica set<a class="headerlink" href="#monitoring-a-replica-set" title="Permalink to this headline">¶</a></h1>
+<p>To learn what instances belong in the replica set, and obtain statistics for all
+these instances, issue a <a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication</span></a> request:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.replication
+---
+  replication:
+    1:
+      id: 1
+      uuid: b8a7db60-745f-41b3-bf68-5fcce7a1e019
+      lsn: 88
+    2:
+      id: 2
+      uuid: cd3c7da2-a638-4c5d-ae63-e7767c3a6896
+      lsn: 31
+      upstream:
+        status: follow
+        idle: 43.187747001648
+        peer: replicator@192.168.0.102:3301
+        lag: 0
+      downstream:
+        vclock: {1: 31}
+    3:
+      id: 3
+      uuid: e38ef895-5804-43b9-81ac-9f2cd872b9c4
+      lsn: 54
+      upstream:
+        status: follow
+        idle: 43.187621831894
+        peer: replicator@192.168.0.103:3301
+        lag: 2
+      downstream:
+        vclock: {1: 54}
+...
+</pre></div>
+</div>
+<p>This report is for a master-master replica set of three instances, each having
+its own instance id, UUID and log sequence number.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/mm-3m-mesh.svg" src="../../../../_images/mm-3m-mesh.svg" /></div>
+<p>The request was issued at master #1, and the reply includes statistics for the
+other two masters, given in regard to master #1.</p>
+<p>The primary indicators of replication health are:</p>
+<ul id="heartbeat">
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication-upstream-idle"><span class="std std-ref">idle</span></a>, the time (in seconds) since
+the instance received the last event from a master.</p>
+<p>A replica sends heartbeat messages to the master every second, and the master
+is programmed to reconnect automatically if it does not see heartbeat messages
+within <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-timeout"><span class="std std-ref">replication_timeout</span></a>
+seconds.</p>
+<p>Therefore, in a healthy replication setup, <code class="docutils literal notranslate"><span class="pre">idle</span></code> should never exceed
+<code class="docutils literal notranslate"><span class="pre">replication_timeout</span></code>: if it does, either the replication is lagging
+seriously behind, because the master is running ahead of the replica, or the
+network link between the instances is down.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication-upstream-lag"><span class="std std-ref">lag</span></a>, the time difference between
+the local time at the instance, recorded when the event was received, and the
+local time at another master recorded when the event was written to the
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write ahead log</span></a> on that master.</p>
+<p>Since the <code class="docutils literal notranslate"><span class="pre">lag</span></code> calculation uses the operating system clocks from two different
+machines, do not be surprised if it’s negative: a time drift may lead to the
+remote master clock being consistently behind the local instance’s clock.</p>
+<p>For multi-master configurations, <code class="docutils literal notranslate"><span class="pre">lag</span></code> is the maximal lag.</p>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

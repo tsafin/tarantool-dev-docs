@@ -1,0 +1,1562 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module fio &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>fio</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/fio.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fio">
+<span id="fio-module"></span><h1>Module <cite>fio</cite><a class="headerlink" href="#module-fio" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<span id="fio-section"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool supports file input/output with an API that is similar to POSIX
+syscalls. All operations are performed asynchronously. Multiple fibers can
+access the same file simultaneously.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">fio</span></code> module contains:</p>
+<ul class="simple">
+<li>functions for <a class="reference internal" href="#fio-pathname"><span class="std std-ref">common pathname manipulations</span></a>,</li>
+<li>functions for <a class="reference internal" href="#fio-checks"><span class="std std-ref">directory or file existence and type checks</span></a>,</li>
+<li>functions for <a class="reference internal" href="#fio-file"><span class="std std-ref">common file manipulations</span></a>, and</li>
+<li><a class="reference internal" href="#fio-c"><span class="std std-ref">constants</span></a> which are the same as POSIX flag values (for example
+<code class="docutils literal notranslate"><span class="pre">fio.c.flag.O_RDONLY</span></code> = POSIX O_RDONLY).</li>
+</ul>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">fio</span></code> functions and members.</p>
+<div class="table docutils container">
+<table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#fio-pathjoin"><span class="std std-ref">fio.pathjoin()</span></a></td>
+<td>Form a path name from one or
+more partial strings</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-basename"><span class="std std-ref">fio.basename()</span></a></td>
+<td>Get a file name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-dirname"><span class="std std-ref">fio.dirname()</span></a></td>
+<td>Get a directory name</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-abspath"><span class="std std-ref">fio.abspath()</span></a></td>
+<td>Get a directory and file name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-path-exists"><span class="std std-ref">fio.path.exists()</span></a></td>
+<td>Check if file or directory
+exists</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-path-is-dir"><span class="std std-ref">fio.path.is_dir()</span></a></td>
+<td>Check if file or directory
+is a directory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-path-is-file"><span class="std std-ref">fio.path.is_file()</span></a></td>
+<td>Check if file or directory
+is a file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-path-is-link"><span class="std std-ref">fio.path.is_link()</span></a></td>
+<td>Check if file or directory
+is a link</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-path-lexists"><span class="std std-ref">fio.path.lexists()</span></a></td>
+<td>Check if file or directory
+exists</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-umask"><span class="std std-ref">fio.umask()</span></a></td>
+<td>Set mask bits</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-stat"><span class="std std-ref">fio.lstat()</span></a> <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+<a class="reference internal" href="#fio-stat"><span class="std std-ref">fio.stat()</span></a></td>
+<td>Get information about a file
+object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-mkdir"><span class="std std-ref">fio.mkdir()</span></a> <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+<a class="reference internal" href="#fio-mkdir"><span class="std std-ref">fio.rmdir()</span></a></td>
+<td>Create or delete a directory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-chdir"><span class="std std-ref">fio.chdir()</span></a></td>
+<td>Change working directory</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-listdir"><span class="std std-ref">fio.listdir()</span></a></td>
+<td>List files in a directory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-glob"><span class="std std-ref">fio.glob()</span></a></td>
+<td>Get files whose names match
+a given string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-tempdir"><span class="std std-ref">fio.tempdir()</span></a></td>
+<td>Get the name of a directory for
+storing temporary files</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-cwd"><span class="std std-ref">fio.cwd()</span></a></td>
+<td>Get the name of the current
+working directory</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-copytree"><span class="std std-ref">fio.copytree()</span></a> <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+<a class="reference internal" href="#fio-mktree"><span class="std std-ref">fio.mktree()</span></a> <a href="#id7"><span class="problematic" id="id8">|br|</span></a>
+<a class="reference internal" href="#fio-rmtree"><span class="std std-ref">fio.rmtree()</span></a></td>
+<td>Create and delete directories</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-link"><span class="std std-ref">fio.link()</span></a> <a href="#id9"><span class="problematic" id="id10">|br|</span></a>
+<a class="reference internal" href="#fio-link"><span class="std std-ref">fio.symlink()</span></a> <a href="#id11"><span class="problematic" id="id12">|br|</span></a>
+<a class="reference internal" href="#fio-link"><span class="std std-ref">fio.readlink()</span></a> <a href="#id13"><span class="problematic" id="id14">|br|</span></a>
+<a class="reference internal" href="#fio-link"><span class="std std-ref">fio.unlink()</span></a></td>
+<td>Create and delete links</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-rename"><span class="std std-ref">fio.rename()</span></a></td>
+<td>Rename a file or directory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-copyfile"><span class="std std-ref">fio.copyfile()</span></a></td>
+<td>Copy a file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-chown"><span class="std std-ref">fio.chown()</span></a> <a href="#id15"><span class="problematic" id="id16">|br|</span></a>
+<a class="reference internal" href="#fio-chown"><span class="std std-ref">fio.chmod()</span></a></td>
+<td>Manage rights to and ownership
+of file objects</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-truncate"><span class="std std-ref">fio.truncate()</span></a></td>
+<td>Reduce the file size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fio-sync"><span class="std std-ref">fio.sync()</span></a></td>
+<td>Ensure that changes are written
+to disk</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-open"><span class="std std-ref">fio.open()</span></a></td>
+<td>Open a file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#file-handle-close"><span class="std std-ref">file-handle:close()</span></a></td>
+<td>Close a file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#file-handle-pread"><span class="std std-ref">file-handle:pread()</span></a> <a href="#id17"><span class="problematic" id="id18">|br|</span></a>
+<a class="reference internal" href="#file-handle-pwrite"><span class="std std-ref">file-handle:pwrite()</span></a></td>
+<td>Perform random-access read or
+write on a file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#file-handle-read"><span class="std std-ref">file-handle:read()</span></a> <a href="#id19"><span class="problematic" id="id20">|br|</span></a>
+<a class="reference internal" href="#file-handle-write"><span class="std std-ref">file-handle:write()</span></a></td>
+<td>Perform non-random-access read
+or write on a file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#file-handle-truncate"><span class="std std-ref">file-handle:truncate()</span></a></td>
+<td>Change the size of an open file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#file-handle-seek"><span class="std std-ref">file-handle:seek()</span></a></td>
+<td>Change position in a file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#file-handle-stat"><span class="std std-ref">file-handle:stat()</span></a></td>
+<td>Get statistics about an open
+file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#file-handle-fsync"><span class="std std-ref">file-handle:fsync()</span></a> <a href="#id21"><span class="problematic" id="id22">|br|</span></a>
+<a class="reference internal" href="#file-handle-fsync"><span class="std std-ref">file-handle:fdatasync()</span></a></td>
+<td>Ensure that changes made to an
+open file are written to disk</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fio-c-table"><span class="std std-ref">fio.c</span></a></td>
+<td>Table of constants similar to
+POSIX flag values</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-fio"></span></div>
+<div class="section" id="common-pathname-manipulations">
+<span id="fio-pathname"></span><h2>Common pathname manipulations<a class="headerlink" href="#common-pathname-manipulations" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="fio-pathjoin"></span><dl class="function">
+<dt id="fio.pathjoin">
+<code class="descclassname">fio.</code><code class="descname">pathjoin</code><span class="sig-paren">(</span><em>partial-string</em><span class="optional">[</span>, <em>partial-string ...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.pathjoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate partial string, separated by ‘/’ to form a path name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>partial-string</strong> (<em>string</em>) – one or more strings to be concatenated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.pathjoin(&#39;/etc&#39;, &#39;default&#39;, &#39;myfile&#39;)
+---
+- /etc/default/myfile
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-basename"></span><dl class="function">
+<dt id="fio.basename">
+<code class="descclassname">fio.</code><code class="descname">basename</code><span class="sig-paren">(</span><em>path-name</em><span class="optional">[</span>, <em>suffix</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.basename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a full path name, remove all but the final part (the file name).
+Also remove the suffix, if it is passed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – path name</li>
+<li><strong>suffix</strong> (<em>string</em>) – suffix</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">file name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.basename(&#39;/path/to/my.lua&#39;, &#39;.lua&#39;)
+---
+- my
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-dirname"></span><dl class="function">
+<dt id="fio.dirname">
+<code class="descclassname">fio.</code><code class="descname">dirname</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.dirname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a full path name, remove the final part (the file name).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">directory name, that is, path name except for file name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.dirname(&#39;path/to/my.lua&#39;)
+---
+- &#39;path/to/&#39;
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-abspath"></span><dl class="function">
+<dt id="fio.abspath">
+<code class="descclassname">fio.</code><code class="descname">abspath</code><span class="sig-paren">(</span><em>file-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.abspath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a final part (the file name), return the full path name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file-name</strong> (<em>string</em>) – file name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">directory name, that is, path name including file name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.abspath(&#39;my.lua&#39;)
+---
+- &#39;path/to/my.lua&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="directory-or-file-existence-and-type-checks">
+<span id="fio-checks"></span><h2>Directory or file existence and type checks<a class="headerlink" href="#directory-or-file-existence-and-type-checks" title="Permalink to this headline">¶</a></h2>
+<p>Functions in this section are similar to some
+<a class="reference external" href="https://docs.python.org/2/library/os.path.htmll">Python os.path</a>
+functions.</p>
+<span class="target" id="fio-path-exists"></span><dl class="function">
+<dt id="fio.fio.path.exists">
+<code class="descclassname">fio.path.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.fio.path.exists" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path to directory or file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if path-name refers to a directory or file that exists and is not a broken symbolic link; otherwise false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="fio-path-is-dir"></span><dl class="function">
+<dt id="fio.fio.path.is_dir">
+<code class="descclassname">fio.path.</code><code class="descname">is_dir</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.fio.path.is_dir" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path to directory or file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if path-name refers to a directory; otherwise false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="fio-path-is-file"></span><dl class="function">
+<dt id="fio.fio.path.is_file">
+<code class="descclassname">fio.path.</code><code class="descname">is_file</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.fio.path.is_file" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path to directory or file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if path-name refers to a file; otherwise false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="fio-path-is-link"></span><dl class="function">
+<dt id="fio.fio.path.is_link">
+<code class="descclassname">fio.path.</code><code class="descname">is_link</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.fio.path.is_link" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path to directory or file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if path-name refers to a symbolic link; otherwise false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="fio-path-lexists"></span><dl class="function">
+<dt id="fio.fio.path.lexists">
+<code class="descclassname">fio.path.</code><code class="descname">lexists</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.fio.path.lexists" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path to directory or file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if path-name refers to a directory or file that exists or is a broken symbolic link; otherwise false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="common-file-manipulations">
+<span id="fio-file"></span><h2>Common file manipulations<a class="headerlink" href="#common-file-manipulations" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="fio-umask"></span><dl class="function">
+<dt id="fio.umask">
+<code class="descclassname">fio.</code><code class="descname">umask</code><span class="sig-paren">(</span><em>mask-bits</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.umask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the mask bits used when creating files or directories. For a detailed
+description type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">umask</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mask-bits</strong> (<em>number</em>) – mask bits.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">previous mask bits.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.umask(tonumber(&#39;755&#39;, 8))
+---
+- 493
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-stat"></span><dl class="function">
+<dt id="fio.lstat">
+<code class="descclassname">fio.</code><code class="descname">lstat</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.lstat" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.stat">
+<code class="descclassname">fio.</code><code class="descname">stat</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns information about a file object. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">lstat</span></code> or
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">stat</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path name of file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(If no error) table of fields which describe the file’s block size,
+creation time, size, and other attributes. <a href="#id23"><span class="problematic" id="id24">|br|</span></a>
+(If error) two return values: null, error message.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table.</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, the result of <code class="docutils literal notranslate"><span class="pre">fio.stat('file-name')</span></code> will include methods
+equivalent to POSIX macros:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">is_blk()</span></code> = POSIX macro S_ISBLK,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_chr()</span></code> = POSIX macro S_ISCHR,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_dir()</span></code> = POSIX macro S_ISDIR,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_fifo()</span></code> = POSIX macro S_ISFIFO,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_link()</span></code> = POSIX macro S_ISLINK,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_reg()</span></code> = POSIX macro S_ISREG,</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_sock()</span></code> = POSIX macro S_ISSOCK.</li>
+</ul>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">fio.stat('/'):is_dir()</span></code> will return true.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.lstat(&#39;/etc&#39;)
+---
+- inode: 1048577
+  rdev: 0
+  size: 12288
+  atime: 1421340698
+  mode: 16877
+  mtime: 1424615337
+  nlink: 160
+  uid: 0
+  blksize: 4096
+  gid: 0
+  ctime: 1424615337
+  dev: 2049
+  blocks: 24
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-mkdir"></span><dl class="function">
+<dt id="fio.mkdir">
+<code class="descclassname">fio.</code><code class="descname">mkdir</code><span class="sig-paren">(</span><em>path-name</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.mkdir" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.rmdir">
+<code class="descclassname">fio.</code><code class="descname">rmdir</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create or delete a directory. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">mkdir</span></code> or <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">rmdir</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – path of directory.</li>
+<li><strong>mode</strong> (<em>number</em>) – Mode bits can be passed as a number or as string
+constants, for example <code class="docutils literal notranslate"><span class="pre">S_IWUSR</span></code>. Mode bits can be
+combined by enclosing them in braces.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) true. <a href="#id25"><span class="problematic" id="id26">|br|</span></a>
+(If error) two return values: false, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.mkdir(&#39;/etc&#39;)
+---
+- false
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-chdir"></span><dl class="function">
+<dt id="fio.chdir">
+<code class="descclassname">fio.</code><code class="descname">chdir</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.chdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change working directory. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">chdir</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path of directory.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(If success) true. (If failure) false.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.chdir(&#39;/etc&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-listdir"></span><dl class="function">
+<dt id="fio.listdir">
+<code class="descclassname">fio.</code><code class="descname">listdir</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.listdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>List files in directory.
+The result is similar to the <code class="docutils literal notranslate"><span class="pre">ls</span></code> shell command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path of directory.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(If no error) a list of files. <a href="#id27"><span class="problematic" id="id28">|br|</span></a>
+(If error) two return values: null, error message.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.listdir(&#39;/usr/lib/tarantool&#39;)
+---
+- - mysql
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-glob"></span><dl class="function">
+<dt id="fio.glob">
+<code class="descclassname">fio.</code><code class="descname">glob</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.glob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of files that match an input string. The list is constructed
+with a single flag that controls the behavior of the function:
+<code class="docutils literal notranslate"><span class="pre">GLOB_NOESCAPE</span></code>. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">3</span> <span class="pre">glob</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path-name, which may contain wildcard characters.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of files whose names match the input string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Possible errors:</strong> nil.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.glob(&#39;/etc/x*&#39;)
+---
+- - /etc/xdg
+  - /etc/xml
+  - /etc/xul-ext
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-tempdir"></span><dl class="function">
+<dt id="fio.tempdir">
+<code class="descclassname">fio.</code><code class="descname">tempdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of a directory that can be used to store temporary files.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.tempdir()
+---
+- /tmp/lG31e7
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-cwd"></span><dl class="function">
+<dt id="fio.cwd">
+<code class="descclassname">fio.</code><code class="descname">cwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.cwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the current working directory.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.cwd()
+---
+- /home/username/tarantool_sandbox
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-copytree"></span><dl class="function">
+<dt id="fio.copytree">
+<code class="descclassname">fio.</code><code class="descname">copytree</code><span class="sig-paren">(</span><em>from-path</em>, <em>to-path</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.copytree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy everything in the from-path, including subdirectory
+contents, to the to-path.
+The result is similar to the <code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">-r</span></code> shell command.
+The to-path should not be empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>from-path</strong> (<em>string</em>) – path-name.</li>
+<li><strong>to-path</strong> (<em>string</em>) – path-name.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) true. <a href="#id29"><span class="problematic" id="id30">|br|</span></a>
+(If error) two return values: false, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.copytree(&#39;/home/original&#39;,&#39;/home/archives&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-mktree"></span><dl class="function">
+<dt id="fio.mktree">
+<code class="descclassname">fio.</code><code class="descname">mktree</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.mktree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the path, including parent directories, but without file contents.
+The result is similar to the <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">-p</span></code> shell command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path-name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(If no error) true. <a href="#id31"><span class="problematic" id="id32">|br|</span></a>
+(If error) two return values: false, error message.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.mktree(&#39;/home/archives&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-rmtree"></span><dl class="function">
+<dt id="fio.rmtree">
+<code class="descclassname">fio.</code><code class="descname">rmtree</code><span class="sig-paren">(</span><em>path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.rmtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the directory indicated by path-name, including subdirectories.
+The result is similar to the <code class="docutils literal notranslate"><span class="pre">rmdir</span> <span class="pre">-r</span></code> shell command.
+The directory should not be empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path-name</strong> (<em>string</em>) – path-name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(If no error) true. <a href="#id33"><span class="problematic" id="id34">|br|</span></a>
+(If error) two return values: null, error message.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.rmtree(&#39;/home/archives&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-link"></span><dl class="function">
+<dt id="fio.link">
+<code class="descclassname">fio.</code><code class="descname">link</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.link" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.symlink">
+<code class="descclassname">fio.</code><code class="descname">symlink</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.symlink" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.readlink">
+<code class="descclassname">fio.</code><code class="descname">readlink</code><span class="sig-paren">(</span><em>src</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.readlink" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.unlink">
+<code class="descclassname">fio.</code><code class="descname">unlink</code><span class="sig-paren">(</span><em>src</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.unlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions to create and delete links. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">readlink</span></code>,
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">link</span></code>, <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">symlink</span></code>, <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">unlink</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src</strong> (<em>string</em>) – existing file name.</li>
+<li><strong>dst</strong> (<em>string</em>) – linked name.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(If no error) <code class="docutils literal notranslate"><span class="pre">fio.link</span></code> and <code class="docutils literal notranslate"><span class="pre">fio.symlink</span></code> and <code class="docutils literal notranslate"><span class="pre">fio.unlink</span></code>
+return true, <code class="docutils literal notranslate"><span class="pre">fio.readlink</span></code> returns the link value. <a href="#id35"><span class="problematic" id="id36">|br|</span></a>
+(If error) two return values: false|null, error message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.link(&#39;/home/username/tmp.txt&#39;, &#39;/home/username/tmp.txt2&#39;)
+---
+- true
+...
+tarantool&gt; fio.unlink(&#39;/home/username/tmp.txt2&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-rename"></span><dl class="function">
+<dt id="fio.rename">
+<code class="descclassname">fio.</code><code class="descname">rename</code><span class="sig-paren">(</span><em>path-name</em>, <em>new-path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename a file or directory. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">rename</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – original name.</li>
+<li><strong>new-path-name</strong> (<em>string</em>) – new name.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) true. <a href="#id37"><span class="problematic" id="id38">|br|</span></a>
+(If error) two return values: false, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.rename(&#39;/home/username/tmp.txt&#39;, &#39;/home/username/tmp.txt2&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-copyfile"></span><dl class="function">
+<dt id="fio.copyfile">
+<code class="descclassname">fio.</code><code class="descname">copyfile</code><span class="sig-paren">(</span><em>path-name</em>, <em>new-path-name</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.copyfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a file.
+The result is similar to the <code class="docutils literal notranslate"><span class="pre">cp</span></code> shell command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – path to original file.</li>
+<li><strong>new-path-name</strong> (<em>string</em>) – path to new file.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) true. <a href="#id39"><span class="problematic" id="id40">|br|</span></a>
+(If error) two return values: false, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.copyfile(&#39;/home/user/tmp.txt&#39;, &#39;/home/usern/tmp.txt2&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-chown"></span><dl class="function">
+<dt id="fio.chown">
+<code class="descclassname">fio.</code><code class="descname">chown</code><span class="sig-paren">(</span><em>path-name</em>, <em>owner-user</em>, <em>owner-group</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.chown" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.chmod">
+<code class="descclassname">fio.</code><code class="descname">chmod</code><span class="sig-paren">(</span><em>path-name</em>, <em>new-rights</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.chmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage the rights to file objects, or ownership of file objects.
+For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">chown</span></code> or <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">chmod</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>owner-user</strong> (<em>string</em>) – new user uid.</li>
+<li><strong>owner-group</strong> (<em>string</em>) – new group uid.</li>
+<li><strong>new-rights</strong> (<em>number</em>) – new permissions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">null</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.chmod(&#39;/home/username/tmp.txt&#39;, tonumber(&#39;0755&#39;, 8))
+---
+- true
+...
+tarantool&gt; fio.chown(&#39;/home/username/tmp.txt&#39;, &#39;username&#39;, &#39;username&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-truncate"></span><dl class="function">
+<dt id="fio.truncate">
+<code class="descclassname">fio.</code><code class="descname">truncate</code><span class="sig-paren">(</span><em>path-name</em>, <em>new-size</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce file size to a specified value. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">truncate</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – </li>
+<li><strong>new-size</strong> (<em>number</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) true. <a href="#id41"><span class="problematic" id="id42">|br|</span></a>
+(If error) two return values: false, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.truncate(&#39;/home/username/tmp.txt&#39;, 99999)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-sync"></span><dl class="function">
+<dt id="fio.sync">
+<code class="descclassname">fio.</code><code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that changes are written to disk. For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">sync</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if success, false if failure.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.sync()
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fio-open"></span><dl class="function">
+<dt id="fio.open">
+<code class="descclassname">fio.</code><code class="descname">open</code><span class="sig-paren">(</span><em>path-name</em><span class="optional">[</span>, <em>flags</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a file in preparation for reading or writing or seeking.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path-name</strong> (<em>string</em>) – Full path to the file to open.</li>
+<li><strong>flags</strong> (<em>number</em>) – <p>Flags can be passed as a number or as string
+constants, for example ‘<code class="docutils literal notranslate"><span class="pre">O_RDONLY</span></code>’,
+‘<code class="docutils literal notranslate"><span class="pre">O_WRONLY</span></code>’, ‘<code class="docutils literal notranslate"><span class="pre">O_RDWR</span></code>’. Flags can be
+combined by enclosing them in braces.
+On Linux the full set of flags
+as described on the
+<a class="reference external" href="http://man7.org/linux/man-pages/man2/open.2.html">Linux man page</a>
+is:</p>
+<ul>
+<li>O_APPEND (start at end of file),</li>
+<li>O_ASYNC (signal when IO is possible),</li>
+<li>O_CLOEXEC (enable a flag related to closing),</li>
+<li>O_CREAT (create file if it doesn’t exist),</li>
+<li>O_DIRECT (do less caching or no caching),</li>
+<li>O_DIRECTORY (fail if it’s not a directory),</li>
+<li>O_EXCL (fail if file cannot be created),</li>
+<li>O_LARGEFILE (allow 64-bit file offsets),</li>
+<li>O_NOATIME (no access-time updating),</li>
+<li>O_NOCTTY (no console tty),</li>
+<li>O_NOFOLLOW (no following symbolic links),</li>
+<li>O_NONBLOCK (no blocking),</li>
+<li>O_PATH (get a path for low-level use),</li>
+<li>O_SYNC (force writing if it’s possible),</li>
+<li>O_TMPFILE (the file will be temporary and nameless),</li>
+<li>O_TRUNC (truncate)</li>
+</ul>
+<p>… and, always, one of:</p>
+<ul>
+<li>O_RDONLY (read only),</li>
+<li>O_WRONLY (write only), or</li>
+<li>O_RDWR (either read or write).</li>
+</ul>
+</li>
+<li><strong>mode</strong> (<em>number</em>) – Mode bits can be passed as a number or as string
+constants, for example <code class="docutils literal notranslate"><span class="pre">S_IWUSR</span></code>. Mode bits
+are significant if flags include <code class="docutils literal notranslate"><span class="pre">O_CREAT</span></code> or
+<code class="docutils literal notranslate"><span class="pre">O_TMPFILE</span></code>. Mode bits can be
+combined by enclosing them in braces.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(If no error) file handle (abbreviated as ‘fh’ in later
+description). <a href="#id43"><span class="problematic" id="id44">|br|</span></a>
+(If error) two return values: null, error message.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">userdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Possible errors:</strong> nil.</p>
+<p><strong>Example 1:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh = fio.open(&#39;/home/username/tmp.txt&#39;, {&#39;O_RDWR&#39;, &#39;O_APPEND&#39;})
+---
+...
+tarantool&gt; fh -- display file handle returned by fio.open
+---
+- fh: 11
+...
+</pre></div>
+</div>
+<p><strong>Example 2:</strong></p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code> with <code class="docutils literal notranslate"><span class="pre">tonumber('N',</span> <span class="pre">8)</span></code> to set permissions
+as an octal number:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.open(&#39;x.txt&#39;, {&#39;O_WRONLY&#39;, &#39;O_CREAT&#39;}, tonumber(&#39;644&#39;,8))
+---
+- fh: 12
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<code class="descname">file-handle</code></dt>
+<dd><span class="target" id="file-handle-close"></span><dl class="method">
+<dt id="fio.close">
+<code class="descclassname">fio.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close a file that was opened with <code class="docutils literal notranslate"><span class="pre">fio.open</span></code>. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">close</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if success, false if failure.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:close() -- where fh = file-handle
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-pread"></span><dl class="method">
+<dt id="fio.pread">
+<code class="descclassname">fio.</code><code class="descname">pread</code><span class="sig-paren">(</span><em>count</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.pread" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">fio.</code><code class="descname">pread</code><span class="sig-paren">(</span><em>buffer</em>, <em>count</em>, <em>offset</em><span class="sig-paren">)</span></dt>
+<dd><p>Perform random-access read operation on a file, without affecting
+the current seek position of the file.
+For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">pread</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code></li>
+<li><strong>buffer</strong> – where to read into (if the format is
+<code class="docutils literal notranslate"><span class="pre">pread(buffer,</span> <span class="pre">count,</span> <span class="pre">offset)</span></code>)</li>
+<li><strong>count</strong> (<em>number</em>) – number of bytes to read</li>
+<li><strong>offset</strong> (<em>number</em>) – offset within file where reading begins</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">pread(count,</span> <span class="pre">offset)</span></code> then return a string
+containing the data that was read from the file, or empty string if failure.</p>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">pread(buffer,</span> <span class="pre">count,</span> <span class="pre">offset)</span></code> then return the data
+to the buffer.
+Buffers can be acquired with <a class="reference internal" href="buffer.html#buffer-module"><span class="std std-ref">buffer.ibuf</span></a>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:pread(25, 25)
+---
+- |
+  elete from t8//
+  insert in
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-pwrite"></span><dl class="method">
+<dt id="fio.pwrite">
+<code class="descclassname">fio.</code><code class="descname">pwrite</code><span class="sig-paren">(</span><em>new-string</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.pwrite" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">fio.</code><code class="descname">pwrite</code><span class="sig-paren">(</span><em>buffer</em>, <em>count</em>, <em>offset</em><span class="sig-paren">)</span></dt>
+<dd><p>Perform random-access write operation on a file, without affecting
+the current seek position of the file.
+For details type <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">pwrite</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code></li>
+<li><strong>new-string</strong> (<em>string</em>) – value to write (if the format is <code class="docutils literal notranslate"><span class="pre">pwrite(new-string,</span> <span class="pre">offset)</span></code>)</li>
+<li><strong>buffer</strong> (<em>cdata</em>) – value to write (if the format is <code class="docutils literal notranslate"><span class="pre">pwrite(buffer,</span> <span class="pre">count,</span> <span class="pre">offset)</span></code>)</li>
+<li><strong>count</strong> (<em>number</em>) – number of bytes to write</li>
+<li><strong>offset</strong> (<em>number</em>) – offset within file where writing begins</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if success, false if failure.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">pwrite(new-string,</span> <span class="pre">offset)</span></code> then the returned string
+is written to the file, as far as the end of the string.</p>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">pwrite(buffer,</span> <span class="pre">count,</span> <span class="pre">offset)</span></code> then the buffer
+contents are written to the file, for <code class="docutils literal notranslate"><span class="pre">count</span></code> bytes.
+Buffers can be acquired with <a class="reference internal" href="buffer.html#buffer-module"><span class="std std-ref">buffer.ibuf</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>ibuf = require(&#39;buffer&#39;).ibuf()
+---
+...
+
+tarantool&gt; fh:pwrite(ibuf, 1, 0)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-read"></span><dl class="method">
+<dt id="fio.read">
+<code class="descclassname">fio.</code><code class="descname">read</code><span class="sig-paren">(</span><span class="optional">[</span><em>count</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.read" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">fio.</code><code class="descname">read</code><span class="sig-paren">(</span><em>buffer</em>, <em>count</em><span class="sig-paren">)</span></dt>
+<dd><p>Perform non-random-access read on a file. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">read</span></code> or <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">write</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">fh:read</span></code> and <code class="docutils literal notranslate"><span class="pre">fh:write</span></code> affect the seek position within the
+file, and this must be taken into account when working on the same
+file from multiple fibers. It is possible to limit or prevent file
+access from other fibers with <code class="docutils literal notranslate"><span class="pre">fiber.ipc</span></code>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</li>
+<li><strong>buffer</strong> – where to read into (if the format is
+<code class="docutils literal notranslate"><span class="pre">read(buffer,</span> <span class="pre">count)</span></code>)</li>
+<li><strong>count</strong> (<em>number</em>) – number of bytes to read</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>If the format is <code class="docutils literal notranslate"><span class="pre">read()</span></code> – omitting <code class="docutils literal notranslate"><span class="pre">count</span></code> – then read all
+bytes in the file.</li>
+<li>If the format is <code class="docutils literal notranslate"><span class="pre">read()</span></code>  or <code class="docutils literal notranslate"><span class="pre">read([count])</span></code> then return a string
+containing the data that was read from the file, or empty string if failure.</li>
+<li>If the format is <code class="docutils literal notranslate"><span class="pre">read(buffer,</span> <span class="pre">count)</span></code> then return the data
+to the buffer.
+Buffers can be acquired with <a class="reference internal" href="buffer.html#buffer-module"><span class="std std-ref">buffer.ibuf</span></a>.</li>
+<li>In case of an error the method returns <code class="docutils literal notranslate"><span class="pre">nil,</span> <span class="pre">err</span></code> and sets
+the error to <code class="docutils literal notranslate"><span class="pre">errno</span></code>.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>ibuf = require(&#39;buffer&#39;).ibuf()
+---
+...
+
+tarantool&gt; fh:read(ibuf:reserve(5), 5)
+---
+- 5
+...
+
+tarantool&gt; require(&#39;ffi&#39;).string(ibuf:alloc(5),5)
+---
+- abcde
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-write"></span><dl class="method">
+<dt id="fio.write">
+<code class="descclassname">fio.</code><code class="descname">write</code><span class="sig-paren">(</span><em>new-string</em><span class="sig-paren">)</span><a class="headerlink" href="#fio.write" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">fio.</code><code class="descname">write</code><span class="sig-paren">(</span><em>buffer</em>, <em>count</em><span class="sig-paren">)</span></dt>
+<dd><p>Perform non-random-access write on a file. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">write</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">fh:read</span></code> and <code class="docutils literal notranslate"><span class="pre">fh:write</span></code> affect the seek position within the
+file, and this must be taken into account when working on the same
+file from multiple fibers. It is possible to limit or prevent file
+access from other fibers with <code class="docutils literal notranslate"><span class="pre">fiber.ipc</span></code>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code></li>
+<li><strong>new-string</strong> (<em>string</em>) – value to write (if the format is <code class="docutils literal notranslate"><span class="pre">write(new-string)</span></code>)</li>
+<li><strong>buffer</strong> (<em>cdata</em>) – value to write (if the format is <code class="docutils literal notranslate"><span class="pre">write(buffer,</span> <span class="pre">count)</span></code>)</li>
+<li><strong>count</strong> (<em>number</em>) – number of bytes to write</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if success, false if failure.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">write(new-string)</span></code> then the returned string
+is written to the file, as far as the end of the string.</p>
+<p>If the format is <code class="docutils literal notranslate"><span class="pre">write(buffer,</span> <span class="pre">count)</span></code> then the buffer contents
+are written to the file, for <code class="docutils literal notranslate"><span class="pre">count</span></code> bytes.
+Buffers can be acquired with <a class="reference internal" href="buffer.html#buffer-module"><span class="std std-ref">buffer.ibuf</span></a>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:write(&quot;new data&quot;)
+---
+- true
+...
+ibuf = require(&#39;buffer&#39;).ibuf()
+---
+...
+tarantool&gt; fh:write(ibuf, 1)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-truncate"></span><dl class="method">
+<dt>
+<code class="descclassname">fio.</code><code class="descname">truncate</code><span class="sig-paren">(</span><em>new-size</em><span class="sig-paren">)</span></dt>
+<dd><p>Change the size of an open file. Differs from <code class="docutils literal notranslate"><span class="pre">fio.truncate</span></code>, which
+changes the size of a closed file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if success, false if failure.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:truncate(0)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-seek"></span><dl class="method">
+<dt id="fio.seek">
+<code class="descclassname">fio.</code><code class="descname">seek</code><span class="sig-paren">(</span><em>position</em><span class="optional">[</span>, <em>offset-from</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift position in the file to the specified position. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">seek</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</li>
+<li><strong>position</strong> (<em>number</em>) – position to seek to</li>
+<li><strong>offset-from</strong> (<em>string</em>) – ‘<code class="docutils literal notranslate"><span class="pre">SEEK_END</span></code>’ = end of file, ‘<code class="docutils literal notranslate"><span class="pre">SEEK_CUR</span></code>’
+= current position, ‘<code class="docutils literal notranslate"><span class="pre">SEEK_SET</span></code>’ = start of file.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the new position if success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">number</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Possible errors:</strong> nil.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:seek(20, &#39;SEEK_SET&#39;)
+---
+- 20
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-stat"></span><dl class="method">
+<dt>
+<code class="descclassname">fio.</code><code class="descname">stat</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Return statistics about an open file. This differs from <code class="docutils literal notranslate"><span class="pre">fio.stat</span></code>
+which return statistics about a closed file. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">stat</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">details about the file.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:stat()
+---
+- inode: 729866
+  rdev: 0
+  size: 100
+  atime: 140942855
+  mode: 33261
+  mtime: 1409430660
+  nlink: 1
+  uid: 1000
+  blksize: 4096
+  gid: 1000
+  ctime: 1409430660
+  dev: 2049
+  blocks: 8
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="file-handle-fsync"></span><dl class="method">
+<dt id="fio.fsync">
+<code class="descclassname">fio.</code><code class="descname">fsync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.fsync" title="Permalink to this definition">¶</a></dt>
+<dt id="fio.fdatasync">
+<code class="descclassname">fio.</code><code class="descname">fdatasync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fio.fdatasync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that file changes are written to disk, for an open file.
+Compare <code class="docutils literal notranslate"><span class="pre">fio.sync</span></code>, which is for all files. For details type
+<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">fsync</span></code> or <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">fdatasync</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> (<em>userdata</em>) – file-handle as returned by <code class="docutils literal notranslate"><span class="pre">fio.open()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if success, false if failure.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fh:fsync()
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fio-constants">
+<span id="fio-c"></span><h2>FIO constants<a class="headerlink" href="#fio-constants" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="fio-c-table"></span><dl class="data">
+<dt id="fio.c">
+<code class="descclassname">fio.</code><code class="descname">c</code><a class="headerlink" href="#fio.c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table with constants which are the same as POSIX flag values on the
+target platform (see <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">2</span> <span class="pre">stat</span></code>).</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fio.c
+---
+- seek:
+    SEEK_SET: 0
+    SEEK_END: 2
+    SEEK_CUR: 1
+  mode:
+    S_IWGRP: 16
+    S_IXGRP: 8
+    S_IROTH: 4
+    S_IXOTH: 1
+    S_IRUSR: 256
+    S_IXUSR: 64
+    S_IRWXU: 448
+    S_IRWXG: 56
+    S_IWOTH: 2
+    S_IRWXO: 7
+    S_IWUSR: 128
+    S_IRGRP: 32
+  flag:
+    O_EXCL: 2048
+    O_NONBLOCK: 4
+    O_RDONLY: 0
+    &lt;...&gt;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Connecting from your favorite language &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Connecting from your favorite language</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/getting_started/getting_started_connectors.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="connecting-from-your-favorite-language">
+<span id="getting-started-connectors"></span><h1>Connecting from your favorite language<a class="headerlink" href="#connecting-from-your-favorite-language" title="Permalink to this headline">¶</a></h1>
+<p>Now that you have a Tarantool database, let’s see how to connect to it from
+Python, PHP and Go.</p>
+<div class="section" id="connecting-from-python">
+<span id="getting-started-python"></span><h2>Connecting from Python<a class="headerlink" href="#connecting-from-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pre-requisites">
+<span id="getting-started-python-pre-requisites"></span><h3>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>Before we proceed:</p>
+<ol class="arabic">
+<li><p class="first"><a class="reference external" href="https://github.com/tarantool/tarantool-python#download-and-install">Install</a>
+the <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> module. We recommend using <code class="docutils literal notranslate"><span class="pre">python3</span></code> and <code class="docutils literal notranslate"><span class="pre">pip3</span></code>.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="getting_started_db.html#getting-started-db"><span class="std std-ref">Start</span></a> Tarantool (locally or in Docker)
+and make sure that you have created and populated a database as we suggested
+<a class="reference internal" href="using_binary.html#creating-db-locally"><span class="std std-ref">earlier</span></a>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">}</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="p">:</span><span class="n">format</span><span class="p">({</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;band_name&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;band_name&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Roxette&#39;</span><span class="p">,</span> <span class="mi">1986</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Scorpions&#39;</span><span class="p">,</span> <span class="mi">2015</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Ace of Base&#39;</span><span class="p">,</span> <span class="mi">1993</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please do not close the terminal window
+where Tarantool is running – you’ll need it soon.</p>
+</div>
+</li>
+<li><p class="first">In order to connect to Tarantool as an administrator, reset the password
+for the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="connecting-to-tarantool">
+<span id="getting-started-python-connecting"></span><h3>Connecting to Tarantool<a class="headerlink" href="#connecting-to-tarantool" title="Permalink to this headline">¶</a></h3>
+<p>To get connected to the Tarantool server, say this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tarantool</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">tarantool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also specify the user name and password, if needed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tarantool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default user is <code class="docutils literal notranslate"><span class="pre">guest</span></code>.</p>
+</div>
+<div class="section" id="manipulating-the-data">
+<span id="getting-started-python-manipulate"></span><h3>Manipulating the data<a class="headerlink" href="#manipulating-the-data" title="Permalink to this headline">¶</a></h3>
+<p>A <strong>space</strong> is a container for <strong>tuples</strong>. To access a space as a named object,
+use <code class="docutils literal notranslate"><span class="pre">connection.space</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">space</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="inserting-data">
+<span id="getting-started-python-insert"></span><h4>Inserting data<a class="headerlink" href="#inserting-data" title="Permalink to this headline">¶</a></h4>
+<p>To insert a tuple into a space, use <code class="docutils literal notranslate"><span class="pre">insert</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">insert</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;ABBA&#39;</span><span class="p">,</span> <span class="mi">1972</span><span class="p">))</span>
+<span class="go">[4, &#39;ABBA&#39;, 1972]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-data">
+<span id="getting-started-python-query"></span><h4>Querying data<a class="headerlink" href="#querying-data" title="Permalink to this headline">¶</a></h4>
+<p>Let’s start with selecting a tuple by the primary key
+(in our example, this is the index named <code class="docutils literal notranslate"><span class="pre">primary</span></code>, based on the <code class="docutils literal notranslate"><span class="pre">id</span></code> field
+of each tuple). Use <code class="docutils literal notranslate"><span class="pre">select</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">[4, &#39;ABBA&#39;, 1972]</span>
+</pre></div>
+</div>
+<p>Next, select tuples by a secondary key.
+For this purpose, you need to specify the number <em>or</em> name of the index.</p>
+<p>First off, select tuples using the index number:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;Scorpions&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[2, &#39;Scorpions&#39;, 2015]</span>
+</pre></div>
+</div>
+<p>(We say <code class="docutils literal notranslate"><span class="pre">index=1</span></code> because index numbers in Tarantool start with 0,
+and we’re using our second index here.)</p>
+<p>Now make a similar query by the index name and make sure that the result
+is the same:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;Scorpions&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;secondary&#39;</span><span class="p">)</span>
+<span class="go">[2, &#39;Scorpions&#39;, 2015]</span>
+</pre></div>
+</div>
+<p>Finally, select all the tuples in a space via a <code class="docutils literal notranslate"><span class="pre">select</span></code> with no
+arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-data">
+<span id="getting-started-python-update"></span><h4>Updating data<a class="headerlink" href="#updating-data" title="Permalink to this headline">¶</a></h4>
+<p>Update a field value using <code class="docutils literal notranslate"><span class="pre">update</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;New group&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>This updates the value of field <code class="docutils literal notranslate"><span class="pre">1</span></code> and increases the value of field <code class="docutils literal notranslate"><span class="pre">2</span></code>
+in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4. If a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code> doesn’t exist,
+Tarantool will return an error.</p>
+<p>Now use <code class="docutils literal notranslate"><span class="pre">replace</span></code> to totally replace the tuple that matches the
+primary key. If a tuple with this primary key doesn’t exist, Tarantool will
+do nothing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">replace</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;New band&#39;</span><span class="p">,</span> <span class="mi">2015</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>You can also update the data using <code class="docutils literal notranslate"><span class="pre">upsert</span></code> that works similarly
+to <code class="docutils literal notranslate"><span class="pre">update</span></code>, but creates a new tuple if the old one was not found.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">upsert</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Another band&#39;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span> <span class="p">[(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>This increases by 5 the value of field <code class="docutils literal notranslate"><span class="pre">2</span></code> in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4, – or
+inserts the tuple <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">&quot;Another</span> <span class="pre">band&quot;,</span> <span class="pre">2000)</span></code> if a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code>
+doesn’t exist.</p>
+</div>
+<div class="section" id="deleting-data">
+<span id="getting-started-python-delete"></span><h4>Deleting data<a class="headerlink" href="#deleting-data" title="Permalink to this headline">¶</a></h4>
+<p>To delete a tuple, use <code class="docutils literal notranslate"><span class="pre">delete(primary_key)</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tester</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">[4, &#39;New group&#39;, 2012]</span>
+</pre></div>
+</div>
+<p>To delete all tuples in a space (or to delete an entire space), use <code class="docutils literal notranslate"><span class="pre">call</span></code>.
+We’ll focus on this function in more detail in the
+<a class="reference internal" href="getting_started_python.html#getting-started-python-stored-procs"><span class="std std-ref">next</span></a> section.</p>
+<p>To delete all tuples in a space, call <code class="docutils literal notranslate"><span class="pre">space:truncate</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;box.space.tester:truncate&#39;</span><span class="p">,</span> <span class="p">())</span>
+</pre></div>
+</div>
+<p>To delete an entire space, call <code class="docutils literal notranslate"><span class="pre">space:drop</span></code>.
+This requires connecting to Tarantool as the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;box.space.tester:drop&#39;</span><span class="p">,</span> <span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="executing-stored-procedures">
+<span id="getting-started-python-stored-procs"></span><h3>Executing stored procedures<a class="headerlink" href="#executing-stored-procedures" title="Permalink to this headline">¶</a></h3>
+<p>Switch to the terminal window where Tarantool is running.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you don’t have a terminal window with remote connection to Tarantool,
+check out these guides:</p>
+<ul class="last simple">
+<li><a class="reference internal" href="using_binary.html#connecting-remotely"><span class="std std-ref">connecting to a local Tarantool instance</span></a></li>
+<li><a class="reference internal" href="using_docker.html#getting-started-docker-attaching"><span class="std std-ref">attaching to a Tarantool instance that runs in a Docker container</span></a></li>
+</ul>
+</div>
+<p>Define a simple Lua function:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Now we have a Lua function defined in Tarantool. To invoke this function from
+<code class="docutils literal notranslate"><span class="pre">python</span></code>, use <code class="docutils literal notranslate"><span class="pre">call</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>To send bare Lua code for execution, use <code class="docutils literal notranslate"><span class="pre">eval</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="s1">&#39;return 4 + 5&#39;</span><span class="p">)</span>
+<span class="go">9</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="connecting-from-php">
+<span id="getting-started-php"></span><h2>Connecting from PHP<a class="headerlink" href="#connecting-from-php" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-started-php-pre-requisites">
+<span id="id1"></span><h3>Pre-requisites<a class="headerlink" href="#getting-started-php-pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>Before we proceed:</p>
+<ol class="arabic">
+<li><p class="first"><a class="reference external" href="https://github.com/tarantool-php/client#installation">Install</a>
+the <code class="docutils literal notranslate"><span class="pre">tarantool/client</span></code> library.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="getting_started_db.html#getting-started-db"><span class="std std-ref">Start</span></a> Tarantool (locally or in Docker)
+and make sure that you have created and populated a database as we suggested
+<a class="reference internal" href="using_binary.html#creating-db-locally"><span class="std std-ref">earlier</span></a>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">}</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="p">:</span><span class="n">format</span><span class="p">({</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;band_name&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;band_name&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Roxette&#39;</span><span class="p">,</span> <span class="mi">1986</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Scorpions&#39;</span><span class="p">,</span> <span class="mi">2015</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Ace of Base&#39;</span><span class="p">,</span> <span class="mi">1993</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please do not close the terminal window
+where Tarantool is running – you’ll need it soon.</p>
+</div>
+</li>
+<li><p class="first">In order to connect to Tarantool as an administrator, reset the password
+for the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="getting-started-php-connecting">
+<span id="id3"></span><h3>Connecting to Tarantool<a class="headerlink" href="#getting-started-php-connecting" title="Permalink to this headline">¶</a></h3>
+<p>To get connected to the Tarantool server, say this:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">use Tarantool\Client\Client;</span>
+
+<span class="x">require __DIR__.&#39;/vendor/autoload.php&#39;;</span>
+<span class="x">$client = Client::fromDefaults();</span>
+</pre></div>
+</div>
+<p>You can also specify the user name and password, if needed:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$client = Client::fromOptions([</span>
+<span class="x">    &#39;uri&#39; =&gt; &#39;tcp://127.0.0.1:3301&#39;,</span>
+<span class="x">    &#39;username&#39; =&gt; &#39;&lt;username&gt;&#39;,</span>
+<span class="x">    &#39;password&#39; =&gt; &#39;&lt;password&gt;&#39;</span>
+<span class="x">]);</span>
+</pre></div>
+</div>
+<p>The default user is <code class="docutils literal notranslate"><span class="pre">guest</span></code>.</p>
+</div>
+<div class="section" id="getting-started-php-manipulate">
+<span id="id4"></span><h3>Manipulating the data<a class="headerlink" href="#getting-started-php-manipulate" title="Permalink to this headline">¶</a></h3>
+<p>A <strong>space</strong> is a container for <strong>tuples</strong>. To access a space as a named object,
+use <code class="docutils literal notranslate"><span class="pre">getSpace</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$tester = $client-&gt;getSpace(&#39;tester&#39;);</span>
+</pre></div>
+</div>
+<div class="section" id="getting-started-php-insert">
+<span id="id5"></span><h4>Inserting data<a class="headerlink" href="#getting-started-php-insert" title="Permalink to this headline">¶</a></h4>
+<p>To insert a tuple into a space, use <code class="docutils literal notranslate"><span class="pre">insert</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;insert([4, &#39;ABBA&#39;, 1972]);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-started-php-query">
+<span id="id6"></span><h4>Querying data<a class="headerlink" href="#getting-started-php-query" title="Permalink to this headline">¶</a></h4>
+<p>Let’s start with selecting a tuple by the primary key
+(in our example, this is the index named <code class="docutils literal notranslate"><span class="pre">primary</span></code>, based on the <code class="docutils literal notranslate"><span class="pre">id</span></code> field
+of each tuple). Use <code class="docutils literal notranslate"><span class="pre">select</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">use Tarantool\Client\Schema\Criteria;</span>
+
+<span class="x">$result = $tester-&gt;select(Criteria::key([4]));</span>
+<span class="x">printf(json_encode($result));</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[[4, &#39;ABBA&#39;, 1972]]
+</pre></div>
+</div>
+<p>Next, select tuples by a secondary key.
+For this purpose, you need to specify the number <em>or</em> name of the index.</p>
+<p>First off, select tuples using the index number:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;select(Criteria::index(1)-&gt;andKey([&#39;Scorpions&#39;]));</span>
+<span class="x">printf(json_encode($result));</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[2, &#39;Scorpions&#39;, 2015]
+</pre></div>
+</div>
+<p>(We say <code class="docutils literal notranslate"><span class="pre">index(1)</span></code> because index numbers in Tarantool start with 0,
+and we’re using our second index here.)</p>
+<p>Now make a similar query by the index name and make sure that the result
+is the same:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;select(Criteria::index(&#39;secondary&#39;)-&gt;andKey([&#39;Scorpions&#39;]));</span>
+<span class="x">printf(json_encode($result));</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[2, &#39;Scorpions&#39;, 2015]
+</pre></div>
+</div>
+<p>Finally, select all the tuples in a space via a <code class="docutils literal notranslate"><span class="pre">select</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;select(Criteria::allIterator());</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-started-php-update">
+<span id="id7"></span><h4>Updating data<a class="headerlink" href="#getting-started-php-update" title="Permalink to this headline">¶</a></h4>
+<p>Update a field value using <code class="docutils literal notranslate"><span class="pre">update</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">use Tarantool\Client\Schema\Operations;</span>
+
+<span class="x">$result = $tester-&gt;update([4], Operations::set(1, &#39;New group&#39;)-&gt;andAdd(2, 2));</span>
+</pre></div>
+</div>
+<p>This updates the value of field <code class="docutils literal notranslate"><span class="pre">1</span></code> and increases the value of field <code class="docutils literal notranslate"><span class="pre">2</span></code>
+in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4. If a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code> doesn’t exist,
+Tarantool will return an error.</p>
+<p>Now use <code class="docutils literal notranslate"><span class="pre">replace</span></code> to totally replace the tuple that matches the
+primary key. If a tuple with this primary key doesn’t exist, Tarantool will
+do nothing.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;replace([4, &#39;New band&#39;, 2015]);</span>
+</pre></div>
+</div>
+<p>You can also update the data using <code class="docutils literal notranslate"><span class="pre">upsert</span></code> that works similarly
+to <code class="docutils literal notranslate"><span class="pre">update</span></code>, but creates a new tuple if the old one was not found.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">use Tarantool\Client\Schema\Operations;</span>
+
+<span class="x">$tester-&gt;upsert([4, &#39;Another band&#39;, 2000], Operations::add(2, 5));</span>
+</pre></div>
+</div>
+<p>This increases by 5 the value of field <code class="docutils literal notranslate"><span class="pre">2</span></code> in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4, – or
+inserts the tuple <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">&quot;Another</span> <span class="pre">band&quot;,</span> <span class="pre">2000)</span></code> if a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code>
+doesn’t exist.</p>
+</div>
+<div class="section" id="getting-started-php-delete">
+<span id="id8"></span><h4>Deleting data<a class="headerlink" href="#getting-started-php-delete" title="Permalink to this headline">¶</a></h4>
+<p>To delete a tuple, use <code class="docutils literal notranslate"><span class="pre">delete(primary_key)</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $tester-&gt;delete([4]);</span>
+</pre></div>
+</div>
+<p>To delete all tuples in a space (or to delete an entire space), use <code class="docutils literal notranslate"><span class="pre">call</span></code>.
+We’ll focus on this function in more detail in the
+<a class="reference internal" href="getting_started_php.html#getting-started-php-stored-procs"><span class="std std-ref">next</span></a> section.</p>
+<p>To delete all tuples in a space, call <code class="docutils literal notranslate"><span class="pre">space:truncate</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $client-&gt;call(&#39;box.space.tester:truncate&#39;);</span>
+</pre></div>
+</div>
+<p>To delete an entire space, call <code class="docutils literal notranslate"><span class="pre">space:drop</span></code>.
+This requires connecting to Tarantool as the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $client-&gt;call(&#39;box.space.tester:drop&#39;);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-started-php-stored-procs">
+<span id="id9"></span><h3>Executing stored procedures<a class="headerlink" href="#getting-started-php-stored-procs" title="Permalink to this headline">¶</a></h3>
+<p>Switch to the terminal window where Tarantool is running.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you don’t have a terminal window with remote connection to Tarantool,
+check out these guides:</p>
+<ul class="last simple">
+<li><a class="reference internal" href="using_binary.html#connecting-remotely"><span class="std std-ref">connecting to a local Tarantool instance</span></a></li>
+<li><a class="reference internal" href="using_docker.html#getting-started-docker-attaching"><span class="std std-ref">attaching to a Tarantool instance that runs in a Docker container</span></a></li>
+</ul>
+</div>
+<p>Define a simple Lua function:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Now we have a Lua function defined in Tarantool. To invoke this function from
+<code class="docutils literal notranslate"><span class="pre">php</span></code>, use <code class="docutils literal notranslate"><span class="pre">call</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $client-&gt;call(&#39;sum&#39;, 3, 2);</span>
+</pre></div>
+</div>
+<p>To send bare Lua code for execution, use <code class="docutils literal notranslate"><span class="pre">eval</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$result = $client-&gt;evaluate(&#39;return 4 + 5&#39;);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="connecting-from-go">
+<span id="getting-started-go"></span><h2>Connecting from Go<a class="headerlink" href="#connecting-from-go" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-started-go-pre-requisites">
+<span id="id10"></span><h3>Pre-requisites<a class="headerlink" href="#getting-started-go-pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>Before we proceed:</p>
+<ol class="arabic">
+<li><p class="first"><a class="reference external" href="https://github.com/tarantool/go-tarantool#installation">Install</a>
+the <code class="docutils literal notranslate"><span class="pre">go-tarantool</span></code> library.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="getting_started_db.html#getting-started-db"><span class="std std-ref">Start</span></a> Tarantool (locally or in Docker)
+and make sure that you have created and populated a database as we suggested
+<a class="reference internal" href="using_binary.html#creating-db-locally"><span class="std std-ref">earlier</span></a>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">}</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="p">:</span><span class="n">format</span><span class="p">({</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;band_name&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span><span class="p">},</span>
+         <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span>
+         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;band_name&#39;</span><span class="p">}</span>
+         <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Roxette&#39;</span><span class="p">,</span> <span class="mi">1986</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Scorpions&#39;</span><span class="p">,</span> <span class="mi">2015</span><span class="p">}</span>
+<span class="n">s</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Ace of Base&#39;</span><span class="p">,</span> <span class="mi">1993</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please do not close the terminal window
+where Tarantool is running – you’ll need it soon.</p>
+</div>
+</li>
+<li><p class="first">In order to connect to Tarantool as an administrator, reset the password
+for the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="getting-started-go-connecting">
+<span id="id12"></span><h3>Connecting to Tarantool<a class="headerlink" href="#getting-started-go-connecting" title="Permalink to this headline">¶</a></h3>
+<p>To get connected to the Tarantool server, write a simple Go program:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;fmt&quot;</span>
+
+    <span class="s">&quot;github.com/tarantool/go-tarantool&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span><span class="s">&quot;127.0.0.1:3301&quot;</span><span class="p">,</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">Opts</span><span class="p">{</span>
+            <span class="nx">User</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+            <span class="nx">Pass</span><span class="p">:</span> <span class="s">&quot;pass&quot;</span><span class="p">,</span>
+    <span class="p">})</span>
+
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;Connection refused&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+    <span class="c1">// Your logic for interacting with the database</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The default user is <code class="docutils literal notranslate"><span class="pre">guest</span></code>.</p>
+</div>
+<div class="section" id="getting-started-go-manipulate">
+<span id="id13"></span><h3>Manipulating the data<a class="headerlink" href="#getting-started-go-manipulate" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="getting-started-go-insert">
+<span id="id14"></span><h4>Inserting data<a class="headerlink" href="#getting-started-go-insert" title="Permalink to this headline">¶</a></h4>
+<p>To insert a tuple into a space, use <code class="docutils literal notranslate"><span class="pre">Insert</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Insert</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">,</span> <span class="s">&quot;ABBA&quot;</span><span class="p">,</span> <span class="mi">1972</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>This inserts the tuple <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">&quot;ABBA&quot;,</span> <span class="pre">1972)</span></code> into a space named <code class="docutils literal notranslate"><span class="pre">tester</span></code>.</p>
+<p>The response code and data are available in the
+<a class="reference external" href="https://github.com/tarantool/go-tarantool#usage">tarantool.Response</a>
+structure:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">code</span> <span class="o">:=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Code</span>
+<span class="nx">data</span> <span class="o">:=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-started-go-query">
+<span id="id15"></span><h4>Querying data<a class="headerlink" href="#getting-started-go-query" title="Permalink to this headline">¶</a></h4>
+<p>To select a tuple from a space, use
+<a class="reference external" href="https://github.com/tarantool/go-tarantool#api-reference">Select</a>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Select</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="s">&quot;primary&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">IterEq</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>This selects a tuple by the primary key with <code class="docutils literal notranslate"><span class="pre">offset</span></code> = 0 and <code class="docutils literal notranslate"><span class="pre">limit</span></code> = 1
+from a space named <code class="docutils literal notranslate"><span class="pre">tester</span></code> (in our example, this is the index named <code class="docutils literal notranslate"><span class="pre">primary</span></code>,
+based on the <code class="docutils literal notranslate"><span class="pre">id</span></code> field of each tuple).</p>
+<p>Next, select tuples by a secondary key.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Select</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="s">&quot;secondary&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">IterEq</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;ABBA&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Finally, it would be nice to select all the tuples in a space. But there is no
+one-liner for this in Go; you would need a script like
+<a class="reference internal" href="../book/app_server/cookbook.html#cookbook-select-all-go"><span class="std std-ref">this one</span></a>.</p>
+<p>For more examples, see <a class="reference external" href="https://github.com/tarantool/go-tarantool#usage">https://github.com/tarantool/go-tarantool#usage</a></p>
+</div>
+<div class="section" id="getting-started-go-update">
+<span id="id16"></span><h4>Updating data<a class="headerlink" href="#getting-started-go-update" title="Permalink to this headline">¶</a></h4>
+<p>Update a field value using <code class="docutils literal notranslate"><span class="pre">Update</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Update</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="s">&quot;primary&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">},</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>This increases by 3 the value of field <code class="docutils literal notranslate"><span class="pre">2</span></code> in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4.
+If a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code> doesn’t exist, Tarantool will return an error.</p>
+<p>Now use <code class="docutils literal notranslate"><span class="pre">Replace</span></code> to totally replace the tuple that matches the
+primary key. If a tuple with this primary key doesn’t exist, Tarantool will
+do nothing.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">,</span> <span class="s">&quot;New band&quot;</span><span class="p">,</span> <span class="mi">2011</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>You can also update the data using <code class="docutils literal notranslate"><span class="pre">Upsert</span></code> that works similarly
+to <code class="docutils literal notranslate"><span class="pre">Update</span></code>, but creates a new tuple if the old one was not found.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Upsert</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">,</span> <span class="s">&quot;Another band&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">},</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>This increases by 5 the value of the third field in the tuple with <code class="docutils literal notranslate"><span class="pre">id</span></code> = 4, – or
+inserts the tuple <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">&quot;Another</span> <span class="pre">band&quot;,</span> <span class="pre">2000)</span></code> if a tuple with this <code class="docutils literal notranslate"><span class="pre">id</span></code>
+doesn’t exist.</p>
+</div>
+<div class="section" id="getting-started-go-delete">
+<span id="id17"></span><h4>Deleting data<a class="headerlink" href="#getting-started-go-delete" title="Permalink to this headline">¶</a></h4>
+<p>To delete a tuple, use <code class="docutils literal notranslate"><span class="pre">сonnection.Delete</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Delete</span><span class="p">(</span><span class="s">&quot;tester&quot;</span><span class="p">,</span> <span class="s">&quot;primary&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">4</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>To delete all tuples in a space (or to delete an entire space), use <code class="docutils literal notranslate"><span class="pre">Call</span></code>.
+We’ll focus on this function in more detail in the
+<a class="reference internal" href="getting_started_go.html#getting-started-go-stored-procs"><span class="std std-ref">next</span></a> section.</p>
+<p>To delete all tuples in a space, call <code class="docutils literal notranslate"><span class="pre">space:truncate</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Call</span><span class="p">(</span><span class="s">&quot;box.space.tester:truncate&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{})</span>
+</pre></div>
+</div>
+<p>To delete an entire space, call <code class="docutils literal notranslate"><span class="pre">space:drop</span></code>.
+This requires connecting to Tarantool as the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Call</span><span class="p">(</span><span class="s">&quot;box.space.tester:drop&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-started-go-stored-procs">
+<span id="id18"></span><h3>Executing stored procedures<a class="headerlink" href="#getting-started-go-stored-procs" title="Permalink to this headline">¶</a></h3>
+<p>Switch to the terminal window where Tarantool is running.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you don’t have a terminal window with remote connection to Tarantool,
+check out these guides:</p>
+<ul class="last simple">
+<li><a class="reference internal" href="using_binary.html#connecting-remotely"><span class="std std-ref">connecting to a local Tarantool instance</span></a></li>
+<li><a class="reference internal" href="using_docker.html#getting-started-docker-attaching"><span class="std std-ref">attaching to a Tarantool instance that runs in a Docker container</span></a></li>
+</ul>
+</div>
+<p>Define a simple Lua function:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Now we have a Lua function defined in Tarantool. To invoke this function from
+<code class="docutils literal notranslate"><span class="pre">go</span></code>, use <code class="docutils literal notranslate"><span class="pre">Call</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Call</span><span class="p">(</span><span class="s">&quot;sum&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>To send bare Lua code for execution, use <code class="docutils literal notranslate"><span class="pre">Eval</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">Eval</span><span class="p">(</span><span class="s">&quot;return 4 + 5&quot;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

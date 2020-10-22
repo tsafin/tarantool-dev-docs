@@ -1,0 +1,589 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module digest &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>digest</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/digest.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-digest">
+<span id="module-digest"></span><span id="digest"></span><h1>Module <cite>digest</cite><a class="headerlink" href="#module-digest" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>A “digest” is a value which is returned by a function (usually a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>), applied against a string. Tarantool’s <code class="docutils literal notranslate"><span class="pre">digest</span></code>
+module supports several types of cryptographic hash functions (<a class="reference external" href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Md4">MD4</a>,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Md5">MD5</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Sha-1">SHA-1</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Sha-2">SHA-2</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a>) as well as a checksum function (<a class="reference external" href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">CRC32</a>), two
+functions for <a class="reference external" href="https://en.wikipedia.org/wiki/Base64">base64</a>, and two non-cryptographic hash functions (<a class="reference external" href="https://code.google.com/p/guava-libraries/wiki/HashingExplained">guava</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/MurmurHash">murmur</a>).
+Some of the digest functionality is also present in the <a class="reference internal" href="crypto.html#crypto"><span class="std std-ref">crypto</span></a>.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">digest</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#digest-aes"><span class="std std-ref">digest.aes256cbc.encrypt()</span></a></td>
+<td>Encrypt a string using AES</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-aes"><span class="std std-ref">digest.aes256cbc.decrypt()</span></a></td>
+<td>Decrypt a string using AES</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-md4"><span class="std std-ref">digest.md4()</span></a></td>
+<td>Get a digest made with MD4</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-md4-hex"><span class="std std-ref">digest.md4_hex()</span></a></td>
+<td>Get a hexadecimal digest made
+with MD4</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-md5"><span class="std std-ref">digest.md5()</span></a></td>
+<td>Get a digest made with MD5</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-md5-hex"><span class="std std-ref">digest.md5_hex()</span></a></td>
+<td>Get a hexadecimal digest made
+with MD5</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-pbkdf2"><span class="std std-ref">digest.pbkdf2()</span></a></td>
+<td>Get a digest made with PBKDF2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-sha1"><span class="std std-ref">digest.sha1()</span></a></td>
+<td>Get a digest made with SHA-1</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-sha1-hex"><span class="std std-ref">digest.sha1_hex()</span></a></td>
+<td>Get a hexadecimal digest made
+with SHA-1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-sha224"><span class="std std-ref">digest.sha224()</span></a></td>
+<td>Get a 224-bit digest made with
+SHA-2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-sha224-hex"><span class="std std-ref">digest.sha224_hex()</span></a></td>
+<td>Get a 56-byte hexadecimal
+digest made with SHA-2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-sha256"><span class="std std-ref">digest.sha256()</span></a></td>
+<td>Get a 256-bit digest made with
+SHA-2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-sha256-hex"><span class="std std-ref">digest.sha256_hex()</span></a></td>
+<td>Get a 64-byte hexadecimal
+digest made with SHA-2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-sha384"><span class="std std-ref">digest.sha384()</span></a></td>
+<td>Get a 384-bit digest made with
+SHA-2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-sha384-hex"><span class="std std-ref">digest.sha384_hex()</span></a></td>
+<td>Get a 96-byte hexadecimal
+digest made with SHA-2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-sha512"><span class="std std-ref">digest.sha512()</span></a></td>
+<td>Get a 512-bit digest made with
+SHA-2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-sha512-hex"><span class="std std-ref">digest.sha512_hex()</span></a></td>
+<td>Get a 128-byte hexadecimal
+digest made with SHA-2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-base64-encode"><span class="std std-ref">digest.base64_encode()</span></a></td>
+<td>Encode a string to Base64</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-base64-decode"><span class="std std-ref">digest.base64_decode()</span></a></td>
+<td>Decode a Base64-encoded string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-urandom"><span class="std std-ref">digest.urandom()</span></a></td>
+<td>Get an array of random bytes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-crc32"><span class="std std-ref">digest.crc32()</span></a></td>
+<td>Get a 32-bit checksum made with
+CRC32</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-crc32-new"><span class="std std-ref">digest.crc32.new()</span></a></td>
+<td>Initiate incremental CRC32</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-guava"><span class="std std-ref">digest.guava()</span></a></td>
+<td>Get a number made with a
+consistent hash</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#digest-murmur"><span class="std std-ref">digest.murmur()</span></a></td>
+<td>Get a digest made with
+MurmurHash</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#digest-murmur-new"><span class="std std-ref">digest.murmur.new()</span></a></td>
+<td>Initiate incremental MurmurHash</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="digest-aes"></span><dl class="function">
+<dt id="digest.digest.aes256cbc.encrypt">
+<code class="descclassname">digest.aes256cbc.</code><code class="descname">encrypt</code><span class="sig-paren">(</span><em>string</em>, <em>key</em>, <em>iv</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.digest.aes256cbc.encrypt" title="Permalink to this definition">¶</a></dt>
+<dt id="digest.digest.aes256cbc.decrypt">
+<code class="descclassname">digest.aes256cbc.</code><code class="descname">decrypt</code><span class="sig-paren">(</span><em>string</em>, <em>key</em>, <em>iv</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.digest.aes256cbc.decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 256-bit binary string = digest made with AES.</p>
+</dd></dl>
+
+<span class="target" id="digest-md4"></span><dl class="function">
+<dt id="digest.md4">
+<code class="descclassname">digest.</code><code class="descname">md4</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.md4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 128-bit binary string = digest made with MD4.</p>
+</dd></dl>
+
+<span class="target" id="digest-md4-hex"></span><dl class="function">
+<dt id="digest.md4_hex">
+<code class="descclassname">digest.</code><code class="descname">md4_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.md4_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 32-byte string = hexadecimal of a digest calculated with md4.</p>
+</dd></dl>
+
+<span class="target" id="digest-md5"></span><dl class="function">
+<dt id="digest.md5">
+<code class="descclassname">digest.</code><code class="descname">md5</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.md5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 128-bit binary string = digest made with MD5.</p>
+</dd></dl>
+
+<span class="target" id="digest-md5-hex"></span><dl class="function">
+<dt id="digest.md5_hex">
+<code class="descclassname">digest.</code><code class="descname">md5_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.md5_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 32-byte string = hexadecimal of a digest calculated with md5.</p>
+</dd></dl>
+
+<span class="target" id="digest-pbkdf2"></span><dl class="function">
+<dt id="digest.pbkdf2">
+<code class="descclassname">digest.</code><code class="descname">pbkdf2</code><span class="sig-paren">(</span><em>string</em>, <em>salt</em><span class="optional">[</span>, <em>iterations</em><span class="optional">[</span>, <em>digest-length</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#digest.pbkdf2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns binary string = digest made with PBKDF2. <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+For effective encryption the <code class="docutils literal notranslate"><span class="pre">iterations</span></code> value should be
+at least several thousand. The <code class="docutils literal notranslate"><span class="pre">digest-length</span></code> value
+determines the length of the resulting binary string.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha1"></span><dl class="function">
+<dt id="digest.sha1">
+<code class="descclassname">digest.</code><code class="descname">sha1</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 160-bit binary string = digest made with SHA-1.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha1-hex"></span><dl class="function">
+<dt id="digest.sha1_hex">
+<code class="descclassname">digest.</code><code class="descname">sha1_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha1_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 40-byte string = hexadecimal of a digest calculated with sha1.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha224"></span><dl class="function">
+<dt id="digest.sha224">
+<code class="descclassname">digest.</code><code class="descname">sha224</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha224" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 224-bit binary string = digest made with SHA-2.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha224-hex"></span><dl class="function">
+<dt id="digest.sha224_hex">
+<code class="descclassname">digest.</code><code class="descname">sha224_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha224_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 56-byte string = hexadecimal of a digest calculated with sha224.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha256"></span><dl class="function">
+<dt id="digest.sha256">
+<code class="descclassname">digest.</code><code class="descname">sha256</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha256" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 256-bit binary string =  digest made with SHA-2.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha256-hex"></span><dl class="function">
+<dt id="digest.sha256_hex">
+<code class="descclassname">digest.</code><code class="descname">sha256_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha256_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 64-byte string = hexadecimal of a digest calculated with sha256.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha384"></span><dl class="function">
+<dt id="digest.sha384">
+<code class="descclassname">digest.</code><code class="descname">sha384</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha384" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 384-bit binary string =  digest made with SHA-2.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha384-hex"></span><dl class="function">
+<dt id="digest.sha384_hex">
+<code class="descclassname">digest.</code><code class="descname">sha384_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha384_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 96-byte string = hexadecimal of a digest calculated with sha384.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha512"></span><dl class="function">
+<dt id="digest.sha512">
+<code class="descclassname">digest.</code><code class="descname">sha512</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha512" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 512-bit binary tring = digest made with SHA-2.</p>
+</dd></dl>
+
+<span class="target" id="digest-sha512-hex"></span><dl class="function">
+<dt id="digest.sha512_hex">
+<code class="descclassname">digest.</code><code class="descname">sha512_hex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.sha512_hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 128-byte string = hexadecimal of a digest calculated with sha512.</p>
+</dd></dl>
+
+<span class="target" id="digest-base64-encode"></span><dl class="function">
+<dt id="digest.base64_encode">
+<code class="descclassname">digest.</code><code class="descname">base64_encode</code><span class="sig-paren">(</span><em>string</em><span class="optional">[</span>, <em>opts</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#digest.base64_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns base64 encoding from a regular string.</p>
+<p>The possible options are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">nopad</span></code> – result must not include ‘=’ for padding at the end,</li>
+<li><code class="docutils literal notranslate"><span class="pre">nowrap</span></code> – result must not include line feed for splitting lines
+after 72 characters,</li>
+<li><code class="docutils literal notranslate"><span class="pre">urlsafe</span></code> – result must not include ‘=’ or line feed, and may contain
+‘-‘ or ‘_’ instead of ‘+’ or ‘/’ for positions 62 and 63 in the index table.</li>
+</ul>
+<p>Options may be <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>, the default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>For example:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">digest</span><span class="p">.</span><span class="n">base64_encode</span><span class="p">(</span><span class="n">string_variable</span><span class="p">,{</span><span class="n">nopad</span><span class="o">=</span><span class="kc">true</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="digest-base64-decode"></span><dl class="function">
+<dt id="digest.base64_decode">
+<code class="descclassname">digest.</code><code class="descname">base64_decode</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.base64_decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a regular string from a base64 encoding.</p>
+</dd></dl>
+
+<span class="target" id="digest-urandom"></span><dl class="function">
+<dt id="digest.urandom">
+<code class="descclassname">digest.</code><code class="descname">urandom</code><span class="sig-paren">(</span><em>integer</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.urandom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns array of random bytes with length = integer.</p>
+</dd></dl>
+
+<span class="target" id="digest-crc32"></span><dl class="function">
+<dt id="digest.crc32">
+<code class="descclassname">digest.</code><code class="descname">crc32</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.crc32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 32-bit checksum made with CRC32.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">crc32</span></code> and <code class="docutils literal notranslate"><span class="pre">crc32_update</span></code> functions use the <a class="reference external" href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy Check</a>
+polynomial value: <code class="docutils literal notranslate"><span class="pre">0x1EDC6F41</span></code> / <code class="docutils literal notranslate"><span class="pre">4812730177</span></code>.
+(Other settings are: input = reflected, output = reflected, initial value = 0xFFFFFFFF, final xor value = 0x0.)
+If it is necessary to be
+compatible with other checksum functions in other programming languages,
+ensure that the other functions use the same polynomial value.</p>
+<p>For example, in Python, install the <code class="docutils literal notranslate"><span class="pre">crcmod</span></code> package and say:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">crcmod</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun</span> <span class="o">=</span> <span class="n">crcmod</span><span class="o">.</span><span class="n">mkCrcFun</span><span class="p">(</span><span class="s1">&#39;4812730177&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="go">3304160206L</span>
+</pre></div>
+</div>
+<p>In Perl, install the <code class="docutils literal notranslate"><span class="pre">Digest::CRC</span></code> module and run the following code:</p>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="k">use</span> <span class="nn">Digest::CRC</span><span class="p">;</span>
+<span class="nv">$d</span> <span class="o">=</span> <span class="nn">Digest::CRC</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">(</span><span class="n">width</span> <span class="o">=&gt;</span> <span class="mi">32</span><span class="p">,</span> <span class="n">poly</span> <span class="o">=&gt;</span> <span class="mh">0x1EDC6F41</span><span class="p">,</span> <span class="n">init</span> <span class="o">=&gt;</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="n">refin</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">refout</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">);</span>
+<span class="nv">$d</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">);</span>
+<span class="k">print</span> <span class="nv">$d</span><span class="o">-&gt;</span><span class="n">digest</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>(the expected output is 3304160206).</p>
+</dd></dl>
+
+<span class="target" id="digest-crc32-new"></span><dl class="function">
+<dt id="digest.digest.crc32.new">
+<code class="descclassname">digest.crc32.</code><code class="descname">new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#digest.digest.crc32.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates incremental crc32.
+See <a class="reference internal" href="#digest-incremental-digests"><span class="std std-ref">incremental methods</span></a> notes.</p>
+</dd></dl>
+
+<span class="target" id="digest-guava"></span><dl class="function">
+<dt id="digest.guava">
+<code class="descclassname">digest.</code><code class="descname">guava</code><span class="sig-paren">(</span><em>state</em>, <em>bucket</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.guava" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a number made with consistent hash.</p>
+<p>The guava function uses the <a class="reference external" href="https://en.wikipedia.org/wiki/Consistent_hashing">Consistent Hashing</a> algorithm of the Google
+guava library. The first parameter should be a hash code; the second
+parameter should be the number of buckets; the returned value will be an
+integer between 0 and the number of buckets. For example,</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; digest.guava(10863919174838991, 11)
+---
+- 8
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="digest-murmur"></span><dl class="function">
+<dt id="digest.murmur">
+<code class="descclassname">digest.</code><code class="descname">murmur</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.murmur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 32-bit binary string = digest made with MurmurHash.</p>
+</dd></dl>
+
+<span class="target" id="digest-murmur-new"></span><dl class="function">
+<dt id="digest.digest.murmur.new">
+<code class="descclassname">digest.murmur.</code><code class="descname">new</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#digest.digest.murmur.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiates incremental MurmurHash.
+See <a class="reference internal" href="#digest-incremental-digests"><span class="std std-ref">incremental methods</span></a> notes.
+For example:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">murmur</span><span class="p">.</span><span class="n">new</span><span class="p">({</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="incremental-methods-in-the-digest-module">
+<span id="digest-incremental-digests"></span><h3>Incremental methods in the <code class="docutils literal notranslate"><span class="pre">digest</span></code> module<a class="headerlink" href="#incremental-methods-in-the-digest-module" title="Permalink to this headline">¶</a></h3>
+<p>Suppose that a digest is done for a string ‘A’, then a new part ‘B’ is appended
+to the string, then a new digest is required. The new digest could be recomputed
+for the whole string ‘AB’, but it is faster to take what was computed before for
+‘A’ and apply changes based on the new part ‘B’. This is called multi-step or
+“incremental” digesting, which Tarantool supports with crc32 and with murmur…</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">digest</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;digest&#39;</span><span class="p">)</span>
+
+<span class="c1">-- print crc32 of &#39;AB&#39;, with one step, then incrementally</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">digest</span><span class="p">.</span><span class="n">crc32</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">digest</span><span class="p">.</span><span class="n">crc32</span><span class="p">.</span><span class="n">new</span><span class="p">()</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">result</span><span class="p">())</span>
+
+<span class="c1">-- print murmur hash of &#39;AB&#39;, with one step, then incrementally</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">digest</span><span class="p">.</span><span class="n">murmur</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">))</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">digest</span><span class="p">.</span><span class="n">murmur</span><span class="p">.</span><span class="n">new</span><span class="p">()</span>
+<span class="n">m</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">m</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">:</span><span class="n">result</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>In the following example, the user creates two functions, <code class="docutils literal notranslate"><span class="pre">password_insert()</span></code>
+which inserts a <a class="reference external" href="https://en.wikipedia.org/wiki/Sha-1">SHA-1</a> digest of the word “<strong>^S^e^c^ret Wordpass</strong>” into a tuple
+set, and <code class="docutils literal notranslate"><span class="pre">password_check()</span></code> which requires input of a password.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; digest = require(&#39;digest&#39;)
+---
+...
+tarantool&gt; function password_insert()
+         &gt;   box.space.tester:insert{1234, digest.sha1(&#39;^S^e^c^ret Wordpass&#39;)}
+         &gt;   return &#39;OK&#39;
+         &gt; end
+---
+...
+tarantool&gt; function password_check(password)
+         &gt;   local t = box.space.tester:select{12345}
+         &gt;   if digest.sha1(password) == t[2] then
+         &gt;     return &#39;Password is valid&#39;
+         &gt;   else
+         &gt;     return &#39;Password is not valid&#39;
+         &gt;   end
+         &gt; end
+---
+...
+tarantool&gt; password_insert()
+---
+- &#39;OK&#39;
+...
+</pre></div>
+</div>
+<p>If a later user calls the <code class="docutils literal notranslate"><span class="pre">password_check()</span></code> function and enters the wrong
+password, the result is an error.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; password_check(&#39;Secret Password&#39;)
+---
+- &#39;Password is not valid&#39;
+...
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

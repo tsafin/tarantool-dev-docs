@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module http &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>http</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/http.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-http.client">
+<span id="module-http"></span><span id="http-module"></span><h1>Module <cite>http</cite><a class="headerlink" href="#module-http.client" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">http</span></code> module, specifically the <code class="docutils literal notranslate"><span class="pre">http.client</span></code> submodule,
+provides the functionality of an HTTP client with support for HTTPS and keepalive.
+It uses routines in the <a class="reference external" href="https://curl.haxx.se/libcurl/">libcurl</a> library.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">http</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#http-new"><span class="std std-ref">http.client.new()</span></a></td>
+<td>Create an HTTP client instance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#client-object-request"><span class="std std-ref">client_object:request()</span></a></td>
+<td>Perform an HTTP request</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#client-object-stat"><span class="std std-ref">client_object:stat()</span></a></td>
+<td>Get a table with statistics</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="http-new"></span><dl class="function">
+<dt id="http.client.new">
+<code class="descclassname">http.client.</code><code class="descname">new</code><span class="sig-paren">(</span><span class="optional">[</span><em>options</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#http.client.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new HTTP client instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<em>table</em>) – integer settings which are passed to <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>.</td>
+</tr>
+</tbody>
+</table>
+<p>The two possible options are <code class="docutils literal notranslate"><span class="pre">max_connections</span></code> and <code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">max_connections</span></code> is the maximum number of entries in the cache.
+It affects <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>’s <a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLMOPT_MAXCONNECTS.html">CURLMOPT_MAXCONNECTS</a>.
+The default is -1.</p>
+<p><code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code> is the maximum number of active connections.
+It affects <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>’s  <a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLMOPT_MAX_TOTAL_CONNECTIONS.html">CURLMOPT_MAX_TOTAL_CONNECTIONS</a>.
+It is ignored if the <code class="docutils literal notranslate"><span class="pre">curl</span></code> version is less than 7.30.
+The default is 0, which allows <code class="docutils literal notranslate"><span class="pre">libcurl</span></code> to scale according to easy handles count.</p>
+<p>The default option values are usually good enough but in rare cases it
+might be good to set them. In that case here are two tips.</p>
+<p>1. You may want to control the maximum number of sockets that a particular http client uses simultaneously.
+If a system passes many requests to distinct hosts, then <code class="docutils literal notranslate"><span class="pre">libcurl</span></code> cannot reuse sockets.
+In this case setting <code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code> may be useful,
+since it causes <code class="docutils literal notranslate"><span class="pre">curl</span></code> to avoid creating too many sockets which would not be used anyway.</p>
+<p>2. Do not set <code class="docutils literal notranslate"><span class="pre">max_connections</span></code> less than <code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code>
+unless you are confident about your actions.
+When <code class="docutils literal notranslate"><span class="pre">max_connections</span></code> is less then <code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code>, in some cases
+<code class="docutils literal notranslate"><span class="pre">libcurl</span></code> will not reuse sockets for requests that are going to the same host.
+If the limit is reached and a new request occurs, then
+<code class="docutils literal notranslate"><span class="pre">libcurl</span></code> will first create a new socket, send the request, wait for the first connection
+to be free, and close it, in order to avoid exceeding the <code class="docutils literal notranslate"><span class="pre">max_connections</span></code> cache size.
+In the worst case, <code class="docutils literal notranslate"><span class="pre">libcurl</span></code> will create a new socket for every request,
+even if all requests are going to the same host.
+See <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3945">this Tarantool issue on github</a>
+for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a new HTTP client instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">userdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; http_client = require(&#39;http.client&#39;).new({max_connections = 5})
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="http.client.client_object">
+<em class="property">class </em><code class="descclassname">http.client.</code><code class="descname">client_object</code><a class="headerlink" href="#http.client.client_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="client-object-request"></span><dl class="method">
+<dt id="http.client.client_object.request">
+<code class="descname">request</code><span class="sig-paren">(</span><em>method</em>, <em>url</em>, <em>body</em>, <em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#http.client.client_object.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">http_client</span></code> is an HTTP client instance, <code class="docutils literal notranslate"><span class="pre">http_client:request()</span></code> will
+perform an HTTP request and, if there is a successful connection,
+will return a table with connection information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>method</strong> (<em>string</em>) – HTTP method, for example ‘GET’ or ‘POST’ or ‘PUT’</li>
+<li><strong>url</strong> (<em>string</em>) – location, for example ‘<a class="reference external" href="https://tarantool.org/doc">https://tarantool.org/doc</a>’</li>
+<li><strong>body</strong> (<em>string</em>) – optional initial message, for example ‘My text string!’</li>
+<li><strong>opts</strong> (<em>table</em>) – <p>table of connection options, with any of these
+components:</p>
+<blockquote>
+<div><ul>
+<li><code class="docutils literal notranslate"><span class="pre">timeout</span></code> - number of seconds to wait for a <code class="docutils literal notranslate"><span class="pre">curl</span></code> API read request
+before timing out</li>
+<li><code class="docutils literal notranslate"><span class="pre">ca_path</span></code> - path to a directory holding one or more certificates to
+verify the peer with</li>
+<li><code class="docutils literal notranslate"><span class="pre">ca_file</span></code> - path to an SSL certificate file to verify the peer with</li>
+<li><code class="docutils literal notranslate"><span class="pre">verify_host</span></code> - set on/off verification of the certificate’s name
+(CN) against host. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html">CURLOPT_SSL_VERIFYHOST</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">verify_peer</span></code> - set on/off verification of the peer’s SSL
+certificate. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html">CURLOPT_SSL_VERIFYPEER</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">ssl_key</span></code> - path to a private key file for a TLS and SSL client
+certificate. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_SSLKEY.html">CURLOPT_SSLKEY</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">ssl_cert</span></code> - path to a SSL client certificate file. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_SSLCERT.html">CURLOPT_SSLCERT</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">headers</span></code> - table of HTTP headers</li>
+<li><code class="docutils literal notranslate"><span class="pre">keepalive_idle</span></code> - delay, in seconds, that the operating system
+will wait while the connection is idle before sending keepalive
+probes. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_TCP_KEEPIDLE.html">CURLOPT_TCP_KEEPIDLE</a>
+and the note below about keepalive_interval.</li>
+<li><code class="docutils literal notranslate"><span class="pre">keepalive_interval</span></code> - the interval, in seconds, that the operating
+system will wait between sending keepalive probes. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_TCP_KEEPINTVL.html">CURLOPT_TCP_KEEPINTVL</a>.
+If both keepalive_idle and keepalive_interval are set, then
+Tarantool will also set HTTP keepalive headers: Connection:Keep-Alive
+and Keep-Alive:timeout=&lt;keepalive_idle&gt;.
+Otherwise Tarantool will send Connection:close</li>
+<li><code class="docutils literal notranslate"><span class="pre">low_speed_time</span></code> - set the “low speed time” – the time that the
+transfer speed should be below the “low speed limit” for the library
+to consider it too slow and abort. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_LOW_SPEED_TIME.html">CURLOPT_LOW_SPEED_TIME</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">low_speed_limit</span></code> - set the “low speed limit” – the average
+transfer speed in bytes per second that the transfer should be below
+during “low speed time” seconds for the library to consider it to be
+too slow and abort. See also
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/CURLOPT_LOW_SPEED_LIMIT.html">CURLOPT_LOW_SPEED_LIMIT</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">verbose</span></code> - set on/off verbose mode</li>
+<li><code class="docutils literal notranslate"><span class="pre">unix_socket</span></code> - a socket name to use instead of an Internet address,
+for a local connection. The Tarantool server must be built with
+<code class="docutils literal notranslate"><span class="pre">libcurl</span></code> 7.40 or later. See the <a class="reference internal" href="#http-example2"><span class="std std-ref">second example</span></a>
+later in this section.</li>
+<li><code class="docutils literal notranslate"><span class="pre">max_header_name_len</span></code> - the maximal length of a header name. If a header
+name is bigger than this value, it is truncated to this length.
+The default value is ‘32’.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>response information, with all of these components:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">status</span></code> - HTTP response status</li>
+<li><code class="docutils literal notranslate"><span class="pre">reason</span></code> - HTTP response status text</li>
+<li><code class="docutils literal notranslate"><span class="pre">headers</span></code> - a Lua table with normalized HTTP headers</li>
+<li><code class="docutils literal notranslate"><span class="pre">body</span></code> - response body</li>
+<li><code class="docutils literal notranslate"><span class="pre">proto</span></code> - protocol version</li>
+<li><code class="docutils literal notranslate"><span class="pre">cookies</span></code> - a Lua table with response cookies and their options</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">cookies</span></code> component contains a Lua table where the key is a cookie
+name. The value is an array of two elements where the first one is the
+cookie value and the second one is an array with the cookie’s options.
+Possible options are: “Expires”, “Max-Age”, “Domain”, “Path”, “Secure”,
+“HttpOnly”, “SameSite”. Note that an option is a string with ‘=’
+splitting the option’s name and its value.
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">Here</a>
+you can find more info.</p>
+<p><strong>Example</strong></p>
+<p>You can use cookies information like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; require(&#39;http.client&#39;).get(&#39;https://www.tarantool.io/en/&#39;).cookies
+---
+- csrftoken:
+  - bWJVkBybvX9LdJ8uLPOTVrit5P3VbRjE3potYVOuUnsSjYT5ahghDV06tXRkfnOl
+  - - Max-Age=31449600
+    - Path=/
+...
+
+tarantool&gt; cookies = require(&#39;http.client&#39;).get(&#39;https://www.tarantool.io/en/&#39;).cookies
+---
+...
+
+tarantool&gt; options = cookies[&#39;csrftoken&#39;][2]
+---
+...
+
+tarantool&gt; for _, option in ipairs(options) do
+         &gt; if option:startswith(&#39;csrftoken cookie&#39;s Max-Age = &#39;) then
+         &gt; print(option)
+         &gt; end
+         &gt; end
+
+csrftoken cookie&#39;s Max-Age = 31449600
+---
+...
+
+tarantool&gt;
+</pre></div>
+</div>
+<p>The following “shortcuts” exist for requests:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">http_client:get(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;GET&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:post</span> <span class="pre">(url,</span> <span class="pre">body,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;POST&quot;,</span> <span class="pre">url,</span> <span class="pre">body,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:put(url,</span> <span class="pre">body,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;PUT&quot;,</span> <span class="pre">url,</span> <span class="pre">body,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:patch(url,</span> <span class="pre">body,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;PATCH&quot;,</span> <span class="pre">url,</span> <span class="pre">body,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:options(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;OPTIONS&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:head(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;HEAD&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:delete(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;DELETE&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:trace(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;TRACE&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">http_client:connect:(url,</span> <span class="pre">options)</span></code> - shortcut for
+<code class="docutils literal notranslate"><span class="pre">http_client:request(&quot;CONNECT&quot;,</span> <span class="pre">url,</span> <span class="pre">nil,</span> <span class="pre">opts)</span></code></li>
+</ul>
+<p>Requests may be influenced by environment variables, for example
+users can set up an http proxy by setting
+<code class="samp docutils literal notranslate"><span class="pre">HTTP_PROXY=</span><em><span class="pre">proxy</span></em></code> before initiating any requests.
+See the web page document
+<a class="reference external" href="https://curl.haxx.se/libcurl/c/libcurl-env.html">Environment variables libcurl understands</a>.</p>
+</dd></dl>
+
+<span class="target" id="client-object-stat"></span><dl class="function">
+<dt id="http.client.client_object.stat">
+<code class="descname">stat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#http.client.client_object.stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">http_client:stat()</span></code> function returns a table with statistics:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">active_requests</span></code> - number of currently executing requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">sockets_added</span></code> - total number of sockets added into an event loop</li>
+<li><code class="docutils literal notranslate"><span class="pre">sockets_deleted</span></code> - total number of sockets sockets from an event loop</li>
+<li><code class="docutils literal notranslate"><span class="pre">total_requests</span></code> - total number of requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">http_200_responses</span></code> - total number of requests which have returned
+code HTTP 200</li>
+<li><code class="docutils literal notranslate"><span class="pre">http_other_responses</span></code> - total number of requests which have not
+returned code HTTP 200</li>
+<li><code class="docutils literal notranslate"><span class="pre">failed_requests</span></code> - total number of requests which have failed
+including system errors, <code class="docutils literal notranslate"><span class="pre">curl</span></code> errors, and HTTP errors</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<p id="http-example1"><strong>Example 1:</strong></p>
+<p>Connect to an HTTP server, look at the size of the response for a ‘GET’ request,
+and look at the statistics for the session.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; http_client = require(&#39;http.client&#39;).new()
+---
+...
+tarantool&gt; r = http_client:request(&#39;GET&#39;,&#39;http://tarantool.org&#39;)
+---
+...
+tarantool&gt; string.len(r.body)
+---
+- 21725
+...
+tarantool&gt; http_client:stat()
+---
+- total_requests: 1
+  sockets_deleted: 2
+  failed_requests: 0
+  active_requests: 0
+  http_other_responses: 0
+  http_200_responses: 1
+  sockets_added: 2
+</pre></div>
+</div>
+<p id="http-example2"><strong>Example 2:</strong></p>
+<p>Start two Tarantool instances on the same computer.</p>
+<p>On the first Tarantool instance, listen on a Unix socket:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="s1">&#39;/tmp/unix_domain_socket.sock&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>On the second Tarantool instance, send via <code class="docutils literal notranslate"><span class="pre">http_client</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{}</span>
+<span class="n">http_client</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;http.client&#39;</span><span class="p">).</span><span class="n">new</span><span class="p">({</span><span class="mi">5</span><span class="p">})</span>
+<span class="n">http_client</span><span class="p">:</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://localhost/&#39;</span><span class="p">,</span><span class="s1">&#39;body&#39;</span><span class="p">,{</span><span class="n">unix_socket</span> <span class="o">=</span> <span class="s1">&#39;/tmp/unix_domain_socket.sock&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Terminal #1 will show an error message: “Invalid MsgPack”.
+This is not useful but demonstrates the syntax and demonstrates
+that was sent was received.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

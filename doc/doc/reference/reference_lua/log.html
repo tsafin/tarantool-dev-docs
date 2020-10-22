@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module log &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>log</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/log.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-log">
+<span id="module-log"></span><span id="log-module"></span><h1>Module <cite>log</cite><a class="headerlink" href="#module-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The Tarantool server puts all diagnostic messages in a log file specified by
+the <a class="reference internal" href="../configuration/index.html#cfg-logging-log"><span class="std std-ref">log</span></a> configuration parameter. Diagnostic
+messages may be either system-generated by the server’s internal code, or
+user-generated with the <code class="samp docutils literal notranslate"><span class="pre">log.</span><em><span class="pre">log_level_function_name</span></em></code> function.</p>
+<p>As explained in the description of <a class="reference internal" href="../configuration/index.html#cfg-logging-log-format"><span class="std std-ref">log_format</span></a>
+configuration setting, there are two possible formats for log entries:</p>
+<ul class="simple">
+<li>‘plain’ (the default), or</li>
+<li>‘json’ (with more detail and with JSON labels).</li>
+</ul>
+<p>Here is what a log entry looks like after <code class="docutils literal notranslate"><span class="pre">box.cfg{log_format='plain'}</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2017-10-16 11:36:01.508 [18081] main/101/interactive I&gt; set &#39;log_format&#39; configuration option to &quot;plain&quot;
+</pre></div>
+</div>
+<p>Here is what a log entry looks like after <code class="docutils literal notranslate"><span class="pre">box.cfg{log_format='json'}</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&quot;time&quot;: &quot;2017-10-16T11:36:17.996-0600&quot;,
+&quot;level&quot;: &quot;INFO&quot;,
+&quot;message&quot;: &quot;set &#39;log_format&#39; configuration option to \&quot;json\&quot;&quot;,
+&quot;pid&quot;: 18081,|
+&quot;cord_name&quot;: &quot;main&quot;,
+&quot;fiber_id&quot;: 101,
+&quot;fiber_name&quot;: &quot;interactive&quot;,
+&quot;file&quot;: &quot;builtin\/box\/load_cfg.lua&quot;,
+&quot;line&quot;: 317}
+</pre></div>
+</div>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">log</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#log-ug-message"><span class="std std-ref">log.error()</span></a> <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+<a class="reference internal" href="#log-ug-message"><span class="std std-ref">log.warn()</span></a> <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+<a class="reference internal" href="#log-ug-message"><span class="std std-ref">log.info()</span></a> <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+<a class="reference internal" href="#log-ug-message"><span class="std std-ref">log.verbose()</span></a> <a href="#id7"><span class="problematic" id="id8">|br|</span></a>
+<a class="reference internal" href="#log-ug-message"><span class="std std-ref">log.debug()</span></a></td>
+<td>Write a user-generated message
+to a log file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#log-logger-pid"><span class="std std-ref">log.logger_pid()</span></a></td>
+<td>Get the PID of a logger</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#log-rotate"><span class="std std-ref">log.rotate()</span></a></td>
+<td>Rotate a log file</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="log-ug-message"></span><dl class="function">
+<dt id="log.error">
+<code class="descclassname">log.</code><code class="descname">error</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#log.error" title="Permalink to this definition">¶</a></dt>
+<dt id="log.warn">
+<code class="descclassname">log.</code><code class="descname">warn</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#log.warn" title="Permalink to this definition">¶</a></dt>
+<dt id="log.info">
+<code class="descclassname">log.</code><code class="descname">info</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#log.info" title="Permalink to this definition">¶</a></dt>
+<dt id="log.verbose">
+<code class="descclassname">log.</code><code class="descname">verbose</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#log.verbose" title="Permalink to this definition">¶</a></dt>
+<dt id="log.debug">
+<code class="descclassname">log.</code><code class="descname">debug</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#log.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output a user-generated message to the <a class="reference internal" href="../configuration/index.html#cfg-logging-log"><span class="std std-ref">log file</span></a>,
+given log_level_function_name = <code class="docutils literal notranslate"><span class="pre">error</span></code> or <code class="docutils literal notranslate"><span class="pre">warn</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code> or
+<code class="docutils literal notranslate"><span class="pre">verbose</span></code> or <code class="docutils literal notranslate"><span class="pre">debug</span></code>.</p>
+<p>As explained in the description of the configuration setting for
+<a class="reference internal" href="../configuration/index.html#cfg-logging-log-level"><span class="std std-ref">log_level</span></a>, there are seven levels of detail:</p>
+<ul class="simple">
+<li>1 – <code class="docutils literal notranslate"><span class="pre">SYSERROR</span></code></li>
+<li>2 – <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> – this corresponds to <code class="docutils literal notranslate"><span class="pre">log.error(...)</span></code></li>
+<li>3 – <code class="docutils literal notranslate"><span class="pre">CRITICAL</span></code></li>
+<li>4 – <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>  – this corresponds to <code class="docutils literal notranslate"><span class="pre">log.warn(...)</span></code></li>
+<li>5 – <code class="docutils literal notranslate"><span class="pre">INFO</span></code> – this corresponds to <code class="docutils literal notranslate"><span class="pre">log.info(...)</span></code></li>
+<li>6 – <code class="docutils literal notranslate"><span class="pre">VERBOSE</span></code>  – this corresponds to <code class="docutils literal notranslate"><span class="pre">log.verbose(...)</span></code></li>
+<li>7 – <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> – this corresponds to <code class="docutils literal notranslate"><span class="pre">log.debug(...)</span></code></li>
+</ul>
+<p>For example, if <code class="docutils literal notranslate"><span class="pre">box.cfg.log_level</span></code> is currently 5 (the default value),
+then <code class="docutils literal notranslate"><span class="pre">log.error(...)</span></code>, <code class="docutils literal notranslate"><span class="pre">log.warn(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">log.info(...)</span></code> messages
+will go to the log file. However, <code class="docutils literal notranslate"><span class="pre">log.verbose(...)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">log.debug(...)</span></code> messages will not go to the log file, because they
+correspond to higher levels of detail.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>any</em>) – <p>Usually a string.</p>
+<p>Messages may contain C-style format specifiers %d or
+%s, so <code class="samp docutils literal notranslate"><span class="pre">log.error('...%d...%s',</span> <em><span class="pre">x</span></em><span class="pre">,</span> <em><span class="pre">y</span></em><span class="pre">)</span></code>
+will work if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a number and <code class="docutils literal notranslate"><span class="pre">y</span></code> is a string.</p>
+<p>Less commonly, messages may be other scalar data types,
+or even tables. So <code class="code docutils literal notranslate"><span class="pre">log.error({'x',18.7,true})</span></code>
+will work.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+<p>The actual output will be a line in the log, containing:</p>
+<ul class="simple">
+<li>the current timestamp,</li>
+<li>a module name,</li>
+<li>‘E’, ‘W’, ‘I’, ‘V’ or ‘D’ depending on <code class="docutils literal notranslate"><span class="pre">log_level_function_name</span></code>, and</li>
+<li><code class="docutils literal notranslate"><span class="pre">message</span></code>.</li>
+</ul>
+<p>Output will not occur if <code class="docutils literal notranslate"><span class="pre">log_level_function_name</span></code>
+is for a type greater than <a class="reference internal" href="../configuration/index.html#cfg-logging-log-level"><span class="std std-ref">log_level</span></a>.</p>
+</dd></dl>
+
+<span class="target" id="log-logger-pid"></span><dl class="function">
+<dt id="log.logger_pid">
+<code class="descclassname">log.</code><code class="descname">logger_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#log.logger_pid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">PID of a logger</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="log-rotate"></span><dl class="function">
+<dt id="log.rotate">
+<code class="descclassname">log.</code><code class="descname">rotate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#log.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate the log.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ tarantool
+tarantool&gt; box.cfg{log_level=3, log=&#39;tarantool.txt&#39;}
+tarantool&gt; log = require(&#39;log&#39;)
+tarantool&gt; log.error(&#39;Error&#39;)
+tarantool&gt; log.info(&#39;Info %s&#39;, box.info.version)
+tarantool&gt; os.exit()
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> less tarantool.txt
+<span class="go">2017-09-20 ... [68617] main/101/interactive C&gt; version 1.7.5-31-ge939c6ea6</span>
+<span class="go">2017-09-20 ... [68617] main/101/interactive C&gt; log level 3</span>
+<span class="go">2017-09-20 ... [68617] main/101/interactive [C]:-1 E&gt; Error</span>
+</pre></div>
+</div>
+<p>The ‘Error’ line is visible in <code class="docutils literal notranslate"><span class="pre">tarantool.txt</span></code> preceded by the letter E.</p>
+<p>The ‘Info’ line is not present because the <code class="docutils literal notranslate"><span class="pre">log_level</span></code> is 3.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

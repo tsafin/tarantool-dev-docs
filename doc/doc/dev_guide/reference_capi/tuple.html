@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module tuple &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module txn" href="txn.html" />
+    <link rel="prev" title="Module trivia/config" href="trivia.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>tuple</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/tuple.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-tuple">
+<h1>Module <cite>tuple</cite><a class="headerlink" href="#module-tuple" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.box_tuple_format_t">
+<code class="descname">box_tuple_format_t</code><a class="headerlink" href="#c.box_tuple_format_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-format-default"></span><dl class="function">
+<dt id="c.box_tuple_format_default">
+<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a> *<code class="descname">box_tuple_format_default</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_format_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple format.</p>
+<p>Each Tuple has an associated format (class). Default format is used to
+create tuples which are not attached to any particular space.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.box_tuple_t">
+<code class="descname">box_tuple_t</code><a class="headerlink" href="#c.box_tuple_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple</p>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-new"></span><dl class="function">
+<dt id="c.box_tuple_new">
+<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a> *<code class="descname">box_tuple_new</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a><em>&nbsp;*format</em>, const char<em>&nbsp;*tuple</em>, const char<em>&nbsp;*tuple_end</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate and initialize a new tuple from raw MsgPack Array data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>format</strong> (<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t"><em>box_tuple_format_t*</em></a>) – tuple format. Use
+<a class="reference internal" href="#c-api-tuple-box-tuple-format-default"><span class="std std-ref">box_tuple_format_default()</span></a>
+to create space-independent tuple.</li>
+<li><strong>char*          tuple</strong> (<em>const</em>) – tuple data in MsgPack Array format ([field1, field2, …])</li>
+<li><strong>char*      tuple_end</strong> (<em>const</em>) – the end of <code class="docutils literal notranslate"><span class="pre">data</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">NULL on out of memory</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="../../reference/reference_lua/box_tuple.html#box-tuple-new"><span class="std std-ref">box.tuple.new()</span></a></p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When working with tuples, it is the developer’s responsibility
+to ensure that enough space is allocated, taking especial caution
+when writing to them with msgpuck functions such as
+<code class="docutils literal notranslate"><span class="pre">mp_encode_array()</span></code>.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-ref"></span><dl class="function">
+<dt id="c.box_tuple_ref">
+int <code class="descname">box_tuple_ref</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increase the reference counter of tuple.</p>
+<p>Tuples are reference counted. All functions that return tuples guarantee
+that the last returned tuple is reference counted internally until the next
+call to API function that yields or returns another tuple.</p>
+<p>You should increase the reference counter before taking tuples for long
+processing in your code. The Lua garbage collector will not destroy a
+tuple that has references, even
+if another fiber removes them from a space. After processing,
+decrement the reference counter using
+<a class="reference internal" href="#c-api-tuple-box-tuple-unref"><span class="std std-ref">box_tuple_unref()</span></a>,
+otherwise the tuple will leak.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-tuple-box-tuple-unref"><span class="std std-ref">box_tuple_unref()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-unref"></span><dl class="function">
+<dt id="c.box_tuple_unref">
+void <code class="descname">box_tuple_unref</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_unref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrease the reference counter of tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-tuple-box-tuple-ref"><span class="std std-ref">box_tuple_ref()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-field-count"></span><dl class="function">
+<dt id="c.box_tuple_field_count">
+uint32_t <code class="descname">box_tuple_field_count</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_field_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fields in a tuple (the size of MsgPack Array).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_bsize">
+size_t <code class="descname">box_tuple_bsize</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_bsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of bytes used to store internal tuple data (MsgPack Array).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_to_buf">
+ssize_t <code class="descname">box_tuple_to_buf</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em>, char<em>&nbsp;*buf</em>, size_t<em>&nbsp;size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_to_buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump raw MsgPack data to the memory buffer <code class="docutils literal notranslate"><span class="pre">buf</span></code> of size <code class="docutils literal notranslate"><span class="pre">size</span></code>.</p>
+<p>Store tuple fields in the memory buffer.</p>
+<p>Upon successful return, the function returns the number of bytes written.
+If buffer size is not enough then the return value is the number of bytes
+which would have been written if enough space had been available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">-1 on error</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of bytes written on success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_format">
+<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a> *<code class="descname">box_tuple_format</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the associated format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple format</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-field"></span><dl class="function">
+<dt id="c.box_tuple_field">
+const char *<code class="descname">box_tuple_field</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em>, uint32_t<em>&nbsp;field_id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the raw tuple field in MsgPack format.
+The result is a pointer to raw MessagePack data which can be
+decoded with mp_decode functions, for an example see the tutorial
+program <a class="reference internal" href="../../tutorials/c_tutorial.html#f-c-tutorial-read"><span class="std std-ref">read.c</span></a>.</p>
+<p>The buffer is valid until the next call to a <code class="docutils literal notranslate"><span class="pre">box_tuple_*</span></code> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tuple</strong> (<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple</li>
+<li><strong>field_id</strong> (<em>uint32_t</em>) – zero-based index in MsgPack array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">NULL if i &gt;= <a class="reference internal" href="#c-api-tuple-box-tuple-field-count"><span class="std std-ref">box_tuple_field_count()</span></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">msgpack otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="capi-tuple-field-type"></span><dl class="enum">
+<dt id="_CPPv410field_type">
+<span id="_CPPv310field_type"></span><span id="_CPPv210field_type"></span><em class="property">enum </em><code class="descname">field_type</code><a class="headerlink" href="#_CPPv410field_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv414FIELD_TYPE_ANY">
+<span id="_CPPv314FIELD_TYPE_ANY"></span><span id="_CPPv214FIELD_TYPE_ANY"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_ANY</code><a class="headerlink" href="#_CPPv414FIELD_TYPE_ANY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419FIELD_TYPE_UNSIGNED">
+<span id="_CPPv319FIELD_TYPE_UNSIGNED"></span><span id="_CPPv219FIELD_TYPE_UNSIGNED"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_UNSIGNED</code><a class="headerlink" href="#_CPPv419FIELD_TYPE_UNSIGNED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417FIELD_TYPE_STRING">
+<span id="_CPPv317FIELD_TYPE_STRING"></span><span id="_CPPv217FIELD_TYPE_STRING"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_STRING</code><a class="headerlink" href="#_CPPv417FIELD_TYPE_STRING" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416FIELD_TYPE_ARRAY">
+<span id="_CPPv316FIELD_TYPE_ARRAY"></span><span id="_CPPv216FIELD_TYPE_ARRAY"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_ARRAY</code><a class="headerlink" href="#_CPPv416FIELD_TYPE_ARRAY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417FIELD_TYPE_NUMBER">
+<span id="_CPPv317FIELD_TYPE_NUMBER"></span><span id="_CPPv217FIELD_TYPE_NUMBER"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_NUMBER</code><a class="headerlink" href="#_CPPv417FIELD_TYPE_NUMBER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418FIELD_TYPE_INTEGER">
+<span id="_CPPv318FIELD_TYPE_INTEGER"></span><span id="_CPPv218FIELD_TYPE_INTEGER"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_INTEGER</code><a class="headerlink" href="#_CPPv418FIELD_TYPE_INTEGER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417FIELD_TYPE_SCALAR">
+<span id="_CPPv317FIELD_TYPE_SCALAR"></span><span id="_CPPv217FIELD_TYPE_SCALAR"></span><em class="property">enumerator </em><code class="descname">FIELD_TYPE_SCALAR</code><a class="headerlink" href="#_CPPv417FIELD_TYPE_SCALAR" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414field_type_MAX">
+<span id="_CPPv314field_type_MAX"></span><span id="_CPPv214field_type_MAX"></span><em class="property">enumerator </em><code class="descname">field_type_MAX</code><a class="headerlink" href="#_CPPv414field_type_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Possible data types for tuple fields.</p>
+<p>One cannot use STRS/ENUM macros for types because
+there is a mismatch between enum name (STRING) and type
+name literal (“STR”). STR is already used as a type in Objective C.</p>
+</dd></dl>
+
+<span class="target" id="capi-tuple-key-def"></span><dl class="type">
+<dt id="c.box_key_def_t">
+typedef struct key_def <code class="descname">box_key_def_t</code><a class="headerlink" href="#c.box_key_def_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key definition</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_key_def_new">
+<a class="reference internal" href="#c.box_key_def_t" title="box_key_def_t">box_key_def_t</a> *<code class="descname">box_key_def_new</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;*fields</em>, uint32_t<em>&nbsp;*types</em>, uint32_t<em>&nbsp;part_count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_key_def_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a key definition with the key fields with passed types on passed positions.</p>
+<p>May be used for tuple format creation and/or tuple comparison.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fields</strong> (<em>uint32_t*</em>) – array with key field identifiers</li>
+<li><strong>types</strong> (<em>uint32_t</em>) – array with key <a class="reference internal" href="#capi-tuple-field-type"><span class="std std-ref">field types</span></a></li>
+<li><strong>part_count</strong> (<em>uint32_t</em>) – the number of key fields</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">key definition on success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NULL on error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_key_def_delete">
+void <code class="descname">box_key_def_delete</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_key_def_t" title="box_key_def_t">box_key_def_t</a><em>&nbsp;*key_def</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_key_def_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a key definition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key_def</strong> (<a class="reference internal" href="#c.box_key_def_t" title="box_key_def_t"><em>box_key_def_t*</em></a>) – key definition to delete</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="capi-tuple-box-tuple-format-new"></span><dl class="function">
+<dt id="c.box_tuple_format_new">
+<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a> *<code class="descname">box_tuple_format_new</code><span class="sig-paren">(</span>struct key_def<em>&nbsp;*keys</em>, uint16_t<em>&nbsp;key_count</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_format_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return new in-memory tuple format based on passed key definitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>keys</strong> (<em>key_def</em>) – array of keys defined for the format</li>
+<li><strong>key_count</strong> (<em>uint16_t</em>) – count of keys</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">new tuple format on success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NULL on error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_format_ref">
+void <code class="descname">box_tuple_format_ref</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a><em>&nbsp;*format</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_format_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment tuple format reference count</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tuple_format</strong> (<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t"><em>box_tuple_format_t</em></a>) – tuple format to ref</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_format_unref">
+void <code class="descname">box_tuple_format_unref</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t">box_tuple_format_t</a><em>&nbsp;*format</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_format_unref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrement tuple format reference count</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tuple_format</strong> (<a class="reference internal" href="#c.box_tuple_format_t" title="box_tuple_format_t"><em>box_tuple_format_t</em></a>) – tuple format to unref</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="capi-tuple-box-tuple-compare"></span><dl class="function">
+<dt id="c.box_tuple_compare">
+int <code class="descname">box_tuple_compare</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple_a</em>, const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple_b</em>, const <a class="reference internal" href="#c.box_key_def_t" title="box_key_def_t">box_key_def_t</a><em>&nbsp;*key_def</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare tuples using key definition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>box_tuple_t*   tuple_a</strong> (<em>const</em>) – the first tuple</li>
+<li><strong>box_tuple_t*   tuple_b</strong> (<em>const</em>) – the second tuple</li>
+<li><strong>box_key_def_t* key_def</strong> (<em>const</em>) – key definition</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0  if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_a)</span></code> == <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_b)</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">&lt;0 if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_a)</span></code> &lt; <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_b)</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">&gt;0 if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_a)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">key_fields(tuple_b)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: enum <a class="reference internal" href="#capi-tuple-field-type"><span class="std std-ref">field_type</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">int box_tuple_compare_with_key(const box_tuple_t *tuple, const char *key, const box_key_def_t *key_def);</code></dt>
+<dd><p>Compare a tuple with a key using key definition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>box_tuple_t*     tuple</strong> (<em>const</em>) – tuple</li>
+<li><strong>char*              key</strong> (<em>const</em>) – key with MessagePack array header</li>
+<li><strong>box_key_def_t* key_def</strong> (<em>const</em>) – key definition</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0  if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple)</span></code> == <code class="docutils literal notranslate"><span class="pre">parts(key)</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">&lt;0 if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple)</span></code> &lt; <code class="docutils literal notranslate"><span class="pre">parts(key)</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">&gt;0 if <code class="docutils literal notranslate"><span class="pre">key_fields(tuple)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">parts(key)</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: enum <a class="reference internal" href="#capi-tuple-field-type"><span class="std std-ref">field_type</span></a></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.box_tuple_iterator_t">
+<code class="descname">box_tuple_iterator_t</code><a class="headerlink" href="#c.box_tuple_iterator_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple iterator</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_iterator">
+<a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a> *<code class="descname">box_tuple_iterator</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate and initialize a new tuple iterator. The tuple iterator allows
+iterating over fields at the root level of a MsgPack array.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">box_tuple_iterator_t</span><span class="o">*</span> <span class="n">it</span> <span class="o">=</span> <span class="n">box_tuple_iterator</span><span class="p">(</span><span class="n">tuple</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// error handling using box_error_last()</span>
+<span class="p">}</span>
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">field</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">field</span> <span class="o">=</span> <span class="n">box_tuple_next</span><span class="p">(</span><span class="n">it</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// process raw MsgPack data</span>
+<span class="p">}</span>
+
+<span class="c1">// rewind the iterator to the first position</span>
+<span class="n">box_tuple_rewind</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">box_tuple_position</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// rewind three fields</span>
+<span class="n">field</span> <span class="o">=</span> <span class="n">box_tuple_seek</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">box_tuple_position</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span>
+
+<span class="n">box_iterator_free</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_iterator_free">
+void <code class="descname">box_tuple_iterator_free</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a><em>&nbsp;*it</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_iterator_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy and free tuple iterator</p>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-position"></span><dl class="function">
+<dt id="c.box_tuple_position">
+uint32_t <code class="descname">box_tuple_position</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a><em>&nbsp;*it</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return zero-based next position in iterator. That is, this function
+returnы the field id of the field that will be returned by the next call
+to <a class="reference internal" href="#c-api-tuple-box-tuple-next"><span class="std std-ref">box_tuple_next()</span></a>.
+Returned value is zero after initialization
+or rewind and <a class="reference internal" href="#c-api-tuple-box-tuple-field-count"><span class="std std-ref">box_tuple_field_count()</span></a>
+after the end of iteration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>it</strong> (<a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t"><em>box_tuple_iterator_t*</em></a>) – a tuple iterator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">position</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_rewind">
+void <code class="descname">box_tuple_rewind</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a><em>&nbsp;*it</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_rewind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rewind iterator to the initial position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>it</strong> (<a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t"><em>box_tuple_iterator_t*</em></a>) – a tuple iterator</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>After: <code class="docutils literal notranslate"><span class="pre">box_tuple_position(it)</span> <span class="pre">==</span> <span class="pre">0</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_seek">
+const char *<code class="descname">box_tuple_seek</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a><em>&nbsp;*it</em>, uint32_t<em>&nbsp;field_no</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seek the tuple iterator.</p>
+<p>The result is a pointer to raw MessagePack data which can be
+decoded with mp_decode functions, for an example see the tutorial
+program <a class="reference internal" href="../../tutorials/c_tutorial.html#f-c-tutorial-read"><span class="std std-ref">read.c</span></a>.
+The returned buffer is valid until the next call to <code class="docutils literal notranslate"><span class="pre">box_tuple_*</span></code> API.
+The requested <code class="docutils literal notranslate"><span class="pre">field_no</span></code> is returned by the next call to
+<code class="docutils literal notranslate"><span class="pre">box_tuple_next(it)</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>it</strong> (<a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t"><em>box_tuple_iterator_t*</em></a>) – a tuple iterator</li>
+<li><strong>field_no</strong> (<em>uint32_t</em>) – field number - zero-based position
+in MsgPack array</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>After:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box_tuple_position(it)</span> <span class="pre">==</span> <span class="pre">field_not</span></code> if returned value is not NULL.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box_tuple_position(it)</span> <span class="pre">==</span> <span class="pre">box_tuple_field_count(tuple)</span></code> if returned
+value is NULL.</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="c-api-tuple-box-tuple-next"></span><dl class="function">
+<dt id="c.box_tuple_next">
+const char *<code class="descname">box_tuple_next</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t">box_tuple_iterator_t</a><em>&nbsp;*it</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next tuple field from tuple iterator.</p>
+<p>The result is a pointer to raw MessagePack data which can be
+decoded with mp_decode functions, for an example see the tutorial
+program <a class="reference internal" href="../../tutorials/c_tutorial.html#f-c-tutorial-read"><span class="std std-ref">read.c</span></a>.
+The returned buffer is valid until next call to <code class="docutils literal notranslate"><span class="pre">box_tuple_*</span></code> API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>it</strong> (<a class="reference internal" href="#c.box_tuple_iterator_t" title="box_tuple_iterator_t"><em>box_tuple_iterator_t*</em></a>) – a tuple iterator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">NULL if there are no more fields</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">MsgPack otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Before: <a class="reference internal" href="#c-api-tuple-box-tuple-position"><span class="std std-ref">box_tuple_position()</span></a>
+is zero-based ID of returned field.</p>
+<p>After: <code class="docutils literal notranslate"><span class="pre">box_tuple_position(it)</span> <span class="pre">==</span> <span class="pre">box_tuple_field_count(tuple)</span></code> if
+returned value is NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_update">
+<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a> *<code class="descname">box_tuple_update</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em>, const char<em>&nbsp;*expr</em>, const char<em>&nbsp;*expr_end</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.box_tuple_upsert">
+<a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a> *<code class="descname">box_tuple_upsert</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em>, const char<em>&nbsp;*expr</em>, const char<em>&nbsp;*expr_end</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_tuple_upsert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="txn.html" class="btn btn-neutral float-right" title="Module txn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="trivia.html" class="btn btn-neutral float-left" title="Module trivia/config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

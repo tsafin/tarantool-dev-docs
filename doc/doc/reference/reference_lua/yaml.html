@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module yaml &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>yaml</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/yaml.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-yaml">
+<span id="yaml-module"></span><h1>Module <cite>yaml</cite><a class="headerlink" href="#module-yaml" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">yaml</span></code> module takes strings in <a class="reference external" href="http://yaml.org/">YAML</a> format and decodes them, or takes a
+series of non-YAML values and encodes them.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">yaml</span></code> functions and members.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#yaml-encode"><span class="std std-ref">yaml.encode()</span></a></td>
+<td>Convert a Lua object to a YAML
+string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#yaml-decode"><span class="std std-ref">yaml.decode()</span></a></td>
+<td>Convert a YAML string to a Lua
+object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#yaml-serialize"><span class="std std-ref">__serialize parameter</span></a></td>
+<td>Output structure specification</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#yaml-cfg"><span class="std std-ref">yaml.cfg()</span></a></td>
+<td>Change configuration</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#yaml-null"><span class="std std-ref">yaml.NULL</span></a></td>
+<td>Analog of Lua’s “nil”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-yaml"></span><span class="target" id="yaml-encode"></span><dl class="function">
+<dt id="yaml.encode">
+<code class="descclassname">yaml.</code><code class="descname">encode</code><span class="sig-paren">(</span><em>lua_value</em><span class="sig-paren">)</span><a class="headerlink" href="#yaml.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Lua object to a YAML string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lua_value</strong> – either a scalar value or a Lua table value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the original value reformatted as a YAML string.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="yaml-decode"></span><dl class="function">
+<dt id="yaml.decode">
+<code class="descclassname">yaml.</code><code class="descname">decode</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#yaml.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a YAML string to a Lua object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> – a string formatted as YAML.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the original contents formatted as a Lua table.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p id="yaml-serialize"><strong>__serialize parameter:</strong></p>
+<p>The YAML output structure can be specified with <code class="docutils literal notranslate"><span class="pre">__serialize</span></code>:</p>
+<ul class="simple">
+<li>‘seq’, ‘sequence’, ‘array’ - table encoded as an array</li>
+<li>‘map’, ‘mappping’ - table encoded as a map</li>
+<li>function - the meta-method called to unpack serializable representation
+of table, cdata or userdata objects</li>
+</ul>
+<p>‘seq’ or ‘map’ also enable the flow (compact) mode for the YAML serializer
+(flow=”[1,2,3]” vs block=” - 1n - 2n - 3n”).</p>
+<p>Serializing ‘A’ and ‘B’ with different <code class="docutils literal notranslate"><span class="pre">__serialize</span></code> values brings different
+results:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; yaml.encode(setmetatable({&#39;A&#39;, &#39;B&#39;}, { __serialize=&quot;seq&quot;}))
+---
+- &#39;[&quot;A&quot;,&quot;B&quot;]&#39;
+...
+tarantool&gt; yaml.encode(setmetatable({&#39;A&#39;, &#39;B&#39;}, { __serialize=&quot;map&quot;}))
+---
+- &#39;{&quot;1&quot;:&quot;A&quot;,&quot;2&quot;:&quot;B&quot;}&#39;
+...
+tarantool&gt; yaml.encode({setmetatable({f1 = &#39;A&#39;, f2 = &#39;B&#39;}, { __serialize=&quot;map&quot;})})
+---
+- &#39;[{&quot;f2&quot;:&quot;B&quot;,&quot;f1&quot;:&quot;A&quot;}]&#39;
+...
+tarantool&gt; yaml.encode({setmetatable({f1 = &#39;A&#39;, f2 = &#39;B&#39;}, { __serialize=&quot;seq&quot;})})
+---
+- &#39;[[]]&#39;
+...
+</pre></div>
+</div>
+<span class="target" id="yaml-cfg"></span><dl class="function">
+<dt id="yaml.cfg">
+<code class="descclassname">yaml.</code><code class="descname">cfg</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="headerlink" href="#yaml.cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set values affecting the behavior of encode and decode functions.</p>
+<p>The values are all either integers or boolean <code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 center-align-column-2 left-align-column-3 docutils">
+<colgroup>
+<col width="38%" />
+<col width="10%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Default</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_invalid_numbers</span></code></td>
+<td>true</td>
+<td>A flag saying whether to enable encoding
+of NaN and Inf numbers</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_number_precision</span></code></td>
+<td>14</td>
+<td>Precision of floating point numbers</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_load_metatables</span></code></td>
+<td>true</td>
+<td>A flag saying whether the serializer will
+follow <a class="reference internal" href="json.html#json-serialize"><span class="std std-ref">__serialize</span></a>
+metatable field</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_use_tostring</span></code></td>
+<td>false</td>
+<td>A flag saying whether to use
+<code class="docutils literal notranslate"><span class="pre">tostring()</span></code> for unknown types</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_invalid_as_nil</span></code></td>
+<td>false</td>
+<td>A flag saying whether to use NULL for
+non-recognized types</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_convert</span></code></td>
+<td>true</td>
+<td>A flag saying whether to handle
+excessively sparse arrays as maps.
+See detailed description
+<a class="reference internal" href="#yaml-cfg-sparse"><span class="std std-ref">below</span></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_ratio</span></code></td>
+<td>2</td>
+<td>1/<code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code> is the
+permissible percentage of missing values
+in a sparse array</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_safe</span></code></td>
+<td>10</td>
+<td>A limit ensuring that small Lua arrays
+are always encoded as sparse arrays
+(instead of generating an error or
+encoding as map)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.decode_invalid_numbers</span></code></td>
+<td>true</td>
+<td>A flag saying whether to enable decoding
+of NaN and Inf numbers</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.decode_save_metatables</span></code></td>
+<td>true</td>
+<td>A flag saying whether to set metatables
+for all arrays and maps</td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+<p id="yaml-cfg-sparse"><strong>Sparse arrays features:</strong></p>
+<p>During encoding, The YAML encoder tries to classify table into one of four kinds:</p>
+<ul class="simple">
+<li>map - at least one table index is not unsigned integer</li>
+<li>regular array - all array indexes are available</li>
+<li>sparse array - at least one array index is missing</li>
+<li>excessively sparse array - the number of values missing exceeds the configured ratio</li>
+</ul>
+<p>An array is excessively sparse when <strong>all</strong> the following conditions are met:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code> &gt; 0</li>
+<li><code class="docutils literal notranslate"><span class="pre">max(table)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">encode_sparse_safe</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">max(table)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">count(table)</span></code> * <code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code></li>
+</ul>
+<p>The YAML encoder will never consider an array to be excessively sparse
+when <code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span> <span class="pre">=</span> <span class="pre">0</span></code>. The <code class="docutils literal notranslate"><span class="pre">encode_sparse_safe</span></code> limit ensures
+that small Lua arrays are always encoded as sparse arrays.
+By default, attempting to encode an excessively sparse array will
+generate an error. If <code class="docutils literal notranslate"><span class="pre">encode_sparse_convert</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>,
+excessively sparse arrays will be handled as maps.</p>
+<p><strong>yaml.cfg() example 1:</strong></p>
+<p>The following code will encode 0/0 as NaN (“not a number”)
+and 1/0 as Inf (“infinity”), rather than returning nil or an error message:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">yaml</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;yaml&#39;</span><span class="p">)</span>
+<span class="n">yaml</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">encode_invalid_numbers</span> <span class="o">=</span> <span class="kc">true</span><span class="p">}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
+<span class="n">yaml</span><span class="p">.</span><span class="n">encode</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>The result of the <code class="docutils literal notranslate"><span class="pre">yaml.encode()</span></code> request will look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; yaml.encode({1, x, y, 2})
+---
+- &#39;[1,nan,inf,2]
+...
+</pre></div>
+</div>
+<p><strong>yaml.cfg example 2:</strong></p>
+<p>To avoid generating errors on attempts to encode unknown data types as
+userdata/cdata, you can use this code:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; httpc = require(&#39;http.client&#39;).new()
+---
+...
+
+tarantool&gt; yaml.encode(httpc.curl)
+---
+- error: unsupported Lua type &#39;userdata&#39;
+...
+
+tarantool&gt; yaml.encode(httpc.curl, {encode_use_tostring=true})
+---
+- &#39;&quot;userdata: 0x010a4ef2a0&quot;&#39;
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To achieve the same effect for only one call to <code class="docutils literal notranslate"><span class="pre">yaml.encode()</span></code>
+(i.e. without changing the configuration permanently), you can use
+<code class="docutils literal notranslate"><span class="pre">yaml.encode({1,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">2},</span> <span class="pre">{encode_invalid_numbers</span> <span class="pre">=</span> <span class="pre">true})</span></code>.</p>
+</div>
+<p>Similar configuration settings exist for <a class="reference internal" href="json.html#json-module-cfg"><span class="std std-ref">JSON</span></a> and <a class="reference internal" href="msgpack.html#msgpack-cfg"><span class="std std-ref">MsgPack</span></a>.</p>
+<span class="target" id="yaml-null"></span><dl class="data">
+<dt id="yaml.NULL">
+<code class="descclassname">yaml.</code><code class="descname">NULL</code><a class="headerlink" href="#yaml.NULL" title="Permalink to this definition">¶</a></dt>
+<dd><p>A value comparable to Lua “nil” which may be useful as a placeholder in a tuple.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; yaml = require(&#39;yaml&#39;)
+---
+...
+tarantool&gt; y = yaml.encode({&#39;a&#39;, 1, &#39;b&#39;, 2})
+---
+...
+tarantool&gt; z = yaml.decode(y)
+---
+...
+tarantool&gt; z[1], z[2], z[3], z[4]
+---
+- a
+- 1
+- b
+- 2
+...
+tarantool&gt; if yaml.NULL == nil then print(&#39;hi&#39;) end
+hi
+---
+...
+</pre></div>
+</div>
+<p>The <a class="reference external" href="http://yaml.org/spec/1.1/#id930798">YAML collection style</a> can be
+specified with <code class="docutils literal notranslate"><span class="pre">__serialize</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">__serialize=&quot;sequence&quot;</span></code> for a Block Sequence array,</li>
+<li><code class="docutils literal notranslate"><span class="pre">__serialize=&quot;seq&quot;</span></code> for a Flow Sequence array,</li>
+<li><code class="docutils literal notranslate"><span class="pre">__serialize=&quot;mapping&quot;</span></code> for a Block Mapping map,</li>
+<li><code class="docutils literal notranslate"><span class="pre">__serialize=&quot;map&quot;</span></code> for a Flow Mapping map.</li>
+</ul>
+<p>Serializing ‘A’ and ‘B’ with different <code class="docutils literal notranslate"><span class="pre">__serialize</span></code> values causes
+different results:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; yaml = require(&#39;yaml&#39;)
+---
+...
+
+tarantool&gt; yaml.encode(setmetatable({&#39;A&#39;, &#39;B&#39;}, { __serialize=&quot;sequence&quot;}))
+---
+- &#39;---
+
+  - A
+
+  - B
+
+  ...
+
+  &#39;
+...
+
+tarantool&gt; yaml.encode(setmetatable({&#39;A&#39;, &#39;B&#39;}, { __serialize=&quot;seq&quot;}))
+---
+- &#39;--- [&#39;&#39;A&#39;&#39;, &#39;&#39;B&#39;&#39;]
+
+  ...
+
+  &#39;
+...
+
+tarantool&gt; yaml.encode({setmetatable({f1 = &#39;A&#39;, f2 = &#39;B&#39;}, { __serialize=&quot;map&quot;})})
+---
+- &#39;---
+
+  - {&#39;&#39;f2&#39;&#39;: &#39;&#39;B&#39;&#39;, &#39;&#39;f1&#39;&#39;: &#39;&#39;A&#39;&#39;}
+
+  ...
+
+  &#39;
+...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

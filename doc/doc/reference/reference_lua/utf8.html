@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module utf8 &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>utf8</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/utf8.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utf8">
+<span id="utf8-module"></span><h1>Module <cite>utf8</cite><a class="headerlink" href="#module-utf8" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">utf8</span></code> is Tarantool’s module for handling UTF-8 strings.
+It includes some functions which are compatible with ones in
+<a class="reference external" href="https://www.lua.org/manual/5.3/manual.html#6.5">Lua 5.3</a>
+but Tarantool has much more. For example, because internally
+Tarantool contains a complete copy of the
+“International Components For Unicode” library,
+there are comparison functions which understand the default ordering
+for Cyrillic (Capital Letter Zhe Ж = Small Letter Zhe ж)
+and Japanese (Hiragana A = Katakana A).</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#utf8-casecmp"><span class="std std-ref">casecmp</span></a> and <a href="#id2"><span class="problematic" id="id3">|br|</span></a>
+<a class="reference internal" href="#utf8-cmp"><span class="std std-ref">cmp</span></a></td>
+<td>Comparisons</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#utf8-islower"><span class="std std-ref">lower</span></a> and <a href="#id4"><span class="problematic" id="id5">|br|</span></a>
+<a class="reference internal" href="#utf8-isupper"><span class="std std-ref">upper</span></a></td>
+<td>Case conversions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#utf8-isalpha"><span class="std std-ref">isalpha</span></a>, <a href="#id6"><span class="problematic" id="id7">|br|</span></a>
+<a class="reference internal" href="#utf8-isdigit"><span class="std std-ref">isdigit</span></a>, <a href="#id8"><span class="problematic" id="id9">|br|</span></a>
+<a class="reference internal" href="#utf8-islower"><span class="std std-ref">islower</span></a> and <a href="#id10"><span class="problematic" id="id11">|br|</span></a>
+<a class="reference internal" href="#utf8-isupper"><span class="std std-ref">isupper</span></a></td>
+<td>Determine character types</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#utf8-sub"><span class="std std-ref">sub</span></a></td>
+<td>Substrings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#utf8-length"><span class="std std-ref">length</span></a></td>
+<td>Length in characters</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#utf8-next"><span class="std std-ref">next</span></a></td>
+<td>Character-at-a-time iterations</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-utf8"></span><span class="target" id="utf8-casecmp"></span><dl class="function">
+<dt id="utf8.casecmp">
+<code class="descclassname">utf8.</code><code class="descname">casecmp</code><span class="sig-paren">(</span><em>UTF8-string</em>, <em>utf8-string</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.casecmp" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">-1 meaning “less”, 0 meaning “equal”, +1 meaning “greater”</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p>Compare two strings with the Default Unicode Collation Element Table
+(DUCET) for the
+<a class="reference external" href="http://www.unicode.org/Public/UCA/10.0.0/allkeys.txt">Unicode Collation Algorithm</a>.
+Thus ‘å’ is less than ‘B’, even though the code-point value of å (229) is greater
+than the code-point value of B (66), because the algorithm depends on
+the values in the Collation Element Table, not the code-point values.</p>
+<p>The comparison is done with primary weights. Therefore the
+elements which affect secondary or later weights (such as “case”
+in Latin or Cyrillic alphabets, or “kana differentiation” in Japanese)
+are ignored. If asked “is this like a Microsoft case-insensitive
+accent-insensitive collation” we tend to answer “yes”, though the
+Unicode Collation Algorithm is far more sophisticated than those
+terms imply.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.casecmp(&#39;é&#39;,&#39;e&#39;),utf8.casecmp(&#39;E&#39;,&#39;e&#39;)
+---
+- 0
+- 0
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-char"></span><dl class="function">
+<dt id="utf8.char">
+<code class="descclassname">utf8.</code><code class="descname">char</code><span class="sig-paren">(</span><em>code-point</em><span class="optional">[</span>, <em>code-point ...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#utf8.char" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>number</strong> (<em>code-point</em>) – a Unicode code point value, repeatable</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a UTF-8 string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p>The code-point number is the value that corresponds to a character
+in the
+<a class="reference external" href="http://www.unicode.org/Public/5.2.0/ucd/UnicodeData.txt">Unicode Character Database</a>
+This is not the same as the byte values of the encoded character,
+because the UTF-8 encoding scheme is more complex than a simple
+copy of the code-point number.</p>
+<p>Another way to construct a string with Unicode characters is
+with the \u{hex-digits} escape mechanism, for example
+‘\u{41}\u{42}’ and <code class="docutils literal notranslate"><span class="pre">utf8.char(65,66)</span></code> both produce the string ‘AB’.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.char(229)
+---
+- å
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-cmp"></span><dl class="function">
+<dt id="utf8.cmp">
+<code class="descclassname">utf8.</code><code class="descname">cmp</code><span class="sig-paren">(</span><em>UTF8-string</em>, <em>utf8-string</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.cmp" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">-1 meaning “less”, 0 meaning “equal”, +1 meaning “greater”</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p>Compare two strings with the Default Unicode Collation Element Table
+(DUCET) for the
+<a class="reference external" href="http://www.unicode.org/Public/UCA/10.0.0/allkeys.txt">Unicode Collation Algorithm</a>.
+Thus ‘å’ is less than ‘B’, even though the code-point value of å (229) is greater
+than the code-point value of B (66), because the algorithm depends on
+the values in the Collation Element Table, not the code values.</p>
+<p>The comparison is done with at least three weights. Therefore the
+elements which affect secondary or later weights (such as “case”
+in Latin or Cyrillic alphabets, or “kana differentiation” in Japanese)
+are not ignored. and upper case comes after lower case.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.cmp(&#39;é&#39;,&#39;e&#39;),utf8.cmp(&#39;E&#39;,&#39;e&#39;)
+---
+- 1
+- 1
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-isalpha"></span><dl class="function">
+<dt id="utf8.isalpha">
+<code class="descclassname">utf8.</code><code class="descname">isalpha</code><span class="sig-paren">(</span><em>UTF8-character</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.isalpha" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string-or-number</strong> (<em>UTF8-character</em>) – a single UTF8 character, expressed
+as a one-byte string or a code point value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p>Return true if the input character is an “alphabetic-like” character, otherwise return false.
+Generally speaking a character will be considered alphabetic-like provided it
+is typically used within a word, as opposed to a digit or punctuation.
+It does not have to be a character in an alphabet.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.isalpha(&#39;Ж&#39;),utf8.isalpha(&#39;å&#39;),utf8.isalpha(&#39;9&#39;)
+---
+- true
+- true
+- false
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-isdigit"></span><dl class="function">
+<dt id="utf8.isdigit">
+<code class="descclassname">utf8.</code><code class="descname">isdigit</code><span class="sig-paren">(</span><em>UTF8-character</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.isdigit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string-or-number</strong> (<em>UTF8-character</em>) – a single UTF8 character, expressed as a one-byte
+string or a code point value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p>Return true if the input character is a digit, otherwise return false.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.isdigit(&#39;Ж&#39;),utf8.isdigit(&#39;å&#39;),utf8.isdigit(&#39;9&#39;)
+---
+- false
+- false
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-islower"></span><dl class="function">
+<dt id="utf8.islower">
+<code class="descclassname">utf8.</code><code class="descname">islower</code><span class="sig-paren">(</span><em>UTF8-character</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.islower" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string-or-number</strong> (<em>UTF8-character</em>) – a single UTF8 character, expressed as a one-byte
+string or a code point value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p>Return true if the input character is lower case, otherwise return false.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.islower(&#39;Ж&#39;),utf8.islower(&#39;å&#39;),utf8.islower(&#39;9&#39;)
+---
+- false
+- true
+- false
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-isupper"></span><dl class="function">
+<dt id="utf8.isupper">
+<code class="descclassname">utf8.</code><code class="descname">isupper</code><span class="sig-paren">(</span><em>UTF8-character</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.isupper" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string-or-number</strong> (<em>UTF8-character</em>) – a single UTF8 character, expressed as a one-byte string
+or a code point value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+<p>Return true if the input character is upper case, otherwise return false.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.isupper(&#39;Ж&#39;),utf8.isupper(&#39;å&#39;),utf8.isupper(&#39;9&#39;)
+---
+- true
+- false
+- false
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-length"></span><dl class="function">
+<dt id="utf8.length">
+<code class="descclassname">utf8.</code><code class="descname">length</code><span class="sig-paren">(</span><em>UTF8-string</em><span class="optional">[</span>, <em>start-byte</em><span class="optional">[</span>, <em>end-byte</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#utf8.length" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</li>
+<li><strong>integer</strong> (<em>end-byte</em>) – byte position of the first character</li>
+<li><strong>integer</strong> – byte position where to stop</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the number of characters in the string, or between start and end</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">number</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Byte positions for start and end can be negative, which indicates
+“calculate from end of string” rather than “calculate from start of string”.</p>
+<p>If the string contains a byte sequence which is not valid in UTF-8,
+each byte in the invalid byte sequence will be counted as one character.</p>
+<p>UTF-8 is a variable-size encoding scheme. Typically
+a simple Latin letter takes one byte, a Cyrillic letter
+takes two bytes, a Chinese/Japanese character takes three
+bytes, and the maximum is four bytes.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.len(&#39;G&#39;),utf8.len(&#39;ж&#39;)
+---
+- 1
+- 1
+...
+
+tarantool&gt; string.len(&#39;G&#39;),string.len(&#39;ж&#39;)
+---
+- 1
+- 2
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-lower"></span><dl class="function">
+<dt id="utf8.lower">
+<code class="descclassname">utf8.</code><code class="descname">lower</code><span class="sig-paren">(</span><em>UTF8-string</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.lower" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the same string, lower case</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.lower(&#39;ÅΓÞЖABCDEFG&#39;)
+---
+- åγþжabcdefg
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-next"></span><dl class="function">
+<dt id="utf8.next">
+<code class="descclassname">utf8.</code><code class="descname">next</code><span class="sig-paren">(</span><em>UTF8-string</em><span class="optional">[</span>, <em>start-byte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#utf8.next" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</li>
+<li><strong>integer</strong> (<em>start-byte</em>) – byte position where to start within the string, default is 1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">byte position of the next character and the code point value of the next character</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">next</span></code> function is often used in a loop to get one character
+at a time from a UTF-8 string.</p>
+<p><strong>Example:</strong></p>
+<p>In the string ‘åa’ the first character is ‘å’, it starts
+at position 1, it takes two bytes to store so the
+character after it will be at position 3, its Unicode
+code point value is (decimal) 229.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- show next-character position + first-character codepoint
+tarantool&gt; utf8.next(&#39;åa&#39;, 1)
+---
+- 3
+- 229
+...
+tarantool&gt; -- (loop) show codepoint of every character
+tarantool&gt; for position,codepoint in utf8.next,&#39;åa&#39; do print(codepoint) end
+229
+97
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-sub"></span><dl class="function">
+<dt id="utf8.sub">
+<code class="descclassname">utf8.</code><code class="descname">sub</code><span class="sig-paren">(</span><em>UTF8-string</em>, <em>start-character</em><span class="optional">[</span>, <em>end-character</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#utf8.sub" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<em>UTF8-string</em>) – a string encoded as UTF-8</li>
+<li><strong>number</strong> (<em>end-character</em>) – the position of the first character</li>
+<li><strong>number</strong> – the position of the last character</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a UTF-8 string, the “substring” of the input value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Character positions for start and end can be negative, which indicates
+“calculate from end of string” rather than “calculate from start of string”.</p>
+<p>The default value
+for end-character is the length of the input string. Therefore, saying
+<code class="docutils literal notranslate"><span class="pre">utf8.sub(1,</span> <span class="pre">'abc')</span></code> will return ‘abc’, the same as the input string.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.sub(&#39;åγþжabcdefg&#39;, 5, 8)
+---
+- abcd
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="utf8-upper"></span><dl class="function">
+<dt id="utf8.upper">
+<code class="descclassname">utf8.</code><code class="descname">upper</code><span class="sig-paren">(</span><em>UTF8-string</em><span class="sig-paren">)</span><a class="headerlink" href="#utf8.upper" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>UTF8-string</em>) – a string encoded with UTF-8</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the same string, upper case</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In rare cases the upper-case result may be longer
+than the lower-case input, for example <code class="docutils literal notranslate"><span class="pre">utf8.upper('ß')</span></code> is ‘SS’.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; utf8.upper(&#39;åγþжabcdefg&#39;)
+---
+- ÅΓÞЖABCDEFG
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WAL file binary format &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Write-ahead logging" href="wal.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/contributing/index.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tarantool internals</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fiber.html">Fibers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relay.html">Relay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal.html">Write-ahead logging</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">WAL file binary format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-overview">General overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meta-information-block">Meta information block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-blocks-xrows">Data blocks (xrows)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tarantool internals</a> &raquo;</li>
+        
+      <li>WAL file binary format</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/internals/source/wal-fmt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="wal-file-binary-format">
+<h1>WAL file binary format<a class="headerlink" href="#wal-file-binary-format" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general-overview">
+<h2>General overview<a class="headerlink" href="#general-overview" title="Permalink to this headline">¶</a></h2>
+<p>The WAL file starts with <code class="docutils literal notranslate"><span class="pre">meta</span></code> information block following by <code class="docutils literal notranslate"><span class="pre">xrow</span></code> entries.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>meta block</td>
+</tr>
+<tr class="row-even"><td>xrows block</td>
+</tr>
+<tr class="row-odd"><td>xrows block</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="meta-information-block">
+<h2>Meta information block<a class="headerlink" href="#meta-information-block" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">meta</span></code> block ends up by <code class="docutils literal notranslate"><span class="pre">\n\n</span></code> marker. Each entry inside the block
+is <code class="docutils literal notranslate"><span class="pre">\n</span></code> separated records. The block is started with obligatory <code class="docutils literal notranslate"><span class="pre">signature</span></code>,
+<code class="docutils literal notranslate"><span class="pre">version</span></code> followed by <code class="docutils literal notranslate"><span class="pre">key:value</span></code> array.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>signature</td>
+</tr>
+<tr class="row-even"><td>version</td>
+</tr>
+<tr class="row-odd"><td>key: value</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">signature</span></code> either <code class="docutils literal notranslate"><span class="pre">XLOG</span></code> for regular WAL files or <code class="docutils literal notranslate"><span class="pre">SNAP</span></code> for
+snapshots. For example an empty WAL file might look like</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">XLOG\n</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0.13\n</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Version:</span> <span class="pre">2.5.0-136-gef86e3c99\n</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Instance:</span> <span class="pre">123a579d-4994-4e7c-a52f-6b576a8988d7\n</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">VClock:</span> <span class="pre">{1:</span> <span class="pre">8}\n</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PrevVClock:</span> <span class="pre">{}\n</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">\n</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Note the double <code class="docutils literal notranslate"><span class="pre">\n\n</span></code> formed by last entry and <code class="docutils literal notranslate"><span class="pre">PrevVClock</span></code> entry.
+This represents the end of meta information block.</p>
+</div></blockquote>
+</div>
+<div class="section" id="data-blocks-xrows">
+<h2>Data blocks (xrows)<a class="headerlink" href="#data-blocks-xrows" title="Permalink to this headline">¶</a></h2>
+<p>The meta block carries only service information about content of the
+WAL file. The real data appended into the WAL file in xrows records.
+Structure of each record is the following</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>fixed header</td>
+</tr>
+<tr class="row-even"><td>xrows header</td>
+</tr>
+<tr class="row-odd"><td>xrows data</td>
+</tr>
+<tr class="row-even"><td>xrows header</td>
+</tr>
+<tr class="row-odd"><td>xrows data</td>
+</tr>
+<tr class="row-even"><td>…</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">fixed</span> <span class="pre">header</span></code> defined as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">xlog_fixheader</span> <span class="p">{</span>
+    <span class="n">log_magic_t</span> <span class="n">magic</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>    <span class="n">crc32p</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>    <span class="n">crc32c</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>    <span class="n">len</span><span class="p">;</span>
+    <span class="c1">// padding to 19 bytes</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">magic</span></code> is one of the following constants</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">0xd5ba0bab</span></code></td>
+<td>uncompressed rows</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">0xd5ba0bba</span></code></td>
+<td>compressed rows</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">0xd510aded</span></code></td>
+<td>end of file</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">xlog_fixheader</span></code> should have length of 19 bytes on disk so right
+afther the structure the padding is pushed. <code class="docutils literal notranslate"><span class="pre">magic</span></code> points how xrows
+are kept - either they are compressed (with zstd compression library)
+or not.</p>
+<p>Aside from this the <code class="docutils literal notranslate"><span class="pre">magic</span></code> may have end of file represeting that there
+is no more data. Thus when read <code class="docutils literal notranslate"><span class="pre">xlog_fixheader</span></code> structure from disk
+we need to read 4 bytes first and make sure it is not EOF value.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">len</span></code> value stores the number of bytes occupied by xrow headers
+with data. If xrows are compressed we should read <code class="docutils literal notranslate"><span class="pre">len</span></code> bytes and
+decompress them.</p>
+<p>Decompressed stream consists of xrow header plus xrow data pairs.
+Header represented as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">xrow_header</span> <span class="p">{</span>
+    <span class="kt">uint32_t</span>        <span class="n">type</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>        <span class="n">replica_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>        <span class="n">group_id</span><span class="p">;</span>
+    <span class="kt">uint64_t</span>        <span class="n">sync</span><span class="p">;</span>
+    <span class="kt">int64_t</span>         <span class="n">lsn</span><span class="p">;</span>
+    <span class="kt">double</span>          <span class="n">tm</span><span class="p">;</span>
+    <span class="kt">int64_t</span>         <span class="n">tsn</span><span class="p">;</span>
+    <span class="kt">bool</span>            <span class="n">is_commit</span><span class="p">;</span>
+    <span class="kt">int</span>             <span class="n">bodycnt</span><span class="p">;</span>
+    <span class="kt">uint32_t</span>        <span class="n">schema_version</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">iovec</span>    <span class="n">body</span><span class="p">[</span><span class="n">XROW_BODY_IOVMAX</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Each <code class="docutils literal notranslate"><span class="pre">xrow_header</span></code> describes the <code class="docutils literal notranslate"><span class="pre">body</span></code> data, ie the requests to be
+executed (like insert, update and etc). Note that <code class="docutils literal notranslate"><span class="pre">xlog_fixheader::len</span></code>
+may cover not one <code class="docutils literal notranslate"><span class="pre">xrow_header</span></code> but a series of headers and xrow requests.</p>
+<p>Tarantool provides a <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> tool to show the content of files
+in a human readable form.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$./src/tarantool ./extra/dist/tarantoolctl cat --show-system ../dumper/examples/00000000000000000008.snap
+---
+HEADER:
+  timestamp: <span class="m">1592050034</span>.6865
+  type: INSERT
+BODY:
+  space_id: <span class="m">272</span>
+  tuple: <span class="o">[</span><span class="s1">&#39;cluster&#39;</span>, <span class="s1">&#39;442100e0-b90f-4d5b-92d7-98ad52ed4919&#39;</span><span class="o">]</span>
+---
+HEADER:
+  lsn: <span class="m">1</span>
+  type: INSERT
+  timestamp: <span class="m">1592050034</span>.6865
+BODY:
+  space_id: <span class="m">272</span>
+  tuple: <span class="o">[</span><span class="s1">&#39;max_id&#39;</span>, <span class="m">512</span><span class="o">]</span>
+...
+HEADER:
+  lsn: <span class="m">517</span>
+  type: INSERT
+  timestamp: <span class="m">1592050034</span>.6865
+BODY:
+  space_id: <span class="m">512</span>
+  tuple: <span class="o">[</span><span class="m">2</span>, <span class="s1">&#39;Scorpions&#39;</span>, <span class="m">2015</span><span class="o">]</span>
+---
+HEADER:
+  lsn: <span class="m">518</span>
+  type: INSERT
+  timestamp: <span class="m">1592050034</span>.6865
+BODY:
+  space_id: <span class="m">512</span>
+  tuple: <span class="o">[</span><span class="m">3</span>, <span class="s1">&#39;Ace of Base&#39;</span>, <span class="m">1993</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Another example is more detailed example for same file</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ /ttdump examples/00000000000000000008.snap
+
+meta: <span class="s1">&#39;SNAP&#39;</span>
+meta: <span class="s1">&#39;0.13&#39;</span>
+meta: <span class="s1">&#39;Version: 2.5.0-136-gef86e3c99&#39;</span>
+meta: <span class="s1">&#39;Instance: 123a579d-4994-4e7c-a52f-6b576a8988d7&#39;</span>
+meta: <span class="s1">&#39;VClock: {1: 8}&#39;</span>
+fixed header
+-------
+  magic 0xba0bbad5 crc32p <span class="m">0</span> crc32c 0x66db6462 len <span class="m">6055</span>
+-------
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">0</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">0</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">55</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">272</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span>cluster, 442100e0-b90f-4d5b-92d7-98ad52ed4919<span class="o">}</span>
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">1</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">1</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">19</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">272</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span>max_id, <span class="m">512</span><span class="o">}</span>
+...
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">515</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">515</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">48</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">320</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span><span class="m">1</span>, 123a579d-4994-4e7c-a52f-6b576a8988d7<span class="o">}</span>
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">516</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">516</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">21</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">512</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span><span class="m">1</span>, Roxette, <span class="m">1986</span><span class="o">}</span>
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">517</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">517</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">23</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">512</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span><span class="m">2</span>, Scorpions, <span class="m">2015</span><span class="o">}</span>
+xrow header
+-------
+  <span class="nb">type</span> 0x2 <span class="o">(</span>INSERT<span class="o">)</span> replica_id <span class="m">0</span> group_id <span class="m">0</span> sync <span class="m">0</span> lsn <span class="m">518</span> tm <span class="m">1</span>.592e+09 tsn <span class="m">518</span> is_commit <span class="m">1</span> bodycnt <span class="m">1</span> schema_version 0x4027e6
+    iov: len <span class="m">25</span>
+-------
+key: 0x10 <span class="s1">&#39;space id&#39;</span> value: <span class="m">512</span>
+key: 0x21 <span class="s1">&#39;tuple&#39;</span> value: <span class="o">{</span><span class="m">3</span>, Ace of Base, <span class="m">1993</span><span class="o">}</span>
+-------
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="wal.html" class="btn btn-neutral float-left" title="Write-ahead logging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

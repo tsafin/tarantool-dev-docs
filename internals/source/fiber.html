@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fibers &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Replication" href="replication.html" />
+    <link rel="prev" title="Tarantool internals" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/contributing/index.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tarantool internals</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fibers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-library">Event library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fibers-engine">Fibers engine</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relay.html">Relay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal.html">Write-ahead logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal-fmt.html">WAL file binary format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tarantool internals</a> &raquo;</li>
+        
+      <li>Fibers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/internals/source/fiber.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fibers">
+<h1>Fibers<a class="headerlink" href="#fibers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool uses cooperative multitasking via that named fibers.
+They are similar to well known threads except they are not running
+simultaneously but must be scheduled explicitly.</p>
+<p>Fibers are coupled into cords (in turn the cords are real threads,
+thus fibers inside a cord are executing in a sequent way while several
+cords may run simultaneously).</p>
+<p>When we create a fiber we provide a function to be invoked upon fiber’s
+start, lets call it a fiber function to distinguish from other
+service routines.</p>
+</div>
+<div class="section" id="event-library">
+<h2>Event library<a class="headerlink" href="#event-library" title="Permalink to this headline">¶</a></h2>
+<p>The heart of Tarantool fibers schedule is <code class="docutils literal notranslate"><span class="pre">libev</span></code> library. As its
+name implies the library provides an loop which get interrupted when an
+event arrive. We won’t jump into internals of <code class="docutils literal notranslate"><span class="pre">libev</span></code> but provide
+only a few code snippets to draw a basic workflow</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ev_run</span> <span class="p">(</span><span class="kt">int</span> <span class="n">flags</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="c1">//...</span>
+        <span class="n">backend_poll</span><span class="p">(</span><span class="n">waittime</span><span class="p">);</span>
+        <span class="c1">//...</span>
+        <span class="n">EV_INVOKE_PENDING</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">backend_poll</span></code> invokes low level service call (such as <code class="docutils literal notranslate"><span class="pre">epoll</span></code> or
+<code class="docutils literal notranslate"><span class="pre">select</span></code> depending on operating system, please see their man pages)
+to fetch events. Evens are explicitly passed to queue via API <code class="docutils literal notranslate"><span class="pre">libev</span></code>
+provides to programmers. The service call supports <code class="docutils literal notranslate"><span class="pre">waittime</span></code> timeout,
+so if no events available a new wait iteration started or polling to be precise.
+The typical minimal <code class="docutils literal notranslate"><span class="pre">waittime</span></code> is 1 millisecond.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">EV_INVOKE_PENDING</span></code> fetches events to process and runs associated
+callbacks for this iteration. Once callbacks are finished a new iteration
+begins.</p>
+<p>Pushing new event into the queue is provided by <code class="docutils literal notranslate"><span class="pre">ev_feed_event</span></code> call
+and Tarantool use it under the hood.</p>
+</div>
+<div class="section" id="fibers-engine">
+<h2>Fibers engine<a class="headerlink" href="#fibers-engine" title="Permalink to this headline">¶</a></h2>
+<p>The main cord defined as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="k">struct</span> <span class="nc">cord</span> <span class="n">main_cord</span><span class="p">;</span>
+<span class="n">__thread</span> <span class="k">struct</span> <span class="nc">cord</span> <span class="o">*</span><span class="n">cord_ptr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="cp">#define cord()    cord_ptr</span>
+<span class="cp">#define fiber()   cord()-&gt;fiber</span>
+<span class="cp">#define loop()    (cord()-&gt;loop)</span>
+</pre></div>
+</div>
+<p>Note the <code class="docutils literal notranslate"><span class="pre">cord()</span></code>, <code class="docutils literal notranslate"><span class="pre">fiber()</span></code> and <code class="docutils literal notranslate"><span class="pre">loop()</span></code> helper macros.
+They are used frequently to access currently executing cord,
+fiber and event loop.</p>
+<p>The cord structure is the following (note that we are posting stripped
+versions of structures in sake of simplicity)</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">cord</span> <span class="p">{</span>
+    <span class="c1">// Running fiber</span>
+    <span class="k">struct</span> <span class="nc">fiber</span>        <span class="o">*</span><span class="n">fiber</span><span class="p">;</span>
+    <span class="c1">// Libev loop</span>
+    <span class="k">struct</span> <span class="nc">ev_loop</span>      <span class="o">*</span><span class="n">loop</span><span class="p">;</span>
+    <span class="c1">// Fiber&#39;s ID map</span>
+    <span class="k">struct</span> <span class="nc">mh_i32ptr_t</span>  <span class="o">*</span><span class="n">fiber_registry</span><span class="p">;</span>
+    <span class="c1">// All fibers</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>        <span class="n">alive</span><span class="p">;</span>
+    <span class="c1">// Fibers ready for execution</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>        <span class="n">ready</span><span class="p">;</span>
+    <span class="c1">// Fibers for recycling</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>        <span class="n">dead</span><span class="p">;</span>
+    <span class="c1">// Scheduler</span>
+    <span class="k">struct</span> <span class="nc">fiber</span>        <span class="n">sched</span><span class="p">;</span>
+    <span class="c1">// Cord name</span>
+    <span class="kt">char</span>                <span class="n">name</span><span class="p">[</span><span class="n">FIBER_NAME_MAX</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>The most important members are:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">fiber</span></code> is a currently executing fiber</li>
+<li><code class="docutils literal notranslate"><span class="pre">sched</span></code> is a service fiber which schedules all other fibers in the cord</li>
+</ul>
+</dd>
+</dl>
+<p>The fiber structure is the following</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">fiber</span> <span class="p">{</span>
+    <span class="c1">// The fiber to be scheduled</span>
+    <span class="c1">// when this one yields</span>
+    <span class="k">struct</span> <span class="nc">fiber</span>    <span class="o">*</span><span class="n">caller</span><span class="p">;</span>
+    <span class="c1">// Fiber ID</span>
+    <span class="kt">uint32_t</span>        <span class="n">fid</span><span class="p">;</span>
+    <span class="c1">// To link with cord&#39;s</span>
+    <span class="c1">// @alive or @dead lists</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>    <span class="n">link</span><span class="p">;</span>
+    <span class="c1">// To link with cord&#39;s @ready list</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>    <span class="n">state</span><span class="p">;</span>
+    <span class="c1">// Fibers waiting for this</span>
+    <span class="c1">// instance to finish.</span>
+    <span class="k">struct</span> <span class="nc">rlist</span>    <span class="n">wake</span><span class="p">;</span>
+    <span class="c1">// Fiber function, its</span>
+    <span class="c1">// arguments and return code</span>
+    <span class="n">fiber_func</span>      <span class="n">f</span><span class="p">;</span>
+    <span class="kt">va_list</span>         <span class="n">f_data</span><span class="p">;</span>
+    <span class="kt">int</span>             <span class="n">f_ret</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When Tarantool starts it creates the main cord</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">fiber_init</span><span class="p">(</span><span class="n">fiber_cxx_invoke</span><span class="p">);</span>
+        <span class="n">fiber_invoke</span> <span class="o">=</span> <span class="n">fiber_cxx_invoke</span><span class="p">;</span>
+        <span class="n">main_thread_id</span> <span class="o">=</span> <span class="n">pthread_self</span><span class="p">();</span>
+        <span class="n">main_cord</span><span class="p">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">ev_default_loop</span><span class="p">();</span>
+        <span class="n">cord_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">main_cord</span><span class="p">,</span> <span class="s">&quot;main&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Don’t pay attention on <code class="docutils literal notranslate"><span class="pre">fiber_cxx`_invoke</span></code> for now, it is just
+a wrapper to run a fiber function.</p>
+<p>The cord creation is the following</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">cord_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">main_cord</span><span class="p">,</span> <span class="s">&quot;main&quot;</span><span class="p">);</span>
+    <span class="n">cord</span><span class="p">()</span> <span class="o">=</span> <span class="n">cord</span><span class="p">;</span>
+    <span class="n">cord</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="n">pthread_self</span><span class="p">();</span>
+    <span class="n">rlist_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">alive</span><span class="p">);</span>
+    <span class="n">rlist_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">ready</span><span class="p">);</span>
+    <span class="n">rlist_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">dead</span><span class="p">);</span>
+    <span class="n">cord</span><span class="o">-&gt;</span><span class="n">fiber_registry</span> <span class="o">=</span> <span class="n">mh_i32ptr_new</span><span class="p">();</span>
+    <span class="n">cord</span><span class="o">-&gt;</span><span class="n">sched</span><span class="p">.</span><span class="n">fid</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">fiber_set_name</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">sched</span><span class="p">,</span> <span class="s">&quot;sched&quot;</span><span class="p">);</span>
+    <span class="n">cord</span><span class="o">-&gt;</span><span class="n">fiber</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">sched</span><span class="p">;</span>
+    <span class="n">ev_async_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">wakeup_event</span><span class="p">,</span> <span class="n">fiber_schedule_wakeup</span><span class="p">);</span>
+    <span class="n">ev_idle_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">idle_event</span><span class="p">,</span> <span class="n">fiber_schedule_idle</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>When the cord is created the <em>scheduler fiber</em> <code class="docutils literal notranslate"><span class="pre">cord-&gt;sched</span></code>
+becomes its primary one. Think of it as a main fiber which will
+switch all other fibers in this cord.</p>
+<p>Note that here we setup <code class="docutils literal notranslate"><span class="pre">cord()</span></code> macro to point to <code class="docutils literal notranslate"><span class="pre">main_cord</span></code>,
+thus <code class="docutils literal notranslate"><span class="pre">fiber()</span></code> will point to main cord scheduler fiber and
+<code class="docutils literal notranslate"><span class="pre">loop()</span></code> will be <code class="docutils literal notranslate"><span class="pre">ev_default_loop</span></code>.</p>
+<p>Abstract description is not very usefull so lets look how Tarantool
+boots in interactive console mode (the mode is not really important
+here but rather a call graph).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">main</span>
+    <span class="nf">fiber_init</span><span class="p">(</span><span class="n">fiber_cxx_invoke</span><span class="p">);</span>
+    <span class="n">tarantool_lua_run_script</span>
+        <span class="n">script_fiber</span> <span class="o">=</span> <span class="n">fiber_new</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">run_script_f</span><span class="p">);</span>
+            <span class="n">fiber_new_ex</span>
+                <span class="n">cord</span> <span class="o">=</span> <span class="n">cord</span><span class="p">();</span>
+                <span class="n">fiber</span> <span class="o">=</span> <span class="n">mempool_alloc</span><span class="p">()</span>
+                <span class="n">coro_create</span><span class="p">(...,</span> <span class="n">fiber_loop</span><span class="p">,...)</span>
+                <span class="n">rlist_add_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">alive</span><span class="p">,</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">link</span><span class="p">);</span>
+                <span class="n">register_fid</span><span class="p">(</span><span class="n">fiber</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here we create a new fiber to run <code class="docutils literal notranslate"><span class="pre">run_script_f</span></code> fiber
+function. <code class="docutils literal notranslate"><span class="pre">fiber_new</span></code> allocates a new fiber instance
+(actually there is a fiber cache so that if a previous fiber
+already finished its work and exited we can reuse it without
+calling <code class="docutils literal notranslate"><span class="pre">mempool_alloc</span></code> but this is just an optimization
+for speed sake), then we chain it into the main cord’s
+<code class="docutils literal notranslate"><span class="pre">alive</span></code> list and register in fiber IDs pool.</p>
+<p>One of the clue here is <code class="docutils literal notranslate"><span class="pre">coro_create</span></code> call, where “coro”
+stands for “coroutine”. Coroutines are implemented via <code class="docutils literal notranslate"><span class="pre">coro</span></code>
+library. On Linux it simply handles hardware context to reload
+registers and jump into desired function. More precisely the heart of “coro”
+library is <code class="docutils literal notranslate"><span class="pre">coro_transfer(&amp;from,</span> <span class="pre">&amp;to)</span></code> routine which remembers current
+point of execution (<code class="docutils literal notranslate"><span class="pre">from</span></code>) and transfer flow to the new instruction
+pointer provided (<code class="docutils literal notranslate"><span class="pre">to</span></code> which is created during <code class="docutils literal notranslate"><span class="pre">coro_create</span></code>).</p>
+<p>Note that the fiber function is wrapped by <code class="docutils literal notranslate"><span class="pre">fiber_loop</span></code>.
+This is because the fiber function itself may not call scheduler
+explicitly but we have to pass execution to others fibers, thus
+we simply call fiber function manually inside <code class="docutils literal notranslate"><span class="pre">fiber_loop</span></code>
+and reschedule then.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">fiber_loop</span><span class="p">(</span><span class="n">MAYBE_UNUSED</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">fiber</span><span class="o">-&gt;</span><span class="n">f_ret</span> <span class="o">=</span> <span class="n">fiber_invoke</span><span class="p">(</span><span class="n">fiber</span><span class="o">-&gt;</span><span class="n">f</span><span class="p">,</span> <span class="n">fiber</span><span class="o">-&gt;</span><span class="n">f_data</span><span class="p">);</span>
+    <span class="n">fiber</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">|=</span> <span class="n">FIBER_IS_DEAD</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">rlist_empty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fiber</span><span class="o">-&gt;</span><span class="n">wake</span><span class="p">))</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="n">fiber_wakeup</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+            <span class="p">...</span>
+            <span class="n">rlist_move_tail_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">ready</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">fiber</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">FIBER_IS_JOINABLE</span><span class="p">))</span>
+        <span class="n">fiber_recycle</span><span class="p">(</span><span class="n">fiber</span><span class="p">);</span>
+    <span class="n">fiber</span><span class="o">-&gt;</span><span class="n">f</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">fiber_yield</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Some fibers may wait for others to be finished, for this sake we
+move them to <code class="docutils literal notranslate"><span class="pre">ready</span></code> list of the cord first, then we try to
+put the fiber into a cache pool to recycle it (thus don’t allocate
+memory again) via <code class="docutils literal notranslate"><span class="pre">fiber_recycle</span></code> and finally we move execution
+flow back to the scheduler fiber via <code class="docutils literal notranslate"><span class="pre">fiber_yield</span></code>.</p>
+<p>Fibers do not start execution automatically, for this sake we have
+to call <code class="docutils literal notranslate"><span class="pre">fiber_start</span></code>. Thus back to Tarantool startup</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">tarantool_lua_run_script</span>
+    <span class="n">script_fiber</span> <span class="o">=</span> <span class="n">fiber_new</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">run_script_f</span><span class="p">);</span>
+    <span class="n">fiber_start</span><span class="p">(</span><span class="n">script_fiber</span><span class="p">,</span> <span class="p">...)</span>
+        <span class="n">fiber_call</span><span class="p">(...)</span>
+            <span class="n">fiber_call_impl</span><span class="p">(...)</span>
+                <span class="n">coro_transfer</span><span class="p">(...)</span>
+    <span class="n">ev_run</span><span class="p">(</span><span class="n">loop</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here once the fiber is created we kick it to execute. This is done
+indside <code class="docutils literal notranslate"><span class="pre">fiber_call_impl`</span> <span class="pre">which</span> <span class="pre">uses</span> <span class="pre">``core_transfer</span></code>
+routine to jump into <code class="docutils literal notranslate"><span class="pre">fiber_loop</span></code> and invoke <code class="docutils literal notranslate"><span class="pre">run_script_f</span></code>
+inside.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">run_script_f</span></code> shows a good example how to give execution
+back to scheduler fiber and continue</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">run_script_f</span>
+    <span class="p">...</span>
+    <span class="n">fiber_sleep</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">fiber_sleep</span></code> is called the <code class="docutils literal notranslate"><span class="pre">coro</span></code> switch execution
+to the scheduler fiber</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">fiber_sleep</span><span class="p">(</span><span class="kt">double</span> <span class="n">delay</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">fiber_yield_timeout</span><span class="p">(</span><span class="n">delay</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">fiber_yield</span><span class="p">();</span>
+            <span class="n">cord</span> <span class="o">=</span> <span class="n">cord</span><span class="p">();</span>
+            <span class="n">caller</span><span class="o">-&gt;</span><span class="n">caller</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">cord</span><span class="o">-&gt;</span><span class="n">sched</span><span class="p">;</span>
+            <span class="n">coro_transfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">caller</span><span class="o">-&gt;</span><span class="n">ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">callee</span><span class="o">-&gt;</span><span class="n">ctx</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Once <code class="docutils literal notranslate"><span class="pre">coro</span></code> jumped into scheduler fiber another fiber is
+choosen to execute. At some moment scheduler return execution
+to the point after <code class="docutils literal notranslate"><span class="pre">fiber_sleep(0.0)</span></code> and we step up back
+to <code class="docutils literal notranslate"><span class="pre">tarantool_lua_run_script</span></code> and run main event loop
+<code class="docutils literal notranslate"><span class="pre">ev_run(loop(),</span> <span class="pre">0)</span></code>. Now all future execution will be driven
+by <code class="docutils literal notranslate"><span class="pre">libev</span></code> and by events we supply into the queue.</p>
+<p>The full description of the fiber API is provided in Tarantool
+manual but we mention a few just to complete this introduction:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">cord_create</span></code> to create a new cord;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_new</span></code> to create a new fiber but not run it;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_start</span></code> to execute a fiber immediately;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_cancel</span></code> to cancel execution of a fiber;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_join</span></code> to wait for a cancelled fiber;}</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_yield</span></code> to switch execution to another fiber,
+the execution will back to the point after this call later.
+By later we mean that some other fiber will call <code class="docutils literal notranslate"><span class="pre">fiber_wakeup</span></code>
+on this fiber, until then it won’t be scheduled. This is the key
+function of fibers switch;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_sleep</span></code> to sleep some time giving execution
+to another fibers;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_yield_timeout</span></code> to give execution to another
+fibers with some timeout value;</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber_reschedule</span></code> give execution to another fibers.
+In contrast with plain <code class="docutils literal notranslate"><span class="pre">fiber_yield</span></code> we are moving self
+to the end of cord’s <code class="docutils literal notranslate"><span class="pre">ready</span></code> list. We will grab execution
+back when all fibers already waiting for execution are
+processed.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="replication.html" class="btn btn-neutral float-right" title="Replication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Tarantool internals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

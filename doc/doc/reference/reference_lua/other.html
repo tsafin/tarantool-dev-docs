@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Miscellaneous &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Miscellaneous</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/other.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="miscellaneous">
+<h1>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of miscellaneous functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#other-tonumber64"><span class="std std-ref">tonumber64()</span></a></td>
+<td>Convert a string or a Lua
+number to a 64-bit integer</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#other-dostring"><span class="std std-ref">dostring()</span></a></td>
+<td>Parse and execute an arbitrary
+chunk of Lua code</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="other-tonumber64"></span><dl class="function">
+<dt id="tonumber64">
+<code class="descname">tonumber64</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#tonumber64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string or a Lua number to a 64-bit integer.
+The input value can be expressed in decimal, binary (for example 0b1010),
+or hexadecimal (for example -0xffff). The result can be
+used in arithmetic, and the arithmetic will be 64-bit integer arithmetic
+rather than floating-point arithmetic. (Operations on an unconverted Lua
+number use floating-point arithmetic.) The <code class="docutils literal notranslate"><span class="pre">tonumber64()</span></code> function is
+added by Tarantool; the name is global.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; type(123456789012345), type(tonumber64(123456789012345))
+---
+- number
+- number
+...
+tarantool&gt; i = tonumber64(&#39;1000000000&#39;)
+---
+...
+tarantool&gt; type(i), i / 2, i - 2, i * 2, i + 2, i % 2, i ^ 2
+---
+- number
+- 500000000
+- 999999998
+- 2000000000
+- 1000000002
+- 0
+- 1000000000000000000
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="other-dostring"></span><dl class="function">
+<dt id="dostring">
+<code class="descname">dostring</code><span class="sig-paren">(</span><em>lua-chunk-string</em><span class="optional">[</span>, <em>lua-chunk-string-argument ...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#dostring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse and execute an arbitrary chunk of Lua code. This function is mainly
+useful to define and run Lua code without having to introduce changes to
+the global Lua environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lua-chunk-string</strong> (<em>string</em>) – Lua code</li>
+<li><strong>lua-chunk-string-argument</strong> (<em>lua-value</em>) – zero or more scalar values
+which will be appended to, or substitute for,
+items in the Lua chunk.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">whatever is returned by the Lua code chunk.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: If there is a compilation error, it is raised as a Lua
+error.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; dostring(&#39;abc&#39;)
+---
+error: &#39;[string &quot;abc&quot;]:1: &#39;&#39;=&#39;&#39; expected near &#39;&#39;&lt;eof&gt;&#39;&#39;&#39;
+...
+tarantool&gt; dostring(&#39;return 1&#39;)
+---
+- 1
+...
+tarantool&gt; dostring(&#39;return ...&#39;, &#39;hello&#39;, &#39;world&#39;)
+---
+- hello
+- world
+...
+tarantool&gt; dostring([[
+         &gt;   local f = function(key)
+         &gt;     local t = box.space.tester:select{key}
+         &gt;     if t ~= nil then
+         &gt;       return t[1]
+         &gt;     else
+         &gt;       return nil
+         &gt;     end
+         &gt;   end
+         &gt;   return f(...)]], 1)
+---
+- null
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

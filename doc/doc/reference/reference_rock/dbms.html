@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SQL DBMS Modules &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SQL DBMS Modules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_rock/dbms.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sql-dbms-modules">
+<span id="dbms-modules"></span><h1>SQL DBMS Modules<a class="headerlink" href="#sql-dbms-modules" title="Permalink to this headline">¶</a></h1>
+<p>The discussion here in the reference is about incorporating and using two
+modules that have already been created: the “SQL DBMS rocks” for MySQL and
+PostgreSQL.</p>
+<p>To call another DBMS from Tarantool, the essential requirements are: another
+DBMS, and Tarantool. The module which connects Tarantool to another DBMS may
+be called a “connector”. Within the module there is a shared library which
+may be called a “driver”.</p>
+<p>Tarantool supplies DBMS connector modules with the module manager for Lua,
+LuaRocks. So the connector modules may be called “rocks”.</p>
+<p>The Tarantool rocks allow for connecting to SQL servers and executing SQL
+statements the same way that a MySQL or PostgreSQL client does. The SQL
+statements are visible as Lua methods. Thus Tarantool can serve as a “MySQL Lua
+Connector” or “PostgreSQL Lua Connector”, which would be useful even if that was
+all Tarantool could do. But of course Tarantool is also a DBMS, so the module
+also is useful for any operations, such as database copying and accelerating,
+which work best when the application can work on both SQL and Tarantool inside
+the same Lua routine.
+The methods for connect/select/insert/etc. are similar to the ones in the
+<a class="reference internal" href="../reference_lua/net_box.html#net-box-module"><span class="std std-ref">net.box</span></a> module.</p>
+<p>From a user’s point of view the MySQL and PostgreSQL rocks are very similar, so
+the following sections – “MySQL Example” and “PostgreSQL Example” – contain
+some redundancy.</p>
+<div class="section" id="mysql-example">
+<span id="dbms-modules-mysql-example"></span><h2>MySQL Example<a class="headerlink" href="#mysql-example" title="Permalink to this headline">¶</a></h2>
+<p>This example assumes that MySQL 5.5 or MySQL 5.6 or MySQL 5.7 has been installed.
+Recent MariaDB versions will also work, the MariaDB C connector is used. The
+package that matters most is the MySQL client developer package, typically named
+something like libmysqlclient-dev. The file that matters most from this package
+is libmysqlclient.so or a similar name. One can use <code class="docutils literal notranslate"><span class="pre">find</span></code> or <code class="docutils literal notranslate"><span class="pre">whereis</span></code> to
+see what directories these files are installed in.</p>
+<p>It will be necessary to install Tarantool’s MySQL driver shared library, load
+it, and use it to connect to a MySQL server instance. After that, one can pass any MySQL
+statement to the server instance and receive results, including multiple result sets.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Check the instructions for
+<a class="reference external" href="http://tarantool.org/download.html">downloading and installing a binary package</a>
+that apply for the environment where Tarantool was installed. In addition to
+installing <code class="docutils literal notranslate"><span class="pre">tarantool</span></code>, install <code class="docutils literal notranslate"><span class="pre">tarantool-dev</span></code>. For example, on Ubuntu, add
+the line:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install tarantool-dev
+</pre></div>
+</div>
+<p>Now, for the MySQL driver shared library, there are two ways to install:</p>
+<div class="section" id="with-luarocks">
+<h4>With LuaRocks<a class="headerlink" href="#with-luarocks" title="Permalink to this headline">¶</a></h4>
+<p>Begin by installing luarocks and making sure that tarantool is among the
+upstream servers, as in the instructions on <a class="reference external" href="http://rocks.tarantool.org/">rocks.tarantool.org</a>, the
+Tarantool luarocks page. Now execute this:</p>
+<pre class="highlight literal-block">
+luarocks install mysql [MYSQL_LIBDIR = <em>path</em>]
+                       [MYSQL_INCDIR = <em>path</em>]
+                       [--local]
+</pre>
+<p>For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> luarocks install mysql <span class="nv">MYSQL_LIBDIR</span><span class="o">=</span>/usr/local/mysql/lib
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-github">
+<h4>With GitHub<a class="headerlink" href="#with-github" title="Permalink to this headline">¶</a></h4>
+<p>Go the site <a class="reference external" href="https://github.com/tarantool/mysql">github.com/tarantool/mysql</a>. Follow the instructions there, saying:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/tarantool/mysql.git
+<span class="gp">$</span> <span class="nb">cd</span> mysql <span class="o">&amp;&amp;</span> cmake . -DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo
+<span class="gp">$</span> make
+<span class="gp">$</span> make install
+</pre></div>
+</div>
+<p>At this point it is a good idea to check that the installation produced a file
+named <code class="docutils literal notranslate"><span class="pre">driver.so</span></code>, and to check that this file is on a directory that is
+searched by the <code class="docutils literal notranslate"><span class="pre">require</span></code> request.</p>
+</div>
+</div>
+<div class="section" id="connecting">
+<h3>Connecting<a class="headerlink" href="#connecting" title="Permalink to this headline">¶</a></h3>
+<p>Begin by making a <code class="docutils literal notranslate"><span class="pre">require</span></code> request for the mysql driver. We will assume that
+the name is <code class="docutils literal notranslate"><span class="pre">mysql</span></code> in further examples.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;mysql&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, say:</p>
+<pre class="highlight literal-block">
+<em>connection_name</em> = mysql.connect(<em>connection options</em>)
+</pre>
+<p>The connection-options parameter is a table. Possible options are:</p>
+<ul class="simple">
+<li><code class="samp docutils literal notranslate"><span class="pre">host</span> <span class="pre">=</span> <em><span class="pre">host-name</span></em></code> - string, default value = ‘localhost’</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">port</span> <span class="pre">=</span> <em><span class="pre">port-number</span></em></code> - number, default value = 3306</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">user</span> <span class="pre">=</span> <em><span class="pre">user-name</span></em></code> - string, default value is operating-system user name</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">password</span> <span class="pre">=</span> <em><span class="pre">password</span></em></code> - string, default value is blank</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">db</span> <span class="pre">=</span> <em><span class="pre">database-name</span></em></code> - string, default value is blank</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">raise</span> <span class="pre">=</span> <em><span class="pre">true|false</span></em></code> - boolean, default value is false</li>
+</ul>
+<p>The option names, except for <cite>raise</cite>, are similar to the names that MySQL’s
+mysql client uses, for details see the MySQL manual at
+<a class="reference external" href="https://dev.mysql.com/doc/refman/5.6/en/connecting.html">dev.mysql.com/doc/refman/5.6/en/connecting.html</a>.
+The <cite>raise</cite> option should be set to <a href="#id1"><span class="problematic" id="id2">:codenormal:`true`</span></a> if errors should be
+raised when encountered. To connect with a Unix socket rather than with TCP,
+specify <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">=</span> <span class="pre">'unix/'</span></code> and <code class="samp docutils literal notranslate"><span class="pre">port</span> <span class="pre">=</span> <em><span class="pre">socket-name</span></em></code>.</p>
+<p>Example, using a table literal enclosed in {braces}:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">mysql</span><span class="p">.</span><span class="n">connect</span><span class="p">({</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">3306</span><span class="p">,</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span>
+    <span class="n">raise</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">})</span>
+<span class="c1">-- OR</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">mysql</span><span class="p">.</span><span class="n">connect</span><span class="p">({</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;unix/&#39;</span><span class="p">,</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;/var/run/mysqld/mysqld.sock&#39;</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Example, creating a function which sets each option in a separate line:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- Connection function. Usage: conn = mysql_connect()
+tarantool&gt; function mysql_connection()
+         &gt;   local p = {}
+         &gt;   p.host = &#39;widgets.com&#39;
+         &gt;   p.db = &#39;test&#39;
+         &gt;   conn = mysql.connect(p)
+         &gt;   return conn
+         &gt; end
+---
+...
+tarantool&gt; conn = mysql_connect()
+---
+...
+</pre></div>
+</div>
+<p>We will assume that the name is ‘conn’ in further examples.</p>
+</div>
+<div class="section" id="how-to-ping">
+<h3>How to ping<a class="headerlink" href="#how-to-ping" title="Permalink to this headline">¶</a></h3>
+<p>To ensure that a connection is working, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:ping()
+</pre>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:ping()
+---
+- true
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="executing-a-statement">
+<h3>Executing a statement<a class="headerlink" href="#executing-a-statement" title="Permalink to this headline">¶</a></h3>
+<p>For all MySQL statements, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:execute(<em>sql-statement</em> [, <em>parameters</em>])
+</pre>
+<p>where <code class="docutils literal notranslate"><span class="pre">sql-statement</span></code> is a string, and the optional <code class="docutils literal notranslate"><span class="pre">parameters</span></code> are extra
+values that can be plugged in to replace any question marks (“?”s) in the SQL
+statement.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:execute(&#39;select table_name from information_schema.tables&#39;)
+---
+- - table_name: ALL_PLUGINS
+  - table_name: APPLICABLE_ROLES
+  - table_name: CHARACTER_SETS
+  &lt;...&gt;
+- 78
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="closing-connection">
+<h3>Closing connection<a class="headerlink" href="#closing-connection" title="Permalink to this headline">¶</a></h3>
+<p>To end a session that began with <code class="docutils literal notranslate"><span class="pre">mysql.connect</span></code>, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:close()
+</pre>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:close()
+---
+...
+</pre></div>
+</div>
+<p>For further information, including examples of rarely-used requests, see the
+README.md file at <a class="reference external" href="https://github.com/tarantool/mysql">github.com/tarantool/mysql</a>.</p>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>The example was run on an Ubuntu 12.04 (“precise”) machine where tarantool had
+been installed in a /usr subdirectory, and a copy of MySQL had been installed
+on ~/mysql-5.5. The mysqld server instance is already running on the local host 127.0.0.1.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">TMDIR</span><span class="o">=</span>~/mysql-5.5
+<span class="gp">$</span> <span class="c1"># Check that the include subdirectory exists by looking</span>
+<span class="gp">$</span> <span class="c1"># for .../include/mysql.h. (If this fails, there&#39;s a chance</span>
+<span class="gp">$</span> <span class="c1"># that it&#39;s in .../include/mysql/mysql.h instead.)</span>
+<span class="gp">$</span> <span class="o">[</span> -f <span class="nv">$TMDIR</span>/include/mysql.h <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;Error&quot;</span>
+<span class="go">OK</span>
+
+<span class="gp">$</span> <span class="c1"># Check that the library subdirectory exists and has the</span>
+<span class="gp">$</span> <span class="c1"># necessary .so file.</span>
+<span class="gp">$</span> <span class="o">[</span> -f <span class="nv">$TMDIR</span>/lib/libmysqlclient.so <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;Error&quot;</span>
+<span class="go">OK</span>
+
+<span class="gp">$</span> <span class="c1"># Check that the mysql client can connect using some factory</span>
+<span class="gp">$</span> <span class="c1"># defaults: port = 3306, user = &#39;root&#39;, user password = &#39;&#39;,</span>
+<span class="gp">$</span> <span class="c1"># database = &#39;test&#39;. These can be changed, provided one uses</span>
+<span class="gp">$</span> <span class="c1"># the changed values in all places.</span>
+<span class="gp">$</span> <span class="nv">$TMDIR</span>/bin/mysql --port<span class="o">=</span><span class="m">3306</span> -h <span class="m">127</span>.0.0.1 --user<span class="o">=</span>root <span class="se">\</span>
+    --password<span class="o">=</span> --database<span class="o">=</span><span class="nb">test</span>
+<span class="go">Welcome to the MySQL monitor.  Commands end with ; or \g.</span>
+<span class="go">Your MySQL connection id is 25</span>
+<span class="go">Server version: 5.5.35 MySQL Community Server (GPL)</span>
+<span class="go">...</span>
+<span class="go">Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear ...</span>
+
+<span class="gp">$</span> <span class="c1"># Insert a row in database test, and quit.</span>
+<span class="go">mysql&gt; CREATE TABLE IF NOT EXISTS test (s1 INT, s2 VARCHAR(50));</span>
+<span class="go">Query OK, 0 rows affected (0.13 sec)</span>
+<span class="go">mysql&gt; INSERT INTO test.test VALUES (1,&#39;MySQL row&#39;);</span>
+<span class="go">Query OK, 1 row affected (0.02 sec)</span>
+<span class="go">mysql&gt; QUIT</span>
+<span class="go">Bye</span>
+
+<span class="gp">$</span> <span class="c1"># Install luarocks</span>
+<span class="gp">$</span> sudo apt-get -y install luarocks <span class="p">|</span> grep -E <span class="s2">&quot;Setting up|already&quot;</span>
+<span class="go">Setting up luarocks (2.0.8-2) ...</span>
+
+<span class="gp">$</span> <span class="c1"># Set up the Tarantool rock list in ~/.luarocks,</span>
+<span class="gp">$</span> <span class="c1"># following instructions at rocks.tarantool.org</span>
+<span class="gp">$</span> mkdir ~/.luarocks
+<span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&quot;rocks_servers = {[[http://rocks.tarantool.org/]]}&quot;</span> &gt;&gt; <span class="se">\</span>
+    ~/.luarocks/config.lua
+
+<span class="gp">$</span> <span class="c1"># Ensure that the next &quot;install&quot; will get files from Tarantool</span>
+<span class="gp">$</span> <span class="c1"># master repository. The resultant display is normal for Ubuntu</span>
+<span class="gp">$</span> <span class="c1"># 12.04 precise</span>
+<span class="gp">$</span> cat /etc/apt/sources.list.d/tarantool.list
+<span class="go">deb http://tarantool.org/dist/1.7/ubuntu/ precise main</span>
+<span class="go">deb-src http://tarantool.org/dist/1.7/ubuntu/ precise main</span>
+
+<span class="gp">$</span> <span class="c1"># Install tarantool-dev. The displayed line should show version = 1.6</span>
+<span class="gp">$</span> sudo apt-get -y install tarantool-dev <span class="p">|</span> grep -E <span class="s2">&quot;Setting up|already&quot;</span>
+<span class="go">Setting up tarantool-dev (1.6.6.222.g48b98bb~precise-1) ...</span>
+<span class="gp">$</span>
+
+<span class="gp">$</span> <span class="c1"># Use luarocks to install locally, that is, relative to $HOME</span>
+<span class="gp">$</span> luarocks install mysql <span class="nv">MYSQL_LIBDIR</span><span class="o">=</span>/usr/local/mysql/lib --local
+<span class="go">Installing http://rocks.tarantool.org/mysql-scm-1.rockspec...</span>
+<span class="go">... (more info about building the Tarantool/MySQL driver appears here)</span>
+<span class="go">mysql scm-1 is now built and installed in ~/.luarocks/</span>
+
+<span class="gp">$</span> <span class="c1"># Ensure driver.so now has been created in a place</span>
+<span class="gp">$</span> <span class="c1"># tarantool will look at</span>
+<span class="gp">$</span> find ~/.luarocks -name <span class="s2">&quot;driver.so&quot;</span>
+<span class="go">~/.luarocks/lib/lua/5.1/mysql/driver.so</span>
+
+<span class="gp">$</span> <span class="c1"># Change directory to a directory which can be used for</span>
+<span class="gp">$</span> <span class="c1"># temporary tests. For this example we assume that the name</span>
+<span class="gp">$</span> <span class="c1"># of this directory is /home/pgulutzan/tarantool_sandbox.</span>
+<span class="gp">$</span> <span class="c1"># (Change &quot;/home/pgulutzan&quot; to whatever is the user&#39;s actual</span>
+<span class="gp">$</span> <span class="c1"># home directory for the machine that&#39;s used for this test.)</span>
+<span class="gp">$</span> <span class="nb">cd</span> /home/pgulutzan/tarantool_sandbox
+
+<span class="gp">$</span> <span class="c1"># Start the Tarantool server instance. Do not use a Lua initialization file.</span>
+
+<span class="gp">$</span> tarantool
+<span class="go">tarantool: version 1.7.0-222-g48b98bb</span>
+<span class="go">type &#39;help&#39; for interactive help</span>
+<span class="go">tarantool&gt;</span>
+</pre></div>
+</div>
+<p>Configure tarantool and load mysql module. Make sure that tarantool doesn’t
+reply “error” for the call to “require()”.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{}
+...
+tarantool&gt; mysql = require(&#39;mysql&#39;)
+---
+...
+</pre></div>
+</div>
+<p>Create a Lua function that will connect to the MySQL server instance, (using some factory
+default values for the port and user and password), retrieve one row, and
+display the row. For explanations of the statement types used here, read the
+Lua tutorial earlier in the Tarantool user manual.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function mysql_select ()
+         &gt;   local conn = mysql.connect({
+         &gt;     host = &#39;127.0.0.1&#39;,
+         &gt;     port = 3306,
+         &gt;     user = &#39;root&#39;,
+         &gt;     db = &#39;test&#39;
+         &gt;   })
+         &gt;   local test = conn:execute(&#39;SELECT * FROM test WHERE s1 = 1&#39;)
+         &gt;   local row = &#39;&#39;
+         &gt;   for i, card in pairs(test) do
+         &gt;       row = row .. card.s2 .. &#39; &#39;
+         &gt;       end
+         &gt;   conn:close()
+         &gt;   return row
+         &gt; end
+---
+...
+tarantool&gt; mysql_select()
+---
+- &#39;MySQL row &#39;
+...
+</pre></div>
+</div>
+<p>Observe the result. It contains “MySQL row”. So this is the row that was inserted
+into the MySQL database. And now it’s been selected with the Tarantool client.</p>
+</div>
+</div>
+<div class="section" id="postgresql-example">
+<span id="dbms-modules-postgresql-example"></span><h2>PostgreSQL Example<a class="headerlink" href="#postgresql-example" title="Permalink to this headline">¶</a></h2>
+<p>This example assumes that PostgreSQL 8 or PostgreSQL 9 has been installed. More
+recent versions should also work. The package that matters most is the
+PostgreSQL developer package, typically named something like libpq-dev. On
+Ubuntu this can be installed with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install libpq-dev
+</pre></div>
+</div>
+<p>However, because not all platforms are alike, for this example the assumption
+is that the user must check that the appropriate PostgreSQL files are present
+and must explicitly state where they are when building the Tarantool/PostgreSQL
+driver. One can use <code class="docutils literal notranslate"><span class="pre">find</span></code> or <code class="docutils literal notranslate"><span class="pre">whereis</span></code> to see what directories
+PostgreSQL files are installed in.</p>
+<p>It will be necessary to install Tarantool’s PostgreSQL driver shared library,
+load it, and use it to connect to a PostgreSQL server instance. After that, one can pass
+any PostgreSQL statement to the server instance and receive results.</p>
+<div class="section" id="id3">
+<h3>Installation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Check the instructions for
+<a class="reference external" href="http://tarantool.org/download.html">downloading and installing a binary package</a>
+that apply for the environment where Tarantool was installed. In addition to
+installing <code class="docutils literal notranslate"><span class="pre">tarantool</span></code>, install <code class="docutils literal notranslate"><span class="pre">tarantool-dev</span></code>. For example, on Ubuntu, add
+the line:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install tarantool-dev
+</pre></div>
+</div>
+<p>Now, for the PostgreSQL driver shared library, there are two ways to install:</p>
+<div class="section" id="id5">
+<h4>With LuaRocks<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>Begin by installing luarocks and making sure that tarantool is among the upstream
+servers, as in the instructions on <a class="reference external" href="http://rocks.tarantool.org/">rocks.tarantool.org</a>, the Tarantool luarocks
+page. Now execute this:</p>
+<pre class="highlight literal-block">
+luarocks install pg [POSTGRESQL_LIBDIR = <em>path</em>]
+                    [POSTGRESQL_INCDIR = <em>path</em>]
+                    [--local]
+</pre>
+<p>For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> luarocks install pg <span class="nv">POSTGRESQL_LIBDIR</span><span class="o">=</span>/usr/local/postgresql/lib
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h4>With GitHub<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>Go the site <a class="reference external" href="https://github.com/tarantool/pg">github.com/tarantool/pg</a>. Follow the instructions there, saying:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/tarantool/pg.git
+<span class="gp">$</span> <span class="nb">cd</span> pg <span class="o">&amp;&amp;</span> cmake . -DCMAKE_BUILD_TYPE<span class="o">=</span>RelWithDebInfo
+<span class="gp">$</span> make
+<span class="gp">$</span> make install
+</pre></div>
+</div>
+<p>At this point it is a good idea to check that the installation produced a file
+named <code class="docutils literal notranslate"><span class="pre">driver.so</span></code>, and to check that this file is on a directory that is
+searched by the <code class="docutils literal notranslate"><span class="pre">require</span></code> request.</p>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Connecting<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>Begin by making a <code class="docutils literal notranslate"><span class="pre">require</span></code> request for the pg driver. We will assume that the
+name is <code class="docutils literal notranslate"><span class="pre">pg</span></code> in further examples.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">pg</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;pg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, say:</p>
+<pre class="highlight literal-block">
+<em>connection_name</em> = pg.connect(<em>connection options</em>)
+</pre>
+<p>The connection-options parameter is a table. Possible options are:</p>
+<ul class="simple">
+<li><code class="samp docutils literal notranslate"><span class="pre">host</span> <span class="pre">=</span> <em><span class="pre">host-name</span></em></code> - string, default value = ‘localhost’</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">port</span> <span class="pre">=</span> <em><span class="pre">port-number</span></em></code> - number, default value = 5432</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">user</span> <span class="pre">=</span> <em><span class="pre">user-name</span></em></code> - string, default value is operating-system user name</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">pass</span> <span class="pre">=</span> <em><span class="pre">password</span></em></code> or <code class="samp docutils literal notranslate"><span class="pre">password</span> <span class="pre">=</span> <em><span class="pre">password</span></em></code> - string, default value is blank</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">db</span> <span class="pre">=</span> <em><span class="pre">database-name</span></em></code> - string, default value is blank</li>
+</ul>
+<p>The names are similar to the names that PostgreSQL itself uses.</p>
+<p>Example, using a table literal enclosed in {braces}:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">connect</span><span class="p">({</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span><span class="p">,</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Example, creating a function which sets each option in a separate line:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function pg_connect()
+         &gt;   local p = {}
+         &gt;   p.host = &#39;widgets.com&#39;
+         &gt;   p.db = &#39;test&#39;
+         &gt;   p.user = &#39;postgres&#39;
+         &gt;   p.password = &#39;postgres&#39;
+         &gt;   local conn = pg.connect(p)
+         &gt;   return conn
+         &gt; end
+---
+...
+tarantool&gt; conn = pg_connect()
+---
+...
+</pre></div>
+</div>
+<p>We will assume that the name is ‘conn’ in further examples.</p>
+</div>
+<div class="section" id="id8">
+<h3>How to ping<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>To ensure that a connection is working, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:ping()
+</pre>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:ping()
+---
+- true
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="id9">
+<h3>Executing a statement<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>For all PostgreSQL statements, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:execute(<em>sql-statement</em> [, <em>parameters</em>])
+</pre>
+<p>where <code class="docutils literal notranslate"><span class="pre">sql-statement</span></code> is a string, and the optional <code class="docutils literal notranslate"><span class="pre">parameters</span></code>
+are extra values that can be plugged in to replace any placeholders
+($1 $2 $3 etc.) in the SQL statement.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:execute(&#39;select tablename from pg_tables&#39;)
+---
+- - tablename: pg_statistic
+  - tablename: pg_type
+  - tablename: pg_authid
+  &lt;...&gt;
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h3>Closing connection<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>To end a session that began with <code class="docutils literal notranslate"><span class="pre">pg.connect</span></code>, the request is:</p>
+<pre class="highlight literal-block">
+<em>connection-name</em>:close()
+</pre>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; conn:close()
+---
+...
+</pre></div>
+</div>
+<p>For further information, including examples of rarely-used requests, see the
+README.md file at <a class="reference external" href="https://github.com/tarantool/pg">github.com/tarantool/pg</a>.</p>
+</div>
+<div class="section" id="id11">
+<h3>Example<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>The example was run on an Ubuntu 12.04 (“precise”) machine where tarantool had
+been installed in a /usr subdirectory, and a copy of PostgreSQL had been installed
+on /usr. The PostgreSQL server instance is already running on the local host 127.0.0.1.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># Check that the include subdirectory exists</span>
+<span class="gp">$</span> <span class="c1"># by looking for /usr/include/postgresql/libpq-fe-h.</span>
+<span class="gp">$</span> <span class="o">[</span> -f /usr/include/postgresql/libpq-fe.h <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;Error&quot;</span>
+<span class="go">OK</span>
+
+<span class="gp">$</span> <span class="c1"># Check that the library subdirectory exists and has the necessary .so file.</span>
+<span class="gp">$</span> <span class="o">[</span> -f /usr/lib/x86_64-linux-gnu/libpq.so <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;Error&quot;</span>
+<span class="go">OK</span>
+
+<span class="gp">$</span> <span class="c1"># Check that the psql client can connect using some factory defaults:</span>
+<span class="gp">$</span> <span class="c1"># port = 5432, user = &#39;postgres&#39;, user password = &#39;postgres&#39;,</span>
+<span class="gp">$</span> <span class="c1"># database = &#39;postgres&#39;. These can be changed, provided one changes</span>
+<span class="gp">$</span> <span class="c1"># them in all places. Insert a row in database postgres, and quit.</span>
+<span class="gp">$</span> psql -h <span class="m">127</span>.0.0.1 -p <span class="m">5432</span> -U postgres -d postgres
+<span class="go">Password for user postgres:</span>
+<span class="go">psql (9.3.10)</span>
+<span class="go">SSL connection (cipher: DHE-RSA-AES256-SHA, bits: 256)</span>
+<span class="go">Type &quot;help&quot; for help.</span>
+
+<span class="go">postgres=# CREATE TABLE test (s1 INT, s2 VARCHAR(50));</span>
+<span class="go">CREATE TABLE</span>
+<span class="go">postgres=# INSERT INTO test VALUES (1,&#39;PostgreSQL row&#39;);</span>
+<span class="go">INSERT 0 1</span>
+<span class="go">postgres=# \q</span>
+<span class="gp">$</span>
+
+<span class="gp">$</span> <span class="c1"># Install luarocks</span>
+<span class="gp">$</span> sudo apt-get -y install luarocks <span class="p">|</span> grep -E <span class="s2">&quot;Setting up|already&quot;</span>
+<span class="go">Setting up luarocks (2.0.8-2) ...</span>
+
+<span class="gp">$</span> <span class="c1"># Set up the Tarantool rock list in ~/.luarocks,</span>
+<span class="gp">$</span> <span class="c1"># following instructions at rocks.tarantool.org</span>
+<span class="gp">$</span> mkdir ~/.luarocks
+<span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&quot;rocks_servers = {[[http://rocks.tarantool.org/]]}&quot;</span> &gt;&gt; <span class="se">\</span>
+        ~/.luarocks/config.lua
+
+<span class="gp">$</span> <span class="c1"># Ensure that the next &quot;install&quot; will get files from Tarantool master</span>
+<span class="gp">$</span> <span class="c1"># repository. The resultant display is normal for Ubuntu 12.04 precise</span>
+<span class="gp">$</span> cat /etc/apt/sources.list.d/tarantool.list
+<span class="go">deb http://tarantool.org/dist/1.7/ubuntu/ precise main</span>
+<span class="go">deb-src http://tarantool.org/dist/1.7/ubuntu/ precise main</span>
+
+<span class="gp">$</span> <span class="c1"># Install tarantool-dev. The displayed line should show version = 1.7</span>
+<span class="gp">$</span> sudo apt-get -y install tarantool-dev <span class="p">|</span> grep -E <span class="s2">&quot;Setting up|already&quot;</span>
+<span class="go">Setting up tarantool-dev (1.7.0.222.g48b98bb~precise-1) ...</span>
+<span class="gp">$</span>
+
+<span class="gp">$</span> <span class="c1"># Use luarocks to install locally, that is, relative to $HOME</span>
+<span class="gp">$</span> luarocks install pg <span class="nv">POSTGRESQL_LIBDIR</span><span class="o">=</span>/usr/lib/x86_64-linux-gnu --local
+<span class="go">Installing http://rocks.tarantool.org/pg-scm-1.rockspec...</span>
+<span class="go">... (more info about building the Tarantool/PostgreSQL driver appears here)</span>
+<span class="go">pg scm-1 is now built and installed in ~/.luarocks/</span>
+
+<span class="gp">$</span> <span class="c1"># Ensure driver.so now has been created in a place</span>
+<span class="gp">$</span> <span class="c1"># tarantool will look at</span>
+<span class="gp">$</span> find ~/.luarocks -name <span class="s2">&quot;driver.so&quot;</span>
+<span class="go">~/.luarocks/lib/lua/5.1/pg/driver.so</span>
+
+<span class="gp">$</span> <span class="c1"># Change directory to a directory which can be used for</span>
+<span class="gp">$</span> <span class="c1"># temporary tests. For this example we assume that the</span>
+<span class="gp">$</span> <span class="c1"># name of this directory is $HOME/tarantool_sandbox.</span>
+<span class="gp">$</span> <span class="c1"># (Change &quot;$HOME&quot; to whatever is the user&#39;s actual</span>
+<span class="gp">$</span> <span class="c1"># home directory for the machine that&#39;s used for this test.)</span>
+<span class="go">cd $HOME/tarantool_sandbox</span>
+
+<span class="gp">$</span> <span class="c1"># Start the Tarantool server instance. Do not use a Lua initialization file.</span>
+
+<span class="gp">$</span> tarantool
+<span class="go">tarantool: version 1.7.0-412-g803b15c</span>
+<span class="go">type &#39;help&#39; for interactive help</span>
+<span class="go">tarantool&gt;</span>
+</pre></div>
+</div>
+<p>Configure tarantool and load pg module. Make sure that tarantool doesn’t
+reply “error” for the call to “require()”.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{}
+...
+tarantool&gt; pg = require(&#39;pg&#39;)
+---
+...
+</pre></div>
+</div>
+<p>Create a Lua function that will connect to a PostgreSQL server, (using some
+factory default values for the port and user and password), retrieve one row,
+and display the row. For explanations of the statement types used here, read the
+Lua tutorial earlier in the Tarantool user manual.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function pg_select ()
+         &gt;   local conn = pg.connect({
+         &gt;     host = &#39;127.0.0.1&#39;,
+         &gt;     port = 5432,
+         &gt;     user = &#39;postgres&#39;,
+         &gt;     password = &#39;postgres&#39;,
+         &gt;     db = &#39;postgres&#39;
+         &gt;   })
+         &gt;   local test = conn:execute(&#39;SELECT * FROM test WHERE s1 = 1&#39;)
+         &gt;   local row = &#39;&#39;
+         &gt;   for i, card in pairs(test) do
+         &gt;       row = row .. card.s2 .. &#39; &#39;
+         &gt;       end
+         &gt;   conn:close()
+         &gt;   return row
+         &gt; end
+---
+...
+tarantool&gt; pg_select()
+---
+- &#39;PostgreSQL row &#39;
+...
+</pre></div>
+</div>
+<p>Observe the result. It contains “PostgreSQL row”. So this is the row that was
+inserted into the PostgreSQL database. And now it’s been selected with the
+Tarantool client.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

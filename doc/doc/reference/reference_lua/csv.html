@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module csv &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>csv</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/csv.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-csv">
+<span id="module-csv"></span><h1>Module <cite>csv</cite><a class="headerlink" href="#module-csv" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">csv</span></code> module handles records formatted according to Comma-Separated-Values
+(CSV) rules.</p>
+<p>The default formatting rules are:</p>
+<ul class="simple">
+<li>Lua <a class="reference external" href="http://www.lua.org/pil/2.4.html">escape sequences</a> such as \n or \10 are legal within strings but not
+within files,</li>
+<li>Commas designate end-of-field,</li>
+<li>Line feeds, or line feeds plus carriage returns, designate end-of-record,</li>
+<li>Leading or trailing spaces are ignored,</li>
+<li>Quote marks may enclose fields or parts of fields,</li>
+<li>When enclosed by quote marks, commas and line feeds and spaces are treated
+as ordinary characters, and a pair of quote marks “” is treated as a single
+quote mark.</li>
+</ul>
+<p id="csv-options">The possible options which can be passed to csv functions are:</p>
+<ul class="simple">
+<li><code class="samp docutils literal notranslate"><span class="pre">delimiter</span> <span class="pre">=</span> <em><span class="pre">string</span></em></code> (default: comma) – single-byte character to
+designate end-of-field</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">quote_char</span> <span class="pre">=</span> <em><span class="pre">string</span></em></code> (default: quote mark) – single-byte character
+to designate encloser of string</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">chunk_size</span> <span class="pre">=</span> <em><span class="pre">number</span></em></code> (default: 4096) – number of characters to read
+at once (usually for file-IO efficiency)</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">skip_head_lines</span> <span class="pre">=</span> <em><span class="pre">number</span></em></code> (default: 0) – number of lines to skip at
+the start (usually for a header)</li>
+</ul>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">csv</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#csv-load"><span class="std std-ref">csv.load()</span></a></td>
+<td>Load a CSV file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#csv-dump"><span class="std std-ref">csv.dump()</span></a></td>
+<td>Transform input into a
+CSV-formatted string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#csv-iterate"><span class="std std-ref">csv.iterate()</span></a></td>
+<td>Iterate over CSV records</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="csv-load"></span><dl class="function">
+<dt id="csv.load">
+<code class="descclassname">csv.</code><code class="descname">load</code><span class="sig-paren">(</span><em>readable</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get CSV-formatted input from <code class="docutils literal notranslate"><span class="pre">readable</span></code> and return a table as output.
+Usually <code class="docutils literal notranslate"><span class="pre">readable</span></code> is either a string or a file opened for reading.
+Usually <code class="samp docutils literal notranslate"><em><span class="pre">options</span></em></code> is not specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>readable</strong> (<em>object</em>) – a string, or any object which has a read() method,
+formatted according to the CSV rules</li>
+<li><strong>options</strong> (<em>table</em>) – see <a class="reference internal" href="#csv-options"><span class="std std-ref">above</span></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">loaded_value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>Readable string has 3 fields, field#2 has comma and space so use quote
+marks:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; csv = require(&#39;csv&#39;)
+---
+...
+tarantool&gt; csv.load(&#39;a,&quot;b,c &quot;,d&#39;)
+---
+- - - a
+    - &#39;b,c &#39;
+    - d
+...
+</pre></div>
+</div>
+<p>Readable string contains 2-byte character = Cyrillic Letter Palochka:
+(This displays a palochka if and only if character set = UTF-8.)</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; csv.load(&#39;a\\211\\128b&#39;)
+---
+- - - a\211\128b
+...
+</pre></div>
+</div>
+<p>Semicolon instead of comma for the delimiter:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; csv.load(&#39;a,b;c,d&#39;, {delimiter = &#39;;&#39;})
+---
+- - - a,b
+    - c,d
+...
+</pre></div>
+</div>
+<p>Readable file <code class="file docutils literal notranslate"><span class="pre">./file.csv</span></code> contains two CSV records. Explanation of
+<code class="docutils literal notranslate"><span class="pre">fio</span></code> is in section <a class="reference internal" href="fio.html#fio-section"><span class="std std-ref">fio</span></a>. Source CSV file and example
+respectively:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- input in file.csv is:
+tarantool&gt; -- a,&quot;b,c &quot;,d
+tarantool&gt; -- a\\211\\128b
+tarantool&gt; fio = require(&#39;fio&#39;)
+---
+...
+tarantool&gt; f = fio.open(&#39;./file.csv&#39;, {&#39;O_RDONLY&#39;})
+---
+...
+tarantool&gt; csv.load(f, {chunk_size = 4096})
+---
+- - - a
+    - &#39;b,c &#39;
+    - d
+  - - a\\211\\128b
+...
+tarantool&gt; f:close()
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="csv-dump"></span><dl class="function">
+<dt id="csv.dump">
+<code class="descclassname">csv.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>csv-table</em><span class="optional">[</span>, <em>options</em>, <em>writable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get table input from <code class="docutils literal notranslate"><span class="pre">csv-table</span></code> and return a CSV-formatted string as
+output. Or, get table input from <code class="docutils literal notranslate"><span class="pre">csv-table</span></code> and put the output in
+<code class="docutils literal notranslate"><span class="pre">writable</span></code>. Usually <code class="samp docutils literal notranslate"><em><span class="pre">options</span></em></code> is not specified. Usually
+<code class="docutils literal notranslate"><span class="pre">writable</span></code>, if specified, is a file opened for writing. <a class="reference internal" href="#csv-dump"><span class="std std-ref">csv.dump()</span></a> is the reverse of <a class="reference internal" href="#csv-load"><span class="std std-ref">csv.load()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>csv-table</strong> (<em>table</em>) – a table which can be formatted according to the CSV
+rules.</li>
+<li><strong>options</strong> (<em>table</em>) – optional. see <a class="reference internal" href="#csv-options"><span class="std std-ref">above</span></a></li>
+<li><strong>writable</strong> (<em>object</em>) – any object which has a <code class="docutils literal notranslate"><span class="pre">write()</span></code> method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dumped_value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string, which is written to <code class="docutils literal notranslate"><span class="pre">writable</span></code> if specified</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>CSV-table has 3 fields, field#2 has “,” so result has quote marks</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; csv = require(&#39;csv&#39;)
+---
+...
+tarantool&gt; csv.dump({&#39;a&#39;,&#39;b,c &#39;,&#39;d&#39;})
+---
+- &#39;a,&quot;b,c &quot;,d
+
+&#39;
+...
+</pre></div>
+</div>
+<p>Round Trip: from string to table and back to string</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; csv_table = csv.load(&#39;a,b,c&#39;)
+---
+...
+tarantool&gt; csv.dump(csv_table)
+---
+- &#39;a,b,c
+
+&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="csv-iterate"></span><dl class="function">
+<dt id="csv.iterate">
+<code class="descclassname">csv.</code><code class="descname">iterate</code><span class="sig-paren">(</span><em>input</em>, <em>{options}</em><span class="sig-paren">)</span><a class="headerlink" href="#csv.iterate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form a Lua iterator function for going through CSV records one field at a
+time. Use of an iterator is strongly recommended if the amount of data is
+large (ten or more megabytes).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>csv-table</strong> (<em>table</em>) – a table which can be formatted according to the CSV
+rules.</li>
+<li><strong>options</strong> (<em>table</em>) – see <a class="reference internal" href="#csv-options"><span class="std std-ref">above</span></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Lua iterator function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">iterator function</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p><a class="reference internal" href="#csv-iterate"><span class="std std-ref">csv.iterate()</span></a> is the low level of <a class="reference internal" href="#csv-load"><span class="std std-ref">csv.load()</span></a> and <a class="reference internal" href="#csv-dump"><span class="std std-ref">csv.dump()</span></a>. To illustrate that, here is a
+function which is the same as the <a class="reference internal" href="#csv-load"><span class="std std-ref">csv.load()</span></a> function, as
+seen in <a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.10/src/lua/csv.lua">the Tarantool source code</a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; load = function(readable, opts)
+         &gt;   opts = opts or {}
+         &gt;   local result = {}
+         &gt;   for i, tup in csv.iterate(readable, opts) do
+         &gt;     result[i] = tup
+         &gt;   end
+         &gt;   return result
+         &gt; end
+---
+...
+tarantool&gt; load(&#39;a,b,c&#39;)
+---
+- - - a
+    - b
+    - c
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

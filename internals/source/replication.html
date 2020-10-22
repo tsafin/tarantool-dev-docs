@@ -1,0 +1,1313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Replication &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Relay" href="relay.html" />
+    <link rel="prev" title="Fibers" href="fiber.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/contributing/index.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tarantool internals</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fiber.html">Fibers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Replication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replication-in-1-10-series">Replication in 1.10 series</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-flow">Code flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bootstrap-first-replica">Bootstrap first replica</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bootstrap-from-a-cluster-leader">Bootstrap from a cluster leader</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#continue-bootstrap">Continue bootstrap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applier-lifecycle">Applier lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#replication-in-2-x-series">Replication in 2.x series</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Bootstrap first replica</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Bootstrap from a cluster leader</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Applier lifecycle</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relay.html">Relay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal.html">Write-ahead logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal-fmt.html">WAL file binary format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tarantool internals</a> &raquo;</li>
+        
+      <li>Replication</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/internals/source/replication.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="replication">
+<h1>Replication<a class="headerlink" href="#replication" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The following sections describe replication procedure.</p>
+</div>
+<div class="section" id="replication-in-1-10-series">
+<h2>Replication in 1.10 series<a class="headerlink" href="#replication-in-1-10-series" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="code-flow">
+<h3>Code flow<a class="headerlink" href="#code-flow" title="Permalink to this headline">¶</a></h3>
+<p>Entry point is in <code class="docutils literal notranslate"><span class="pre">box_cfg_xc</span></code> routine which is called once box
+configuration initiated (via command line or startup script).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">replication_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">replicaset</span><span class="p">));</span>
+    <span class="n">replica_hash_new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">hash</span><span class="p">);</span>
+    <span class="n">rlist_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">anon</span><span class="p">);</span>
+    <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">cond</span><span class="p">);</span>
+    <span class="n">replicaset</span><span class="p">.</span><span class="n">replica_by_id</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">VCLOCK_MAX</span><span class="p">,</span> <span class="p">...);</span>
+    <span class="n">latch_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">order_latch</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">replicaset</span></code> may carry up to <code class="docutils literal notranslate"><span class="pre">VCLOCK_MAX=32</span></code> replicas at once.
+This limitation is due to saving network bandwidth when nodes communicate
+between each other (same time 32 bits are good length for fast lookup, we
+treat is as a bitmap).</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">replicaset</span></code> is set we consider bootstrap of a new node, ie assume
+there is no recovery from checkpoint procedure needed.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instance_uuid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset_uuid</span><span class="p">,</span>
+          <span class="o">&amp;</span><span class="n">is_bootstrap_leader</span><span class="p">);</span>
+    <span class="n">box_sync_replication</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">box_sync_replication</span></code> we try to connect to <strong>master</strong> nodes
+to receive updates from.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">box_sync_replication</span>
+    <span class="n">appliers</span> <span class="o">=</span> <span class="n">cfg_get_replication</span><span class="p">(</span><span class="o">&amp;</span><span class="n">count</span><span class="p">);</span>
+        <span class="c1">// max num of appliers is VCLOCK_MAX;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// get addresses</span>
+            <span class="o">*</span><span class="n">source</span> <span class="o">=</span> <span class="n">cfg_getarr_elem</span><span class="p">(</span><span class="s">&quot;replication&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="c1">// allocate applier entries dynamically</span>
+            <span class="n">applier</span> <span class="o">=</span> <span class="n">applier_new</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="p">...);</span>
+                <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">resume_cond</span><span class="p">);</span>
+                <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer_cond</span><span class="p">);</span>
+    <span class="n">replicaset_connect</span><span class="p">(</span><span class="n">appliers</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">connect_quorum</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here we fetch replicas addresses from config and allocate <code class="docutils literal notranslate"><span class="pre">applier</span></code> array.
+The <code class="docutils literal notranslate"><span class="pre">applier</span></code> will be notified by <code class="docutils literal notranslate"><span class="pre">resume_cond</span></code> and <code class="docutils literal notranslate"><span class="pre">writer_cond</span></code>
+conditions.</p>
+<p>Then we initiate the connection procedure.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_connect</span><span class="p">(</span><span class="n">appliers</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">connect_quorum</span><span class="p">)</span>
+    <span class="k">struct</span> <span class="nc">applier_on_connect</span> <span class="n">triggers</span><span class="p">[</span><span class="n">VCLOCK_MAX</span><span class="p">];</span>
+    <span class="k">struct</span> <span class="nc">replicaset_connect_state</span> <span class="n">state</span><span class="p">;</span>
+    <span class="n">state</span><span class="p">.</span><span class="n">connected</span> <span class="o">=</span> <span class="n">state</span><span class="p">.</span><span class="n">failed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">state</span><span class="p">.</span><span class="n">wakeup</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">applier</span> <span class="o">=</span> <span class="n">appliers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">trigger</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">triggers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">trigger_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">trigger</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">,</span> <span class="n">applier_on_connect_f</span><span class="p">,</span> <span class="p">...);</span>
+        <span class="n">trigger</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">state</span><span class="p">;</span>
+        <span class="n">trigger_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">on_state</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">trigger</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">);</span>
+        <span class="n">applier_start</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fiber_new_xc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">applier_f</span><span class="p">);</span>
+            <span class="n">fiber_set_joinable</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+            <span class="n">applier</span><span class="o">-&gt;</span><span class="n">reader</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+            <span class="n">fiber_start</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">applier</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>On every applier fiber allocated we assign a trigger to track the change of
+the applier state which is handled by the <code class="docutils literal notranslate"><span class="pre">applier_on_connect_f</span></code> helper.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_on_connect_f</span><span class="p">(</span><span class="k">struct</span> <span class="nc">trigger</span> <span class="o">*</span><span class="n">trigger</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nl">APPLIER_OFF</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nl">APPLIER_STOPPED</span><span class="p">:</span>
+        <span class="n">state</span><span class="o">-&gt;</span><span class="n">failed</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">APPLIER_CONNECTED</span><span class="p">:</span>
+        <span class="n">state</span><span class="o">-&gt;</span><span class="n">connected</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
+        <span class="c1">// Not interested in any</span>
+        <span class="c1">// other events just continue</span>
+        <span class="c1">// executing an applier fiber.</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Notify replicaset_connect_state</span>
+    <span class="c1">// and pause applier, will be kicked</span>
+    <span class="c1">// to run explicitly.</span>
+    <span class="n">fiber_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">wakeup</span><span class="p">);</span>
+    <span class="n">applier_pause</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This trigger process <code class="docutils literal notranslate"><span class="pre">failed</span></code> and <code class="docutils literal notranslate"><span class="pre">connected</span></code> statistics which
+is needed to fit the replicas quorum.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">APPLIER_OFF</span></code>, <code class="docutils literal notranslate"><span class="pre">APPLIER_STOPPED</span></code> and <code class="docutils literal notranslate"><span class="pre">APPLIER_CONNECTED</span></code>
+states notify the <code class="docutils literal notranslate"><span class="pre">replicaset_connect</span></code> waiters. Due to cooperative
+multitasking model the <code class="docutils literal notranslate"><span class="pre">replicaset_connect</span></code> routine need to waits
+for notifications from the applier fibers (described below).</p>
+<p>Now back to applier fibers. The <code class="docutils literal notranslate"><span class="pre">applier_start</span></code> function creates an
+<code class="docutils literal notranslate"><span class="pre">applier</span></code> fiber and immediately runs <code class="docutils literal notranslate"><span class="pre">applier_f</span></code> routine.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_f</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">fiber_is_cancelled</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">try</span> <span class="p">{</span>
+            <span class="n">applier_connect</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">}</span> <span class="n">catch</span><span class="p">()</span> <span class="p">{</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">applier_connect</span></code> we send a greeting to the remote node
+and fetch UUID of the remote machine (of the <strong>master</strong> node).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_connect</span>
+    <span class="kt">char</span> <span class="n">greetingbuf</span><span class="p">[</span><span class="n">IPROTO_GREETING_SIZE</span><span class="p">];</span>
+    <span class="n">coio_connect</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">addr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">addr_len</span><span class="p">);</span>
+    <span class="n">coio_readn</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">greetingbuf</span><span class="p">,</span> <span class="n">IPROTO_GREETING_SIZE</span><span class="p">);</span>
+    <span class="n">greeting_decode</span><span class="p">(</span><span class="n">greetingbuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">greeting</span><span class="p">);</span>
+    <span class="n">applier</span><span class="o">-&gt;</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">greeting</span><span class="p">.</span><span class="n">uuid</span><span class="p">;</span>
+    <span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">=</span> <span class="n">greeting</span><span class="p">.</span><span class="n">version_id</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="n">xrow_decode_ballot_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">ballot</span><span class="p">);</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+    <span class="c1">// Notify replicaset waiter that we&#39;re done.</span>
+    <span class="c1">// Then pause and wait for a kick.</span>
+    <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_CONNECTED</span><span class="p">);</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>Once we reach <code class="docutils literal notranslate"><span class="pre">APPLIER_CONNECTED</span></code> state the fiber get paused
+from <code class="docutils literal notranslate"><span class="pre">applier_on_connect_f</span></code> trigger. And left in this state
+until being explicitly kicked to run.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">replicaset_connect</span></code> caller at this moment is spinning in
+a cycle waiting for notification from appliers to fit the quorum
+of appliers in connected state.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_connect</span>
+    <span class="p">...</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">connected</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="n">fiber_cond_wait_timeout</span><span class="p">(</span><span class="o">&amp;</span><span class="n">state</span><span class="p">.</span><span class="n">wakeup</span><span class="p">,</span> <span class="n">timeout</span><span class="p">);</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Once appliers are in <code class="docutils literal notranslate"><span class="pre">APPLIER_CONNECTED</span></code> state we clear <code class="docutils literal notranslate"><span class="pre">applier_on_connect_f</span></code>
+trigger and call <code class="docutils literal notranslate"><span class="pre">replicaset_update</span></code>. Note that not all appliers might
+be connected. Those ones which did not manage to are explicitly stopped,
+ie fibers are ripped off.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_connect</span>
+    <span class="p">...</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">trigger_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">triggers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">base</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_CONNECTED</span><span class="p">)</span>
+            <span class="n">applier_stop</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+                <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_OFF</span><span class="p">);</span>
+                <span class="n">applier</span><span class="o">-&gt;</span><span class="n">reader</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">try</span> <span class="p">{</span>
+        <span class="n">replicaset_update</span><span class="p">(</span><span class="n">appliers</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
+    <span class="p">}</span> <span class="n">catch</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">replicaset_update</span></code> we map appliers to replicas and they
+are linked into red-black tree <code class="docutils literal notranslate"><span class="pre">uniq</span></code> for fast lookup via their UUID.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_update</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">**</span><span class="n">appliers</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">RLIST_HEAD</span><span class="p">(</span><span class="n">anon_replicas</span><span class="p">);</span>
+    <span class="n">replica_hash_new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uniq</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">applier</span> <span class="o">=</span> <span class="n">appliers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">replica</span> <span class="o">=</span> <span class="n">replica_new</span><span class="p">();</span>
+            <span class="n">replica</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">replica</span><span class="p">));</span>
+            <span class="n">replica</span><span class="o">-&gt;</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay_new</span><span class="p">(</span><span class="n">replica</span><span class="p">);</span>
+                <span class="n">relay</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">relay</span><span class="p">));</span>
+                <span class="n">relay</span><span class="o">-&gt;</span><span class="n">replica</span> <span class="o">=</span> <span class="n">replica</span><span class="p">;</span>
+                <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">reader_cond</span><span class="p">);</span>
+                <span class="n">relay</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">RELAY_OFF</span><span class="p">;</span>
+            <span class="n">replica</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">replica</span><span class="o">-&gt;</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">uuid_nil</span><span class="p">;</span>
+            <span class="n">replica</span><span class="o">-&gt;</span><span class="n">applier</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">trigger_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">on_applier_state</span><span class="p">,</span>
+                            <span class="n">replica_on_applier_state_f</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+            <span class="n">replica</span><span class="o">-&gt;</span><span class="n">applier_sync_state</span> <span class="o">=</span> <span class="n">APPLIER_DISCONNECTED</span><span class="p">;</span>
+            <span class="n">latch_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">order_latch</span><span class="p">);</span>
+        <span class="n">replica_set_applier</span><span class="p">(</span><span class="n">replica</span><span class="p">,</span> <span class="n">applier</span><span class="p">);</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>We allocate new replica and assign an applier to it.</p>
+<p>Note that replica state is driven by <code class="docutils literal notranslate"><span class="pre">replica_on_applier_state_f</span></code>
+trigger. We won’t be juming into it right now but the important thing is
+that this trigger sends <code class="docutils literal notranslate"><span class="pre">fiber_cond_signal(&amp;replicaset.applier.cond)</span></code>
+to the main replicaset instance.</p>
+<p>Now back to the caller, ie <code class="docutils literal notranslate"><span class="pre">applier_sync_state</span></code>. The replica
+instances are created we continue walking over appliers</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_update</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">**</span><span class="n">appliers</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+<span class="p">...</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="c1">// continue listing</span>
+        <span class="n">replica_set_applier</span><span class="p">(</span><span class="n">replica</span><span class="p">,</span> <span class="n">applier</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Any not yet connected appliers are</span>
+            <span class="c1">// chained into anon_replicas list,</span>
+            <span class="c1">// we will retry to reconnect later.</span>
+            <span class="n">rlist_add_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">anon_replicas</span><span class="p">,</span> <span class="n">replica</span><span class="p">,</span> <span class="n">in_anon</span><span class="p">);</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">replica</span><span class="o">-&gt;</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">applier</span><span class="o">-&gt;</span><span class="n">uuid</span><span class="p">;</span>
+        <span class="n">replica_hash_insert</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uniq</span><span class="p">,</span> <span class="n">replica</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>In result we will have two sets, one in <code class="docutils literal notranslate"><span class="pre">uniq</span></code> tree which
+is intended to keep alive connected replicas and <code class="docutils literal notranslate"><span class="pre">anon_replicas</span></code>
+list which carries not yet connected ones.</p>
+<p>Then all alive replicas are marked and connected, statistics updated
+and they are moved to global <code class="docutils literal notranslate"><span class="pre">replicaset.hash</span></code> tree.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replicaset_update</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">**</span><span class="n">appliers</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">connected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">loading</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">synced</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">replica_hash_foreach_safe</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uniq</span><span class="p">,</span> <span class="n">replica</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">replica_hash_remove</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uniq</span><span class="p">,</span> <span class="n">replica</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">replica_hash_insert</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">hash</span><span class="p">,</span> <span class="n">replica</span><span class="p">);</span>
+        <span class="n">replica</span><span class="o">-&gt;</span><span class="n">applier_sync_state</span> <span class="o">=</span> <span class="n">APPLIER_CONNECTED</span><span class="p">;</span>
+        <span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">connected</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+    <span class="n">rlist_swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">anon</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">anon_replicas</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>At the end the anonimous replicas (which is not connected)
+are moved to global <code class="docutils literal notranslate"><span class="pre">replicaset.anon</span></code>. So we have
+global <code class="docutils literal notranslate"><span class="pre">replicaset</span></code> fully consistent and ready for use.</p>
+<p>Now we need to jump up to the initial caller <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap</span>
+    <span class="p">...</span>
+    <span class="n">master</span> <span class="o">=</span> <span class="n">replicaset_leader</span><span class="p">();</span>
+        <span class="n">replicaset_round</span>
+            <span class="nf">replicaset_foreach</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Walk over unique replicas</span>
+                <span class="c1">// from replicaset hash and</span>
+                <span class="c1">// choose one with more advinsed</span>
+                <span class="c1">// vclock or one with lowest UUID</span>
+        <span class="k">return</span> <span class="n">leader</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We need to find out how exactly we should start, either
+we are the master node or we should start from another
+node which is choosen as a cluster leader (ie it has
+most advansed vclock and low UUID).</p>
+</div>
+<div class="section" id="bootstrap-first-replica">
+<h3>Bootstrap first replica<a class="headerlink" href="#bootstrap-first-replica" title="Permalink to this headline">¶</a></h3>
+<p>Lets consider bootstrap as a first replica in a cluster. Note
+that all previous actions are still intact and appliers in
+a replicaset are sitting in connected state and paused.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap_master</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="nc">tt_uuid</span> <span class="o">*</span><span class="n">replicaset_uuid</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">replica_id</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">box_register_replica</span><span class="p">(</span><span class="n">replica_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">INSTANCE_UUID</span><span class="p">)</span>
+        <span class="n">boxk</span><span class="p">(</span><span class="n">IPROTO_INSERT</span><span class="p">,</span> <span class="n">BOX_CLUSTER_ID</span><span class="p">,</span> <span class="s">&quot;[%u%s]&quot;</span><span class="p">,</span>
+             <span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span> <span class="n">id</span><span class="p">,</span> <span class="n">tt_uuid_str</span><span class="p">(</span><span class="n">uuid</span><span class="p">))</span>
+    <span class="n">replicaset_foreach</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tt_uuid_is_equal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">uuid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">INSTANCE_UUID</span><span class="p">))</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="n">box_register_replica</span><span class="p">(</span><span class="o">++</span><span class="n">replica_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">uuid</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">box_set_replicaset_uuid</span><span class="p">(</span><span class="n">replicaset_uuid</span><span class="p">)</span>
+        <span class="n">boxk</span><span class="p">(</span><span class="n">IPROTO_INSERT</span><span class="p">,</span> <span class="n">BOX_SCHEMA_ID</span><span class="p">,</span> <span class="s">&quot;[%s%s]&quot;</span><span class="p">,</span> <span class="s">&quot;cluster&quot;</span><span class="p">,</span>
+             <span class="n">tt_uuid_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uu</span><span class="p">))</span>
+    <span class="n">wal_enable</span><span class="p">()</span>
+        <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+        <span class="n">wal_open</span><span class="p">(</span><span class="n">writer</span><span class="p">)</span>
+        <span class="n">journal_set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">writer</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">do_checkpoint</span><span class="p">()</span>
+    <span class="n">gc_add_checkpoint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We register our node <code class="docutils literal notranslate"><span class="pre">replica_id</span></code> in <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> internal
+service space (as string like <code class="docutils literal notranslate"><span class="pre">n9613291f-xxx</span></code> where <code class="docutils literal notranslate"><span class="pre">n</span></code> is
+a replica number, and 9613291f-xxx is UUID) and then the rest of
+replicas are registered as well.</p>
+<p>The replicaset is registered in the <code class="docutils literal notranslate"><span class="pre">_schema</span></code> internal service
+space as a string like <code class="docutils literal notranslate"><span class="pre">cluster9613291f-xxx</span></code>.</p>
+<p>Then the write ahead log (WAL) enabled and the wal writer takes vclock
+time from replicaset time and produce initial checkpoint. The initial
+vclock for replicaset will be zero since we’re not restoring from
+snapshot. We become that named bootstrap leader (for this sake we set
+<code class="docutils literal notranslate"><span class="pre">is_bootstrap_leader</span></code>).</p>
+<p>Once above is done the replicaset enters into “follow” mode. We will
+discuss it later because this part is common for bootstrap as a master
+and as from a cluster leader.</p>
+</div>
+<div class="section" id="bootstrap-from-a-cluster-leader">
+<h3>Bootstrap from a cluster leader<a class="headerlink" href="#bootstrap-from-a-cluster-leader" title="Permalink to this headline">¶</a></h3>
+<p>Bootstrap from remote master node (a cluster leader) is implemented
+by <code class="docutils literal notranslate"><span class="pre">bootstrap_from_master</span></code> routine which is quite nontrivial.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap_from_master</span><span class="p">(</span><span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">master</span><span class="p">)</span>
+    <span class="n">applier</span> <span class="o">=</span> <span class="n">master</span><span class="o">-&gt;</span><span class="n">applier</span><span class="p">;</span>
+    <span class="c1">// Wait the applier to become ready</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">);</span>
+        <span class="k">struct</span> <span class="nc">applier_on_state</span> <span class="n">trigger</span><span class="p">;</span>
+        <span class="n">applier_add_on_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">trigger</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+            <span class="c1">// Notification from applier handles in applier_on_state_f</span>
+            <span class="c1">// then in replica_on_applier_state_f</span>
+            <span class="n">trigger_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">trigger</span><span class="o">-&gt;</span><span class="n">base</span><span class="p">,</span> <span class="n">applier_on_state_f</span><span class="p">,</span> <span class="p">...);</span>
+            <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">trigger</span><span class="o">-&gt;</span><span class="n">wakeup</span><span class="p">);</span>
+        <span class="n">applier_resume</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+        <span class="n">applier_wait_for_state</span><span class="p">(</span><span class="o">&amp;</span><span class="n">trigger</span><span class="p">,</span> <span class="n">timeout</span><span class="p">);</span>
+        <span class="c1">// Once we reach the sate, clear the trigger</span>
+        <span class="n">applier_clear_on_state</span><span class="p">(</span><span class="o">&amp;</span><span class="n">trigger</span><span class="p">);</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_INITIAL_JOIN</span><span class="p">);</span>
+    <span class="n">engine_begin_initial_recovery_xc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_FINAL_JOIN</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>One of the key moment here is <code class="docutils literal notranslate"><span class="pre">applier_resume_to_state</span></code> helper calls.
+As you remember the appliers are bound to replica instance and they all
+were in <code class="docutils literal notranslate"><span class="pre">APPLIER_CONNECTED</span></code> state when we entered this routine, iow
+they are paused waiting for a kick.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_f</span>
+    <span class="p">...</span>
+    <span class="n">applier_connect</span>
+        <span class="p">...</span>
+        <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_CONNECTED</span><span class="p">);</span>
+        <span class="p">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tt_uuid_is_nil</span><span class="p">(</span><span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">))</span>
+        <span class="n">applier_join</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Side note: there are two triggers assigned to <code class="docutils literal notranslate"><span class="pre">applier-&gt;on_state</span></code>.
+The first one is new <code class="docutils literal notranslate"><span class="pre">applier_on_state_f</span></code> and second is
+<code class="docutils literal notranslate"><span class="pre">replica_on_applier_state_f</span></code>. The triggers are running in the sequence
+above but neet to mention than <code class="docutils literal notranslate"><span class="pre">applier_on_state_f</span></code> is one time trigger,
+once fired it get cleaned up while <code class="docutils literal notranslate"><span class="pre">replica_on_applier_state_f</span></code> is premanent.
+And to refresh memory these triggers are running from
+<code class="docutils literal notranslate"><span class="pre">applier_f:</span> <span class="pre">applier_set_state</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">applier_resume_to_state</span></code> kicks the applier of a chosen leader.
+This fiber tries to pass authentification (if provided in config) and become
+<code class="docutils literal notranslate"><span class="pre">APPLIER_READY</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_on_state_f</span>
+    <span class="nf">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_OFF</span> <span class="o">&amp;&amp;</span>
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_STOPPED</span> <span class="o">&amp;&amp;</span>
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">on_state</span><span class="o">-&gt;</span><span class="n">desired_state</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="n">fiber_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">on_state</span><span class="o">-&gt;</span><span class="n">wakeup</span><span class="p">);</span>
+    <span class="n">applier_pause</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In other words <code class="docutils literal notranslate"><span class="pre">applier_resume_to_state</span></code> kicks the applier
+and waits it to reach the desired state then simply pause.
+And stages are processed one by one. At every stage two triggers
+are running as been mentioned above.</p>
+<p>Once applier reaches <code class="docutils literal notranslate"><span class="pre">APPLIER_READY</span></code> we wait it to pass
+the join stage.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_join</span>
+    <span class="nf">xrow_encode_join_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">INSTANCE_UUID</span><span class="p">);</span>
+    <span class="n">coio_write_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+    <span class="n">xrow_decode_vclock_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_INITIAL_JOIN</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Note that we fetch vclock from a cluster leader and save it
+into <code class="docutils literal notranslate"><span class="pre">replicaset.vclock</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">applier_set_state(APPLIER_INITIAL_JOIN)</span></code> triggers
+<code class="docutils literal notranslate"><span class="pre">applier_resume_to_state</span></code> to process.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">replica_on_applier_state_f</span><span class="p">(</span><span class="k">struct</span> <span class="nc">trigger</span> <span class="o">*</span><span class="n">trigger</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="k">case</span> <span class="nl">APPLIER_INITIAL_JOIN</span><span class="p">:</span>
+        <span class="n">replicaset</span><span class="p">.</span><span class="n">is_joining</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">APPLIER_JOINED</span><span class="p">:</span>
+        <span class="n">replicaset</span><span class="p">.</span><span class="n">is_joining</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">...</span>
+    <span class="n">fiber_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">cond</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>So back to <code class="docutils literal notranslate"><span class="pre">bootstrap_from_master</span></code> we wait the applier to
+pass <code class="docutils literal notranslate"><span class="pre">APPLIER_INITIAL_JOIN</span></code>, where we receive vclock from
+the cluster leader. Then we kick <code class="docutils literal notranslate"><span class="pre">applier_join</span></code> to process</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_join</span>
+    <span class="nf">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">coio_read_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iproto_type_is_dml</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">xstream_write_xc</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">join_stream</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">IPROTO_OK</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">...</span>
+        <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_FINAL_JOIN</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>So we receive data manipulation requests (ie records with operation
+and data, an remember them in applier <code class="docutils literal notranslate"><span class="pre">join_stream</span></code>). The reply
+<code class="docutils literal notranslate"><span class="pre">IPROTO_OK</span></code> means we are done with joining to the cluster leader.
+The applier sets <code class="docutils literal notranslate"><span class="pre">APPLIER_FINAL_JOIN</span></code> state and notifies
+<code class="docutils literal notranslate"><span class="pre">bootstrap_from_master</span></code> about passing this stage.
+Remember after each notification the applier get paused.</p>
+<p>Then the main fiber continue until <code class="docutils literal notranslate"><span class="pre">APPLIER_READY</span></code> is reached</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap_from_master</span><span class="p">(</span><span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">master</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">engine_begin_final_recovery_xc</span><span class="p">();</span>
+    <span class="n">recovery_journal_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">journal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">journal_set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">journal</span><span class="p">.</span><span class="n">base</span><span class="p">);</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_JOINED</span><span class="p">);</span>
+    <span class="n">engine_end_recovery_xc</span><span class="p">();</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Before the applier become <code class="docutils literal notranslate"><span class="pre">APPLIER_READY</span></code> it receives final
+data from cluster leader.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_join</span>
+    <span class="nf">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">coio_read_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iproto_type_is_dml</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">vclock_follow_xrow</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+            <span class="n">xstream_write_xc</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">subscribe_stream</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">IPROTO_OK</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">...</span>
+        <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_JOINED</span><span class="p">);</span>
+        <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>FIXME: We need to put details about <code class="docutils literal notranslate"><span class="pre">join_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">subscribe_stream</span></code>
+xstreams associated with applier fibers. They are shared between all appliers
+and manipulate with backend engine (memtx, vinyl).</p>
+<p>Once appliers are ready we do a checkpoint. The appliers are paused
+and no longer assigned to <code class="docutils literal notranslate"><span class="pre">applier_on_state_f</span></code> trigger.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap_from_master</span>
+    <span class="p">...</span>
+    <span class="n">do_checkpoint</span><span class="p">();</span>
+    <span class="n">gc_add_checkpoint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Next we consider the code which is common for both modes.</p>
+</div>
+<div class="section" id="continue-bootstrap">
+<h3>Continue bootstrap<a class="headerlink" href="#continue-bootstrap" title="Permalink to this headline">¶</a></h3>
+<p>We wake up appliers fibers and try to reconnect the ones
+which were unable to connect</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">box_cfg_xc</span>
+    <span class="p">...</span>
+    <span class="n">replicaset_follow</span>
+        <span class="n">replicaset_foreach</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span>
+            <span class="n">applier_resume</span><span class="p">(</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">applier</span><span class="p">);</span>
+        <span class="n">rlist_foreach_entry_safe</span><span class="p">(</span><span class="n">replica</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">anon</span><span class="p">...)</span>
+            <span class="n">applier_start</span><span class="p">(</span><span class="n">replica</span><span class="o">-&gt;</span><span class="n">applier</span><span class="p">)</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>Note that woken appliers are not running they are just marked
+as alive.</p>
+</div>
+<div class="section" id="applier-lifecycle">
+<h3>Applier lifecycle<a class="headerlink" href="#applier-lifecycle" title="Permalink to this headline">¶</a></h3>
+<p>Next we need them to process further and call <code class="docutils literal notranslate"><span class="pre">applier_subscribe</span></code>.
+The appliers are scheduled to execution by <code class="docutils literal notranslate"><span class="pre">box_cfg_xc</span></code> callers,
+which is either <em>interactive console</em> (where explicit <code class="docutils literal notranslate"><span class="pre">fiber_yield</span></code>
+is called waiting for input from command line) or once startup script is
+finished and we call <code class="docutils literal notranslate"><span class="pre">ev_run</span></code> which leads to run idle events causing
+reschedule to happen.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">applier_subscribe</span></code> executed we try to subscribe
+to the <strong>master</strong> node we wanted to receive changed from.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_subscribe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="n">applier</span><span class="p">)</span>
+<span class="p">...</span>
+    <span class="cm">/* Send SUBSCRIBE comand */</span>
+    <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">xrow_encode_subscribe_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">,</span>
+            <span class="o">&amp;</span><span class="n">INSTANCE_UUID</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">coio_write_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+
+    <span class="cm">/* Read SUBSCRIBE response */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">coio_read_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="cm">/*</span>
+<span class="cm">         * In case of successful subscribe, the server</span>
+<span class="cm">         * responds with its current vclock.</span>
+<span class="cm">         */</span>
+        <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">);</span>
+        <span class="n">xrow_decode_vclock_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">);</span>
+
+        <span class="n">say_info</span><span class="p">(</span><span class="s">&quot;subscribed&quot;</span><span class="p">);</span>
+        <span class="n">say_info</span><span class="p">(</span><span class="s">&quot;remote vclock %s local vclock %s&quot;</span><span class="p">,</span>
+            <span class="n">vclock_to_string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">),</span>
+            <span class="n">vclock_to_string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>Once we’re subscribed we create that named “writer” fiber</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_subscribe</span>
+    <span class="p">...</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">FIBER_NAME_MAX</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s">&quot;applierw/&quot;</span><span class="p">);</span>
+    <span class="n">uri_format</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="n">pos</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span> <span class="o">=</span> <span class="n">fiber_new_xc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">applier_writer_f</span><span class="p">);</span>
+    <span class="n">fiber_set_joinable</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="n">fiber_start</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span><span class="p">,</span> <span class="n">applier</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This fiber is serving <em>Ack</em> commands to send to master node
+notifying it with the last vclock value it has successfully
+processed.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_writer_f</span>
+    <span class="nf">while</span> <span class="p">(</span><span class="o">!</span><span class="n">fiber_is_cancelled</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+            <span class="n">fiber_cond_wait_timeout</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer_cond</span><span class="p">,</span>
+                <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">fiber_cond_wait_timeout</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer_cond</span><span class="p">,</span>
+                <span class="n">replication_timeout</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_SYNC</span> <span class="o">&amp;&amp;</span>
+            <span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_FOLLOW</span><span class="p">)</span>
+                <span class="k">continue</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="n">xrow</span><span class="p">;</span>
+        <span class="n">xrow_encode_vclock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">xrow</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+        <span class="n">coio_write_xrow</span><span class="p">(</span><span class="o">&amp;</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">xrow</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>In case of error the fiber logs the error but continue spinning
+until it get explicitly cancled by the applier.</p>
+<p>Then the applier enters the loop which waits for data to be received
+from the master node. In other words any update on the master node
+is sent to us via network and we are trying to update our local
+instance with new data.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_subscribe</span>
+    <span class="p">...</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&lt;</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">coio_read_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">replication_disconnect_timeout</span><span class="p">();</span>
+            <span class="n">coio_read_xrow_timeout_xc</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="n">timeout</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="p">...</span>
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">lag</span> <span class="o">=</span> <span class="n">ev_now</span><span class="p">(</span><span class="n">loop</span><span class="p">())</span> <span class="o">-</span> <span class="n">row</span><span class="p">.</span><span class="n">tm</span><span class="p">;</span>
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">last_row_time</span> <span class="o">=</span> <span class="n">ev_monotonic_now</span><span class="p">(</span><span class="n">loop</span><span class="p">());</span>
+        <span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">replica</span> <span class="o">=</span> <span class="n">replica_by_id</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">replica_id</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vclock_get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="n">row</span><span class="p">.</span><span class="n">replica_id</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">.</span><span class="n">lsn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Write the changes local if incomin data is newer</span>
+            <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">xstream_write</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">subscribe_stream</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">APPLIER_SYNC</span> <span class="o">||</span>
+            <span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">APPLIER_FOLLOW</span><span class="p">)</span>
+            <span class="n">fiber_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer_cond</span><span class="p">);</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Upon new data arrived we figure out if we should apply the change using
+<code class="docutils literal notranslate"><span class="pre">lsn</span></code> as a marker. If the data is more novel that we have now we write
+it into local instance (the <code class="docutils literal notranslate"><span class="pre">subscribe_stream</span></code> uses <code class="docutils literal notranslate"><span class="pre">apply_row</span></code> helper
+which process database requests) and send <em>Ack</em> packet back to the master
+(waking up <code class="docutils literal notranslate"><span class="pre">applier-&gt;writer_cond</span></code> which triggers <code class="docutils literal notranslate"><span class="pre">applier_writer_f</span></code> cycle.</p>
+<p>An interesting moment takes place when some error happens inside
+<code class="docutils literal notranslate"><span class="pre">applier_subscribe</span></code> routine - in this case we raise an error via
+<code class="docutils literal notranslate"><span class="pre">diag_raise</span></code> helper (which basically throws an exception). The caller
+intercepts it.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">applier_f</span>
+    <span class="p">...</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">fiber_is_cancelled</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">try</span> <span class="p">{</span>
+            <span class="n">applier_subscribe</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="p">...</span>
+        <span class="p">}</span> <span class="n">catch</span> <span class="p">(...)</span> <span class="p">{</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Depending on error type the <code class="docutils literal notranslate"><span class="pre">applier_f</span></code> fiber either try to reconnect
+to the master node or simply disconnect (when applier get disconnected
+it stops the writer fiber as well) and finish its execution.</p>
+</div>
+</div>
+<div class="section" id="replication-in-2-x-series">
+<h2>Replication in 2.x series<a class="headerlink" href="#replication-in-2-x-series" title="Permalink to this headline">¶</a></h2>
+<p>Generally replication in 2.x series very similar to 1.10 in ideas
+still there are some significant diffierences.</p>
+<p>The initialization starts with <code class="docutils literal notranslate"><span class="pre">box_cfg_xc</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">box_cfg_xc</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="c1">// prepare replicaset</span>
+    <span class="n">replication_init</span><span class="p">();</span>
+    <span class="p">...</span>
+    <span class="n">box_set_replication_anon</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">box_set_replication_anon</span></code> serves anonymous replications.
+Most important part here is that this code is called by two places:
+from the cold start of tarantool and when <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>} is triggered
+manually (from interactive console or script).</p>
+<p>Thus if previously the node has been an anonymous replica (where we only
+fetch fresh data from the remote master machine) and wanna be a normal
+replica then we have to reset all previous appliers and reconnect
+to a master. In turn it implies that previously we’ve finished bootup
+with anonymous replication and we have some appliers running.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">box_set_replication_anon</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">anon</span> <span class="o">=</span> <span class="n">box_check_replication_anon</span><span class="p">();</span>
+    <span class="c1">//</span>
+    <span class="c1">// the role of the node has not been changed</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">anon</span> <span class="o">==</span> <span class="n">replication_anon</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="c1">//</span>
+    <span class="c1">// We were anonymous replica and gonna be</span>
+    <span class="c1">// a regular one.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">anon</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">replication_anon</span> <span class="o">=</span> <span class="n">anon</span><span class="p">;</span>
+        <span class="n">box_sync_replication</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+        <span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">master</span> <span class="o">=</span> <span class="n">replicaset_leader</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">master</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">master</span><span class="o">-&gt;</span><span class="n">applier</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span>
+            <span class="n">master</span><span class="o">-&gt;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tnt_raise</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_CANNOT_REGISTER</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="n">master_applier</span> <span class="o">=</span> <span class="n">master</span><span class="o">-&gt;</span><span class="n">applier</span><span class="p">;</span>
+        <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">master_applier</span><span class="p">,</span> <span class="n">APPLIER_REGISTERED</span><span class="p">,</span>
+                                <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+        <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">master_applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">,</span>
+                                <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+        <span class="n">replicaset_follow</span><span class="p">();</span>
+        <span class="n">replicaset_sync</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_box_configured</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">replication_anon</span> <span class="o">=</span> <span class="n">anon</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">tnt_raise</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_CFG</span><span class="p">,</span> <span class="s">&quot;replication_anon&quot;</span><span class="p">,</span>
+            <span class="s">&quot;cannot be turned on after bootstrap&quot;</span>
+            <span class="s">&quot; has finished&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>On a cold start if we gonna be an anonymous replica we just remember the
+setting in <cite>replication_anon</cite>. Then we continue bootstrap procesure
+(we don’t consider local recovery for simplicity sake).</p>
+<p>First we’re trying to reify appliers.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">bootstrap</span><span class="p">()</span>
+    <span class="p">...</span>
+    <span class="n">box_sync_replication</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+        <span class="n">appliers</span> <span class="o">=</span> <span class="n">cfg_get_replication</span><span class="p">(</span><span class="o">&amp;</span><span class="n">count</span><span class="p">);</span>
+        <span class="n">replicaset_connect</span><span class="p">(</span><span class="n">appliers</span><span class="p">,</span> <span class="p">...);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">connect_quorum</span><span class="p">)</span>
+                <span class="n">box_do_set_orphan</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">trigger_create</span><span class="p">(</span><span class="n">applier_on_connect_f</span><span class="p">)</span>
+                <span class="n">applier_start</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">trigger_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">triggers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">base</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">!=</span> <span class="n">APPLIER_CONNECTED</span><span class="p">)</span>
+                    <span class="n">applier_stop</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="n">replicaset_update</span><span class="p">(</span><span class="n">appliers</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We connect to remote machines (if quorum is not fit we just leave
+the box in read only state) and register replicas in global replicas
+hash. If there some old appliers were running we clean them up. This
+is similar to 1.10 series. If something goes wrong we trigger an
+exception.</p>
+<p>Then we continue bootstrap either from remote master node or as
+a cluster leader.</p>
+<div class="section" id="id1">
+<h3>Bootstrap first replica<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>This process is similar to 1.10 series - we register our node
+<code class="docutils literal notranslate"><span class="pre">replica_id</span></code> in <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> internal service space together
+with other replicas. Then replicaset is registered in the
+<code class="docutils literal notranslate"><span class="pre">_schema</span></code> space.</p>
+</div>
+<div class="section" id="id2">
+<h3>Bootstrap from a cluster leader<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Booting up from cluster leader a bit differs from 1.10 due to
+anonymous replication (the master node is obtained by
+<code class="docutils literal notranslate"><span class="pre">replicaset_leader</span></code>)</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">bootstrap_from_master</span><span class="p">(</span><span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">master</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">applier</span> <span class="o">=</span> <span class="n">master</span><span class="o">-&gt;</span><span class="n">applier</span><span class="p">;</span>
+
+    <span class="c1">// Wait the applier becom ready</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">,</span> <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+
+    <span class="c1">// Either join a cluster or</span>
+    <span class="c1">// fetch the snapshot.</span>
+    <span class="n">wait_state</span> <span class="o">=</span> <span class="n">replication_anon</span> <span class="o">?</span>
+        <span class="nl">APPLIER_FETCH_SNAPSHOT</span> <span class="p">:</span>
+        <span class="n">APPLIER_INITIAL_JOIN</span><span class="p">;</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">wait_state</span><span class="p">,</span> <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * Process initial data (snapshot or dirty disk data).</span>
+<span class="cm">     */</span>
+    <span class="n">engine_begin_initial_recovery_xc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">wait_state</span> <span class="o">=</span> <span class="n">replication_anon</span> <span class="o">?</span>
+        <span class="nl">APPLIER_FETCHED_SNAPSHOT</span> <span class="p">:</span>
+        <span class="n">APPLIER_FINAL_JOIN</span><span class="p">;</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">wait_state</span><span class="p">,</span> <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * Process final data (WALs).</span>
+<span class="cm">     */</span>
+    <span class="n">engine_begin_final_recovery_xc</span><span class="p">();</span>
+    <span class="n">recovery_journal_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">replication_anon</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_JOINED</span><span class="p">,</span>
+            <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Finalize the new replica */</span>
+    <span class="n">engine_end_recovery_xc</span><span class="p">();</span>
+
+    <span class="cm">/* Switch applier to initial state */</span>
+    <span class="n">applier_resume_to_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">,</span> <span class="n">TIMEOUT_INFINITY</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An interesting moment here is if we boot as an anonymous replica: instead
+of joining master we wait the applier (ie <code class="docutils literal notranslate"><span class="pre">applier_f</span></code>) to fetch a snapshot
+of data from remote master node. Same time if we’ve been an anonymous replica
+we try to make a transition to become a regular one.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">applier_f</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">fiber_is_cancelled</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">try</span> <span class="p">{</span>
+            <span class="c1">// Connect to remote peers</span>
+            <span class="n">applier_connect</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tt_uuid_is_nil</span><span class="p">(</span><span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">))</span> <span class="p">{</span>
+                <span class="c1">// Either join to cluster or</span>
+                <span class="c1">// just fetch a data snapshot</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">replication_anon</span><span class="p">)</span>
+                    <span class="n">applier_fetch_snapshot</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+                <span class="k">else</span>
+                    <span class="nf">applier_join</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">instance_id</span> <span class="o">==</span> <span class="n">REPLICA_ID_NIL</span> <span class="o">&amp;&amp;</span>
+                <span class="o">!</span><span class="n">replication_anon</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// We&#39;ve been an anonymous replica</span>
+                <span class="c1">// and become a normal one</span>
+                <span class="n">applier_register</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">applier_subscribe</span><span class="p">(</span><span class="n">applier</span><span class="p">);</span>
+        <span class="p">}</span> <span class="n">catch</span><span class="p">()</span> <span class="p">{</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Then we jump into <code class="docutils literal notranslate"><span class="pre">applier_subscribe</span></code> lifecycle.</p>
+</div>
+<div class="section" id="id3">
+<h3>Applier lifecycle<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Processing requests is implemented via <code class="docutils literal notranslate"><span class="pre">applier_subscribe</span></code> helper.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">applier_subscribe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="n">applier</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* Send SUBSCRIBE request */</span>
+    <span class="k">struct</span> <span class="nc">ev_io</span> <span class="o">*</span><span class="n">coio</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">io</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">ibuf</span> <span class="o">*</span><span class="n">ibuf</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">ibuf</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="n">row</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">tt_uuid</span> <span class="n">cluster_id</span> <span class="o">=</span> <span class="n">uuid_nil</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="nc">vclock</span> <span class="n">vclock</span><span class="p">;</span>
+    <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+
+    <span class="c1">// Send subscribe command to the master node</span>
+    <span class="kt">uint32_t</span> <span class="n">id_filter</span> <span class="o">=</span> <span class="n">box_is_orphan</span><span class="p">()</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">instance_id</span><span class="p">;</span>
+    <span class="n">xrow_encode_subscribe_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">INSTANCE_UUID</span><span class="p">,</span>
+            <span class="o">&amp;</span><span class="n">vclock</span><span class="p">,</span> <span class="n">replication_anon</span><span class="p">,</span> <span class="n">id_filter</span><span class="p">);</span>
+    <span class="n">coio_write_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+
+    <span class="cm">/* Read SUBSCRIBE response */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">coio_read_xrow</span><span class="p">(</span><span class="n">coio</span><span class="p">,</span> <span class="n">ibuf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iproto_type_is_error</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">xrow_decode_error_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>  <span class="cm">/* error */</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">IPROTO_OK</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tnt_raise</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_PROTOCOL</span><span class="p">,</span>
+                    <span class="s">&quot;Invalid response to SUBSCRIBE&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="cm">/*</span>
+<span class="cm">         * In case of successful subscribe, the server</span>
+<span class="cm">         * responds with its current vclock.</span>
+<span class="cm">         *</span>
+<span class="cm">         * Tarantool &gt; 2.1.1 also sends its cluster id to</span>
+<span class="cm">         * the replica, and replica has to check whether</span>
+<span class="cm">         * its and master&#39;s cluster ids match.</span>
+<span class="cm">         */</span>
+        <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">);</span>
+        <span class="n">xrow_decode_subscribe_response_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cluster_id</span><span class="p">,</span>
+                <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">);</span>
+        <span class="cm">/*</span>
+<span class="cm">         * If master didn&#39;t send us its cluster id</span>
+<span class="cm">         * assume that it has done all the checks.</span>
+<span class="cm">         * In this case cluster_id will remain zero.</span>
+<span class="cm">         */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tt_uuid_is_nil</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cluster_id</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="o">!</span><span class="n">tt_uuid_is_equal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cluster_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">tnt_raise</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_REPLICASET_UUID_MISMATCH</span><span class="p">,</span>
+                <span class="n">tt_uuid_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cluster_id</span><span class="p">),</span>
+                <span class="n">tt_uuid_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="n">say_info</span><span class="p">(</span><span class="s">&quot;subscribed&quot;</span><span class="p">);</span>
+        <span class="n">say_info</span><span class="p">(</span><span class="s">&quot;remote vclock %s local vclock %s&quot;</span><span class="p">,</span>
+            <span class="n">vclock_to_string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">remote_vclock_at_subscribe</span><span class="p">),</span>
+            <span class="n">vclock_to_string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="cm">/*</span>
+<span class="cm">     * Tarantool &lt; 1.6.7:</span>
+<span class="cm">     * If there is an error in subscribe, it&#39;s sent directly</span>
+<span class="cm">     * in response to subscribe.  If subscribe is successful,</span>
+<span class="cm">     * there is no &quot;OK&quot; response, but a stream of rows from</span>
+<span class="cm">     * the binary log.</span>
+<span class="cm">     */</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">APPLIER_READY</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/*</span>
+<span class="cm">         * Tarantool &lt; 1.7.7 does not send periodic heartbeat</span>
+<span class="cm">         * messages so we cannot enable applier synchronization</span>
+<span class="cm">         * for it without risking getting stuck in the &#39;orphan&#39;</span>
+<span class="cm">         * mode until a DML operation happens on the master.</span>
+<span class="cm">         */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+            <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_SYNC</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="nf">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_FOLLOW</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="cm">/*</span>
+<span class="cm">         * Tarantool &lt; 1.7.0 sends replica id during</span>
+<span class="cm">         * &quot;subscribe&quot; stage. We can&#39;t finish bootstrap</span>
+<span class="cm">         * until it is received.</span>
+<span class="cm">         */</span>
+        <span class="n">assert</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">APPLIER_FINAL_JOIN</span><span class="p">);</span>
+        <span class="n">assert</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&lt;</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Re-enable warnings after successful execution of SUBSCRIBE */</span>
+    <span class="n">applier</span><span class="o">-&gt;</span><span class="n">last_logged_errcode</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&gt;=</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="p">{</span>
+        <span class="cm">/* Enable replication ACKs for newer servers */</span>
+
+        <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">FIBER_NAME_MAX</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s">&quot;applierw/&quot;</span><span class="p">);</span>
+        <span class="n">uri_format</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="n">pos</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span> <span class="o">=</span> <span class="n">fiber_new_xc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">applier_writer_f</span><span class="p">);</span>
+        <span class="n">fiber_set_joinable</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="n">fiber_start</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer</span><span class="p">,</span> <span class="n">applier</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">applier</span><span class="o">-&gt;</span><span class="n">lag</span> <span class="o">=</span> <span class="n">TIMEOUT_INFINITY</span><span class="p">;</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>First we’re trying to subscribe to the remote master node. On success
+we crate a writer fiber (which runs <code class="docutils literal notranslate"><span class="pre">applier_writer_f</span></code>) fiber to
+send Acks to remote node upon we commit the data received.</p>
+<p>Then we enter applier lifecycle</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">applier_subscribe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="n">applier</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="cm">/* Register triggers to handle replication commits and rollbacks. */</span>
+    <span class="k">struct</span> <span class="nc">trigger</span> <span class="n">on_commit</span><span class="p">;</span>
+    <span class="n">trigger_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">on_commit</span><span class="p">,</span> <span class="n">applier_on_commit</span><span class="p">,</span> <span class="n">applier</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">trigger_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">on_commit</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">on_commit</span><span class="p">);</span>
+
+    <span class="k">struct</span> <span class="nc">trigger</span> <span class="n">on_rollback</span><span class="p">;</span>
+    <span class="n">trigger_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">on_rollback</span><span class="p">,</span> <span class="n">applier_on_rollback</span><span class="p">,</span> <span class="n">applier</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">trigger_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">on_rollback</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">on_rollback</span><span class="p">);</span>
+
+    <span class="k">auto</span> <span class="n">trigger_guard</span> <span class="o">=</span> <span class="n">make_scoped_guard</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span>
+        <span class="n">trigger_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">on_commit</span><span class="p">);</span>
+        <span class="n">trigger_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">on_rollback</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * Process a stream of rows from the binary log.</span>
+<span class="cm">     */</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">APPLIER_FINAL_JOIN</span> <span class="o">&amp;&amp;</span>
+            <span class="n">instance_id</span> <span class="o">!=</span> <span class="n">REPLICA_ID_NIL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">say_info</span><span class="p">(</span><span class="s">&quot;final data received&quot;</span><span class="p">);</span>
+            <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_JOINED</span><span class="p">);</span>
+            <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_READY</span><span class="p">);</span>
+            <span class="n">applier_set_state</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="n">APPLIER_FOLLOW</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">struct</span> <span class="nc">stailq</span> <span class="n">rows</span><span class="p">;</span>
+        <span class="n">applier_read_tx</span><span class="p">(</span><span class="n">applier</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rows</span><span class="p">);</span>
+
+        <span class="n">applier</span><span class="o">-&gt;</span><span class="n">last_row_time</span> <span class="o">=</span> <span class="n">ev_monotonic_now</span><span class="p">(</span><span class="n">loop</span><span class="p">());</span>
+        <span class="cm">/*</span>
+<span class="cm">         * In case of an heartbeat message wake a writer up</span>
+<span class="cm">         * and check applier state.</span>
+<span class="cm">         */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">stailq_first_entry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rows</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">applier_tx_row</span><span class="p">,</span>
+            <span class="n">next</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">row</span><span class="p">.</span><span class="n">lsn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">fiber_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">writer_cond</span><span class="p">);</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">applier_apply_tx</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rows</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">diag_raise</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here we fetch data from remote node via <code class="docutils literal notranslate"><span class="pre">applier_read_tx</span></code> and collect
+it into <code class="docutils literal notranslate"><span class="pre">rows</span></code> queue. Then call <code class="docutils literal notranslate"><span class="pre">applier_apply_tx</span></code> to process it
+locally (we will back to it). The trigger <code class="docutils literal notranslate"><span class="pre">applier_on_commit</span></code> notifies
+the writer fiber to send Ack to the remote node. In turn the trigger
+<code class="docutils literal notranslate"><span class="pre">applier_on_rollback</span></code> is a bit more complex</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">applier_on_rollback</span><span class="p">(</span><span class="k">struct</span> <span class="nc">trigger</span> <span class="o">*</span><span class="n">trigger</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="n">applier</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">applier</span> <span class="o">*</span><span class="p">)</span><span class="n">trigger</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="cm">/* Setup a shared error. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">diag_is_empty</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">diag</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">diag_add_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">diag</span><span class="p">,</span>
+            <span class="n">diag_last_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">diag</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="cm">/* Stop the applier fiber. */</span>
+    <span class="n">fiber_cancel</span><span class="p">(</span><span class="n">applier</span><span class="o">-&gt;</span><span class="n">reader</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It runs when something gone wrong when we’ve been processing the
+transaction. We move the error shared between all appliers in
+<code class="docutils literal notranslate"><span class="pre">replicaset.applier.diag</span></code>. This is toplevel diag instance. Each
+applier has own diag entry as well. We will dive into this moment
+a bit later. So we put a reference from <code class="docutils literal notranslate"><span class="pre">replicaset.applier.diag</span></code>
+error to the failing applier diag instace and stop the applier.</p>
+<p>Main processing of the transaction takes place in</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">applier_apply_tx</span><span class="p">(</span><span class="k">struct</span> <span class="nc">stailq</span> <span class="o">*</span><span class="n">rows</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span> <span class="o">=</span> <span class="n">txn_begin</span><span class="p">();</span>
+    <span class="k">struct</span> <span class="nc">applier_tx_row</span> <span class="o">*</span><span class="n">item</span><span class="p">;</span>
+    <span class="p">...</span>
+    <span class="n">stailq_foreach_entry</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// process data in engine (box_process_rw)</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">apply_row</span><span class="p">(</span><span class="n">row</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">goto</span> <span class="n">rollback</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+    <span class="k">struct</span> <span class="nc">trigger</span> <span class="o">*</span><span class="n">on_rollback</span><span class="p">,</span> <span class="o">*</span><span class="n">on_commit</span><span class="p">;</span>
+    <span class="n">on_rollback</span> <span class="o">=</span> <span class="n">region_alloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">region</span><span class="p">,</span> <span class="p">...);</span>
+    <span class="n">on_commit</span> <span class="o">=</span> <span class="n">region_alloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">region</span><span class="p">,</span> <span class="p">...);</span>
+
+    <span class="n">trigger_create</span><span class="p">(</span><span class="n">on_rollback</span><span class="p">,</span> <span class="n">applier_txn_rollback_cb</span><span class="p">,</span> <span class="p">...);</span>
+    <span class="n">txn_on_rollback</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="n">on_rollback</span><span class="p">);</span>
+
+    <span class="n">trigger_create</span><span class="p">(</span><span class="n">on_commit</span><span class="p">,</span> <span class="n">applier_txn_commit_cb</span><span class="p">,</span> <span class="p">...);</span>
+    <span class="n">txn_on_commit</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="n">on_commit</span><span class="p">);</span>
+
+    <span class="c1">// Write transaction to WAL</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn_commit_async</span><span class="p">(</span><span class="n">txn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">goto</span> <span class="n">fail</span><span class="p">;</span>
+
+    <span class="n">vclock_follow</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span>
+        <span class="n">first_row</span><span class="o">-&gt;</span><span class="n">replica_id</span><span class="p">,</span> <span class="n">first_row</span><span class="o">-&gt;</span><span class="n">lsn</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nl">rollback</span><span class="p">:</span>
+    <span class="n">txn_rollback</span><span class="p">(</span><span class="n">txn</span><span class="p">);</span>
+<span class="nl">fail</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>First we try to commit request into engine without writting to
+the WAL. If it passes fine we create two triggers -
+<code class="docutils literal notranslate"><span class="pre">applier_txn_commit_cb</span></code> to notify linked triggers that
+transaction passed (in our case it means we trigger toplevel
+<code class="docutils literal notranslate"><span class="pre">applier_on_commit</span></code> and applier writer fiber notifies the
+master node that transaction has been successfully completed),
+and <code class="docutils literal notranslate"><span class="pre">applier_txn_rollback_cb</span></code> to rollback the commit.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">applier_txn_rollback_cb</span></code> is a bit tricky. It sets
+error to the current fiber and copies it to the replicaset
+instance.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">applier_txn_rollback_cb</span><span class="p">(</span><span class="k">struct</span> <span class="nc">trigger</span> <span class="o">*</span><span class="n">trigger</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">trigger</span><span class="p">;</span>
+
+    <span class="cm">/* Setup shared applier diagnostic area. */</span>
+    <span class="n">diag_set</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_WAL_IO</span><span class="p">);</span>
+    <span class="n">diag_set_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">diag</span><span class="p">,</span>
+                   <span class="n">diag_last_error</span><span class="p">(</span><span class="n">diag_get</span><span class="p">()));</span>
+
+    <span class="cm">/* Broadcast the rollback event across all appliers. */</span>
+    <span class="n">trigger_run</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">on_rollback</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
+
+    <span class="cm">/* Rollback applier vclock to the committed one. */</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">applier</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then we run chained <code class="docutils literal notranslate"><span class="pre">on_rollback</span></code> which is basically
+<code class="docutils literal notranslate"><span class="pre">applier_txn_rollback_cb</span></code> set earlier.</p>
+<p>Once transaction is prepared we call <code class="docutils literal notranslate"><span class="pre">txn_commit_async</span></code> to write
+it into WAL. The write is done in asynchronous manner which means
+it simply queued but not written immediately. Because of this
+the triggers were allocated dynamically since we can’t use
+stack space for deferred writes.</p>
+<p>The transaction itself bound to journal entry thus the caller
+fiber no longer linked with it. The calling fiber simply goes
+into next iteration and waits for data to receive from remote
+node.</p>
+<p>The WAL engine will commit the transaction by self independently
+of the applier fiber. An interesting moment here is how we rollback
+the transaction if something went wrong. The core function here is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">txn_complete</span><span class="p">(</span><span class="k">struct</span> <span class="nc">txn</span> <span class="o">*</span><span class="n">txn</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">signature</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* Undo the transaction. */</span>
+        <span class="k">struct</span> <span class="nc">txn_stmt</span> <span class="o">*</span><span class="n">stmt</span><span class="p">;</span>
+        <span class="n">stailq_reverse</span><span class="p">(</span><span class="o">&amp;</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">stmts</span><span class="p">);</span>
+        <span class="n">stailq_foreach_entry</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">stmts</span><span class="p">,</span> <span class="n">next</span><span class="p">)</span>
+            <span class="n">txn_rollback_one_stmt</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="n">stmt</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span><span class="p">)</span>
+            <span class="n">engine_rollback</span><span class="p">(</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">engine</span><span class="p">,</span> <span class="n">txn</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">txn_has_flag</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="n">TXN_HAS_TRIGGERS</span><span class="p">))</span>
+            <span class="n">txn_run_rollback_triggers</span><span class="p">(</span><span class="n">txn</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">txn</span><span class="o">-&gt;</span><span class="n">on_rollback</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When we run <code class="docutils literal notranslate"><span class="pre">txn_run_rollback_triggers</span></code> we call the linked
+trigger <code class="docutils literal notranslate"><span class="pre">applier_txn_rollback_cb</span></code> mentioned recently where
+we copy error into shared <code class="docutils literal notranslate"><span class="pre">replicaset.applier.diag</span></code> and
+run <code class="docutils literal notranslate"><span class="pre">replicaset.applier.on_rollback</span></code>, which in turn calls a
+linked <code class="docutils literal notranslate"><span class="pre">applier_on_rollback</span></code>. This fetches last error from
+<code class="docutils literal notranslate"><span class="pre">relicaset</span></code> instance, sets it to the current applier and
+then stops the applier fiber.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="relay.html" class="btn btn-neutral float-right" title="Relay" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="fiber.html" class="btn btn-neutral float-left" title="Fibers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

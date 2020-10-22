@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module lua/utils &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module say (logging)" href="say.html" />
+    <link rel="prev" title="Module latch" href="latch.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>lua/utils</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-lua-utils">
+<h1>Module <cite>lua/utils</cite><a class="headerlink" href="#module-lua-utils" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="c-api-utils-lual-pushcdata"></span><dl class="function">
+<dt id="c.luaL_pushcdata">
+void *<code class="descname">luaL_pushcdata</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, uint32_t<em>&nbsp;ctypeid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_pushcdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push cdata of given <code class="docutils literal notranslate"><span class="pre">ctypeid</span></code> onto the stack.</p>
+<p>CTypeID must be used from FFI at least once. Allocated memory returned
+uninitialized. Only numbers and pointers are supported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>ctypeid</strong> (<em>uint32_t</em>) – FFI’s CTypeID of this cdata</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">memory associated with this cdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-utils-lual-checkcdata"><span class="std std-ref">luaL_checkcdata()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-utils-lual-checkcdata"></span><dl class="function">
+<dt id="c.luaL_checkcdata">
+void *<code class="descname">luaL_checkcdata</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em>, uint32_t<em>&nbsp;*ctypeid</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_checkcdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the function argument <code class="docutils literal notranslate"><span class="pre">idx</span></code> is a cdata.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>idx</strong> (<em>int</em>) – stack index</li>
+<li><strong>ctypeid</strong> (<em>uint32_t*</em>) – output argument. FFI’s CTypeID of returned cdata</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">memory associated with this cdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-utils-lual-pushcdata"><span class="std std-ref">luaL_pushcdata()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_setcdatagc">
+void <code class="descname">luaL_setcdatagc</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_setcdatagc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set finalizer function on a cdata object.</p>
+<p>Equivalent to call <cite>ffi.gc(obj, function)</cite>. Finalizer function must be on
+the top of the stack.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>idx</strong> (<em>int</em>) – stack index</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_ctypeid">
+uint32_t <code class="descname">luaL_ctypeid</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, const char<em>&nbsp;*ctypename</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_ctypeid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return CTypeID (FFI) of given СDATA type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>char* ctypename</strong> (<em>const</em>) – C type name as string (e.g. “struct request”
+or “uint32_t”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">CTypeID</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-utils-lual-pushcdata"><span class="std std-ref">luaL_pushcdata()</span></a>,
+<a class="reference internal" href="#c-api-utils-lual-checkcdata"><span class="std std-ref">luaL_checkcdata()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_cdef">
+int <code class="descname">luaL_cdef</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, const char<em>&nbsp;*ctypename</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_cdef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Declare symbols for FFI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>char* ctypename</strong> (<em>const</em>) – C definitions (e.g. “struct stat”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0 on success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">LUA_ERRRUN</span></code>, <code class="docutils literal notranslate"><span class="pre">LUA_ERRMEM</span></code> or <code class="docutils literal notranslate"><span class="pre">LUA_ERRERR</span></code> otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <code class="docutils literal notranslate"><span class="pre">ffi.cdef(def)</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_pushuint64">
+void <code class="descname">luaL_pushuint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, uint64_t<em>&nbsp;val</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_pushuint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push uint64_t onto the stack.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>val</strong> (<em>uint64_t</em>) – value to push</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_pushint64">
+void <code class="descname">luaL_pushint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int64_t<em>&nbsp;val</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_pushint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push int64_t onto the stack.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>val</strong> (<em>int64_t</em>) – value to push</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_checkuint64">
+uint64_t <code class="descname">luaL_checkuint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_checkuint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the argument idx is a uint64 or a convertable string and
+returns this number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Throws:</th><td class="field-body">error if the argument can’t be converted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_checkint64">
+uint64_t <code class="descname">luaL_checkint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_checkint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the argument idx is a int64 or a convertable string and
+returns this number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Throws:</th><td class="field-body">error if the argument can’t be converted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_touint64">
+uint64_t <code class="descname">luaL_touint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_touint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the argument idx is a uint64 or a convertable string and
+returns this number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the converted number or 0 of argument can’t be converted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaL_toint64">
+int64_t <code class="descname">luaL_toint64</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaL_toint64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the argument idx is a int64 or a convertable string and
+returns this number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the converted number or 0 of argument can’t be converted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaT_pushtuple">
+void <code class="descname">luaT_pushtuple</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaT_pushtuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push a tuple onto the stack.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Throws:</th><td class="field-body"><p class="first last">error on OOM</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-utils-luat-istuple"><span class="std std-ref">luaT_istuple</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-utils-luat-istuple"></span><dl class="function">
+<dt id="c.luaT_istuple">
+<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a> *<code class="descname">luaT_istuple</code><span class="sig-paren">(</span>struct lua_State<em>&nbsp;*L</em>, int<em>&nbsp;idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaT_istuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether <code class="docutils literal notranslate"><span class="pre">idx</span></code> is a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>L</strong> (<em>lua_State*</em>) – Lua State</li>
+<li><strong>idx</strong> (<em>int</em>) – the stack index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">non-NULL if <code class="docutils literal notranslate"><span class="pre">idx</span></code> is a tuple</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NULL if <code class="docutils literal notranslate"><span class="pre">idx</span></code> is not a tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaT_error">
+int <code class="descname">luaT_error</code><span class="sig-paren">(</span>lua_State<em>&nbsp;*L</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaT_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-throw the last Tarantool error as a Lua object.</p>
+<dl class="docutils">
+<dt>See also: <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#lua_error">lua_error()</a>,</dt>
+<dd><a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaT_cpcall">
+int <code class="descname">luaT_cpcall</code><span class="sig-paren">(</span>lua_State<em>&nbsp;*L</em>, lua_CFunction<em>&nbsp;func</em>, void<em>&nbsp;*ud</em><span class="sig-paren">)</span><a class="headerlink" href="#c.luaT_cpcall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#lua_cpcall">lua_cpcall()</a>,
+but with the proper support of Tarantool errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.luaT_state">
+lua_State *<code class="descname">luaT_state</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.luaT_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the global Lua state used by Tarantool.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="say.html" class="btn btn-neutral float-right" title="Module say (logging)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="latch.html" class="btn btn-neutral float-left" title="Module latch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

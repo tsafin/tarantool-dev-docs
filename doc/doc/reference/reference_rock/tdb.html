@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module tdb &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>tdb</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_rock/tdb.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-tdb">
+<h1>Module <cite>tdb</cite><a class="headerlink" href="#module-tdb" title="Permalink to this headline">¶</a></h1>
+<p>The Tarantool Debugger (abbreviation = <code class="docutils literal notranslate"><span class="pre">tdb</span></code>) can be used with any Lua program.
+The operational features include: setting breakpoints, examining variables,
+going forward one line at a time, backtracing, and showing information about
+fibers. The display features include: using different colors for different
+situations, including line numbers, and adding hints.</p>
+<p>It is not supplied as part of the Tarantool repository; it must be installed
+separately. Here is the usual way:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone --recursive https://github.com/Sulverus/tdb
+<span class="gp">$</span> <span class="nb">cd</span> tdb
+<span class="gp">$</span> make
+<span class="gp">$</span> sudo make install <span class="nv">prefix</span><span class="o">=</span>/usr/share/tarantool/
+</pre></div>
+</div>
+<p>To initiate <code class="docutils literal notranslate"><span class="pre">tdb</span></code> within a Lua program and set a breakpoint, edit the program
+to include these lines:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">tdb</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;tdb&#39;</span><span class="p">)</span>
+<span class="n">tdb</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To start the debugging session, execute the Lua program. Execution will stop at
+the breakpoint, and it will be possible to enter debugging commands.</p>
+<div class="section" id="debugger-commands">
+<h2>Debugger Commands<a class="headerlink" href="#debugger-commands" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a href="#id1"><span class="problematic" id="id2">:codebold:`bt`</span></a></dt>
+<dd>Backtrace – show the stack (in red), with program/function names and line
+numbers of whatever has been invoked to reach the current line.</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">:codebold:`c`</span></a></dt>
+<dd>Continue till next breakpoint or till program ends.</dd>
+<dt><a href="#id5"><span class="problematic" id="id6">:codebold:`e`</span></a></dt>
+<dd>Enter evaluation mode. When the program is in evaluation mode, one can
+execute certain Lua statements that would be valid in the context. This is
+particularly useful for displaying the values of the program’s variables.
+Other debugger commands will not work until one exits evaluation mode by
+typing <a href="#id7"><span class="problematic" id="id8">:codebold:`-e`</span></a>.</dd>
+<dt><a href="#id9"><span class="problematic" id="id10">:codebold:`-e`</span></a></dt>
+<dd>Exit evaluation mode.</dd>
+<dt><a href="#id11"><span class="problematic" id="id12">:codebold:`f`</span></a></dt>
+<dd>Display the fiber id, the program name, and the percentage of memory used,
+as a table.</dd>
+<dt><a href="#id13"><span class="problematic" id="id14">:codebold:`n`</span></a></dt>
+<dd>Go to the next line, skipping over any function calls.</dd>
+<dt><a href="#id15"><span class="problematic" id="id16">:codebold:`globals`</span></a></dt>
+<dd>Display names of variables or functions which are defined as global.</dd>
+<dt><a href="#id17"><span class="problematic" id="id18">:codebold:`h`</span></a></dt>
+<dd>Display a list of debugger commands.</dd>
+<dt><a href="#id19"><span class="problematic" id="id20">:codebold:`locals`</span></a></dt>
+<dd>Display names and values of variables, for example the control variables of
+a Lua “for” statement.</dd>
+<dt><a href="#id21"><span class="problematic" id="id22">:codebold:`q`</span></a></dt>
+<dd>Quit immediately.</dd>
+</dl>
+</div>
+<div class="section" id="example-session">
+<h2>Example Session<a class="headerlink" href="#example-session" title="Permalink to this headline">¶</a></h2>
+<p>Put the following program in a default directory and call it “example.lua”:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">tdb</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;tdb&#39;</span><span class="p">)</span>
+<span class="n">tdb</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">j</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span> <span class="o">..</span> <span class="n">i</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;end of program&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now start Tarantool, using example.lua as the initialization file</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantool example.lua
+</pre></div>
+</div>
+<p>The screen should now look like this:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span>$ :codebold:`tarantool example.lua`
+:codeblue:`(TDB)`  :codegreen:`Tarantool debugger v.0.0.3. Type h for help`
+example.lua
+:codeblue:`(TDB)`  :codegreen:`[example.lua]`
+:codeblue:`(TDB)`  :codenormal:`3: i = 1`
+:codeblue:`(TDB)&gt;`
+</pre></div>
+</div>
+<p>Debugger prompts are blue, debugger hints and information
+are green, and the current line – line 3 of example.lua –
+is the default color. Now enter six debugger commands:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">n</span>  <span class="c1">-- go to next line</span>
+<span class="n">n</span>  <span class="c1">-- go to next line</span>
+<span class="n">e</span>  <span class="c1">-- enter evaluation mode</span>
+<span class="n">j</span>  <span class="c1">-- display j</span>
+<span class="o">-</span><span class="n">e</span> <span class="c1">-- exit evaluation mode</span>
+<span class="n">q</span>  <span class="c1">-- quit</span>
+</pre></div>
+</div>
+<p>The screen should now look like this:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span>$ :codebold:`tarantool example.lua`
+:codeblue:`(TDB)`  :codegreen:`Tarantool debugger v.0.0.3. Type h for help`
+example.lua
+:codeblue:`(TDB)`  :codegreen:`[example.lua]`
+:codeblue:`(TDB)`  :codenormal:`3: i = 1`
+:codeblue:`(TDB)&gt;` n
+:codeblue:`(TDB)`  :codenormal:`4: j = &#39;a&#39; .. i`
+:codeblue:`(TDB)&gt;` n
+:codeblue:`(TDB)`  :codenormal:`5: print(&#39;end of program&#39;)`
+:codeblue:`(TDB)&gt;` e
+:codeblue:`(TDB)`  :codegreen:`Eval mode ON`
+:codeblue:`(TDB)&gt;` j
+j       a1
+:codeblue:`(TDB)&gt;` -e
+:codeblue:`(TDB)`  :codegreen:`Eval mode OFF`
+:codeblue:`(TDB)&gt;` q
+</pre></div>
+</div>
+<p>Another debugger example can be found <a class="reference external" href="https://github.com/sulverus/tdb">here</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

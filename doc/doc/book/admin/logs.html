@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logs &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Logs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/logs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="logs">
+<span id="admin-logs"></span><h1>Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool logs important events to a file, e.g. <code class="docutils literal notranslate"><span class="pre">/var/log/tarantool/my_app.log</span></code>.
+To build the log file path, <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> takes the instance name, prepends
+the instance directory and appends “.log” extension.</p>
+<p>Let’s write something to the log file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl enter my_app
+<span class="go">/bin/tarantoolctl: connected to unix/:/var/run/tarantool/my_app.control</span>
+<span class="go">unix/:/var/run/tarantool/my_app.control&gt; require(&#39;log&#39;).info(&quot;Hello for the manual readers&quot;)</span>
+<span class="go">---</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Then check the logs:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tail /var/log/tarantool/my_app.log
+<span class="go">2017-04-04 15:54:04.977 [29255] main/101/tarantoolctl C&gt; version 1.7.3-382-g68ef3f6a9</span>
+<span class="go">2017-04-04 15:54:04.977 [29255] main/101/tarantoolctl C&gt; log level 5</span>
+<span class="go">2017-04-04 15:54:04.978 [29255] main/101/tarantoolctl I&gt; mapping 134217728 bytes for tuple arena...</span>
+<span class="go">2017-04-04 15:54:04.985 [29255] iproto/101/main I&gt; binary: bound to [::1]:3301</span>
+<span class="go">2017-04-04 15:54:04.986 [29255] main/101/tarantoolctl I&gt; recovery start</span>
+<span class="go">2017-04-04 15:54:04.986 [29255] main/101/tarantoolctl I&gt; recovering from `/var/lib/tarantool/my_app/00000000000000000000.snap&#39;</span>
+<span class="go">2017-04-04 15:54:04.988 [29255] main/101/tarantoolctl I&gt; ready to accept requests</span>
+<span class="go">2017-04-04 15:54:04.988 [29255] main/101/tarantoolctl I&gt; set &#39;checkpoint_interval&#39; configuration option to 3600</span>
+<span class="go">2017-04-04 15:54:04.988 [29255] main/101/my_app I&gt; Run console at unix/:/var/run/tarantool/my_app.control</span>
+<span class="go">2017-04-04 15:54:04.989 [29255] main/106/console/unix/:/var/ I&gt; started</span>
+<span class="go">2017-04-04 15:54:04.989 [29255] main C&gt; entering the event loop</span>
+<span class="go">2017-04-04 15:54:47.147 [29255] main/107/console/unix/: I&gt; Hello for the manual readers</span>
+</pre></div>
+</div>
+<p>When logging to a file, the system administrator must ensure logs are
+rotated timely and do not take up all the available disk space. With
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>, log rotation is pre-configured to use <code class="docutils literal notranslate"><span class="pre">logrotate</span></code> program,
+which you must have installed.</p>
+<p>File <code class="docutils literal notranslate"><span class="pre">/etc/logrotate.d/tarantool</span></code> is part of the standard Tarantool
+distribution, and you can modify it to change the default behavior. This is what
+this file is usually like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/var/log/tarantool/*.log {
+    daily
+    size 512k
+    missingok
+    rotate 10
+    compress
+    delaycompress
+    create 0640 tarantool adm
+    postrotate
+        /usr/bin/tarantoolctl logrotate `basename ${1%%.*}`
+    endscript
+}
+</pre></div>
+</div>
+<p>If you use a different log rotation program, you can invoke
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">logrotate</span></code> command to request instances to reopen their log
+files after they were moved by the program of your choice.</p>
+<p>Tarantool can write its logs to a log file, <code class="docutils literal notranslate"><span class="pre">syslog</span></code> or a program specified
+in the configuration file (see <a class="reference internal" href="../../reference/configuration/index.html#cfg-logging-log"><span class="std std-ref">log</span></a> parameter).</p>
+<p>By default, logs are written to a file as defined in <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>
+defaults. <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> automatically detects if an instance is using
+<code class="docutils literal notranslate"><span class="pre">syslog</span></code> or an external program for logging, and does not override the log
+destination in this case. In such configurations, log rotation is usually
+handled by the external program used for logging. So,
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">logrotate</span></code> command works only if logging-into-file is enabled
+in the instance file.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

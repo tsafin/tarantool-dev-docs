@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module buffer &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>buffer</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/buffer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-buffer">
+<span id="buffer-module"></span><h1>Module <cite>buffer</cite><a class="headerlink" href="#module-buffer" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">buffer</span></code> module returns a dynamically resizable buffer which is solely
+for optional use by methods of the <a class="reference internal" href="net_box.html#net-box-module"><span class="std std-ref">net.box module</span></a>
+or the <a class="reference internal" href="msgpack.html#msgpack-module"><span class="std std-ref">msgpack module</span></a>.</p>
+<p>Ordinarily the <code class="docutils literal notranslate"><span class="pre">net.box</span></code> methods return a Lua table.
+If a <code class="docutils literal notranslate"><span class="pre">buffer</span></code> option is used, then the <code class="docutils literal notranslate"><span class="pre">net.box</span></code> methods return a
+<a class="reference internal" href="msgpack.html#msgpack-definitions"><span class="std std-ref">raw MsgPack string</span></a>.
+This saves time on the server, if the client application has
+its own routine for decoding raw MsgPack strings.</p>
+<span class="target" id="module-buffer"></span><span class="target" id="buffer-ibuf"></span><dl class="function">
+<dt id="buffer.ibuf">
+<code class="descclassname">buffer.</code><code class="descname">ibuf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#buffer.ibuf" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a descriptor of a buffer.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">cdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>Assume a Tarantool server is listening on farhost:3301.
+Assume it has a space <code class="docutils literal notranslate"><span class="pre">T</span></code> with one tuple: <code class="docutils literal notranslate"><span class="pre">'ABCDE',</span> <span class="pre">12345</span></code>.
+In this example we start up a server on localhost:3302
+and then use <code class="docutils literal notranslate"><span class="pre">net.box</span></code> routines to connect to farhost.
+Then we create a buffer, and use it as an option
+for a <code class="docutils literal notranslate"><span class="pre">conn.space...select()</span></code> call.
+The result will be in <a class="reference external" href="http://msgpack.org/">MsgPack</a> format.
+To show this, we will use
+<a class="reference internal" href="msgpack.html#msgpack-decode-unchecked-c-style-string-pointer"><span class="std std-ref">msgpack.decode_unchecked()</span></a>
+on <code class="docutils literal notranslate"><span class="pre">ibuf.rpos</span></code> (the “read position” of the buffer).
+Thus we do not decode on the remote server, but we do
+decode on the local server.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="mi">3302</span><span class="p">}</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;buffer&#39;</span><span class="p">)</span>
+<span class="n">ibuf</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">.</span><span class="n">ibuf</span><span class="p">()</span>
+<span class="n">net_box</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;net.box&#39;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">net_box</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;farhost:3301&#39;</span><span class="p">)</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;buffer&#39;</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">T</span><span class="p">:</span><span class="nb">select</span><span class="p">({},{</span><span class="n">buffer</span><span class="o">=</span><span class="n">ibuf</span><span class="p">})</span>
+<span class="n">msgpack</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;msgpack&#39;</span><span class="p">)</span>
+<span class="n">msgpack</span><span class="p">.</span><span class="n">decode_unchecked</span><span class="p">(</span><span class="n">ibuf</span><span class="p">.</span><span class="n">rpos</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result of the final request looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; msgpack.decode_unchecked(ibuf.rpos)
+---
+- {48: [[&#39;ABCDE&#39;, 12345]]}
+- &#39;cdata&lt;char *&gt;: 0x7f97ba10c041&#39;
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before Tarantool version 1.7.7, the function to use for
+this case is <code class="docutils literal notranslate"><span class="pre">msgpack.ibuf_decode(ibuf.rpos)</span></code>. Starting
+with Tarantool version 1.7.7, <code class="docutils literal notranslate"><span class="pre">ibuf_decode</span></code> is deprecated.</p>
+</div>
+</dd></dl>
+
+<p id="buffer-module-and-skip-header"><strong>Module buffer and skip_header</strong></p>
+<p>The example in the previous section</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; msgpack.decode_unchecked(ibuf.rpos)
+---
+- {48: [[&#39;ABCDE&#39;, 12345]]}
+- &#39;cdata&lt;char *&gt;: 0x7f97ba10c041&#39;
+...
+</pre></div>
+</div>
+<p>showed that, ordinarily, the response from net.box includes a header –
+48 (hexadecimal 30) is the <span class="xref std std-ref">key</span>
+for IPROTO_DATA. But in some situations,
+for example when passing the buffer to a C function
+that expects a MsgPack byte array without a header,
+the header can be skipped. This is done by specifying
+<code class="docutils literal notranslate"><span class="pre">skip_header=true</span></code> as an option to
+<a class="reference internal" href="net_box.html#conn-select"><span class="std std-ref">conn.space.space-name:select{…}</span></a> or
+<a class="reference internal" href="net_box.html#conn-insert"><span class="std std-ref">conn.space.space-name:insert{…}</span></a> or
+<a class="reference internal" href="net_box.html#conn-replace"><span class="std std-ref">conn.space.space-name:replace{…}</span></a> or
+<a class="reference internal" href="net_box.html#conn-update"><span class="std std-ref">conn.space.space-name:update{…}</span></a> or
+<a class="reference internal" href="net_box.html#conn-upsert"><span class="std std-ref">conn.space.space-name:upsert{…}</span></a> or
+<a class="reference internal" href="net_box.html#conn-delete"><span class="std std-ref">conn.space.space-name:delete{…}</span></a>.
+The default is <code class="docutils literal notranslate"><span class="pre">skip_header=false</span></code>.</p>
+<p>Now here is the same example, except that <code class="docutils literal notranslate"><span class="pre">skip_header=true</span></code> is used.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="mi">3302</span><span class="p">}</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;buffer&#39;</span><span class="p">)</span>
+<span class="n">ibuf</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">.</span><span class="n">ibuf</span><span class="p">()</span>
+<span class="n">net_box</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;net.box&#39;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">net_box</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;farhost:3301&#39;</span><span class="p">)</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;buffer&#39;</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">T</span><span class="p">:</span><span class="nb">select</span><span class="p">({},{</span><span class="n">buffer</span><span class="o">=</span><span class="n">ibuf</span><span class="p">,</span> <span class="n">skip_header</span><span class="o">=</span><span class="kc">true</span><span class="p">})</span>
+<span class="n">msgpack</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;msgpack&#39;</span><span class="p">)</span>
+<span class="n">msgpack</span><span class="p">.</span><span class="n">decode_unchecked</span><span class="p">(</span><span class="n">ibuf</span><span class="p">.</span><span class="n">rpos</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result of the final request looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt;         msgpack.decode_unchecked(ibuf.rpos)
+---
+- [[&#39;ABCDE&#39;, 12345]]
+- &#39;cdata&lt;char *&gt;: 0x7f8fd102803f&#39;
+...
+</pre></div>
+</div>
+<p>Notice that the IPROTO_DATA header (48) is gone.</p>
+<p>The result is still inside an array, as is clear from the fact
+that it is shown inside square brackets. It is possible to skip
+the array header too, with
+<a class="reference internal" href="msgpack.html#msgpack-decode-array-header"><span class="std std-ref">msgpack.decode_array_header()</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

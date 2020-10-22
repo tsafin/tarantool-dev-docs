@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C# &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>C#</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/connectors/__csharp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c">
+<h1>C#<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h1>
+<p>The most commonly used C# driver is
+<a class="reference external" href="https://github.com/progaudi/progaudi.tarantool">progaudi.tarantool</a>,
+previously named <code class="docutils literal notranslate"><span class="pre">tarantool-csharp</span></code>. It is not supplied as part of the
+Tarantool repository; it must be installed separately. The makers recommend
+<a class="reference external" href="https://www.nuget.org/packages/progaudi.tarantool">cross-platform installation using Nuget</a>.</p>
+<p>To be consistent with the other instructions in this chapter, here is a way to
+install the driver directly on Ubuntu 16.04.</p>
+<ol class="arabic simple">
+<li>Install .net core from Microsoft. Follow
+<a class="reference external" href="https://www.microsoft.com/net/core#ubuntu">.net core installation instructions</a>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Mono will not work, nor will .Net from xbuild. Only .net core supported on
+Linux and Mac.</li>
+<li>Read the Microsoft End User License Agreement first, because it is not an
+ordinary open-source agreement and there will be a message during
+installation saying “This software may collect information about you and
+your use of the software, and send that to Microsoft.”
+Still you can
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry#behavior">set environment variables</a>
+to opt out from telemetry.</li>
+</ul>
+</div>
+<ol class="arabic" start="2">
+<li><p class="first">Create a new console project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~
+<span class="gp">$</span> mkdir progaudi.tarantool.test
+<span class="gp">$</span> <span class="nb">cd</span> progaudi.tarantool.test
+<span class="gp">$</span> dotnet new console
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add <code class="docutils literal notranslate"><span class="pre">progaudi.tarantool</span></code> reference.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dotnet add package progaudi.tarantool
+</pre></div>
+</div>
+</li>
+<li><p class="first">Change code in <code class="docutils literal notranslate"><span class="pre">Program.cs</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cat &lt;&lt;EOT &gt; Program.cs
+<span class="go">using System;</span>
+<span class="go">using System.Threading.Tasks;</span>
+<span class="go">using ProGaudi.Tarantool.Client;</span>
+
+<span class="go">public class HelloWorld</span>
+<span class="go">{</span>
+<span class="go">  static public void Main ()</span>
+<span class="go">  {</span>
+<span class="go">    Test().GetAwaiter().GetResult();</span>
+<span class="go">  }</span>
+<span class="go">  static async Task Test()</span>
+<span class="go">  {</span>
+<span class="go">    var box = await Box.Connect(&quot;127.0.0.1:3301&quot;);</span>
+<span class="go">    var schema = box.GetSchema();</span>
+<span class="go">    var space = await schema.GetSpace(&quot;examples&quot;);</span>
+<span class="go">    await space.Insert((99999, &quot;BB&quot;));</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="go">EOT</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build and run your application.</p>
+<p>Before trying to run, check that the server is listening at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>
+and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="index.html#index-connector-setting"><span class="std std-ref">described earlier</span></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dotnet restore
+<span class="gp">$</span> dotnet run
+</pre></div>
+</div>
+<p>The program will:</p>
+<ul class="simple">
+<li>connect using an application-specific definition of the space,</li>
+<li>open a socket connection with the Tarantool server at <cite>localhost:3301</cite>,</li>
+<li>send an INSERT request, and — if all is well — end without saying anything.</li>
+</ul>
+<p>If Tarantool is not running on localhost with listen port = 3301, or if user
+‘guest’ does not have authorization to connect, or if the INSERT request
+fails for any reason, the program will print an error message, among other
+things (stacktrace, etc).</p>
+</li>
+</ol>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see the
+<a class="reference external" href="https://github.com/progaudi/progaudi.tarantool">progaudi.tarantool driver repository</a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

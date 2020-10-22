@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tarantool Cartridge &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tarantool Cartridge</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/cartridge/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tarantool-cartridge">
+<span id="cartridge"></span><h1>Tarantool Cartridge<a class="headerlink" href="#tarantool-cartridge" title="Permalink to this headline">¶</a></h1>
+<p><strong>Cluster</strong> management in Tarantool is powered by the Tarantool Cartridge
+framework.</p>
+<p>Here we explain how you can benefit with Tarantool Cartridge,
+a framework for developing, deploying, and managing applications
+based on Tarantool.</p>
+<p>This documentation contains the following sections:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cartridge_dev.html">Developer’s guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#installing-tarantool-cartridge">Installing Tarantool Cartridge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#creating-a-project">Creating a project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#cluster-roles">Cluster roles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#using-the-built-in-http-server">Using the built-in HTTP server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#implementing-authorization-in-the-web-interface">Implementing authorization in the web interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#application-versioning">Application versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#using-cartridge-ignore-files">Using .cartridge.ignore files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#deploying-an-application">Deploying an application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_dev.html#starting-stopping-instances">Starting/stopping instances</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cartridge_admin.html">Administrator’s guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#deploying-the-cluster">Deploying the cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#updating-the-configuration">Updating the configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#managing-the-cluster">Managing the cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#managing-users">Managing users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#resolving-conflicts">Resolving conflicts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#monitoring-a-cluster-via-cli">Monitoring a cluster via CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#disaster-recovery">Disaster recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cartridge_admin.html#backups">Backups</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

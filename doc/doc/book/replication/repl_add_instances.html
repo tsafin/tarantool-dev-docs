@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Adding instances &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Adding instances</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_add_instances.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="adding-instances">
+<span id="replication-add-instances"></span><h1>Adding instances<a class="headerlink" href="#adding-instances" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="adding-a-replica">
+<span id="replication-add-replica"></span><h2>Adding a replica<a class="headerlink" href="#adding-a-replica" title="Permalink to this headline">¶</a></h2>
+<div align="center" class="align-center"><img alt="../../../../_images/mr-1m-2r-mesh-add.svg" src="../../../../_images/mr-1m-2r-mesh-add.svg" /></div>
+<p>To add a second <strong>replica</strong> instance to the <strong>master-replica</strong> set from our
+<a class="reference internal" href="repl_bootstrap.html#replication-master-replica-bootstrap"><span class="std std-ref">bootstrapping example</span></a>, we need an
+analog of the instance file that we created for the first replica in that set:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- instance file for replica #2</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+  <span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">,</span>
+  <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;replicator:password@192.168.0.101:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.102:3301&#39;</span><span class="p">,</span>  <span class="c1">-- replica #1 URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.103:3301&#39;</span><span class="p">},</span> <span class="c1">-- replica #2 URI</span>
+  <span class="n">read_only</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">})</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="s1">&#39;replication&#39;</span><span class="p">)</span> <span class="c1">-- grant replication role</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.once executed on replica #2&#39;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we add the URI of replica #2 to the <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a>
+parameter, so now it contains three URIs.</p>
+<p>After we launch the new replica instance, it gets connected to the master
+instance and retrieves the master’s write-ahead-log and snapshot files:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching replica #2</span>
+<span class="gp">$</span> tarantool replica2.lua
+<span class="go">2017-06-14 14:54:33.927 [46945] main/101/replica2.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 14:54:33.927 [46945] main/101/replica2.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 14:54:33.928 [46945] main/101/replica2.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 14:54:33.930 [46945] main/104/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:54:33.930 [46945] main/104/applier/replicator@192.168.0.10 I&gt; authenticated</span>
+<span class="go">2017-06-14 14:54:33.930 [46945] main/101/replica2.lua I&gt; bootstrapping replica from 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:54:33.933 [46945] main/104/applier/replicator@192.168.0.10 I&gt; initial data received</span>
+<span class="go">2017-06-14 14:54:33.933 [46945] main/104/applier/replicator@192.168.0.10 I&gt; final data received</span>
+<span class="go">2017-06-14 14:54:33.934 [46945] snapshot/101/main I&gt; saving snapshot `/var/lib/tarantool/replica2/00000000000000000010.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 14:54:33.934 [46945] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 14:54:33.935 [46945] main/101/replica2.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 14:54:33.935 [46945] main/101/replica2.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 14:54:33.935 [46945] main/101/replica2.lua I&gt; set &#39;read_only&#39; configuration option to true</span>
+<span class="go">2017-06-14 14:54:33.936 [46945] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+<p>Since we are adding a read-only instance, there is no need to dynamically
+update the <code class="docutils literal notranslate"><span class="pre">replication</span></code> parameter on the other running instances. This update
+would be required if we <a class="reference internal" href="#replication-add-master"><span class="std std-ref">added a master instance</span></a>.</p>
+<p>However, we recommend specifying the URI of replica #3 in all instance files of the
+replica set. This will keep all the files consistent with each other and with
+the current replication topology, and so will help to avoid configuration errors
+in case of further configuration updates and replica set restart.</p>
+</div>
+<div class="section" id="adding-a-master">
+<span id="replication-add-master"></span><h2>Adding a master<a class="headerlink" href="#adding-a-master" title="Permalink to this headline">¶</a></h2>
+<div align="center" class="align-center"><img alt="../../../../_images/mm-3m-mesh-add.svg" src="../../../../_images/mm-3m-mesh-add.svg" /></div>
+<p>To add a third master instance to the <strong>master-master</strong> set from our
+<a class="reference internal" href="repl_bootstrap.html#replication-master-master-bootstrap"><span class="std std-ref">bootstrapping example</span></a>, we need an
+analog of the instance files that we created to bootstrap the other master
+instances in that set:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- instance file for master #3</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+  <span class="n">listen</span>      <span class="o">=</span> <span class="mi">3301</span><span class="p">,</span>
+  <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;replicator:password@192.168.0.101:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master#1 URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.102:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master#2 URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.103:3301&#39;</span><span class="p">},</span> <span class="c1">-- master#3 URI</span>
+  <span class="n">read_only</span>   <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">-- temporarily read-only</span>
+<span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">})</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="s1">&#39;replication&#39;</span><span class="p">)</span> <span class="c1">-- grant replication role</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we make the following changes:</p>
+<ul class="simple">
+<li>Add the URI of master #3 to the <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a>
+parameter.</li>
+<li>Temporarily specify <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-read-only"><span class="std std-ref">read_only=true</span></a> to disable
+data-change operations on the instance. After launch, master #3 will act as a
+replica until it retrieves all data from the other masters in the replica set.</li>
+</ul>
+<p>After we launch master #3, it gets connected to the other master
+instances and retrieves their write-ahead-log and snapshot files:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching master #3</span>
+<span class="gp">$</span> tarantool master3.lua
+<span class="go">2017-06-14 17:10:00.556 [47121] main/101/master3.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 17:10:00.557 [47121] main/101/master3.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 17:10:00.557 [47121] main/101/master3.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] main/104/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] main/105/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] main/106/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.103:3301</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] main/105/applier/replicator@192.168.0.10 I&gt; authenticated</span>
+<span class="go">2017-06-14 17:10:00.559 [47121] main/101/master3.lua I&gt; bootstrapping replica from 192.168.0.102:3301</span>
+<span class="go">2017-06-14 17:10:00.562 [47121] main/105/applier/replicator@192.168.0.10 I&gt; initial data received</span>
+<span class="go">2017-06-14 17:10:00.562 [47121] main/105/applier/replicator@192.168.0.10 I&gt; final data received</span>
+<span class="go">2017-06-14 17:10:00.562 [47121] snapshot/101/main I&gt; saving snapshot `/Users/e.shebunyaeva/work/tarantool-test-repl/master3_dir/00000000000000000009.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 17:10:00.562 [47121] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 17:10:00.564 [47121] main/101/master3.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 17:10:00.564 [47121] main/101/master3.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 17:10:00.565 [47121] main/101/master3.lua I&gt; set &#39;read_only&#39; configuration option to true</span>
+<span class="go">2017-06-14 17:10:00.565 [47121] main C&gt; entering the event loop</span>
+<span class="go">2017-06-14 17:10:00.565 [47121] main/104/applier/replicator@192.168.0.10 I&gt; authenticated</span>
+</pre></div>
+</div>
+<p>Next, we add the URI of master #3 to the <code class="docutils literal notranslate"><span class="pre">replication</span></code> parameter on the existing two
+masters. Replication-related parameters are dynamic, so we only need to make a
+<code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> request on each of the running instances:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># adding master #3 URI to replication sources
+tarantool&gt; box.cfg{replication =
+         &gt; {&#39;replicator:password@192.168.0.101:3301&#39;,
+         &gt; &#39;replicator:password@192.168.0.102:3301&#39;,
+         &gt; &#39;replicator:password@192.168.0.103:3301&#39;}}
+---
+...
+</pre></div>
+</div>
+<p>When master #3 catches up with the other masters’ state, we can disable
+read-only mode for this instance:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># making master #3 a real master
+tarantool&gt; box.cfg{read_only=false}
+---
+...
+</pre></div>
+</div>
+<p>We also recommend to specify master #3 URI in all instance files in order to
+keep all the files consistent with each other and with the current replication
+topology.</p>
+</div>
+<div class="section" id="orphan-status">
+<span id="replication-orphan-status"></span><h2>Orphan status<a class="headerlink" href="#orphan-status" title="Permalink to this headline">¶</a></h2>
+<p>Starting with Tarantool version 1.9, there is a change to the
+procedure when an instance joins a replica set.
+During <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> the instance will try to join all masters listed
+in <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">box.cfg.replication</span></a>.
+If the instance does not succeed with at least
+the number of masters specified in
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>,
+then it will switch to <strong>orphan status</strong>.
+While an instance is in orphan status, it is read-only.</p>
+<p>To “join” a master, a replica instance must “connect” to the
+master node and then “sync”.</p>
+<p>“Connect” means contact the master over the physical network
+and receive acknowledgment. If there is no acknowledgment after
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-timeout"><span class="std std-ref">box.replication_connect_timeout</span></a>
+seconds (usually 4 seconds), and retries fail, then the connect step fails.</p>
+<p>“Sync” means receive updates
+from the master in order to make a local database copy.
+Syncing is complete when the replica has received all the
+updates, or at least has received enough updates that the replica’s lag
+(see
+<a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication-upstream-lag"><span class="std std-ref">replication.upstream.lag</span></a>
+in <code class="docutils literal notranslate"><span class="pre">box.info()</span></code>)
+is less than or equal to the number of seconds specified in
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-sync-lag"><span class="std std-ref">box.cfg.replication_sync_lag</span></a>.
+If <code class="docutils literal notranslate"><span class="pre">replication_sync_lag</span></code> is unset (nil) or set to TIMEOUT_INFINITY, then
+the replica skips the “sync” state and switches to “follow” immediately.</p>
+<p>In order to leave orphan mode you need to sync with a sufficient number
+(<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>) of
+instances. To do so, you may either:</p>
+<ul class="simple">
+<li>Set <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>
+to a lower value.</li>
+<li>Reset <code class="docutils literal notranslate"><span class="pre">box.cfg.replication</span></code> to exclude instances that cannot be reached
+or synced with.</li>
+<li>Set <code class="docutils literal notranslate"><span class="pre">box.cfg.replication</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (empty string).</li>
+</ul>
+<p>The following situations are possible.</p>
+<p id="replication-leader"><strong>Situation 1: bootstrap</strong></p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is being called for the first time.
+A replica is joining but no replica set exists yet.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Set status to ‘orphan’.</p>
+</li>
+<li><p class="first">Try to connect to all nodes from <code class="docutils literal notranslate"><span class="pre">box.cfg.replication</span></code>,
+or to the number of nodes required by
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>.
+Retrying up to 3 times in 30 seconds is possible because this is bootstrap,
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-timeout"><span class="std std-ref">replication_connect_timeout</span></a>
+is overridden.</p>
+</li>
+<li><p class="first">Abort and throw an error if not connected to all nodes in <code class="docutils literal notranslate"><span class="pre">box.cfg.replication</span></code> or
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>.</p>
+</li>
+<li><p class="first">This instance might be elected as the replica set ‘leader’.
+Criteria for electing a leader include vclock value (largest is best),
+and whether it is read-only or read-write (read-write is best unless there is no other choice).
+The leader is the master that other instances must join.
+The leader is the master that executes <a class="reference internal" href="../../reference/reference_lua/box_once.html#box-once"><span class="std std-ref">box_once()</span></a> functions.</p>
+</li>
+<li><p class="first">If this instance is elected as the replica set leader,
+then
+perform an “automatic bootstrap”:</p>
+<ol class="loweralpha simple">
+<li>Set status to ‘running’.</li>
+<li>Return from <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>.</li>
+</ol>
+<p>Otherwise this instance will be a replica joining an existing replica set,
+so:</p>
+<ol class="loweralpha simple">
+<li>Bootstrap from the leader.
+See examples in section <a class="reference internal" href="repl_bootstrap.html#replication-bootstrap"><span class="std std-ref">Bootstrapping a replica set</span></a>.</li>
+<li>In background, sync with all the other nodes in the replication set.</li>
+</ol>
+</li>
+</ol>
+</div></blockquote>
+<p><strong>Situation 2: recovery</strong></p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is not being called for the first time.
+It is being called again in order to perform recovery.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Perform <a class="reference internal" href="../../dev_guide/internals_index.html#internals-recovery-process"><span class="std std-ref">recovery</span></a> from the last local
+snapshot and the WAL files.</li>
+<li>Connect to at least
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>
+nodes. If failed – set status to ‘orphan’.
+(Attempts to sync will continue in the background and when/if they succeed
+then ‘orphan’ will be changed to ‘connected’.)</li>
+<li>If connected - sync with all connected nodes, until the difference is not more than
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-sync-lag"><span class="std std-ref">replication_sync_lag</span></a> seconds.</li>
+</ol>
+</div></blockquote>
+<p id="replication-configuration-update"><strong>Situation 3: configuration update</strong></p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is not being called for the first time.
+It is being called again because some replication parameter
+or something in the replica set has changed.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Try to connect to all nodes from <code class="docutils literal notranslate"><span class="pre">box.cfg.replication</span></code>,
+or to the number of nodes required by
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a>,
+within the time period specified in
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-connect-timeout"><span class="std std-ref">replication_connect_timeout</span></a>.</li>
+<li>Try to sync with the connected nodes,
+within the time period specified in
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-sync-timeout"><span class="std std-ref">replication_sync_timeout</span></a>.</li>
+<li>If earlier steps fail, change status to ‘orphan’.
+(Attempts to sync will continue in the background and when/if they succeed
+then ‘orphan’ status will end.)</li>
+<li>If earlier steps succeed, set status to ‘running’ (master) or ‘follow’ (replica).</li>
+</ol>
+</div></blockquote>
+<p id="replication-configuration-rebootstrap"><strong>Situation 4: rebootstrap</strong></p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is not being called. The replica connected successfully
+at some point in the past, and is now ready for an update from the master.
+But the master cannot provide an update.
+This can happen by accident, or more likely can happen because the replica
+is slow (its <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication-sync-lag"><span class="std std-ref">lag</span></a> is large),
+and the WAL (.xlog) files containing the
+updates have been deleted. This is not crippling. The replica can discard
+what it received earlier, and then ask for the master’s latest snapshot
+(.snap) file contents. Since it is effectively going through the bootstrap
+process a second time, this is called “rebootstrapping”. However, there has
+to be one difference from an ordinary bootstrap – the replica’s
+<a class="reference internal" href="repl_architecture.html#replication-replica-id"><span class="std std-ref">replica id</span></a> will remain the same.
+If it changed, then the master would think that the replica is a
+new addition to the cluster, and would maintain a record of an
+instance ID of a replica that has ceased to exist. Rebootstrapping was
+introduced in Tarantool version 1.10.2 and is completely automatic.</p>
+</div>
+<div class="section" id="server-startup-with-replication">
+<span id="replication-server-startup"></span><h2>Server startup with replication<a class="headerlink" href="#server-startup-with-replication" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the recovery process described in the
+section <a class="reference internal" href="../../dev_guide/internals_index.html#internals-recovery-process"><span class="std std-ref">Recovery process</span></a>, the server must take
+additional steps and precautions if <a class="reference internal" href="index.html#replication"><span class="std std-ref">replication</span></a> is enabled.</p>
+<p>Once again the startup procedure is initiated by the <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> request.
+One of the <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> parameters may be
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a> which specifies replication
+source(-s). We will refer to this replica, which is starting up due to <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code>,
+as the “local” replica to distinguish it from the other replicas in a replica set,
+which we will refer to as “distant” replicas.</p>
+<p><em>If there is no snapshot .snap file and the</em> <code class="docutils literal notranslate"><span class="pre">replication</span></code> <em>parameter is empty</em>: <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+then the local replica assumes it is an unreplicated “standalone” instance, or is
+the first replica of a new replica set. It will generate new UUIDs for
+itself and for the replica set. The replica UUID is stored in the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space; the
+replica set UUID is stored in the <code class="docutils literal notranslate"><span class="pre">_schema</span></code> space. Since a snapshot contains all the
+data in all the spaces, that means the local replica’s snapshot will contain the
+replica UUID and the replica set UUID. Therefore, when the local replica restarts on
+later occasions, it will be able to recover these UUIDs when it reads the .snap
+file.</p>
+<p><em>If there is no snapshot .snap file and the</em> <code class="docutils literal notranslate"><span class="pre">replication</span></code> <em>parameter is not empty
+and the</em> <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> <em>space contains no other replica UUIDs</em>: <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+then the local replica assumes it is not a standalone instance, but is not yet part
+of a replica set. It must now join the replica set. It will send its replica UUID to the
+first distant replica which is listed in <code class="docutils literal notranslate"><span class="pre">replication</span></code> and which will act as a
+master. This is called the “join request”. When a distant replica receives a join
+request, it will send back:</p>
+<ol class="arabic simple">
+<li>the distant replica’s replica set UUID,</li>
+<li>the contents of the distant replica’s .snap file. <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+When the local replica receives this information, it puts the replica set UUID in
+its <code class="docutils literal notranslate"><span class="pre">_schema</span></code> space, puts the distant replica’s UUID and connection information
+in its <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space, and makes a snapshot containing all the data sent by
+the distant replica. Then, if the local replica has data in its WAL .xlog
+files, it sends that data to the distant replica. The distant replica will
+receive this and update its own copy of the data, and add the local replica’s
+UUID to its <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space.</li>
+</ol>
+<p><em>If there is no snapshot .snap file and the</em> <code class="docutils literal notranslate"><span class="pre">replication</span></code> <em>parameter is not empty
+and the</em> <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> <em>space contains other replica UUIDs</em>: <a href="#id7"><span class="problematic" id="id8">|br|</span></a>
+then the local replica assumes it is not a standalone instance, and is already part
+of a replica set. It will send its replica UUID and replica set UUID to all the distant
+replicas which are listed in <code class="docutils literal notranslate"><span class="pre">replication</span></code>. This is called the “on-connect
+handshake”. When a distant replica receives an on-connect handshake: <a href="#id9"><span class="problematic" id="id10">|br|</span></a></p>
+<ol class="arabic simple">
+<li>the distant replica compares its own copy of the replica set UUID to the one in
+the on-connect handshake. If there is no match, then the handshake fails and
+the local replica will display an error.</li>
+<li>the distant replica looks for a record of the connecting instance in its
+<code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space. If there is none, then the handshake fails. <a href="#id11"><span class="problematic" id="id12">|br|</span></a>
+Otherwise the handshake is successful. The distant replica will read any new
+information from its own .snap and .xlog files, and send the new requests to
+the local replica.</li>
+</ol>
+<p>In the end, the local replica knows what replica set it belongs to, the distant
+replica knows that the local replica is a member of the replica set, and both
+replicas have the same database contents.</p>
+<p id="replication-vector"><em>If there is a snapshot file and replication source is not empty</em>: <a href="#id13"><span class="problematic" id="id14">|br|</span></a>
+first the local replica goes through the recovery process described in the
+previous section, using its own .snap and .xlog files. Then it sends a
+“subscribe” request to all the other replicas of the replica set. The subscribe
+request contains the server vector clock. The vector clock has a collection of
+pairs ‘server id, lsn’ for every replica in the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> system space. Each
+distant replica, upon receiving a subscribe request, will read its .xlog files’
+requests and send them to the local replica if (lsn of .xlog file request) is
+greater than (lsn of the vector clock in the subscribe request). After all the
+other replicas of the replica set have responded to the local replica’s subscribe
+request, the replica startup is complete.</p>
+<p>The following temporary limitations applied for Tarantool versions earlier than
+1.7.7:</p>
+<ul class="simple">
+<li>The URIs in the <code class="docutils literal notranslate"><span class="pre">replication</span></code> parameter should all be in the same order on all replicas.
+This is not mandatory but is an aid to consistency.</li>
+<li>The replicas of a replica set should be started up at slightly different times.
+This is not mandatory but prevents a situation where each replica is waiting
+for the other replica to be ready.</li>
+</ul>
+<p>The following limitation still applies for the current Tarantool version:</p>
+<ul class="simple">
+<li>The maximum number of entries in the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space is
+<a class="reference internal" href="../box/limitations.html#limitations-replicas"><span class="std std-ref">32</span></a>. Tuples for
+out-of-date replicas are not automatically re-used, so if this 32-replica
+limit is reached, users may have to reorganize the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space manually.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

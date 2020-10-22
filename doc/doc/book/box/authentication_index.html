@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Access control &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Access control</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/box/authentication_index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="access-control">
+<span id="authentication"></span><h1>Access control<a class="headerlink" href="#access-control" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="id1">
+<span id="id2"></span><h1>Access control<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Understanding security details is primarily an issue for administrators.
+However, ordinary users should at least skim this section to get an idea
+of how Tarantool makes it possible for administrators to prevent unauthorized
+access to the database and to certain functions.</p>
+<p>Briefly:</p>
+<ul class="simple">
+<li>There is a method to guarantee with password checks that users really are
+who they say they are (“authentication”).</li>
+<li>There is a <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> system space, where usernames and
+password-hashes are stored.</li>
+<li>There are functions for saying that certain users are allowed to do certain
+things (“privileges”).</li>
+<li>There is a <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-priv"><span class="std std-ref">_priv</span></a> system space, where privileges are
+stored. Whenever a user tries to do an operation, there is a check whether
+the user has the privilege to do the operation (“access control”).</li>
+</ul>
+<p>Details follow.</p>
+<div class="section" id="users">
+<span id="authentication-users"></span><h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>There is a <strong>current user</strong> for any program working with Tarantool,
+local or remote.
+If a remote connection is using a <a class="reference internal" href="../admin/security.html#admin-security"><span class="std std-ref">binary port</span></a>,
+the current user, by default, is ‘<strong>guest</strong>’.
+If the connection is using an <a class="reference internal" href="../admin/security.html#admin-security"><span class="std std-ref">admin-console port</span></a>,
+the current user is ‘<strong>admin</strong>’.
+When executing a <a class="reference internal" href="../../reference/configuration/index.html#index-init-label"><span class="std std-ref">Lua initialization script</span></a>,
+the current user is also ‘<strong>admin</strong>’.</p>
+<p>The current user name can be found with <a class="reference internal" href="../../reference/reference_lua/box_session.html#box-session-user"><span class="std std-ref">box.session.user()</span></a>.</p>
+<p>The current user can be changed:</p>
+<ul class="simple">
+<li>For a binary port connection – with the
+<a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">AUTH protocol command</span></a>, supported
+by most clients;</li>
+<li>For an admin-console connection and in a Lua initialization script –
+with <a class="reference internal" href="../../reference/reference_lua/box_session.html#box-session-su"><span class="std std-ref">box.session.su</span></a>;</li>
+<li>For a binary-port connection invoking a stored function with the CALL command –
+if the <a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-func-create"><span class="std std-ref">SETUID</span></a> property is enabled for the function,
+Tarantool temporarily replaces the current user with the
+function’s creator, with all the creator’s privileges, during function execution.</li>
+</ul>
+</div>
+<div class="section" id="passwords">
+<span id="authentication-passwords"></span><h2>Passwords<a class="headerlink" href="#passwords" title="Permalink to this headline">¶</a></h2>
+<p>Each user (except ‘guest’) may have a <strong>password</strong>.
+The password is any alphanumeric string.</p>
+<p>Tarantool passwords are stored in the <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a>
+system space with a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash function</a>
+so that, if the password is ‘x’, the stored hash-password is a long string
+like ‘lL3OvhkIPOKh+Vn9Avlkx69M/Ck=‘.
+When a client connects to a Tarantool instance, the instance sends a random
+<a class="reference external" href="https://en.wikipedia.org/wiki/Salt_%28cryptography%29">salt value</a>
+which the client must mix with the hashed-password before sending
+to the instance. Thus the original value ‘x’ is never stored anywhere except
+in the user’s head, and the hashed value is never passed down a network wire
+except when mixed with a random salt.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For more details of the password hashing algorithm (e.g. for the purpose of writing
+a new client application), read the
+<a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.9/src/scramble.h">scramble.h</a>
+header file.</p>
+</div>
+<p>This system prevents malicious onlookers from finding passwords by snooping
+in the log files or snooping on the wire. It is the same system that
+<a class="reference external" href="http://dev.mysql.com/doc/refman/5.7/en/password-hashing.html">MySQL introduced several years ago</a>,
+which has proved adequate for medium-security installations.
+Nevertheless, administrators should warn users that no system
+is foolproof against determined long-term attacks, so passwords should be
+guarded and changed occasionally. Administrators should also advise users to
+choose long unobvious passwords, but it is ultimately up to the users to choose
+or change their own passwords.</p>
+<p>There are two functions for managing passwords in Tarantool:
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-passwd"><span class="std std-ref">box.schema.user.passwd()</span></a> for changing a user’s password and
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-password"><span class="std std-ref">box.schema.user.password()</span></a> for getting a hash
+of a user’s password.</p>
+</div>
+<div class="section" id="owners-and-privileges">
+<span id="authentication-owners-privileges"></span><h2>Owners and privileges<a class="headerlink" href="#owners-and-privileges" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool has one database. It may be called “box.schema” or “universe”.
+The database contains database objects, including
+spaces, indexes, users, roles, sequences, and functions.</p>
+<p>The <strong>owner</strong> of a database object is the user who created it.
+The owner of the database itself, and the owner of objects that
+are created initially (the system spaces and the default users)
+is ‘<strong>admin</strong>’.</p>
+<p>Owners automatically have <strong>privileges</strong> for what they create.
+They can share these privileges with other users or with roles,
+using <a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">box.schema.user.grant</span></a> requests.
+The following privileges can be granted:</p>
+<ul class="simple">
+<li>‘read’, e.g. allow select from a space</li>
+<li>‘write’, e.g. allow update on a space</li>
+<li>‘execute’, e.g. allow call of a function, or (less commonly) allow use of a role</li>
+<li>‘create’, e.g. allow
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-space-create"><span class="std std-ref">box.schema.space.create</span></a>
+(access to certain system spaces is also necessary)</li>
+<li>‘alter’, e.g. allow
+<a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-alter"><span class="std std-ref">box.space.x.index.y:alter</span></a>
+(access to certain system spaces is also necessary)</li>
+<li>‘drop’, e.g. allow
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-sequence-drop"><span class="std std-ref">box.sequence.x:drop</span></a>
+(currently this can be granted but has no effect)</li>
+<li>‘usage’, e.g. whether any action is allowable regardless of other
+privileges (sometimes revoking ‘usage’ is a convenient way to
+block a user temporarily without dropping the user)</li>
+<li>‘session’, e.g. whether the user can ‘connect’.</li>
+</ul>
+<p>To <strong>create</strong> objects, users need the ‘create’ privilege and
+at least ‘read’ and ‘write’ privileges
+on the system space with a similar name (for example, on the
+<a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-space"><span class="std std-ref">_space</span></a> if the user needs to create spaces).</p>
+<p>To <strong>access</strong> objects, users need an appropriate privilege
+on the object (for example, the ‘execute’ privilege on function F
+if the users need to execute function F). See below some
+<a class="reference internal" href="#authentication-owners-privileges-examples-specific"><span class="std std-ref">examples for granting specific privileges</span></a>
+that a grantor – that is, ‘admin’ or the object creator – can make.</p>
+<p>To <strong>drop</strong> an object, users must be the object’s creator or be ‘admin’.
+As the owner of the entire database, ‘admin’ can drop any object including
+other users.</p>
+<p>To grant privileges to a user, the object owner says <a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">grant()</span></a>.
+To revoke privileges from a user, the object owner says <a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-revoke"><span class="std std-ref">revoke()</span></a>.
+In either case, there are up to five parameters:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="p">,</span> <span class="n">privilege</span><span class="p">,</span> <span class="n">object</span><span class="o">-</span><span class="nb">type</span> <span class="p">[,</span> <span class="n">object</span><span class="o">-</span><span class="n">name</span> <span class="p">[,</span> <span class="n">options</span><span class="p">]])</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">user-name</span></code> is the user (or role) that will receive or lose the privilege;</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">privilege</span></code> is any of ‘read’, ‘write’, ‘execute’, ‘create’, ‘alter’, ‘drop’,
+‘usage’, or ‘session’ (or a comma-separated list);</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">object-type</span></code> is any of ‘space’, ‘index’,
+‘sequence’, ‘function’, role-name, or ‘universe’;</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">object-name</span></code> is what the privilege is for
+(omitted if <code class="docutils literal notranslate"><span class="pre">object-type</span></code> is ‘universe’);</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">options</span></code> is a list inside braces for example <code class="docutils literal notranslate"><span class="pre">{if_not_exists=true|false}</span></code>
+(usually omitted because the default is acceptable).</p>
+<p>Every update of user privileges is reflected immediately in the existing sessions
+and objects, e.g. functions.</p>
+</li>
+</ul>
+<p><strong>Example for granting many privileges at once</strong></p>
+<p>In this example user ‘admin’ grants many privileges on
+many objects to user ‘U’, with a single request.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write,execute,create,drop&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="authentication-owners-privileges-examples-specific"><strong>Examples for granting privileges for specific operations</strong></p>
+<p>In these examples the object’s creator grants precisely
+the minimal privileges necessary for particular operations,
+to user ‘U’.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- So that &#39;U&#39; can create spaces:</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;create&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_schema&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_space&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can  create indexes (assuming &#39;U&#39; created the space)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_space&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_index&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can  create indexes on space T (assuming &#39;U&#39; did not create space T)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;create&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_space&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_index&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can  alter indexes on space T (assuming &#39;U&#39; did not create the index)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;alter&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_space&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_index&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_space_sequence&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_index&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can create users or roles:</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;create&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_user&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_priv&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can create sequences:</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;create&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_sequence&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can create functions:</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;create&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_func&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can grant access on objects that &#39;U&#39; created</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_user&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can select or get from a space named &#39;T&#39;</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can update or insert or delete or truncate a space named &#39;T&#39;</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can execute a function named &#39;F&#39;</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;execute&#39;</span><span class="p">,</span><span class="s1">&#39;function&#39;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can use the &quot;S:next()&quot; function with a sequence named S</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span><span class="s1">&#39;sequence&#39;</span><span class="p">,</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="c1">-- So that &#39;U&#39; can use the &quot;S:set()&quot; or &quot;S:reset() function with a sequence named S</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span><span class="s1">&#39;write&#39;</span><span class="p">,</span><span class="s1">&#39;sequence&#39;</span><span class="p">,</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example for creating users and objects then granting privileges</strong></p>
+<p>Here we create a Lua function that will be executed under the user id of its
+creator, even if called by another user.</p>
+<p>First, we create two spaces (‘u’ and ‘i’) and grant a no-password user (‘internal’)
+full access to them. Then we define a function (‘read_and_modify’) and the
+no-password user becomes this function’s creator. Finally, we grant another user
+(‘public_user’) access to execute Lua functions created by the no-password user.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">u</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">i</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
+
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="s1">&#39;create&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;_func&#39;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nf">read_and_modify</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">u</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">u</span>
+  <span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">i</span>
+  <span class="kd">local</span> <span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="p">:</span><span class="n">get</span><span class="p">{</span><span class="n">key</span><span class="p">}</span>
+  <span class="kr">if</span> <span class="n">t</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+    <span class="n">u</span><span class="p">:</span><span class="n">put</span><span class="p">{</span><span class="n">key</span><span class="p">,</span> <span class="n">box</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">uid</span><span class="p">()}</span>
+    <span class="n">i</span><span class="p">:</span><span class="n">put</span><span class="p">{</span><span class="n">key</span><span class="p">,</span> <span class="n">fiber</span><span class="p">.</span><span class="n">time</span><span class="p">()}</span>
+  <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="n">box</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">su</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;read_and_modify&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">setuid</span><span class="o">=</span> <span class="kc">true</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">su</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;public_user&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;public_user&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;read_and_modify&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="roles">
+<span id="authentication-roles"></span><h2>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>role</strong> is a container for privileges which can be granted to regular users.
+Instead of granting or revoking individual privileges, you can put all the
+privileges in a role and then grant or revoke the role.</p>
+<p>Role information is stored in the <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space, but
+the third field in the tuple – the type field – is ‘role’ rather than ‘user’.</p>
+<p>An important feature in role management is that roles can be <strong>nested</strong>.
+For example, role R1 can be granted a privilege “role R2”, so users with the
+role R1 will subsequently get all privileges from both roles R1 and R2.
+In other words, a user gets all the privileges that are granted to a user’s
+roles, directly or indirectly.</p>
+<p>There are actually two ways to grant or revoke a role:
+<code class="samp docutils literal notranslate"><span class="pre">box.schema.user.grant-or-revoke(</span><em><span class="pre">user-name-or-role-name</span></em><span class="pre">,'execute',</span> <span class="pre">'role',</span><em><span class="pre">role-name</span></em><span class="pre">...)</span></code>
+or
+<code class="samp docutils literal notranslate"><span class="pre">box.schema.user.grant-or-revoke(</span><em><span class="pre">user-name-or-role-name</span></em><span class="pre">,</span><em><span class="pre">role-name</span></em><span class="pre">...)</span></code>.
+The second way is preferable.</p>
+<p>The ‘usage’ and ‘session’ privileges cannot be granted to roles.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- This example will work for a user with many privileges, such as &#39;admin&#39;</span>
+<span class="c1">-- or a user with the pre-defined &#39;super&#39; role</span>
+<span class="c1">-- Create space T with a primary index</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">T</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{})</span>
+<span class="c1">-- Create user U1 so that later we can change the current user to U1</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;U1&#39;</span><span class="p">)</span>
+<span class="c1">-- Create two roles, R1 and R2</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;R1&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;R2&#39;</span><span class="p">)</span>
+<span class="c1">-- Grant role R2 to role R1 and role R1 to user U1 (order doesn&#39;t matter)</span>
+<span class="c1">-- There are two ways to grant a role; here we use the shorter way</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;R1&#39;</span><span class="p">,</span> <span class="s1">&#39;R2&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;U1&#39;</span><span class="p">,</span> <span class="s1">&#39;R1&#39;</span><span class="p">)</span>
+<span class="c1">-- Grant read/write privileges for space T to role R2</span>
+<span class="c1">-- (but not to role R1 and not to user U1)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;R2&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="c1">-- Change the current user to user U1</span>
+<span class="n">box</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">su</span><span class="p">(</span><span class="s1">&#39;U1&#39;</span><span class="p">)</span>
+<span class="c1">-- An insertion to space T will now succeed because, due to nested roles,</span>
+<span class="c1">-- user U1 has write privilege on space T</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">T</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>For more detail see
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">box.schema.user.grant()</span></a> and
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-role-grant"><span class="std std-ref">box.schema.role.grant()</span></a> in
+the built-in modules reference.</p>
+</div>
+<div class="section" id="sessions-and-security">
+<span id="authentication-sessions"></span><h2>Sessions and security<a class="headerlink" href="#sessions-and-security" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>session</strong> is the state of a connection to Tarantool. It contains:</p>
+<ul class="simple">
+<li>an integer id identifying the connection,</li>
+<li>the <a class="reference internal" href="#authentication-users"><span class="std std-ref">current user</span></a> associated with the connection,</li>
+<li>text description of the connected peer, and</li>
+<li>session local state, such as Lua variables and functions.</li>
+</ul>
+<p>In Tarantool, a single session can execute multiple concurrent transactions.
+Each transaction is identified by a unique integer id, which can be queried
+at start of the transaction using <a class="reference internal" href="../../reference/reference_lua/box_session.html#box-session-sync"><span class="std std-ref">box.session.sync()</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To track all connects and disconnects, you can use
+<a class="reference internal" href="triggers.html#triggers"><span class="std std-ref">connection and authentication triggers</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

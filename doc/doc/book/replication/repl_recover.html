@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Recovering from a degraded state &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Recovering from a degraded state</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_recover.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="recovering-from-a-degraded-state">
+<span id="replication-recover"></span><h1>Recovering from a degraded state<a class="headerlink" href="#recovering-from-a-degraded-state" title="Permalink to this headline">¶</a></h1>
+<p>“Degraded state” is a situation when the master becomes unavailable – due to
+hardware or network failure, or due to a programming bug.</p>
+<div align="center" class="align-center"><img alt="../../../../_images/mr-degraded.svg" src="../../../../_images/mr-degraded.svg" /></div>
+<p>In a master-replica set, if a master disappears, error messages appear on the
+replicas stating that the connection is lost:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># messages from a replica&#39;s log</span>
+<span class="go">2017-06-14 16:23:10.993 [19153] main/105/applier/replicator@192.168.0. I&gt; can&#39;t read row</span>
+<span class="go">2017-06-14 16:23:10.993 [19153] main/105/applier/replicator@192.168.0. coio.cc:349 !&gt; SystemError</span>
+<span class="go">unexpected EOF when reading from socket, called on fd 17, aka 192.168.0.101:57815,</span>
+<span class="go">peer of 192.168.0.101:3301: Broken pipe</span>
+<span class="go">2017-06-14 16:23:10.993 [19153] main/105/applier/replicator@192.168.0. I&gt; will retry every 1 second</span>
+<span class="go">2017-06-14 16:23:10.993 [19153] relay/[::ffff:192.168.0.101]:/101/main I&gt; the replica has closed its socket, exiting</span>
+<span class="go">2017-06-14 16:23:10.993 [19153] relay/[::ffff:192.168.0.101]:/101/main C&gt; exiting the relay loop</span>
+</pre></div>
+</div>
+<p>… and the master’s status is reported as “disconnected”:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># report from replica #1
+tarantool&gt; box.info.replication
+---
+- 1:
+    id: 1
+    uuid: 70e8e9dc-e38d-4046-99e5-d25419267229
+    lsn: 542
+    upstream:
+      peer: replicator@192.168.0.101:3301
+      lag: 0.00026607513427734
+      status: disconnected
+      idle: 182.36929893494
+      message: connect, called on fd 13, aka 192.168.0.101:58244
+  2:
+    id: 2
+    uuid: fb252ac7-5c34-4459-84d0-54d248b8c87e
+    lsn: 0
+  3:
+    id: 3
+    uuid: fd7681d8-255f-4237-b8bb-c4fb9d99024d
+    lsn: 0
+    downstream:
+      vclock: {1: 542}
+...
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># report from replica #2
+tarantool&gt; box.info.replication
+---
+- 1:
+    id: 1
+    uuid: 70e8e9dc-e38d-4046-99e5-d25419267229
+    lsn: 542
+    upstream:
+      peer: replicator@192.168.0.101:3301
+      lag: 0.00027203559875488
+      status: disconnected
+      idle: 186.76988101006
+      message: connect, called on fd 13, aka 192.168.0.101:58253
+  2:
+    id: 2
+    uuid: fb252ac7-5c34-4459-84d0-54d248b8c87e
+    lsn: 0
+    upstream:
+      status: follow
+      idle: 186.76960110664
+      peer: replicator@192.168.0.102:3301
+      lag: 0.00020599365234375
+  3:
+    id: 3
+    uuid: fd7681d8-255f-4237-b8bb-c4fb9d99024d
+    lsn: 0
+...
+</pre></div>
+</div>
+<p>To declare that one of the replicas must now take over as a new master:</p>
+<ol class="arabic simple">
+<li>Make sure that the old master is gone for good:<ul>
+<li>change network routing rules to avoid any more packets being delivered to
+the master, or</li>
+<li>shut down the master instance, if you have access to the machine, or</li>
+<li>power off the container or the machine.</li>
+</ul>
+</li>
+<li>Say <code class="docutils literal notranslate"><span class="pre">box.cfg{read_only=false,</span> <span class="pre">listen=URI}</span></code> on the replica, and
+<code class="docutils literal notranslate"><span class="pre">box.cfg{replication=URI}</span></code> on the other replicas in the set.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If there are updates on the old master that were not propagated before the
+old master went down,
+<a class="reference internal" href="../admin/disaster_recovery.html#admin-disaster-recovery-master-replica"><span class="std std-ref">re-apply them manually</span></a> to the
+new master using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">cat</span></code> and <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">play</span></code> commands.</p>
+</div>
+<p>There is no automatic way for a replica to detect that the master is gone
+forever, since sources of failure and replication environments vary
+significantly. So the detection of degraded state requires an external observer.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

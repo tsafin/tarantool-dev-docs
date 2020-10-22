@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building from source &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Release management" href="release_management.html" />
+    <link rel="prev" title="Build and contribute" href="build_contribute_index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributor’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="reference_capi/index.html">C API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals_index.html">Internals</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="build_contribute_index.html">Build and contribute</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Building from source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="release_management.html">Release management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guidelines_index.html">Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="build_contribute_index.html">Build and contribute</a> &raquo;</li>
+        
+      <li>Building from source</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/dev_guide/building_from_source.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-from-source">
+<span id="id1"></span><h1>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h1>
+<p>For downloading Tarantool source and building it, the platforms can differ and
+the preferences can differ. But strategically the steps are always the same.</p>
+<ol class="arabic">
+<li><p class="first">Get tools and libraries that will be necessary for building
+and testing.</p>
+<p>The absolutely necessary ones are:</p>
+<ul>
+<li><p class="first">A program for downloading source repositories. <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+For all platforms, this is <code class="docutils literal notranslate"><span class="pre">git</span></code>. It allows downloading the latest
+complete set of source files from the Tarantool repository on GitHub.</p>
+</li>
+<li><p class="first">A C/C++ compiler. <a href="#id5"><span class="problematic" id="id6">|br|</span></a> Ordinarily, this is <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">g++</span></code> version
+4.6 or later. On Mac OS X, this is <code class="docutils literal notranslate"><span class="pre">Clang</span></code> version 3.2+.</p>
+</li>
+<li><p class="first">A program for managing the build process. <a href="#id7"><span class="problematic" id="id8">|br|</span></a> For all platforms, this is
+<code class="docutils literal notranslate"><span class="pre">CMake</span></code> version 2.8+.</p>
+</li>
+<li><p class="first">A build automation tool. <a href="#id9"><span class="problematic" id="id10">|br|</span></a> For all platforms this is <code class="docutils literal notranslate"><span class="pre">GNU</span> <span class="pre">Make</span></code>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.gnu.org/software/readline/">ReadLine</a> library, any version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.gnu.org/software/ncurses/">ncurses</a> library, any version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.openssl.org">OpenSSL</a> library, version 1.0.1+</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://site.icu-project.org/download">ICU</a> library, recent version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.gnu.org/software/autoconf/">Autoconf</a> library, any version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.gnu.org/software/automake/">Automake</a> library, any version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.gnu.org/software/libtool/">Libtool</a> library, any version</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.zlib.net/">Zlib-devel</a> library, any version</p>
+</li>
+<li><p class="first">Python and modules. <a href="#id11"><span class="problematic" id="id12">|br|</span></a> Python interpreter is not necessary for building
+Tarantool itself, unless you intend to use the “Run the test suite”
+option in step 5. For all platforms, this is <code class="docutils literal notranslate"><span class="pre">python</span></code> version 2.7+
+(but not 3.x). You need the following Python modules:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://pypi.python.org/pypi/PyYAML">pyyaml</a> version 3.10</li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/argparse">argparse</a> version 1.1</li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/msgpack-python">msgpack-python</a> version 0.4.6</li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> version 1.1.2</li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/six">six</a> version 1.8.0</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>To install all required dependencies, follow the instructions for your OS:</p>
+<ul>
+<li><p class="first">For Debian/Ubuntu, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt install -y build-essential cmake make coreutils sed <span class="se">\</span>
+      autoconf automake libtool zlib1g-dev <span class="se">\</span>
+      libreadline-dev libncurses5-dev libssl-dev <span class="se">\</span>
+      libunwind-dev libicu-dev <span class="se">\</span>
+      python python-pip python-setuptools python-dev <span class="se">\</span>
+      python-msgpack python-yaml python-argparse python-six python-gevent
+</pre></div>
+</div>
+</li>
+<li><p class="first">For RHEL/CentOS/Fedora, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> yum install -y gcc gcc-c++ cmake make coreutils sed <span class="se">\</span>
+      autoconf automake libtool zlib-devel <span class="se">\</span>
+      readline-devel ncurses-devel openssl-devel <span class="se">\</span>
+      libunwind-devel libicu-devel <span class="se">\</span>
+      python python-pip python-setuptools python-devel <span class="se">\</span>
+      python-msgpack python-yaml python-argparse python-six python-gevent
+</pre></div>
+</div>
+</li>
+<li><p class="first">For Mac OS X (instructions below are for OS X El Capitan):</p>
+<p>If you’re using Homebrew as your package manager, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> brew install cmake make autoconf binutils zlib <span class="se">\</span>
+       autoconf automake libtool <span class="se">\</span>
+       readline ncurses openssl libunwind-headers icu4c <span class="se">\</span>
+       <span class="o">&amp;&amp;</span> pip install python-daemon <span class="se">\</span>
+       msgpack-python pyyaml configargparse six gevent
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can not install <a class="reference external" href="https://www.zlib.net/">zlib-devel</a>  package this way.</p>
+</div>
+<p>Alternatively, download Apple’s default Xcode toolset:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> xcode-select --install
+<span class="gp">$</span> xcode-select -switch /Applications/Xcode.app/Contents/Developer
+</pre></div>
+</div>
+</li>
+<li><p class="first">For FreeBSD (instructions below are for FreeBSD 10.1+ release), say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pkg install -y sudo git cmake gmake gcc coreutils <span class="se">\</span>
+      autoconf automake libtool <span class="se">\</span>
+      readline ncurses openssl libunwind icu <span class="se">\</span>
+      python27 py27-pip py27-setuptools py27-daemon <span class="se">\</span>
+      py27-msgpack py27-yaml py27-argparse py27-six py27-gevent
+</pre></div>
+</div>
+</li>
+</ul>
+<p>If some Python modules are not available in a repository,
+it is best to set up the modules by getting a tarball and
+doing the setup with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span></code> like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># On some machines, this initial command may be necessary:</span>
+<span class="gp">$</span> wget https://bootstrap.pypa.io/ez_setup.py -O - <span class="p">|</span> sudo python
+
+<span class="gp">$</span> <span class="c1"># Python module for parsing YAML (pyYAML), for test suite:</span>
+<span class="gp">$</span> <span class="c1"># (If wget fails, check at http://pyyaml.org/wiki/PyYAML</span>
+<span class="gp">$</span> <span class="c1"># what the current version is.)</span>
+<span class="gp">$</span> <span class="nb">cd</span> ~
+<span class="gp">$</span> wget http://pyyaml.org/download/pyyaml/PyYAML-3.10.tar.gz
+<span class="gp">$</span> tar -xzf PyYAML-3.10.tar.gz
+<span class="gp">$</span> <span class="nb">cd</span> PyYAML-3.10
+<span class="gp">$</span> sudo python setup.py install
+</pre></div>
+</div>
+<p>Finally, use Python <code class="docutils literal notranslate"><span class="pre">pip</span></code> to bring in Python packages
+that may not be up-to-date in the distro repositories.
+(On CentOS 7, it will be necessary to install <code class="docutils literal notranslate"><span class="pre">pip</span></code> first,
+with <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">epel-release</span></code> followed by
+<code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">python-pip</span></code>.)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install -r <span class="se">\</span>
+      https://raw.githubusercontent.com/tarantool/test-run/master/requirements.txt <span class="se">\</span>
+      --user
+</pre></div>
+</div>
+<p>This step is only necessary once, the first time you do a download.</p>
+</li>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">git</span></code> to download the latest Tarantool source code from the
+GitHub repository <code class="docutils literal notranslate"><span class="pre">tarantool/tarantool</span></code>, branch 1.10, to a
+local directory named <code class="docutils literal notranslate"><span class="pre">~/tarantool</span></code>, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone --recursive https://github.com/tarantool/tarantool.git -b <span class="m">1</span>.10 ~/tarantool
+</pre></div>
+</div>
+<p>On rare occasions, the submodules need to be updated again with the
+command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd ~/tarantool</span>
+<span class="gp">$</span> git submodule update --init --recursive
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use CMake to initiate the build.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~/tarantool
+<span class="gp">$</span> make clean         <span class="c1"># unnecessary, added for good luck</span>
+<span class="gp">$</span> rm CMakeCache.txt  <span class="c1"># unnecessary, added for good luck</span>
+<span class="gp">$</span> cmake .            <span class="c1"># start initiating with build type=Debug</span>
+</pre></div>
+</div>
+<p>On some platforms, it may be necessary to specify the C and C++ versions,
+for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">CC</span><span class="o">=</span>gcc-4.8 <span class="nv">CXX</span><span class="o">=</span>g++-4.8 cmake .
+</pre></div>
+</div>
+<p>The CMake option for specifying build type is <code class="samp docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=</span><em><span class="pre">type</span></em></code>,
+where <code class="samp docutils literal notranslate"><em><span class="pre">type</span></em></code> can be:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Debug</span></code> – used by project maintainers</li>
+<li><code class="docutils literal notranslate"><span class="pre">Release</span></code> – used only if the highest performance is required</li>
+<li><code class="docutils literal notranslate"><span class="pre">RelWithDebInfo</span></code> – used for production, also provides debugging capabilities</li>
+</ul>
+<p>The CMake option for hinting that the result will be distributed is
+<code class="code docutils literal notranslate"><span class="pre">-DENABLE_DIST=ON</span></code>. If this option is on, then later <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>
+will install <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> files in addition to <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> files.</p>
+</li>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">make</span></code> to complete the build.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> make
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For FreeBSD, use <code class="docutils literal notranslate"><span class="pre">gmake</span></code> instead.</p>
+</div>
+<p>This creates the ‘tarantool’ executable in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you encounter a <code class="docutils literal notranslate"><span class="pre">curl</span></code> or <code class="docutils literal notranslate"><span class="pre">OpenSSL</span></code> errors on this step try
+installing <code class="docutils literal notranslate"><span class="pre">openssl111</span></code> package of the specific <code class="docutils literal notranslate"><span class="pre">1.1.1d</span></code> version.</p>
+</div>
+<p>Next, it’s highly recommended to say <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> to install Tarantool to
+the <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code> directory and keep your system clean. However, it is
+possible to run the Tarantool executable without installation.</p>
+</li>
+</ol>
+<ol class="arabic" id="run-test-suite" start="5">
+<li><p class="first">Run the test suite.</p>
+<p>This step is optional. Tarantool’s developers always run the test suite
+before they publish new versions. You should run the test suite too, if you
+make any changes in the code. Assuming you downloaded to <code class="docutils literal notranslate"><span class="pre">~/tarantool</span></code>, the
+principal steps are:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># make a subdirectory named `bin`</span>
+<span class="gp">$</span> mkdir ~/tarantool/bin
+
+<span class="gp">$</span> <span class="c1"># link Python to bin (this may require superuser privileges)</span>
+<span class="gp">$</span> ln /usr/bin/python ~/tarantool/bin/python
+
+<span class="gp">$</span> <span class="c1"># get to the test subdirectory</span>
+<span class="gp">$</span> <span class="nb">cd</span> ~/tarantool/test
+
+<span class="gp">$</span> <span class="c1"># run tests using Python</span>
+<span class="gp">$</span> <span class="nv">PATH</span><span class="o">=</span>~/tarantool/bin:<span class="nv">$PATH</span> ./test-run.py
+</pre></div>
+</div>
+<p>The output should contain reassuring reports, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">======================================================================</span>
+TEST                                            RESULT
+------------------------------------------------------------
+box/bad_trigger.test.py                         <span class="o">[</span> pass <span class="o">]</span>
+box/call.test.py                                <span class="o">[</span> pass <span class="o">]</span>
+box/iproto.test.py                              <span class="o">[</span> pass <span class="o">]</span>
+box/xlog.test.py                                <span class="o">[</span> pass <span class="o">]</span>
+box/admin.test.lua                              <span class="o">[</span> pass <span class="o">]</span>
+box/auth_access.test.lua                        <span class="o">[</span> pass <span class="o">]</span>
+... etc.
+</pre></div>
+</div>
+<p>To prevent later confusion, clean up what’s in the <code class="docutils literal notranslate"><span class="pre">bin</span></code> subdirectory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> rm ~/tarantool/bin/python
+<span class="gp">$</span> rmdir ~/tarantool/bin
+</pre></div>
+</div>
+</li>
+<li><p class="first">Make RPM and Debian packages.</p>
+<p>This step is optional. It’s only for people who want to redistribute
+Tarantool. We highly recommend to use official packages from the
+<a class="reference external" href="https://tarantool.org/download.html">tarantool.org</a> web-site.
+However, you can build RPM and Debian packages using
+<a class="reference external" href="https://github.com/packpack/packpack">PackPack</a> or using the
+<code class="docutils literal notranslate"><span class="pre">dpkg-buildpackage</span></code> or <code class="docutils literal notranslate"><span class="pre">rpmbuild</span></code> tools. Please consult
+<code class="docutils literal notranslate"><span class="pre">dpkg</span></code> or <code class="docutils literal notranslate"><span class="pre">rpmbuild</span></code> documentation for details.</p>
+</li>
+<li><p class="first">Verify your Tarantool installation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="c1"># if you installed tarantool locally after build</span>
+$ tarantool
+$ <span class="c1"># - OR -</span>
+$ <span class="c1"># if you didn&#39;t install tarantool locally after build</span>
+$ ./src/tarantool
+</pre></div>
+</div>
+<p>This starts Tarantool in the interactive mode.</p>
+</li>
+</ol>
+<p>See also:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.10/README.md">Tarantool README.md</a></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="release_management.html" class="btn btn-neutral float-right" title="Release management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="build_contribute_index.html" class="btn btn-neutral float-left" title="Build and contribute" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

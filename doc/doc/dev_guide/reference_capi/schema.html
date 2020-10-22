@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module schema &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module trivia/config" href="trivia.html" />
+    <link rel="prev" title="Module say (logging)" href="say.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>schema</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/schema.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-schema">
+<span id="module-schema"></span><h1>Module <cite>schema</cite><a class="headerlink" href="#module-schema" title="Permalink to this headline">¶</a></h1>
+<dl class="enum">
+<dt id="_CPPv46SCHEMA">
+<span id="_CPPv36SCHEMA"></span><span id="_CPPv26SCHEMA"></span><em class="property">enum </em><code class="descname">SCHEMA</code><a class="headerlink" href="#_CPPv46SCHEMA" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv417BOX_SYSTEM_ID_MIN">
+<span id="_CPPv317BOX_SYSTEM_ID_MIN"></span><span id="_CPPv217BOX_SYSTEM_ID_MIN"></span><em class="property">enumerator </em><code class="descname">BOX_SYSTEM_ID_MIN</code><a class="headerlink" href="#_CPPv417BOX_SYSTEM_ID_MIN" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Start of the reserved range of system spaces.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413BOX_SCHEMA_ID">
+<span id="_CPPv313BOX_SCHEMA_ID"></span><span id="_CPPv213BOX_SCHEMA_ID"></span><em class="property">enumerator </em><code class="descname">BOX_SCHEMA_ID</code><a class="headerlink" href="#_CPPv413BOX_SCHEMA_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _schema.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412BOX_SPACE_ID">
+<span id="_CPPv312BOX_SPACE_ID"></span><span id="_CPPv212BOX_SPACE_ID"></span><em class="property">enumerator </em><code class="descname">BOX_SPACE_ID</code><a class="headerlink" href="#_CPPv412BOX_SPACE_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _space.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413BOX_VSPACE_ID">
+<span id="_CPPv313BOX_VSPACE_ID"></span><span id="_CPPv213BOX_VSPACE_ID"></span><em class="property">enumerator </em><code class="descname">BOX_VSPACE_ID</code><a class="headerlink" href="#_CPPv413BOX_VSPACE_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _vspace view.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412BOX_INDEX_ID">
+<span id="_CPPv312BOX_INDEX_ID"></span><span id="_CPPv212BOX_INDEX_ID"></span><em class="property">enumerator </em><code class="descname">BOX_INDEX_ID</code><a class="headerlink" href="#_CPPv412BOX_INDEX_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _index.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413BOX_VINDEX_ID">
+<span id="_CPPv313BOX_VINDEX_ID"></span><span id="_CPPv213BOX_VINDEX_ID"></span><em class="property">enumerator </em><code class="descname">BOX_VINDEX_ID</code><a class="headerlink" href="#_CPPv413BOX_VINDEX_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _vindex view.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411BOX_FUNC_ID">
+<span id="_CPPv311BOX_FUNC_ID"></span><span id="_CPPv211BOX_FUNC_ID"></span><em class="property">enumerator </em><code class="descname">BOX_FUNC_ID</code><a class="headerlink" href="#_CPPv411BOX_FUNC_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _func.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412BOX_VFUNC_ID">
+<span id="_CPPv312BOX_VFUNC_ID"></span><span id="_CPPv212BOX_VFUNC_ID"></span><em class="property">enumerator </em><code class="descname">BOX_VFUNC_ID</code><a class="headerlink" href="#_CPPv412BOX_VFUNC_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _vfunc view.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411BOX_USER_ID">
+<span id="_CPPv311BOX_USER_ID"></span><span id="_CPPv211BOX_USER_ID"></span><em class="property">enumerator </em><code class="descname">BOX_USER_ID</code><a class="headerlink" href="#_CPPv411BOX_USER_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _user.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412BOX_VUSER_ID">
+<span id="_CPPv312BOX_VUSER_ID"></span><span id="_CPPv212BOX_VUSER_ID"></span><em class="property">enumerator </em><code class="descname">BOX_VUSER_ID</code><a class="headerlink" href="#_CPPv412BOX_VUSER_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _vuser view.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411BOX_PRIV_ID">
+<span id="_CPPv311BOX_PRIV_ID"></span><span id="_CPPv211BOX_PRIV_ID"></span><em class="property">enumerator </em><code class="descname">BOX_PRIV_ID</code><a class="headerlink" href="#_CPPv411BOX_PRIV_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _priv.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412BOX_VPRIV_ID">
+<span id="_CPPv312BOX_VPRIV_ID"></span><span id="_CPPv212BOX_VPRIV_ID"></span><em class="property">enumerator </em><code class="descname">BOX_VPRIV_ID</code><a class="headerlink" href="#_CPPv412BOX_VPRIV_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _vpriv view.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414BOX_CLUSTER_ID">
+<span id="_CPPv314BOX_CLUSTER_ID"></span><span id="_CPPv214BOX_CLUSTER_ID"></span><em class="property">enumerator </em><code class="descname">BOX_CLUSTER_ID</code><a class="headerlink" href="#_CPPv414BOX_CLUSTER_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _cluster.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415BOX_TRUNCATE_ID">
+<span id="_CPPv315BOX_TRUNCATE_ID"></span><span id="_CPPv215BOX_TRUNCATE_ID"></span><em class="property">enumerator </em><code class="descname">BOX_TRUNCATE_ID</code><a class="headerlink" href="#_CPPv415BOX_TRUNCATE_ID" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Space id of _truncate.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417BOX_SYSTEM_ID_MAX">
+<span id="_CPPv317BOX_SYSTEM_ID_MAX"></span><span id="_CPPv217BOX_SYSTEM_ID_MAX"></span><em class="property">enumerator </em><code class="descname">BOX_SYSTEM_ID_MAX</code><a class="headerlink" href="#_CPPv417BOX_SYSTEM_ID_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>End of reserved range of system spaces.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv410BOX_ID_NIL">
+<span id="_CPPv310BOX_ID_NIL"></span><span id="_CPPv210BOX_ID_NIL"></span><em class="property">enumerator </em><code class="descname">BOX_ID_NIL</code><a class="headerlink" href="#_CPPv410BOX_ID_NIL" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NULL value, returned on error.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="trivia.html" class="btn btn-neutral float-right" title="Module trivia/config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="say.html" class="btn btn-neutral float-left" title="Module say (logging)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

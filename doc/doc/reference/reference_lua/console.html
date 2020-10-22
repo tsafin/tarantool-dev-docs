@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module console &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>console</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/console.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-console">
+<span id="console-module"></span><h1>Module <cite>console</cite><a class="headerlink" href="#module-console" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The console module allows one Tarantool instance to access another Tarantool
+instance, and allows one Tarantool instance to start listening on an
+<a class="reference internal" href="../../book/admin/security.html#admin-security"><span class="std std-ref">admin port</span></a>.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">console</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#console-connect"><span class="std std-ref">console.connect()</span></a></td>
+<td>Connect to an instance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#console-listen"><span class="std std-ref">console.listen()</span></a></td>
+<td>Listen for incoming requests</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#console-start"><span class="std std-ref">console.start()</span></a></td>
+<td>Start the console</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#console-ac"><span class="std std-ref">console.ac()</span></a></td>
+<td>Set the auto-completion flag</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#console-delimiter"><span class="std std-ref">console.delimiter()</span></a></td>
+<td>Set a delimiter</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-console"></span><span class="target" id="console-connect"></span><dl class="function">
+<dt id="console.connect">
+<code class="descclassname">console.</code><code class="descname">connect</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="headerlink" href="#console.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the instance at <a class="reference internal" href="../configuration/index.html#index-uri"><span class="std std-ref">URI</span></a>, change the prompt from
+‘<code class="docutils literal notranslate"><span class="pre">tarantool&gt;</span></code>’ to ‘<code class="samp docutils literal notranslate"><em><span class="pre">uri</span></em><span class="pre">&gt;</span></code>’, and act henceforth as a client
+until the user ends the session or types <code class="docutils literal notranslate"><span class="pre">control-D</span></code>.</p>
+<p>The console.connect function allows one Tarantool instance, in interactive
+mode, to access another Tarantool instance. Subsequent requests will appear
+to be handled locally, but in reality the requests are being sent to the
+remote instance and the local instance is acting as a client. Once connection
+is successful, the prompt will change and subsequent requests are sent to,
+and executed on, the remote instance. Results are displayed on the local
+instance. To return to local mode, enter <code class="docutils literal notranslate"><span class="pre">control-D</span></code>.</p>
+<p>If the Tarantool instance at <code class="samp docutils literal notranslate"><span class="pre">uri</span></code> requires authentication, the
+connection might look something like:
+<code class="docutils literal notranslate"><span class="pre">console.connect('admin:secretpassword&#64;distanthost.com:3301')</span></code>.</p>
+<p>There are no restrictions on the types of requests that can be entered,
+except those which are due to privilege restrictions – by default the
+login to the remote instance is done with user name = ‘guest’. The remote
+instance could allow for this by granting at least one privilege:
+<code class="docutils literal notranslate"><span class="pre">box.schema.user.grant('guest','execute','universe')</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>string</em>) – the URI of the remote instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: the connection will fail if the target Tarantool instance
+was not initiated with <code class="docutils literal notranslate"><span class="pre">box.cfg{listen=...}</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; console = require(&#39;console&#39;)
+---
+...
+tarantool&gt; console.connect(&#39;198.18.44.44:3301&#39;)
+---
+...
+198.18.44.44:3301&gt; -- prompt is telling us that instance is remote
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="console-listen"></span><dl class="function">
+<dt id="console.listen">
+<code class="descclassname">console.</code><code class="descname">listen</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="headerlink" href="#console.listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Listen on <a class="reference internal" href="../configuration/index.html#index-uri"><span class="std std-ref">URI</span></a>. The primary way of listening for incoming
+requests is via the connection-information string, or URI, specified in
+<code class="docutils literal notranslate"><span class="pre">box.cfg{listen=...}</span></code>. The alternative way of listening is via the URI
+specified in <code class="docutils literal notranslate"><span class="pre">console.listen(...)</span></code>. This alternative way is called
+“administrative” or simply <a class="reference internal" href="../../book/admin/security.html#admin-security"><span class="std std-ref">“admin port”</span></a>.
+The listening is usually over a local host with a Unix domain socket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>string</em>) – the URI of the local instance</td>
+</tr>
+</tbody>
+</table>
+<p>The “admin” address is the URI to listen on. It has no default value, so it
+must be specified if connections will occur via an admin port. The parameter
+is expressed with URI = Universal Resource Identifier format, for example
+“/tmpdir/unix_domain_socket.sock”, or a numeric TCP port. Connections are
+often made with telnet. A typical port value is 3313.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; console = require(&#39;console&#39;)
+---
+...
+tarantool&gt; console.listen(&#39;unix/:/tmp/X.sock&#39;)
+... main/103/console/unix/:/tmp/X I&gt; started
+---
+- fd: 6
+  name:
+    host: unix/
+    family: AF_UNIX
+    type: SOCK_STREAM
+    protocol: 0
+    port: /tmp/X.sock
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="console-start"></span><dl class="function">
+<dt id="console.start">
+<code class="descclassname">console.</code><code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#console.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the console on the current interactive terminal.</p>
+<p><strong>Example:</strong></p>
+<p>A special use of <code class="docutils literal notranslate"><span class="pre">console.start()</span></code> is with <a class="reference internal" href="../configuration/index.html#index-init-label"><span class="std std-ref">initialization files</span></a>. Normally, if one starts the Tarantool instance with
+<code class="samp docutils literal notranslate"><span class="pre">tarantool</span> <em><span class="pre">initialization</span> <span class="pre">file</span></em></code> there is no console. This can be
+remedied by adding these lines at the end of the initialization file:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">console</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">)</span>
+<span class="n">console</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="console-ac"></span><dl class="function">
+<dt id="console.ac">
+<code class="descclassname">console.</code><code class="descname">ac</code><span class="sig-paren">(</span><span class="optional">[</span><em>true|false</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#console.ac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the auto-completion flag. If auto-completion is <cite>true</cite>, and the user is
+using Tarantool as a client or the user is using Tarantool via
+<code class="docutils literal notranslate"><span class="pre">console.connect()</span></code>, then hitting the TAB key may cause tarantool to
+complete a word automatically. The default auto-completion value is <cite>true</cite>.</p>
+</dd></dl>
+
+<span class="target" id="console-delimiter"></span><dl class="function">
+<dt id="console.delimiter">
+<code class="descclassname">console.</code><code class="descname">delimiter</code><span class="sig-paren">(</span><em>marker</em><span class="sig-paren">)</span><a class="headerlink" href="#console.delimiter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a custom end-of-request marker for Tarantool console.</p>
+<p>The default end-of-request marker is a newline (line feed).
+Custom markers are not necessary because Tarantool can tell when a multi-line
+request has not ended (for example, if it sees that a function declaration
+does not have an end keyword). Nonetheless for special needs, or for
+entering multi-line requests in older Tarantool versions, you can change the
+end-of-request marker. As a result, newline alone is not treated as
+end of request.</p>
+<p>To go back to normal mode, say: <code class="docutils literal notranslate"><span class="pre">console.delimiter('')&lt;marker&gt;</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>marker</strong> (<em>string</em>) – a custom end-of-request marker for Tarantool console</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; console = require(&#39;console&#39;); console.delimiter(&#39;!&#39;)
+---
+...
+tarantool&gt; function f ()
+         &gt; statement_1 = &#39;a&#39;
+         &gt; statement_2 = &#39;b&#39;
+         &gt; end!
+---
+...
+tarantool&gt; console.delimiter(&#39;&#39;)!
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

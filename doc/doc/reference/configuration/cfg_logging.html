@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logging example &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Logging example</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/configuration/cfg_logging.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <ul class="simple" id="cfg-logging">
+<li><a class="reference internal" href="index.html#cfg-logging-log-level"><span class="std std-ref">log_level</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-log"><span class="std std-ref">log</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-log-nonblock"><span class="std std-ref">log_nonblock</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-too-long-threshold"><span class="std std-ref">too_long_threshold</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-log-format"><span class="std std-ref">log_format</span></a></li>
+</ul>
+<div class="section" id="logging-example">
+<span id="cfg-logging-logging-example"></span><h1>Logging example<a class="headerlink" href="#logging-example" title="Permalink to this headline">¶</a></h1>
+<p>This will illustrate how “rotation” works, that is, what happens when the server
+instance is writing to a log and signals are used when archiving it.</p>
+<p>Start with two terminal shells, Terminal #1 and Terminal #2.</p>
+<p>On Terminal #1: start an interactive Tarantool session, then say the logging
+will go to <cite>Log_file</cite>, then put a message “Log Line #1” in the log file:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">log</span><span class="o">=</span><span class="s1">&#39;Log_file&#39;</span><span class="p">}</span>
+<span class="n">log</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">mv</span></code> so the log file is now named <cite>Log_file.bak</cite>.
+The result of this is: the next log message will go to <cite>Log_file.bak</cite>.</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Log_file</span> <span class="n">Log_file</span><span class="o">.</span><span class="n">bak</span>
+</pre></div>
+</div>
+<p>On Terminal #1: put a message “Log Line #2” in the log file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">ps</span></code> to find the process ID of the Tarantool instance.</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ps</span> <span class="o">-</span><span class="n">A</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">tarantool</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">kill</span> <span class="pre">-HUP</span></code> to send a SIGHUP signal to the Tarantool instance.
+The result of this is: Tarantool will open <cite>Log_file</cite> again, and
+the next log message will go to <cite>Log_file</cite>.
+(The same effect could be accomplished by executing log.rotate() on the instance.)</p>
+<pre class="highlight literal-block">
+kill -HUP <em>process_id</em>
+</pre>
+<p>On Terminal #1: put a message “Log Line #3” in the log file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">less</span></code> to examine files. <cite>Log_file.bak</cite> will have these lines,
+except that the date and time will depend on when the example is done:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">06.373</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#1`</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mf">25.973</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#2`</span>
+</pre></div>
+</div>
+<p>and <cite>Log_file</cite> will have</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span> <span class="n">file</span> <span class="n">has</span> <span class="n">been</span> <span class="n">reopened</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">32.629</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#3</span>
+</pre></div>
+</div>
+<div class="section" id="feedback">
+<h2>Feedback<a class="headerlink" href="#feedback" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="index.html#cfg-logging-feedback-enabled"><span class="std std-ref">feedback_enabled</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-feedback-host"><span class="std std-ref">feedback_host</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-logging-feedback-interval"><span class="std std-ref">feedback_interval</span></a></li>
+</ul>
+<p>By default a Tarantool daemon sends a small packet
+once per hour, to <a class="reference external" href="https://feedback.tarantool.io">https://feedback.tarantool.io</a>.
+The packet contains three values from <a class="reference internal" href="../reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info</span></a>:
+<code class="docutils literal notranslate"><span class="pre">box.info.version</span></code>, <code class="docutils literal notranslate"><span class="pre">box.info.uuid</span></code>, and <code class="docutils literal notranslate"><span class="pre">box.info.cluster_uuid</span></code>.
+By changing the feedback configuration parameters, users can
+adjust or turn off this feature.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

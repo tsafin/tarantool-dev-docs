@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lua tutorials &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Lua tutorials</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/tutorials/lua_tutorials.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lua-tutorials">
+<span id="id1"></span><h1>Lua tutorials<a class="headerlink" href="#lua-tutorials" title="Permalink to this headline">¶</a></h1>
+<p>Here are three tutorials on using Lua stored procedures with Tarantool:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#c-lua-tutorial-insert-one-million-tuples"><span class="std std-ref">Insert one million tuples with a Lua stored procedure</span></a>,</li>
+<li><a class="reference internal" href="#c-lua-tutorial-sum-a-json-field"><span class="std std-ref">Sum a JSON field for all tuples</span></a>,</li>
+<li><a class="reference internal" href="#c-lua-tutorial-indexed-pattern-search"><span class="std std-ref">Indexed pattern search</span></a>.</li>
+</ul>
+<div class="section" id="insert-one-million-tuples-with-a-lua-stored-procedure">
+<span id="c-lua-tutorial-insert-one-million-tuples"></span><h2>Insert one million tuples with a Lua stored procedure<a class="headerlink" href="#insert-one-million-tuples-with-a-lua-stored-procedure" title="Permalink to this headline">¶</a></h2>
+<p>This is an exercise assignment: “Insert one million tuples. Each tuple should
+have a constantly-increasing numeric primary-key field and a random alphabetic
+10-character string field.”</p>
+<p>The purpose of the exercise is to show what Lua functions look like inside
+Tarantool. It will be necessary to employ the Lua math library, the Lua string
+library, the Tarantool box library, the Tarantool box.tuple library, loops, and
+concatenations. It should be easy to follow even for a person who has not used
+either Lua or Tarantool before. The only requirement is a knowledge of how other
+programming languages work and a memory of the first two chapters of this manual.
+But for better understanding, follow the comments and the links, which point to
+the Lua manual or to elsewhere in this Tarantool manual. To further enhance
+learning, type the statements in with the tarantool client while reading along.</p>
+<div class="section" id="configure">
+<h3>Configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
+<p>We are going to use the Tarantool sandbox that was created for our
+<a class="reference internal" href="../getting_started/index.html#getting-started"><span class="std std-ref">“Getting started” exercises</span></a>.
+So there is a single space, and a numeric primary key,
+and a running Tarantool server instance which also serves as a client.</p>
+</div>
+<div class="section" id="delimiter">
+<h3>Delimiter<a class="headerlink" href="#delimiter" title="Permalink to this headline">¶</a></h3>
+<p>In earlier versions of Tarantool, multi-line functions had to be
+enclosed within “delimiters”. They are no longer necessary, and
+so they will not be used in this tutorial. However, they are still
+supported. Users who wish to use delimiters, or users of
+older versions of Tarantool, should check the syntax description for
+<a class="reference internal" href="../reference/reference_lua/console.html#console-delimiter"><span class="std std-ref">declaring a delimiter</span></a> before proceeding.</p>
+</div>
+<div class="section" id="create-a-function-that-returns-a-string">
+<h3>Create a function that returns a string<a class="headerlink" href="#create-a-function-that-returns-a-string" title="Permalink to this headline">¶</a></h3>
+<p>We will start by making a function that returns a fixed string, “Hello world”.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">string_function</span><span class="p">()</span>
+  <span class="kr">return</span> <span class="s2">&quot;hello world&quot;</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>The word “<code class="docutils literal notranslate"><span class="pre">function</span></code>” is a Lua keyword – we’re about to go into Lua. The
+function name is string_function. The function has one executable statement,
+<code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">&quot;hello</span> <span class="pre">world&quot;</span></code>. The string “hello world” is enclosed in double quotes
+here, although Lua doesn’t care – one could use single quotes instead. The
+word “<code class="docutils literal notranslate"><span class="pre">end</span></code>” means “this is the end of the Lua function declaration.”
+To confirm that the function works, we can say</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">string_function</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Sending <code class="docutils literal notranslate"><span class="pre">function-name()</span></code> means “invoke the Lua function.” The effect is
+that the string which the function returns will end up on the screen.</p>
+<p>For more about Lua strings see Lua manual <a class="reference external" href="http://www.lua.org/pil/2.4.html">chapter 2.4 “Strings”</a> . For more
+about functions see Lua manual <a class="reference external" href="http://www.lua.org/pil/5.html">chapter 5 “Functions”</a>.</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function string_function()
+         &gt;   return &quot;hello world&quot;
+         &gt; end
+---
+...
+tarantool&gt; string_function()
+---
+- hello world
+...
+tarantool&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-function-that-calls-another-function-and-sets-a-variable">
+<h3>Create a function that calls another function and sets a variable<a class="headerlink" href="#create-a-function-that-calls-another-function-and-sets-a-variable" title="Permalink to this headline">¶</a></h3>
+<p>Now that <code class="docutils literal notranslate"><span class="pre">string_function</span></code> exists, we can invoke it from another
+function.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">main_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">string_value</span>
+  <span class="n">string_value</span> <span class="o">=</span> <span class="n">string_function</span><span class="p">()</span>
+  <span class="kr">return</span> <span class="n">string_value</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>We begin by declaring a variable “<code class="docutils literal notranslate"><span class="pre">string_value</span></code>”. The word “<code class="docutils literal notranslate"><span class="pre">local</span></code>”
+means that string_value appears only in <code class="docutils literal notranslate"><span class="pre">main_function</span></code>. If we didn’t use
+“<code class="docutils literal notranslate"><span class="pre">local</span></code>” then <code class="docutils literal notranslate"><span class="pre">string_value</span></code> would be visible everywhere - even by other
+users using other clients connected to this server instance! Sometimes that’s a very
+desirable feature for inter-client communication, but not this time.</p>
+<p>Then we assign a value to <code class="docutils literal notranslate"><span class="pre">string_value</span></code>, namely, the result of
+<code class="docutils literal notranslate"><span class="pre">string_function()</span></code>. Soon we will invoke <code class="docutils literal notranslate"><span class="pre">main_function()</span></code> to check that it
+got the value.</p>
+<p>For more about Lua variables see Lua manual <a class="reference external" href="http://www.lua.org/pil/4.2.html">chapter 4.2 “Local Variables and Blocks”</a> .</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function main_function()
+         &gt;   local string_value
+         &gt;   string_value = string_function()
+         &gt;   return string_value
+         &gt; end
+---
+...
+tarantool&gt; main_function()
+---
+- hello world
+...
+tarantool&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="modify-the-function-so-it-returns-a-one-letter-random-string">
+<h3>Modify the function so it returns a one-letter random string<a class="headerlink" href="#modify-the-function-so-it-returns-a-one-letter-random-string" title="Permalink to this headline">¶</a></h3>
+<p>Now that it’s a bit clearer how to make a variable, we can change
+<code class="docutils literal notranslate"><span class="pre">string_function()</span></code> so that, instead of returning a fixed literal
+“Hello world”, it returns a random letter between ‘A’ and ‘Z’.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">string_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">random_number</span>
+  <span class="kd">local</span> <span class="n">random_string</span>
+  <span class="n">random_number</span> <span class="o">=</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+  <span class="n">random_string</span> <span class="o">=</span> <span class="nb">string.char</span><span class="p">(</span><span class="n">random_number</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="n">random_string</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>It is not necessary to destroy the old <code class="docutils literal notranslate"><span class="pre">string_function()</span></code> contents, they’re
+simply overwritten. The first assignment invokes a random-number function
+in Lua’s math library; the parameters mean “the number must be an integer
+between 65 and 90.” The second assignment invokes an integer-to-character
+function in Lua’s string library; the parameter is the code point of the
+character. Luckily the ASCII value of ‘A’ is 65 and the ASCII value of ‘Z’
+is 90 so the result will always be a letter between A and Z.</p>
+<p>For more about Lua math-library functions see Lua users “<a class="reference external" href="http://lua-users.org/wiki/MathLibraryTutorial">Math Library Tutorial</a>”.
+For more about Lua string-library functions see Lua users “<a class="reference external" href="http://lua-users.org/wiki/StringLibraryTutorial">String Library Tutorial</a>” .</p>
+<p>Once again the <code class="docutils literal notranslate"><span class="pre">string_function()</span></code> can be invoked from main_function() which
+can be invoked with <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>.</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function string_function()
+         &gt;   local random_number
+         &gt;   local random_string
+         &gt;   random_number = math.random(65, 90)
+         &gt;   random_string = string.char(random_number)
+         &gt;   return random_string
+         &gt; end
+---
+...
+tarantool&gt; main_function()
+---
+- C
+...
+tarantool&gt;
+</pre></div>
+</div>
+<p>… Well, actually it won’t always look like this because <code class="docutils literal notranslate"><span class="pre">math.random()</span></code>
+produces random numbers. But for the illustration purposes it won’t matter
+what the random string values are.</p>
+</div>
+<div class="section" id="modify-the-function-so-it-returns-a-ten-letter-random-string">
+<h3>Modify the function so it returns a ten-letter random string<a class="headerlink" href="#modify-the-function-so-it-returns-a-ten-letter-random-string" title="Permalink to this headline">¶</a></h3>
+<p>Now that it’s clear how to produce one-letter random strings, we can reach our
+goal of producing a ten-letter string by concatenating ten one-letter strings,
+in a loop.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">string_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">random_number</span>
+  <span class="kd">local</span> <span class="n">random_string</span>
+  <span class="n">random_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kr">for</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="n">random_number</span> <span class="o">=</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+    <span class="n">random_string</span> <span class="o">=</span> <span class="n">random_string</span> <span class="o">..</span> <span class="nb">string.char</span><span class="p">(</span><span class="n">random_number</span><span class="p">)</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">random_string</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>The words “for x = 1,10,1” mean “start with x equals 1, loop until x equals 10,
+increment x by 1 for each iteration.” The symbol “..” means “concatenate”, that
+is, add the string on the right of the “..” sign to the string on the left of
+the “..” sign. Since we start by saying that random_string is “” (a blank
+string), the end result is that random_string has 10 random letters. Once
+again the <code class="docutils literal notranslate"><span class="pre">string_function()</span></code> can be invoked from <code class="docutils literal notranslate"><span class="pre">main_function()</span></code> which
+can be invoked with <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>.</p>
+<p>For more about Lua loops see Lua manual <a class="reference external" href="http://www.lua.org/pil/4.3.4.html">chapter 4.3.4 “Numeric for”</a>.</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function string_function()
+         &gt;   local random_number
+         &gt;   local random_string
+         &gt;   random_string = &quot;&quot;
+         &gt;   for x = 1,10,1 do
+         &gt;     random_number = math.random(65, 90)
+         &gt;     random_string = random_string .. string.char(random_number)
+         &gt;   end
+         &gt;   return random_string
+         &gt; end
+---
+...
+tarantool&gt; main_function()
+---
+- &#39;ZUDJBHKEFM&#39;
+...
+tarantool&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-a-tuple-out-of-a-number-and-a-string">
+<h3>Make a tuple out of a number and a string<a class="headerlink" href="#make-a-tuple-out-of-a-number-and-a-string" title="Permalink to this headline">¶</a></h3>
+<p>Now that it’s clear how to make a 10-letter random string, it’s possible to
+make a tuple that contains a number and a 10-letter random string, by invoking
+a function in Tarantool’s library of Lua functions.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">main_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">string_value</span><span class="p">,</span> <span class="n">t</span>
+  <span class="n">string_value</span> <span class="o">=</span> <span class="n">string_function</span><span class="p">()</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">tuple</span><span class="p">.</span><span class="n">new</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="n">string_value</span><span class="p">})</span>
+  <span class="kr">return</span> <span class="n">t</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Once this is done, t will be the value of a new tuple which has two fields.
+The first field is numeric: 1. The second field is a random string. Once again
+the <code class="docutils literal notranslate"><span class="pre">string_function()</span></code> can be invoked from <code class="docutils literal notranslate"><span class="pre">main_function()</span></code> which can be
+invoked with  <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>.</p>
+<p>For more about Tarantool tuples see Tarantool manual section <a class="reference internal" href="../reference/reference_lua/box_tuple.html#box-tuple"><span class="std std-ref">Submodule box.tuple</span></a>.</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function main_function()
+         &gt; local string_value, t
+         &gt; string_value = string_function()
+         &gt; t = box.tuple.new({1, string_value})
+         &gt; return t
+         &gt; end
+---
+...
+tarantool&gt; main_function()
+---
+- [1, &#39;PNPZPCOOKA&#39;]
+...
+tarantool&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="modify-main-function-to-insert-a-tuple-into-the-database">
+<h3>Modify main_function to insert a tuple into the database<a class="headerlink" href="#modify-main-function-to-insert-a-tuple-into-the-database" title="Permalink to this headline">¶</a></h3>
+<p>Now that it’s clear how to make a tuple that contains a number and a 10-letter
+random string, the only trick remaining is putting that tuple into tester.
+Remember that tester is the first space that was defined in the sandbox, so
+it’s like a database table.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">main_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">string_value</span><span class="p">,</span> <span class="n">t</span>
+  <span class="n">string_value</span> <span class="o">=</span> <span class="n">string_function</span><span class="p">()</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">tuple</span><span class="p">.</span><span class="n">new</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="n">string_value</span><span class="p">})</span>
+  <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">replace</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>The new line here is <code class="docutils literal notranslate"><span class="pre">box.space.tester:replace(t)</span></code>. The name contains
+‘tester’ because the insertion is going to be to tester. The second parameter
+is the tuple value. To be perfectly correct we could have said
+<code class="docutils literal notranslate"><span class="pre">box.space.tester:insert(t)</span></code> here, rather than <code class="docutils literal notranslate"><span class="pre">box.space.tester:replace(t)</span></code>,
+but “replace” means “insert even if there is already a tuple whose primary-key
+value is a duplicate”, and that makes it easier to re-run the exercise even if
+the sandbox database isn’t empty. Once this is done, tester will contain a tuple
+with two fields. The first field will be 1. The second field will be a random
+10-letter string. Once again the <code class="docutils literal notranslate"><span class="pre">string_function(</span></code>) can be invoked from
+<code class="docutils literal notranslate"><span class="pre">main_function()</span></code> which can be invoked with <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>. But
+<code class="docutils literal notranslate"><span class="pre">main_function()</span></code> won’t tell the whole story, because it does not return t, it
+only puts t into the database. To confirm that something got inserted, we’ll use
+a SELECT request.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">main_function</span><span class="p">()</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="nb">select</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>For more about Tarantool insert and replace calls, see Tarantool manual section
+<a class="reference internal" href="../reference/reference_lua/box_space.html#box-space"><span class="std std-ref">Submodule box.space</span></a>,
+<a class="reference internal" href="../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">space_object:insert()</span></a>, and
+<a class="reference internal" href="../reference/reference_lua/box_space_index.html#box-space-replace"><span class="std std-ref">space_object:replace()</span></a>.</p>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function main_function()
+         &gt;   local string_value, t
+         &gt;   string_value = string_function()
+         &gt;   t = box.tuple.new({1,string_value})
+         &gt;   box.space.tester:replace(t)
+         &gt; end
+---
+...
+tarantool&gt; main_function()
+---
+...
+tarantool&gt; box.space.tester:select{1}
+---
+- - [1, &#39;EUJYVEECIL&#39;]
+...
+tarantool&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="modify-main-function-to-insert-a-million-tuples-into-the-database">
+<h3>Modify main_function to insert a million tuples into the database<a class="headerlink" href="#modify-main-function-to-insert-a-million-tuples-into-the-database" title="Permalink to this headline">¶</a></h3>
+<p>Now that it’s clear how to insert one tuple into the database, it’s no big deal
+to figure out how to scale up: instead of inserting with a literal value = 1
+for the primary key, insert with a variable value = between 1 and 1 million, in
+a loop. Since we already saw how to loop, that’s a simple thing. The only extra
+wrinkle that we add here is a timing function.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">main_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">string_value</span><span class="p">,</span> <span class="n">t</span>
+  <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1000000</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="n">string_value</span> <span class="o">=</span> <span class="n">string_function</span><span class="p">()</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">tuple</span><span class="p">.</span><span class="n">new</span><span class="p">({</span><span class="n">i</span><span class="p">,</span><span class="n">string_value</span><span class="p">})</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">replace</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
+<span class="n">main_function</span><span class="p">()</span>
+<span class="n">end_time</span> <span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
+<span class="s1">&#39;insert done in &#39;</span> <span class="o">..</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">..</span> <span class="s1">&#39; seconds&#39;</span>
+</pre></div>
+</div>
+<p>The standard Lua function
+<a class="reference external" href="http://www.lua.org/manual/5.1/manual.html#pdf-os.clock">os.clock()</a>
+will return the number of CPU seconds since the
+start. Therefore, by getting start_time = number of seconds just before the
+inserting, and then getting end_time = number of seconds just after the
+inserting, we can calculate (end_time - start_time) = elapsed time in seconds.
+We will display that value by putting it in a request without any assignments,
+which causes Tarantool to send the value to the client, which prints it. (Lua’s
+answer to the C <code class="docutils literal notranslate"><span class="pre">printf()</span></code> function, which is <code class="docutils literal notranslate"><span class="pre">print()</span></code>, will also work.)</p>
+<p>For more on Lua <code class="docutils literal notranslate"><span class="pre">os.clock()</span></code> see Lua manual <a class="reference external" href="http://www.lua.org/pil/22.1.html">chapter 22.1 “Date and Time”</a>.
+For more on Lua print() see Lua manual <a class="reference external" href="http://www.lua.org/pil/5.html">chapter 5 “Functions”</a>.</p>
+<p>Since this is the grand finale, we will redo the final versions of all the
+necessary requests: the request that
+created <code class="docutils literal notranslate"><span class="pre">string_function()</span></code>, the request that created <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>,
+and the request that invokes <code class="docutils literal notranslate"><span class="pre">main_function()</span></code>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">string_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">random_number</span>
+  <span class="kd">local</span> <span class="n">random_string</span>
+  <span class="n">random_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kr">for</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="n">random_number</span> <span class="o">=</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+    <span class="n">random_string</span> <span class="o">=</span> <span class="n">random_string</span> <span class="o">..</span> <span class="nb">string.char</span><span class="p">(</span><span class="n">random_number</span><span class="p">)</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">random_string</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">main_function</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">string_value</span><span class="p">,</span> <span class="n">t</span>
+  <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1000000</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="n">string_value</span> <span class="o">=</span> <span class="n">string_function</span><span class="p">()</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">tuple</span><span class="p">.</span><span class="n">new</span><span class="p">({</span><span class="n">i</span><span class="p">,</span><span class="n">string_value</span><span class="p">})</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">replace</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
+<span class="n">main_function</span><span class="p">()</span>
+<span class="n">end_time</span> <span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
+<span class="s1">&#39;insert done in &#39;</span> <span class="o">..</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">..</span> <span class="s1">&#39; seconds&#39;</span>
+</pre></div>
+</div>
+<p>The screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; function string_function()
+         &gt;   local random_number
+         &gt;   local random_string
+         &gt;   random_string = &quot;&quot;
+         &gt;   for x = 1,10,1 do
+         &gt;     random_number = math.random(65, 90)
+         &gt;     random_string = random_string .. string.char(random_number)
+         &gt;   end
+         &gt;   return random_string
+         &gt; end
+---
+...
+tarantool&gt; function main_function()
+         &gt;   local string_value, t
+         &gt;   for i = 1,1000000,1 do
+         &gt;     string_value = string_function()
+         &gt;     t = box.tuple.new({i,string_value})
+         &gt;     box.space.tester:replace(t)
+         &gt;   end
+         &gt; end
+---
+...
+tarantool&gt; start_time = os.clock()
+---
+...
+tarantool&gt; main_function()
+---
+...
+tarantool&gt; end_time = os.clock()
+---
+...
+tarantool&gt; &#39;insert done in &#39; .. end_time - start_time .. &#39; seconds&#39;
+---
+- insert done in 37.62 seconds
+...
+tarantool&gt;
+</pre></div>
+</div>
+<p>What has been shown is that Lua functions are quite expressive (in fact one can
+do more with Tarantool’s Lua stored procedures than one can do with stored
+procedures in some SQL DBMSs), and that it’s straightforward to combine
+Lua-library functions and Tarantool-library functions.</p>
+<p>What has also been shown is that inserting a million tuples took 37 seconds. The
+host computer was a Linux laptop. By changing <a class="reference internal" href="../reference/configuration/index.html#cfg-binary-logging-snapshots-wal-mode"><span class="std std-ref">wal_mode</span></a> to ‘none’ before
+running the test, one can reduce the elapsed time to 4 seconds.</p>
+</div>
+</div>
+<div class="section" id="sum-a-json-field-for-all-tuples">
+<span id="c-lua-tutorial-sum-a-json-field"></span><h2>Sum a JSON field for all tuples<a class="headerlink" href="#sum-a-json-field-for-all-tuples" title="Permalink to this headline">¶</a></h2>
+<p>This is an exercise assignment: “Assume that inside every tuple there is a
+string formatted as JSON. Inside that string there is a JSON numeric field.
+For each tuple, find the numeric field’s value and add it to a ‘sum’ variable.
+At end, return the ‘sum’ variable.” The purpose of the exercise is to get
+experience in one way to read and process tuples.</p>
+<div class="highlight-lua notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">json</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nf">sum_json_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sum</span><span class="p">,</span> <span class="n">field_value</span><span class="p">,</span> <span class="n">is_valid_json</span><span class="p">,</span> <span class="n">lua_table</span>
+  <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="kr">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">t</span> <span class="kr">in</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="nb">pairs</span><span class="p">()</span> <span class="kr">do</span>
+    <span class="n">is_valid_json</span><span class="p">,</span> <span class="n">lua_table</span> <span class="o">=</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">decode</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="kr">if</span> <span class="n">is_valid_json</span> <span class="kr">then</span>
+      <span class="n">field_value</span> <span class="o">=</span> <span class="n">lua_table</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+      <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">field_value</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span> <span class="kr">then</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">field_value</span> <span class="kr">end</span>
+    <span class="kr">end</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">sum</span>
+<span class="kr">end</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>LINE 3: WHY “LOCAL”.</strong> This line declares all the variables that will be used in
+the function. Actually it’s not necessary to declare all variables at the start,
+and in a long function it would be better to declare variables just before using
+them. In fact it’s not even necessary to declare variables at all, but an
+undeclared variable is “global”. That’s not desirable for any of the variables
+that are declared in line 1, because all of them are for use only within the function.</p>
+<p><strong>LINE 5: WHY “PAIRS()”.</strong> Our job is to go through all the rows and there are two
+ways to do it: with <a class="reference internal" href="../reference/reference_lua/box_space_index.html#box-space-pairs"><span class="std std-ref">box.space.space_object:pairs()</span></a> or with
+<code class="docutils literal notranslate"><span class="pre">variable</span> <span class="pre">=</span> <span class="pre">select(...)</span></code> followed by <code class="samp docutils literal notranslate"><span class="pre">for</span> <span class="pre">i,</span> <em><span class="pre">n</span></em><span class="pre">,</span> <span class="pre">1</span> <span class="pre">do</span> <em><span class="pre">some-function</span></em><span class="pre">(variable[i])</span> <span class="pre">end</span></code>.
+We preferred <code class="docutils literal notranslate"><span class="pre">pairs()</span></code> for this example.</p>
+<p><strong>LINE 5: START THE MAIN LOOP.</strong> Everything inside this “<code class="docutils literal notranslate"><span class="pre">for</span></code>” loop will be
+repeated as long as there is another index key. A tuple is fetched and can be
+referenced with variable <code class="code docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<p><strong>LINE 6: WHY “PCALL”.</strong> If we simply said <code class="docutils literal notranslate"><span class="pre">lua_table</span> <span class="pre">=</span> <span class="pre">json.decode(t[2]))</span></code>, then
+the function would abort with an error if it encountered something wrong with the
+JSON string - a missing colon, for example. By putting the function inside “<code class="docutils literal notranslate"><span class="pre">pcall</span></code>”
+(<a class="reference external" href="http://www.lua.org/pil/8.4.html">protected call</a>), we’re saying: we want to intercept that sort of error, so if
+there’s a problem just set <code class="docutils literal notranslate"><span class="pre">is_valid_json</span> <span class="pre">=</span> <span class="pre">false</span></code> and we will know what to do
+about it later.</p>
+<p><strong>LINE 6: MEANING.</strong> The function is <a class="reference internal" href="../reference/reference_lua/json.html#json-decode"><span class="std std-ref">json.decode</span></a> which means decode a JSON
+string, and the parameter is t[2] which is a reference to a JSON string. There’s
+a bit of hard coding here, we’re assuming that the second field in the tuple is
+where the JSON string was inserted. For example, we’re assuming a tuple looks like</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mi">444</span>
+<span class="n">field</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="s1">&#39;{&quot;Hello&quot;: &quot;world&quot;, &quot;Quantity&quot;: 15}&#39;</span>
+</pre></div>
+</div>
+<p>meaning that the tuple’s first field, the primary key field, is a number while
+the tuple’s second field, the JSON string, is a string. Thus the entire statement
+means “decode <code class="docutils literal notranslate"><span class="pre">t[2]</span></code> (the tuple’s second field) as a JSON string; if there’s an
+error set <code class="docutils literal notranslate"><span class="pre">is_valid_json</span> <span class="pre">=</span> <span class="pre">false</span></code>; if there’s no error set <code class="docutils literal notranslate"><span class="pre">is_valid_json</span> <span class="pre">=</span> <span class="pre">true</span></code> and
+set <code class="docutils literal notranslate"><span class="pre">lua_table</span> <span class="pre">=</span></code> a Lua table which has the decoded string”.</p>
+<p><strong>LINE 8.</strong> At last we are ready to get the JSON field value from the Lua table that
+came from the JSON string. The value in field_name, which is the parameter for the
+whole function, must be a name of a JSON field. For example, inside the JSON string
+<code class="docutils literal notranslate"><span class="pre">'{&quot;Hello&quot;:</span> <span class="pre">&quot;world&quot;,</span> <span class="pre">&quot;Quantity&quot;:</span> <span class="pre">15}'</span></code>, there are two JSON fields: “Hello” and
+“Quantity”. If the whole function is invoked with <code class="docutils literal notranslate"><span class="pre">sum_json_field(&quot;Quantity&quot;)</span></code>,
+then <code class="docutils literal notranslate"><span class="pre">field_value</span> <span class="pre">=</span> <span class="pre">lua_table[field_name]</span></code> is effectively the same as
+<code class="docutils literal notranslate"><span class="pre">field_value</span> <span class="pre">=</span> <span class="pre">lua_table[&quot;Quantity&quot;]</span></code> or even <code class="docutils literal notranslate"><span class="pre">field_value</span> <span class="pre">=</span> <span class="pre">lua_table.Quantity</span></code>.
+Those are just three different ways of saying: for the Quantity field in the Lua table,
+get the value and put it in variable <code class="code docutils literal notranslate"><span class="pre">field_value</span></code>.</p>
+<p><strong>LINE 9: WHY “IF”.</strong> Suppose that the JSON string is well formed but the JSON field
+is not a number, or is missing. In that case, the function would be aborted when
+there was an attempt to add it to the sum. By first checking
+<code class="docutils literal notranslate"><span class="pre">type(field_value)</span> <span class="pre">==</span> <span class="pre">&quot;number&quot;</span></code>, we avoid that abortion. Anyone who knows that
+the database is in perfect shape can skip this kind of thing.</p>
+<p>And the function is complete. Time to test it. Starting with an empty database,
+defined the same way as the sandbox database in our
+<a class="reference internal" href="../getting_started/index.html#getting-started"><span class="std std-ref">“Getting started” exercises</span></a>,</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- if tester is left over from some previous test, destroy it</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">drop</span><span class="p">()</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>then add some tuples where the first field is a number and the second
+field is a string.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">444</span><span class="p">,</span> <span class="s1">&#39;{&quot;Item&quot;: &quot;widget&quot;, &quot;Quantity&quot;: 15}&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">445</span><span class="p">,</span> <span class="s1">&#39;{&quot;Item&quot;: &quot;widget&quot;, &quot;Quantity&quot;: 7}&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">446</span><span class="p">,</span> <span class="s1">&#39;{&quot;Item&quot;: &quot;golf club&quot;, &quot;Quantity&quot;: &quot;sunshine&quot;}&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">447</span><span class="p">,</span> <span class="s1">&#39;{&quot;Item&quot;: &quot;waffle iron&quot;, &quot;Quantit&quot;: 3}&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Since this is a test, there are deliberate errors. The “golf club” and the
+“waffle iron” do not have numeric Quantity fields, so must be ignored.
+Therefore the real sum of the Quantity field in the JSON strings should be:
+15 + 7 = 22.</p>
+<p>Invoke the function with <code class="docutils literal notranslate"><span class="pre">sum_json_field(&quot;Quantity&quot;)</span></code>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; sum_json_field(&quot;Quantity&quot;)
+---
+- 22
+...
+</pre></div>
+</div>
+<p>It works. We’ll just leave, as exercises for future improvement, the possibility
+that the “hard coding” assumptions could be removed, that there might have to be
+an overflow check if some field values are huge, and that the function should
+contain a <a class="reference internal" href="../book/box/atomic_index.html#atomic-threads-fibers-yields"><span class="std std-ref">yield</span></a> instruction if the count of tuples is huge.</p>
+</div>
+<div class="section" id="indexed-pattern-search">
+<span id="c-lua-tutorial-indexed-pattern-search"></span><h2>Indexed pattern search<a class="headerlink" href="#indexed-pattern-search" title="Permalink to this headline">¶</a></h2>
+<p>Here is a generic function which takes a field identifier
+and a search pattern, and returns all tuples that match. <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+* The field must be the first field of a TREE index. <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+* The function will use <a class="reference external" href="http://www.lua.org/manual/5.2/manual.html#6.4.1">Lua pattern matching</a>,
+which allows “magic characters” in regular expressions. <a href="#id7"><span class="problematic" id="id8">|br|</span></a>
+* The initial characters in the pattern, as far as the
+first magic character, will be used as an index search key.
+For each tuple that is found via the index, there will be
+a match of the whole pattern. <a href="#id9"><span class="problematic" id="id10">|br|</span></a>
+* To be <a class="reference internal" href="../book/box/atomic_index.html#atomic-cooperative-multitasking"><span class="std std-ref">cooperative</span></a>,
+the function should yield after every
+10 tuples, unless there is a reason to delay yielding. <a href="#id11"><span class="problematic" id="id12">|br|</span></a>
+With this function, we can take advantage of Tarantool’s indexes
+for speed, and take advantage of Lua’s pattern matching for flexibility.
+It does everything that an SQL “LIKE” search can do, and far more.</p>
+<p>Read the following Lua code to see how it works.
+The comments that begin with “SEE NOTE …” refer to long
+explanations that follow the code.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">indexed_pattern_search</span><span class="p">(</span><span class="n">space_name</span><span class="p">,</span> <span class="n">field_no</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+  <span class="c1">-- SEE NOTE #1 &quot;FIND AN APPROPRIATE INDEX&quot;</span>
+  <span class="kr">if</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">]</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Failed to find the specified space&quot;</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kc">nil</span>
+  <span class="kr">end</span>
+  <span class="kd">local</span> <span class="n">index_no</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+  <span class="kr">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">INDEX_MAX</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="kr">then</span> <span class="kr">break</span> <span class="kr">end</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;TREE&quot;</span>
+        <span class="ow">and</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">fieldno</span> <span class="o">==</span> <span class="n">field_no</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;scalar&quot;</span>
+        <span class="ow">or</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">))</span> <span class="kr">then</span>
+      <span class="n">index_no</span> <span class="o">=</span> <span class="n">i</span>
+      <span class="kr">break</span>
+    <span class="kr">end</span>
+  <span class="kr">end</span>
+  <span class="kr">if</span> <span class="p">(</span><span class="n">index_no</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Failed to find an appropriate index&quot;</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kc">nil</span>
+  <span class="kr">end</span>
+  <span class="c1">-- SEE NOTE #2 &quot;DERIVE INDEX SEARCH KEY FROM PATTERN&quot;</span>
+  <span class="kd">local</span> <span class="n">index_search_key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kd">local</span> <span class="n">index_search_key_length</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="kd">local</span> <span class="n">last_character</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kd">local</span> <span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kd">local</span> <span class="n">c2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kr">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">string.len</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span><span class="mi">1</span> <span class="kr">do</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">string.sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="n">last_character</span> <span class="o">~=</span> <span class="s2">&quot;%&quot;</span><span class="p">)</span> <span class="kr">then</span>
+      <span class="kr">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;^&#39;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;(&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;)&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span>
+                   <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;[&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;]&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span>
+                   <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;?&quot;</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="kr">break</span>
+      <span class="kr">end</span>
+      <span class="kr">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;%&quot;</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="nb">string.sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="p">(</span><span class="nb">string.match</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="s2">&quot;%p&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="kr">then</span> <span class="kr">break</span> <span class="kr">end</span>
+        <span class="n">index_search_key</span> <span class="o">=</span> <span class="n">index_search_key</span> <span class="o">..</span> <span class="n">c2</span>
+      <span class="kr">else</span>
+        <span class="n">index_search_key</span> <span class="o">=</span> <span class="n">index_search_key</span> <span class="o">..</span> <span class="n">c</span>
+      <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="n">last_character</span> <span class="o">=</span> <span class="n">c</span>
+  <span class="kr">end</span>
+  <span class="n">index_search_key_length</span> <span class="o">=</span> <span class="nb">string.len</span><span class="p">(</span><span class="n">index_search_key</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="p">(</span><span class="n">index_search_key_length</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: index search key &quot;</span> <span class="o">..</span> <span class="n">index_search_key</span> <span class="o">..</span> <span class="s2">&quot; is too short&quot;</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kc">nil</span>
+  <span class="kr">end</span>
+  <span class="c1">-- SEE NOTE #3 &quot;OUTER LOOP: INITIATE&quot;</span>
+  <span class="kd">local</span> <span class="n">result_set</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="kd">local</span> <span class="n">number_of_tuples_in_result_set</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="kd">local</span> <span class="n">previous_tuple_field</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+    <span class="kd">local</span> <span class="n">number_of_tuples_since_last_yield</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">local</span> <span class="n">is_time_for_a_yield</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="c1">-- SEE NOTE #4 &quot;INNER LOOP: ITERATOR&quot;</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span><span class="n">tuple</span> <span class="kr">in</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">[</span><span class="n">space_name</span><span class="p">].</span><span class="n">index</span><span class="p">[</span><span class="n">index_no</span><span class="p">]:</span>
+    <span class="nb">pairs</span><span class="p">(</span><span class="n">index_search_key</span><span class="p">,{</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">GE</span><span class="p">})</span> <span class="kr">do</span>
+      <span class="c1">-- SEE NOTE #5 &quot;INNER LOOP: BREAK IF INDEX KEY IS TOO GREAT&quot;</span>
+      <span class="kr">if</span> <span class="p">(</span><span class="nb">string.sub</span><span class="p">(</span><span class="n">tuple</span><span class="p">[</span><span class="n">field_no</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">index_search_key_length</span><span class="p">)</span>
+      <span class="o">&gt;</span> <span class="n">index_search_key</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="kr">break</span>
+      <span class="kr">end</span>
+      <span class="c1">-- SEE NOTE #6 &quot;INNER LOOP: BREAK AFTER EVERY 10 TUPLES -- MAYBE&quot;</span>
+      <span class="n">number_of_tuples_since_last_yield</span> <span class="o">=</span> <span class="n">number_of_tuples_since_last_yield</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="kr">if</span> <span class="p">(</span><span class="n">number_of_tuples_since_last_yield</span> <span class="o">&gt;=</span> <span class="mi">10</span>
+          <span class="ow">and</span> <span class="n">tuple</span><span class="p">[</span><span class="n">field_no</span><span class="p">]</span> <span class="o">~=</span> <span class="n">previous_tuple_field</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="n">index_search_key</span> <span class="o">=</span> <span class="n">tuple</span><span class="p">[</span><span class="n">field_no</span><span class="p">]</span>
+        <span class="n">is_time_for_a_yield</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="kr">break</span>
+        <span class="kr">end</span>
+      <span class="n">previous_tuple_field</span> <span class="o">=</span> <span class="n">tuple</span><span class="p">[</span><span class="n">field_no</span><span class="p">]</span>
+      <span class="c1">-- SEE NOTE #7 &quot;INNER LOOP: ADD TO RESULT SET IF PATTERN MATCHES&quot;</span>
+      <span class="kr">if</span> <span class="p">(</span><span class="nb">string.match</span><span class="p">(</span><span class="n">tuple</span><span class="p">[</span><span class="n">field_no</span><span class="p">],</span> <span class="n">pattern</span><span class="p">)</span> <span class="o">~=</span> <span class="kc">nil</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="n">number_of_tuples_in_result_set</span> <span class="o">=</span> <span class="n">number_of_tuples_in_result_set</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">result_set</span><span class="p">[</span><span class="n">number_of_tuples_in_result_set</span><span class="p">]</span> <span class="o">=</span> <span class="n">tuple</span>
+      <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="c1">-- SEE NOTE #8 &quot;OUTER LOOP: BREAK, OR YIELD AND CONTINUE&quot;</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="n">is_time_for_a_yield</span> <span class="o">~=</span> <span class="kc">true</span><span class="p">)</span> <span class="kr">then</span>
+      <span class="kr">break</span>
+    <span class="kr">end</span>
+    <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">).</span><span class="n">yield</span><span class="p">()</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">result_set</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>NOTE #1 “FIND AN APPROPRIATE INDEX” <a href="#id13"><span class="problematic" id="id14">|br|</span></a>
+The caller has passed space_name (a string) and field_no (a number).
+The requirements are: <a href="#id15"><span class="problematic" id="id16">|br|</span></a>
+(a) index type must be “TREE” because for other index types
+(HASH, BITSET, RTREE) a search with <a class="reference internal" href="../reference/reference_lua/box_index.html#box-index-iterator-types"><span class="std std-ref">iterator=GE</span></a>
+will not return strings in order by string value; <a href="#id17"><span class="problematic" id="id18">|br|</span></a>
+(b) field_no must be the first index part; <a href="#id19"><span class="problematic" id="id20">|br|</span></a>
+(c) the field must contain strings, because for other data types
+(such as “unsigned”) pattern searches are not possible; <a href="#id21"><span class="problematic" id="id22">|br|</span></a>
+If these requirements are not met by any index, then
+print an error message and return nil.</p>
+<p>NOTE #2 “DERIVE INDEX SEARCH KEY FROM PATTERN” <a href="#id23"><span class="problematic" id="id24">|br|</span></a>
+The caller has passed pattern (a string).
+The index search key will be
+the characters in the pattern as far as the first magic character.
+Lua’s magic characters are % ^ $ ( ) . [ ] * + - ?.
+For example, if the pattern is “ABC.E”, the period is a magic
+character and therefore the index search key will be “ABC”.
+But there is a complication … If we see “%” followed by a punctuation
+character, that punctuation character is “escaped” so
+remove the “%” when making the index search key. For example, if the
+pattern is “AB%$E”, the dollar sign is escaped and therefore
+the index search key will be “AB$E”.
+Finally there is a check that the index search key length
+must be at least three – this is an arbitrary number, and in
+fact zero would be okay, but short index search keys will cause
+long search times.</p>
+<p>NOTE #3 – “OUTER LOOP: INITIATE” <a href="#id25"><span class="problematic" id="id26">|br|</span></a>
+The function’s job is to return a result set,
+just as <cite>box.space…select &lt;box_space-select&gt;</cite> would. We will fill
+it within an outer loop that contains an inner
+loop. The outer loop’s job is to execute the inner
+loop, and possibly <a class="reference internal" href="../book/box/atomic_index.html#atomic-threads-fibers-yields"><span class="std std-ref">yield</span></a>, until the search ends.
+The inner loop’s job is to find tuples via the index, and put
+them in the result set if they match the pattern.</p>
+<p>NOTE #4 “INNER LOOP: ITERATOR” <a href="#id27"><span class="problematic" id="id28">|br|</span></a>
+The for loop here is using pairs(), see the
+<a class="reference internal" href="../reference/reference_lua/box_index.html#box-index-index-pairs"><span class="std std-ref">explanation of what index iterators are</span></a>.
+Within the inner loop,
+there will be a local variable named “tuple” which contains
+the latest tuple found via the index search key.</p>
+<p>NOTE #5 “INNER LOOP: BREAK IF INDEX KEY IS TOO GREAT” <a href="#id29"><span class="problematic" id="id30">|br|</span></a>
+The iterator is GE (Greater or Equal), and we must be
+more specific: if the search index key has N characters,
+then the leftmost N characters of the result’s index field
+must not be greater than the search index key. For example,
+if the search index key is ‘ABC’, then ‘ABCDE’ is
+a potential match, but ‘ABD’ is a signal that
+no more matches are possible.</p>
+<p>NOTE #6 “INNER LOOP: BREAK AFTER EVERY 10 TUPLES – MAYBE” <a href="#id31"><span class="problematic" id="id32">|br|</span></a>
+This chunk of code is for cooperative multitasking.
+The number 10 is arbitrary, and usually a larger number would be okay.
+The simple rule would be “after checking 10 tuples, yield,
+and then resume the search (that is, do the inner loop again)
+starting after the last value that was found”. However, if
+the index is non-unique or if there is more than one field
+in the index, then we might have duplicates – for example
+{“ABC”,1}, {“ABC”, 2}, {“ABC”, 3}” – and it would be difficult
+to decide which “ABC” tuple to resume with. Therefore, if
+the result’s index field is the same as the previous
+result’s index field, there is no break.</p>
+<p>NOTE #7 “INNER LOOP: ADD TO RESULT SET IF PATTERN MATCHES” <a href="#id33"><span class="problematic" id="id34">|br|</span></a>
+Compare the result’s index field to the entire pattern.
+For example, suppose that the caller passed pattern “ABC.E”
+and there is an indexed field containing “ABCDE”.
+Therefore the initial index search key is “ABC”.
+Therefore a tuple containing an indexed field with “ABCDE”
+will be found by the iterator, because “ABCDE” &gt; “ABC”.
+In that case string.match will return a value which is not nil.
+Therefore this tuple can be added to the result set.</p>
+<p>NOTE #8 “OUTER LOOP: BREAK, OR YIELD AND CONTINUE” <a href="#id35"><span class="problematic" id="id36">|br|</span></a>
+There are three conditions which will cause a break from
+the inner loop: (1) the for loop ends naturally because
+there are no more index keys which are greater than or
+equal to the index search key, (2) the index key is too
+great as described in NOTE #5, (3) it is time for a yield
+as described in NOTE #6. If condition (1) or condition (2)
+is true, then there is nothing more to do, the outer loop
+ends too. If and only if condition (3) is true, the
+outer loop must yield and then continue. If it does
+continue, then the inner loop – the iterator search –
+will happen again with a new value for the index search key.</p>
+<p>EXAMPLE:</p>
+<p>Start Tarantool, cut and paste the code for function <code class="docutils literal notranslate"><span class="pre">indexed_pattern_search()</span></code>,
+and try the following:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">drop</span><span class="p">()</span>
+<span class="n">box</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,{})</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;secondary&#39;</span><span class="p">,{</span><span class="n">unique</span><span class="o">=</span><span class="n">false</span><span class="p">,</span><span class="n">parts</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">}})</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;AB&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;ABC&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;ABCD&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;ABCDE&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;ABCDE&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;ABCDEF&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">}</span>
+<span class="n">box</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">t</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;ABCDF&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
+<span class="n">indexed_pattern_search</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;ABC.E.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result will be:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; indexed_pattern_search(&quot;t&quot;, 2, &quot;ABC.E.&quot;)
+---
+- - [7, &#39;ABCDEF&#39;, &#39;a&#39;]
+...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

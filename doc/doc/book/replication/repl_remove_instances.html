@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Removing instances &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Removing instances</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_remove_instances.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="removing-instances">
+<span id="replication-remove-instances"></span><h1>Removing instances<a class="headerlink" href="#removing-instances" title="Permalink to this headline">¶</a></h1>
+<p>Let’s assume that we have the following configured replica set with 3 instances
+(<em>instance1</em>, <em>instance2</em> and <em>instance3</em>) and we want to remove <em>instance2</em>.</p>
+<div align="left" class="align-left"><img alt="../../../../_images/replication.svg" src="../../../../_images/replication.svg" /></div>
+<p>To remove it politely, follow these steps:</p>
+<ol class="arabic simple">
+<li>Disconnect <em>instance2</em> from the cluster.</li>
+<li>Disconnect the cluster from <em>instance2</em>.</li>
+<li>Remove <em>instance2</em> from the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space.</li>
+</ol>
+<div align="left" class="align-left"><img alt="../../../../_images/replicationX.svg" src="../../../../_images/replicationX.svg" /></div>
+<p><strong>Step 1: disconnecting an instance from the cluster</strong></p>
+<p>On the disconnecting instance <em>instance2</em>, run <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>
+with a blank replication source:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{replication=&#39;&#39;}
+</pre></div>
+</div>
+<p>Then check that it was disconnected. Take a look at <code class="docutils literal notranslate"><span class="pre">box.info.replication</span></code>
+on <em>instance2</em> (notice that <code class="docutils literal notranslate"><span class="pre">replication.{1,3}.upstream</span></code> is absent):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.replication
+---
+- 1:
+   id: 1
+   uuid: db89978f-7115-4537-8417-9982bb5a256f
+   lsn: 9
+-- upstream is absent
+   downstream:
+      status: follow
+      idle: 0.93983899999876
+      vclock: {1: 9}
+2:
+   id: 2
+   uuid: 0a756d14-e437-4296-85b0-d27a0621613e
+   lsn: 0
+3:
+   id: 3
+   uuid: bb362584-c265-4e53-aeb6-450ae818bf59
+   lsn: 0
+-- upstream is absent
+   downstream:
+      status: follow
+      idle: 0.26624799999991
+      vclock: {1: 9}
+...
+</pre></div>
+</div>
+<p>Check <em>instance1</em> and <em>instance3</em> as well
+(notice that the status of <code class="docutils literal notranslate"><span class="pre">replication.2.downstream</span></code> is <code class="docutils literal notranslate"><span class="pre">stopped</span></code>):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- instance1
+tarantool&gt; box.info.replication
+---
+- 1:
+   id: 1
+   uuid: db89978f-7115-4537-8417-9982bb5a256f
+   lsn: 9
+2:
+   id: 2
+   uuid: 0a756d14-e437-4296-85b0-d27a0621613e
+   lsn: 0
+   upstream:
+      status: follow
+      idle: 0.3533439999992
+      peer: replicator@localhost:3302
+      lag: 0.0001220703125
+   downstream:
+      status: stopped     -- status has changed:
+      message: unexpected EOF when reading from socket, called on fd 13, aka [::1]:3301,
+      peer of [::1]:53776
+      system_message: Broken pipe
+3:
+   id: 3
+   uuid: bb362584-c265-4e53-aeb6-450ae818bf59
+   lsn: 0
+   upstream:
+      status: follow
+      idle: 0.35327999999936
+      peer: replicator@localhost:3303
+      lag: 0.00018095970153809
+   downstream:
+      status: follow
+      idle: 0.68685100000221
+      vclock: {1: 9}
+...
+</pre></div>
+</div>
+<p><strong>Step 2: disconnecting the cluster from the decommissioned instance</strong></p>
+<p>On every other instance in the cluster remove <em>instance2</em> from
+the <code class="docutils literal notranslate"><span class="pre">box.cfg{</span> <span class="pre">replication</span> <span class="pre">}</span></code> list and call an appropriate
+<code class="docutils literal notranslate"><span class="pre">box.cfg{</span> <span class="pre">replication</span> <span class="pre">=</span> <span class="pre">{instance1,</span> <span class="pre">instance3}</span> <span class="pre">}</span></code>:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{ replication = { &#39;instance1-uri&#39;, &#39;instance3-uri&#39; } }
+</pre></div>
+</div>
+<p>Take a look at <code class="docutils literal notranslate"><span class="pre">box.info.replication</span></code> on <em>instance2</em> to check that <em>instance1</em> and <em>instance3</em> were
+disconnected
+(notice that the status of <code class="docutils literal notranslate"><span class="pre">replication.{1,3}.downstream</span></code> is <code class="docutils literal notranslate"><span class="pre">stopped</span></code>):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.replication
+---
+- 1:
+   id: 1
+   uuid: db89978f-7115-4537-8417-9982bb5a256f
+   lsn: 9
+   downstream:
+      status: stopped    -- status has changed
+      message: unexpected EOF when reading from socket, called on fd 16, aka [::1]:3302,
+      peer of [::1]:53832
+      system_message: Broken pipe
+2:
+   id: 2
+   uuid: 0a756d14-e437-4296-85b0-d27a0621613e
+   lsn: 0
+3:
+   id: 3
+   uuid: bb362584-c265-4e53-aeb6-450ae818bf59
+   lsn: 0
+   downstream:
+      status: stopped    -- status has changed
+      message: unexpected EOF when reading from socket, called on fd 18, aka [::1]:3302,
+      peer of [::1]:53825
+      system_message: Broken pipe
+...
+</pre></div>
+</div>
+<p>Check <em>instance1</em> and <em>instance3</em> as well
+(notice that the status of <code class="docutils literal notranslate"><span class="pre">replication.2.upstream</span></code> is <code class="docutils literal notranslate"><span class="pre">stopped</span></code>):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- instance1
+tarantool&gt; box.info.replication
+---
+- 1:
+   id: 1
+   uuid: db89978f-7115-4537-8417-9982bb5a256f
+   lsn: 9
+2:
+   id: 2
+   uuid: 0a756d14-e437-4296-85b0-d27a0621613e
+   lsn: 0
+   downstream:
+      status: stopped   -- status has changed
+      message: unexpected EOF when reading from socket, called on fd 13, aka [::1]:3301,
+      peer of [::1]:53776
+      system_message: Broken pipe
+3:
+   id: 3
+   uuid: bb362584-c265-4e53-aeb6-450ae818bf59
+   lsn: 0
+   upstream:
+      status: follow
+      idle: 0.50240100000156
+      peer: replicator@localhost:3303
+      lag: 0.00015711784362793
+   downstream:
+      status: follow
+      idle: 0.14237199999843
+      vclock: {1: 9}
+...
+</pre></div>
+</div>
+<p><strong>Step 3: persistent removal</strong></p>
+<p>If a removed instance rejoins later, it will receive all the updates made
+by the other instances while it was disconnected.</p>
+<p>If an instance is decommissioned forever, we should clean up the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space.
+First, discover the <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">uuid</span></code> of the instance.
+On <em>instance2</em>, call <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">box.info.id,</span> <span class="pre">box.info.uuid</span></code>:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; return box.info.id, box.info.uuid
+---
+- 2
+- &#39;0a756d14-e437-4296-85b0-d27a0621613e&#39;
+...
+</pre></div>
+</div>
+<p>Take a note of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">uuid</span></code>.</p>
+<p>Now choose any master from the remaining cluster and perform the following actions on it
+(let’s assume that we chose <em>instance1</em>):</p>
+<ol class="arabic simple">
+<li>Select all records from the <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space:</li>
+</ol>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space._cluster:select{}
+---
+- - [1, &#39;db89978f-7115-4537-8417-9982bb5a256f&#39;]
+- [2, &#39;0a756d14-e437-4296-85b0-d27a0621613e&#39;]
+- [3, &#39;bb362584-c265-4e53-aeb6-450ae818bf59&#39;]
+...
+</pre></div>
+</div>
+<p>2. Check if the <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">uuid</span></code> of <em>instance2</em> are correct and remove them
+from the cluster:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space._cluster:delete(2)
+---
+- [2, &#39;0a756d14-e437-4296-85b0-d27a0621613e&#39;]
+...
+</pre></div>
+</div>
+<p><strong>Final ckecks</strong></p>
+<p>After all modifications, say <code class="docutils literal notranslate"><span class="pre">box.info.replication</span></code> to check the health status.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Database error codes &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Database error codes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/errcodes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="database-error-codes">
+<span id="error-codes"></span><h1>Database error codes<a class="headerlink" href="#database-error-codes" title="Permalink to this headline">¶</a></h1>
+<p>In the current version of the binary protocol, error messages, which are normally
+more descriptive than error codes, are not present in server responses. The actual
+message may contain a file name, a detailed reason or operating system error code.
+All such messages, however, are logged in the error log. Below are general
+descriptions of some popular codes. A complete list of errors can be found in file
+<a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.9/src/box/errcode.h">errcode.h</a> in the source tree.</p>
+<div class="table docutils container">
+<p><strong>List of error codes</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ER_NONMASTER</td>
+<td>(In replication) A server instance cannot modify data
+unless it is a master.</td>
+</tr>
+<tr class="row-even"><td>ER_ILLEGAL_PARAMS</td>
+<td>Illegal parameters. Malformed protocol
+message.</td>
+</tr>
+<tr class="row-odd"><td>ER_MEMORY_ISSUE</td>
+<td>Out of memory:
+<a class="reference internal" href="../configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a>
+limit has been reached.</td>
+</tr>
+<tr class="row-even"><td>ER_WAL_IO</td>
+<td>Failed to write to disk. May mean: failed
+to record a change in the
+write-ahead log. Some sort of disk error.</td>
+</tr>
+<tr class="row-odd"><td>ER_KEY_PART_COUNT</td>
+<td>Key part count is not the same as
+index part count</td>
+</tr>
+<tr class="row-even"><td>ER_NO_SUCH_SPACE</td>
+<td>The specified space does not exist.</td>
+</tr>
+<tr class="row-odd"><td>ER_NO_SUCH_INDEX</td>
+<td>The specified index in the specified
+space does not exist.</td>
+</tr>
+<tr class="row-even"><td>ER_PROC_LUA</td>
+<td>An error occurred inside a Lua procedure.</td>
+</tr>
+<tr class="row-odd"><td>ER_FIBER_STACK</td>
+<td>The recursion limit was reached when
+creating a new fiber. This usually
+indicates that a stored procedure is
+recursively invoking itself too often.</td>
+</tr>
+<tr class="row-even"><td>ER_UPDATE_FIELD</td>
+<td>An error occurred during update of a
+field.</td>
+</tr>
+<tr class="row-odd"><td>ER_TUPLE_FOUND</td>
+<td>A duplicate key exists in a unique
+index.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="handling-errors">
+<span id="error-handling"></span><h1>Handling errors<a class="headerlink" href="#handling-errors" title="Permalink to this headline">¶</a></h1>
+<p>Here are some procedures that can make Lua functions more robust when there are
+errors, particularly database errors.</p>
+<ol class="arabic">
+<li><p class="first">Invoke with pcall.</p>
+<div class="line-block">
+<div class="line">Take advantage of Lua’s mechanisms for <a class="reference external" href="http://www.lua.org/pil/8.4.html">“Error handling and exceptions”</a>, particularly <code class="docutils literal notranslate"><span class="pre">pcall</span></code>. That is,
+instead of simply invoking with</div>
+<div class="line"><code class="samp docutils literal notranslate"><span class="pre">box.space.</span><em><span class="pre">space-name</span></em><span class="pre">:</span><em><span class="pre">function-name</span></em><span class="pre">()</span></code></div>
+<div class="line">say</div>
+<div class="line"><code class="samp docutils literal notranslate"><span class="pre">if</span> <span class="pre">pcall(box.space.</span><em><span class="pre">space-name</span></em><span class="pre">.</span><em><span class="pre">function-name</span></em><span class="pre">,</span> <span class="pre">box.space.</span><em><span class="pre">space-name</span></em><span class="pre">)</span> <span class="pre">...</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">For some Tarantool box functions, pcall also returns error details
+including a file-name and line-number within Tarantool’s source code.
+This can be seen by unpacking. For example:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y</span> <span class="pre">=</span> <span class="pre">pcall(function()</span> <span class="pre">box.schema.space.create('')</span> <span class="pre">end)</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">y:unpack()</span></code></div>
+</div>
+<p>See the tutorial <a class="reference internal" href="../../tutorials/lua_tutorials.html#c-lua-tutorial-sum-a-json-field"><span class="std std-ref">Sum a JSON field for all tuples</span></a>
+to see how pcall can fit in an application.</p>
+</li>
+<li><p class="first">Examine and raise with box.error.</p>
+<p>To make a new error and pass it on, the box.error module provides
+<a class="reference internal" href="box_error.html#box-error-error"><span class="std std-ref">box.error(code, errtext [, errtext …])</span></a>.</p>
+<p>To find the last error, the box.error module provides <a class="reference internal" href="box_error.html#box-error-last"><span class="std std-ref">box.error.last()</span></a>. (There is also a way to find the text of the last
+operating-system error for certain functions –
+<a class="reference internal" href="errno.html#errno-strerror"><span class="std std-ref">errno.strerror([code])</span></a>.)</p>
+</li>
+<li><p class="first">Log.</p>
+<p>Put messages in a log using the <a class="reference internal" href="log.html#log-module"><span class="std std-ref">log module</span></a>.</p>
+<p>And filter messages that are automatically generated, with the
+<a class="reference internal" href="../configuration/index.html#cfg-logging-log"><span class="std std-ref">log</span></a> configuration parameter.</p>
+</li>
+</ol>
+<p>Generally, for Tarantool built-in functions which are designed to return objects:
+the result will be an object, or nil, or <a class="reference external" href="https://www.lua.org/pil/8.3.html">a Lua error</a>.
+For example consider the <a class="reference internal" href="../../book/app_server/cookbook.html#cookbook-fio-read"><span class="std std-ref">fio_read.lua</span></a> program in our cookbook:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">fio</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fio&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">errno</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;errno&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fio</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/tmp/xxxx.txt&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;O_RDONLY&#39;</span> <span class="p">})</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span>
+    <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Failed to open file: &quot;</span><span class="o">..</span><span class="n">errno</span><span class="p">.</span><span class="n">strerror</span><span class="p">())</span>
+<span class="kr">end</span>
+<span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+<span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After a function call that might fail, like fio.open() above,
+it is common to see syntax like <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">not</span> <span class="pre">f</span> <span class="pre">then</span> <span class="pre">...</span></code>
+or <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">f</span> <span class="pre">==</span> <span class="pre">nil</span> <span class="pre">then</span> <span class="pre">...</span></code>, which check
+for common failures. But if there had been a syntax
+error, for example fio.opex instead of fio.open, then
+there would have been a Lua error and f would not have
+been changed. If checking for such an obvious error
+had been a concern, the programmer would probably have
+used pcall().</p>
+<p>All functions in Tarantool modules should work this way,
+unless the manual explicitly says otherwise.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Developing with an IDE &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Developing with an IDE</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/app_server/using_ide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="developing-with-an-ide">
+<span id="app-server-using-ide"></span><h1>Developing with an IDE<a class="headerlink" href="#developing-with-an-ide" title="Permalink to this headline">¶</a></h1>
+<p>You can use IntelliJ IDEA as an IDE to develop and debug Lua applications for
+Tarantool.</p>
+<ol class="arabic">
+<li><p class="first">Download and install the IDE from the
+<a class="reference external" href="https://www.jetbrains.com/idea/">official web-site</a>.</p>
+<p>JetBrains provides specialized editions for particular languages:
+IntelliJ IDEA (Java), PHPStorm (PHP), PyCharm (Python), RubyMine (Ruby),
+CLion (C/C++), WebStorm (Web) and others.
+So, download a version that suits your primary programming language.</p>
+<p>Tarantool integration is supported for all editions.</p>
+</li>
+<li><p class="first">Configure the IDE:</p>
+<ol class="loweralpha">
+<li><p class="first">Start IntelliJ IDEA.</p>
+</li>
+<li><p class="first">Click <code class="docutils literal notranslate"><span class="pre">Configure</span></code> button and select <code class="docutils literal notranslate"><span class="pre">Plugins</span></code>.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_1.png"><img alt="../../../../_images/ide_1.png" class="frame align-left" src="../../../../_images/ide_1.png" style="width: 337.5px; height: 312.5px;" /></a>
+</li>
+<li><p class="first">Click <code class="docutils literal notranslate"><span class="pre">Browse</span> <span class="pre">repositories</span></code>.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_2.png"><img alt="../../../../_images/ide_2.png" class="frame align-left" src="../../../../_images/ide_2.png" style="width: 403.0px; height: 337.0px;" /></a>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">EmmyLua</span></code> plugin.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please don’t be confused with <code class="docutils literal notranslate"><span class="pre">Lua</span></code> plugin, which is less powerful
+than <code class="docutils literal notranslate"><span class="pre">EmmyLua</span></code>.</p>
+</div>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_3.png"><img alt="../../../../_images/ide_3.png" class="frame align-left" src="../../../../_images/ide_3.png" style="width: 303.5px; height: 233.5px;" /></a>
+</li>
+<li><p class="first">Restart IntelliJ IDEA.</p>
+</li>
+<li><p class="first">Click <code class="docutils literal notranslate"><span class="pre">Configure</span></code>, select <code class="docutils literal notranslate"><span class="pre">Project</span> <span class="pre">Defaults</span></code> and then
+<code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Configurations</span></code>.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_4.png"><img alt="../../../../_images/ide_4.png" class="frame align-left" src="../../../../_images/ide_4.png" style="width: 387.0px; height: 336.5px;" /></a>
+</li>
+<li><p class="first">Find <code class="docutils literal notranslate"><span class="pre">Lua</span> <span class="pre">Application</span></code> in the sidebar at the left.</p>
+</li>
+<li><p class="first">In <code class="docutils literal notranslate"><span class="pre">Program</span></code>, type a path to an installed <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> binary.</p>
+<p>By default, this is <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> or <code class="docutils literal notranslate"><span class="pre">/usr/bin/tarantool</span></code> on most
+platforms.</p>
+<p>If you installed <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> from sources to a custom directory,
+please specify the proper path here.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_5.png"><img alt="../../../../_images/ide_5.png" class="frame align-left" src="../../../../_images/ide_5.png" style="width: 387.5px; height: 262.5px;" /></a>
+<p>Now IntelliJ IDEA is ready to use with Tarantool.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Create a new Lua project.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_6.png"><img alt="../../../../_images/ide_6.png" class="frame align-left" src="../../../../_images/ide_6.png" style="width: 293.5px; height: 237.5px;" /></a>
+</li>
+<li><p class="first">Add a new Lua file, for example <code class="docutils literal notranslate"><span class="pre">init.lua</span></code>.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_7.png"><img alt="../../../../_images/ide_7.png" class="frame align-left" src="../../../../_images/ide_7.png" style="width: 618.0px; height: 379.5px;" /></a>
+</li>
+<li><p class="first">Write your code, save the file.</p>
+</li>
+<li><p class="first">To run you application, click <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">-&gt;</span> <span class="pre">Run</span></code> in the main menu and select
+your source file in the list.</p>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_8.png"><img alt="../../../../_images/ide_8.png" class="frame align-left" src="../../../../_images/ide_8.png" style="width: 368.5px; height: 168.0px;" /></a>
+<p>Or click <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">-&gt;</span> <span class="pre">Debug</span></code> to start debugging.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To use Lua debugger, please upgrade Tarantool to version
+1.7.5-29-gbb6170e4b or later.</p>
+</div>
+<a class="frame reference internal image-reference" href="../../../../_images/ide_9.png"><img alt="../../../../_images/ide_9.png" class="frame align-left" src="../../../../_images/ide_9.png" style="width: 617.5px; height: 370.5px;" /></a>
+</li>
+</ol>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

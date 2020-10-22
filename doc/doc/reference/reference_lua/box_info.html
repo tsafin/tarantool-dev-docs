@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.info &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.info</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_info.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.info">
+<span id="submodule-box-info"></span><span id="box-introspection-box-info"></span><h1>Submodule <cite>box.info</cite><a class="headerlink" href="#module-box.info" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.info</span></code> submodule provides access to information about server instance
+variables.</p>
+<ul class="simple">
+<li><strong>cluster.uuid</strong> is the UUID of the replica set.
+Every instance in a replica set will have the same <code class="docutils literal notranslate"><span class="pre">cluster.uuid</span></code> value.
+This value is also stored in <a class="reference internal" href="box_space_index.html#box-space-schema"><span class="std std-ref">box.space._schema</span></a>
+system space.</li>
+<li><strong>gc()</strong> returns the state of the
+<a class="reference internal" href="../configuration/index.html#cfg-checkpoint-daemon-garbage-collector"><span class="std std-ref">Tarantool garbage collector</span></a>
+including the checkpoints and their consumers (users); see details
+<a class="reference internal" href="#box-info-gc"><span class="std std-ref">below</span></a>.</li>
+<li><strong>id</strong> corresponds to <strong>replication.id</strong>
+(see <a class="reference internal" href="#box-info-replication"><span class="std std-ref">below</span></a>).</li>
+<li><strong>lsn</strong> corresponds to <strong>replication.lsn</strong>
+(see <a class="reference internal" href="#box-info-replication"><span class="std std-ref">below</span></a>).</li>
+<li><strong>memory()</strong> returns the statistics about memory
+(see <a class="reference internal" href="#box-info-memory"><span class="std std-ref">below</span></a>).</li>
+<li><strong>pid</strong> is the process ID. This value is also shown by
+<a class="reference internal" href="tarantool.html#tarantool-build"><span class="std std-ref">tarantool</span></a> module
+and by the Linux command <code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">-A</span></code>.</li>
+<li><strong>ro</strong> is <code class="docutils literal notranslate"><span class="pre">true</span></code> if the instance is in “read-only” mode
+(same as <a class="reference internal" href="../configuration/index.html#cfg-basic-read-only"><span class="std std-ref">read_only</span></a> in <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>),
+or if status is ‘orphan’.</li>
+<li><strong>signature</strong> is the sum of all <strong>lsn</strong> values from the vector clocks
+(<strong>vclock</strong>) of all instances in the replica set.</li>
+<li><strong>status</strong> corresponds to <strong>replication.upstream.status</strong> (see below).</li>
+<li><strong>uptime</strong> is the number of seconds since the instance started.
+This value can also be retrieved with
+<a class="reference internal" href="tarantool.html#tarantool-build"><span class="std std-ref">tarantool.uptime()</span></a>.</li>
+<li><strong>uuid</strong> corresponds to <strong>replication.uuid</strong>
+(see <a class="reference internal" href="#box-info-replication"><span class="std std-ref">below</span></a>).</li>
+<li><strong>vclock</strong> corresponds to <strong>replication.downstream.vclock</strong>
+(see <a class="reference internal" href="#box-info-replication"><span class="std std-ref">below</span></a>).</li>
+<li><strong>version</strong> is the Tarantool version. This value is also shown by
+<a class="reference internal" href="../configuration/index.html#index-tarantool-version"><span class="std std-ref">tarantool -V</span></a>.</li>
+<li><strong>vinyl()</strong> returns runtime statistics for the vinyl storage engine.
+This function is deprecated, use
+<a class="reference internal" href="box_stat.html#box-introspection-box-stat-vinyl"><span class="std std-ref">box.stat.vinyl()</span></a> instead.</li>
+</ul>
+<span class="target" id="box-info-memory"></span><dl class="function">
+<dt id="box.info.box.info.memory">
+<code class="descclassname">box.info.</code><code class="descname">memory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.info.box.info.memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <strong>memory</strong> function of <code class="docutils literal notranslate"><span class="pre">box.info</span></code> gives the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user a
+picture of the whole Tarantool instance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To get a picture of the vinyl subsystem, use
+<a class="reference internal" href="box_stat.html#box-introspection-box-stat-vinyl"><span class="std std-ref">box.stat.vinyl()</span></a> instead.</p>
+</div>
+<ul class="simple">
+<li><strong>memory().cache</strong> – number of bytes used for caching user data. The
+memtx storage engine does not require a cache, so in fact this is
+the number of bytes in the cache for the tuples stored for the vinyl
+storage engine.</li>
+<li><strong>memory().data</strong> – number of bytes used for storing user data
+(the tuples) with the memtx engine and with level 0 of the vinyl engine,
+without taking memory fragmentation into account.</li>
+<li><strong>memory().index</strong> – number of bytes used for indexing user data,
+including memtx and vinyl memory tree extents, the vinyl page index,
+and the vinyl bloom filters.</li>
+<li><strong>memory().lua</strong> – number of bytes used for Lua runtime.</li>
+<li><strong>memory().net</strong> – number of bytes used for network input/output buffers.</li>
+<li><strong>memory().tx</strong> – number of bytes in use by active transactions.
+For the vinyl storage engine, this is the total size of all allocated
+objects (struct <code class="docutils literal notranslate"><span class="pre">txv</span></code>, struct <code class="docutils literal notranslate"><span class="pre">vy_tx</span></code>, struct <code class="docutils literal notranslate"><span class="pre">vy_read_interval</span></code>)
+and tuples pinned for those objects.</li>
+</ul>
+<p>An example with a minimum allocation while only the memtx storage engine is
+in use:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.memory()
+---
+- cache: 0
+  data: 6552
+  tx: 0
+  lua: 1315567
+  net: 98304
+  index: 1196032
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-info-gc"></span><dl class="function">
+<dt id="box.info.box.info.gc">
+<code class="descclassname">box.info.</code><code class="descname">gc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.info.box.info.gc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <strong>gc</strong> function of <code class="docutils literal notranslate"><span class="pre">box.info</span></code> gives the <code class="docutils literal notranslate"><span class="pre">admin</span></code> user a
+picture of the factors that affect the
+<a class="reference internal" href="../configuration/index.html#cfg-checkpoint-daemon-garbage-collector"><span class="std std-ref">Tarantool garbage collector</span></a>.
+The garbage collector compares vclock (<a class="reference internal" href="../../book/replication/repl_add_instances.html#replication-vector"><span class="std std-ref">vector clock</span></a>)
+values of users and checkpoints, so a look at <code class="docutils literal notranslate"><span class="pre">box.info.gc()</span></code> may show why the
+garbage collector has not removed old WAL files, or show what it may soon remove.</p>
+<ul class="simple">
+<li><strong>gc().consumers</strong> – a list of users whose requests might affect the garbage collector.</li>
+<li><strong>gc().checkpoints</strong> – a list of preserved checkpoints.</li>
+<li><strong>gc().checkpoints[n].references</strong> – a list of references to a checkpoint.</li>
+<li><strong>gc().checkpoints[n].vclock</strong> – a checkpoint’s vclock value.</li>
+<li><strong>gc().checkpoints[n].signature</strong> – a sum of a checkpoint’s vclock’s components.</li>
+<li><strong>gc().checkpoint_is_in_progress</strong> – true if a checkpoint is in progress, otherwise false</li>
+<li><strong>gc().vclock</strong> – the garbage collector’s vclock.</li>
+<li><strong>gc().signature</strong> – the sum of the garbage collector’s checkpoint’s components.</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="box-info-replication"></span><dl class="data">
+<dt id="box.info.box.info.replication">
+<code class="descclassname">box.info.</code><code class="descname">replication</code><a class="headerlink" href="#box.info.box.info.replication" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <strong>replication</strong> section of <code class="docutils literal notranslate"><span class="pre">box.info()</span></code> is a table array with statistics for all
+instances in the replica set that the current instance belongs to (see also
+<a class="reference internal" href="../../book/replication/repl_monitoring.html#replication-monitoring"><span class="std std-ref">“Monitoring a replica set”</span></a>):
+In the following, <em>n</em> is the index number of one table item, for example
+<code class="samp docutils literal notranslate"><span class="pre">replication[1]</span></code>, which has data about server instance number 1,
+which may or may not be the same as the current instance
+(the “current instance” is what is responding to <code class="docutils literal notranslate"><span class="pre">box.info</span></code>).</p>
+<ul class="simple">
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].id</span></code> is a short numeric identifier of instance <em>n</em> within
+the replica set.
+This value is also stored in the <a class="reference internal" href="box_space_index.html#box-space-cluster"><span class="std std-ref">box.space._cluster</span></a>
+system space.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].uuid</span></code> is a globally unique identifier of instance <em>n</em>.
+This value is also stored in the <a class="reference internal" href="box_space_index.html#box-space-cluster"><span class="std std-ref">box.space._cluster</span></a>
+system space.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].lsn</span></code> is the
+<a class="reference internal" href="../../book/replication/repl_architecture.html#replication-mechanism"><span class="std std-ref">log sequence number</span></a>
+(LSN) for the latest entry in instance <em>n</em>’s
+<a class="reference internal" href="../../book/box/data_model.html#index-box-persistence"><span class="std std-ref">write ahead log</span></a> (WAL).</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream</span></code> appears (is not nil)
+if the current instance is following or intending to follow instance <em>n</em>,
+which ordinarily means
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.status</span></code> = <code class="docutils literal notranslate"><span class="pre">follow</span></code>,
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.peer</span></code> = url of instance <em>n</em> which is being followed,
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].lag</span> <span class="pre">and</span> <span class="pre">idle</span></code> = the instance’s speed, described later.
+Another way to say this is: <code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream</span></code> will appear when
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.peer</span></code> is not of the current instance,
+and is not read-only, and was specified in <code class="docutils literal notranslate"><span class="pre">box.cfg{replication={...}}</span></code>,
+so it is shown in <a class="reference internal" href="../configuration/index.html#cfg-replication-replication"><span class="std std-ref">box.cfg.replication</span></a>.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.status</span></code> is the replication status of the connection with instance <em>n</em>:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">auth</span></code> means that <a class="reference internal" href="../../book/box/authentication.html#authentication"><span class="std std-ref">authentication</span></a> is happening.</li>
+<li><code class="docutils literal notranslate"><span class="pre">connecting</span></code> means that connection is happening.</li>
+<li><code class="docutils literal notranslate"><span class="pre">disconnected</span></code> means that it is not connected to the replica set (due to network problems, not replication errors).</li>
+<li><code class="docutils literal notranslate"><span class="pre">follow</span></code> means that the current instance’s role is “replica” (read-only, or not read-only but acting as a replica for this remote peer in a master-master configuration), and is receiving or able to receive data from instance <em>n</em> (upstream) master.</li>
+<li><code class="docutils literal notranslate"><span class="pre">running</span></code> means that replication is in progress.</li>
+<li><code class="docutils literal notranslate"><span class="pre">stopped</span></code> means that replication was stopped due to a replication error (for example <a class="reference internal" href="errcodes.html#error-codes"><span class="std std-ref">duplicate key</span></a>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">orphan</span></code> means that it has not (yet) succeeded in joining the required number of masters (see <a class="reference internal" href="../../book/replication/repl_add_instances.html#replication-orphan-status"><span class="std std-ref">orphan status</span></a>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">sync</span></code> means that the master and replica are synchronizing to have the same data.</li>
+</ul>
+</li>
+</ul>
+<ul class="simple" id="box-info-replication-upstream-idle">
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.idle</span></code> is the time (in seconds) since
+the last event was received.
+This is the primary indicator of replication health.
+See more in <a class="reference internal" href="../../book/replication/repl_monitoring.html#replication-monitoring"><span class="std std-ref">Monitoring a replica set</span></a>.</li>
+</ul>
+<ul class="simple" id="box-info-replication-upstream-peer">
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.peer</span></code> contains instance <em>n</em>’s
+<a class="reference internal" href="../configuration/index.html#index-uri"><span class="std std-ref">URI</span></a> for example 127.0.0.1:3302.
+See more in <a class="reference internal" href="../../book/replication/repl_monitoring.html#replication-monitoring"><span class="std std-ref">Monitoring a replica set</span></a>.</li>
+</ul>
+<ul class="simple" id="box-info-replication-upstream-lag">
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.lag</span></code> is the time difference between the local time
+of instance <em>n</em>, recorded when the event was received, and the local time
+at another master recorded when the event was written to the
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write ahead log</span></a> on that master.
+See more in <a class="reference internal" href="../../book/replication/repl_monitoring.html#replication-monitoring"><span class="std std-ref">Monitoring a replica set</span></a>.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].upstream.message</span></code> contains an error message in case of a
+<a class="reference internal" href="../../book/replication/repl_recover.html#replication-recover"><span class="std std-ref">degraded state</span></a>, otherwise it is nil.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream</span></code> appears (is not nil)
+with data about an instance that is following instance <em>n</em>
+or is intending to follow it, which ordinarily means
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.status</span></code> = <code class="docutils literal notranslate"><span class="pre">follow</span></code>,</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.vclock</span></code> contains the
+<a class="reference internal" href="../../book/replication/repl_add_instances.html#replication-vector"><span class="std std-ref">vector clock</span></a>, which is a table of
+‘<strong>id</strong>, <strong>lsn</strong>’ pairs, for example
+<code class="code docutils literal notranslate"><span class="pre">vclock:</span> <span class="pre">{1:</span> <span class="pre">3054773,</span> <span class="pre">4:</span> <span class="pre">8938827,</span> <span class="pre">3:</span> <span class="pre">285902018}</span></code>.
+(Notice that the table may have multiple pairs although <code class="docutils literal notranslate"><span class="pre">vclock</span></code> is a singular name.)
+Even if instance <em>n</em> is <a class="reference internal" href="../../book/replication/repl_remove_instances.html#replication-remove-instances"><span class="std std-ref">removed</span></a>,
+its values will still appear here; however,
+its values will be overridden if an instance joins later with the same UUID.
+Vendor clock pairs will only appear if <code class="docutils literal notranslate"><span class="pre">lsn</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>.
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.vclock</span></code> may be the same as the current instance’s vclock (<code class="docutils literal notranslate"><span class="pre">box.info.vclock</span></code>)
+because this is for all known vclock values of the cluster.
+A master will know what is in a replica’s copy of vclock
+because, when the master makes a data change, it sends
+the change information to the replica (including the master’s
+vector clock), and the replica replies with what is in its entire
+vector clock table.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.idle</span></code> is the time (in seconds) since the last
+time that instance <em>n</em> sent events through the downstream replication.</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.status</span></code> is the replication status for downstream
+replications:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">stopped</span></code> means that downstream replication has stopped.</li>
+<li><code class="docutils literal notranslate"><span class="pre">follow</span></code> means that downstream replication is in progress
+(instance <em>n</em> is ready to accept data from the master or is currently doing so)</li>
+</ul>
+</li>
+<li><code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.message</span></code> and
+<code class="samp docutils literal notranslate"><span class="pre">replication[</span><em><span class="pre">n</span></em><span class="pre">].downstream.system_message</span></code>
+will be nil unless a problem occurs with the connection.
+For example, if instance <em>n</em> goes down, then one may see
+status = ‘stopped’, message = ‘unexpected EOF when reading from socket’, and
+system_message = ‘Broken pipe’.
+See also <a class="reference internal" href="../../book/replication/repl_recover.html#replication-recover"><span class="std std-ref">degraded state</span></a>.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="box.info.box.info">
+<code class="descclassname">box.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.info.box.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Since <code class="docutils literal notranslate"><span class="pre">box.info</span></code> contents are dynamic, it’s not possible to iterate over
+keys with the Lua <code class="docutils literal notranslate"><span class="pre">pairs()</span></code> function. For this purpose, <code class="docutils literal notranslate"><span class="pre">box.info()</span></code>
+builds and returns a Lua table with all keys and values provided in the
+submodule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">keys and values in the submodule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>This example is for a master-replica set that contains one master instance
+and one replica instance. The request was issued at the replica instance.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info()
+---
+- version: 1.7.6-68-g51fcffb77
+  id: 2
+  ro: true
+  vclock: {1: 5}
+  uptime: 917
+  lsn: 0
+  vinyl: []
+  cluster:
+    uuid: 783e2285-55b1-42d4-b93c-68dcbb7a8c18
+  pid: 35341
+  status: running
+  signature: 5
+  replication:
+    1:
+      id: 1
+      uuid: 471cd36e-cb2e-4447-ac66-2d28e9dd3b67
+      lsn: 5
+      upstream:
+        status: follow
+        idle: 124.98795700073
+        peer: replicator@192.168.0.101:3301
+        lag: 0
+      downstream:
+        vclock: {1: 5}
+    2:
+      id: 2
+      uuid: ac45d5d2-8a16-4520-ad5e-1abba6baba0a
+      lsn: 0
+  uuid: ac45d5d2-8a16-4520-ad5e-1abba6baba0a
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

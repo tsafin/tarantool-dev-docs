@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module shard &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>shard</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_rock/shard.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-shard">
+<span id="module-shard"></span><span id="shard-module"></span><h1>Module <cite>shard</cite><a class="headerlink" href="#module-shard" title="Permalink to this headline">¶</a></h1>
+<p>With sharding, the tuples of a tuple set are distributed to multiple nodes,
+with a Tarantool database server instance on each node. With this arrangement,
+each instance is handling only a subset of the total data,
+so larger loads can be handled by simply adding more computers to a network.</p>
+<p>The Tarantool <cite>shard</cite> module has facilities for creating shards,
+as well as analogues for the data-manipulation functions of the box library
+(select, insert, replace, update, delete).</p>
+<p>First some terminology:</p>
+<dl class="glossary docutils">
+<dt id="term-consistent-hash"><strong>Consistent hash</strong></dt>
+<dd>The <cite>shard</cite> module distributes according to a hash algorithm, that is,
+it applies a hash function to a tuple’s primary-key value in order to
+decide which shard the tuple belongs to. The hash function is
+<a class="reference external" href="https://en.wikipedia.org/wiki/Consistent_hashing">consistent</a>
+so that changing the number of servers will not affect results for many
+keys. The specific hash function that the <cite>shard</cite> module uses is
+<a class="reference internal" href="../reference_lua/digest.html#digest-guava"><span class="std std-ref">digest.guava</span></a> in the <a href="#id1"><span class="problematic" id="id2">:codeitalic:`digest`</span></a> module.</dd>
+<dt id="term-instance"><strong>Instance</strong></dt>
+<dd>A currently-running in-memory copy of the Tarantool server, sometimes
+called a “server instance”. Usually each shard is associated with one
+instance, or, if both sharding and replicating are going on, each shard
+is associated with one replica set.</dd>
+<dt id="term-queue"><strong>Queue</strong></dt>
+<dd>A temporary list of recent update requests. Sometimes called “batching”.
+Since updates to a sharded database can be slow, it may speed up
+throughput to send requests to a queue rather than wait for the update
+to finish on every node. The <cite>shard</cite> module has functions for adding
+requests to the queue, which it will process without further intervention.
+Queuing is optional.</dd>
+<dt id="term-redundancy"><strong>Redundancy</strong></dt>
+<dd>The number of replicated data copies in each shard.</dd>
+<dt id="term-replica"><strong>Replica</strong></dt>
+<dd>An instance which is part of a replica set.</dd>
+<dt id="term-replica-set"><strong>Replica set</strong></dt>
+<dd>Often a single shard is associated with a single instance;
+however, often the shard is replicated. When a shard is replicated,
+the multiple instances (“replicas”), which handle the shard’s
+replicated data, are a “replica set”.</dd>
+<dt id="term-replicated-data"><strong>Replicated data</strong></dt>
+<dd>A complete copy of the data. The <cite>shard</cite> module handles both sharding
+and replication. One shard can contain one or more replicated data copies.
+When a write occurs, the write is attempted on every replicated data copy in turn.
+The <cite>shard</cite> module does not use the built-in replication feature.</dd>
+<dt id="term-shard"><strong>Shard</strong></dt>
+<dd>A subset of the tuples in the database partitioned according to the
+value returned by the consistent hash function. Usually each shard
+is on a separate node, or a separate set of nodes (for example if
+redundancy = 3 then the shard will be on three nodes).</dd>
+<dt id="term-zone"><strong>Zone</strong></dt>
+<dd>A physical location where the nodes are closely connected, with
+the same security and backup and access points. The simplest example
+of a zone is a single computer with a single Tarantool-server instance.
+A shard’s replicated data copies should be in different zones.</dd>
+</dl>
+<p>The <cite>shard</cite> package is distributed separately from the main <cite>tarantool</cite> package.
+To acquire it, do a separate installation:</p>
+<ul>
+<li><p class="first">with Tarantool 1.7.4+, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl rocks install shard
+</pre></div>
+</div>
+</li>
+<li><p class="first">install with <cite>yum</cite> or <cite>apt</cite>, for example on Ubuntu say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install tarantool-shard
+</pre></div>
+</div>
+</li>
+<li><p class="first">or download from GitHub <cite>tarantool/shard</cite> and use the Lua files as described
+in the <a class="reference external" href="https://github.com/tarantool/shard">README</a>.</p>
+</li>
+</ul>
+<p>Then, before using the module, say <code class="docutils literal notranslate"><span class="pre">shard</span> <span class="pre">=</span> <span class="pre">require('shard')</span></code>.</p>
+<p>The most important function is:</p>
+<pre class="highlight literal-block">
+shard.init(<em>shard-configuration</em>)
+</pre>
+<p>This must be called for every shard.</p>
+<p>The shard configuration is a table with these fields:</p>
+<ul class="simple">
+<li><cite>servers</cite> (a list of URIs of nodes and the zones the nodes are in)</li>
+<li><cite>login</cite> (the user name which applies for accessing via the <cite>shard</cite> module)</li>
+<li><cite>password</cite> (the password for the login)</li>
+<li><cite>redundancy</cite> (a number, minimum 1)</li>
+<li><cite>binary</cite> (a port number that this host is listening on, on the current host,
+(distinguishable from the ‘listen’ port specified by <cite>box.cfg</cite>)</li>
+</ul>
+<p>Possible errors:</p>
+<ul class="simple">
+<li>redundancy should not be greater than the number of servers;</li>
+<li>the servers must be alive;</li>
+<li>two replicated data copies of the same shard should not be in the same zone.</li>
+</ul>
+<div class="section" id="example-shard-init-syntax-for-one-shard">
+<h2>Example: <cite>shard.init</cite> syntax for one shard<a class="headerlink" href="#example-shard-init-syntax-for-one-shard" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The number of replicated data copies per shard (redundancy) is 3.</li>
+<li>The number of instances is 3.</li>
+<li>The <cite>shard</cite> module will conclude that there is only one shard.</li>
+</ul>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; cfg = {
+         &gt;   servers = {
+         &gt;     { uri = &#39;localhost:33131&#39;, zone = &#39;1&#39; },
+         &gt;     { uri = &#39;localhost:33132&#39;, zone = &#39;2&#39; },
+         &gt;     { uri = &#39;localhost:33133&#39;, zone = &#39;3&#39; }
+         &gt;   },
+         &gt;   login = &#39;test_user&#39;,
+         &gt;   password = &#39;pass&#39;,
+         &gt;   redundancy = &#39;3&#39;,
+         &gt;   binary = 33131,
+         &gt; }
+---
+...
+tarantool&gt; shard.init(cfg)
+---
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-shard-init-syntax-for-three-shards">
+<h2>Example: <cite>shard.init</cite> syntax for three shards<a class="headerlink" href="#example-shard-init-syntax-for-three-shards" title="Permalink to this headline">¶</a></h2>
+<p>This describes three shards. Each shard has two replicated data copies. Since the number of
+servers is 7, and the number of replicated data copies per shard is 2, and dividing 7 / 2
+leaves a remainder of 1, one of the servers will not be used. This is not
+necessarily an error, because perhaps one of the servers in the list is not alive.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; cfg = {
+         &gt;   servers = {
+         &gt;     { uri = &#39;host1:33131&#39;, zone = &#39;1&#39; },
+         &gt;     { uri = &#39;host2:33131&#39;, zone = &#39;2&#39; },
+         &gt;     { uri = &#39;host3:33131&#39;, zone = &#39;3&#39; },
+         &gt;     { uri = &#39;host4:33131&#39;, zone = &#39;4&#39; },
+         &gt;     { uri = &#39;host5:33131&#39;, zone = &#39;5&#39; },
+         &gt;     { uri = &#39;host6:33131&#39;, zone = &#39;6&#39; },
+         &gt;     { uri = &#39;host7:33131&#39;, zone = &#39;7&#39; }
+         &gt;   },
+         &gt;   login = &#39;test_user&#39;,
+         &gt;   password = &#39;pass&#39;,
+         &gt;   redundancy = &#39;2&#39;,
+         &gt;   binary = 33131,
+         &gt; }
+---
+...
+tarantool&gt; shard.init(cfg)
+---
+...
+</pre></div>
+</div>
+<p>Every data-access function in the <cite>box</cite> module has an analogue in the <cite>shard</cite>
+module:</p>
+<pre class="highlight literal-block">
+shard[<em>space-name</em>].insert{...}
+shard[<em>space-name</em>].replace{...}
+shard[<em>space-name</em>].delete{...}
+shard[<em>space-name</em>].select{...}
+shard[<em>space-name</em>].update{...}
+shard[<em>space-name</em>].auto_increment{...}
+</pre>
+<p>For example, to insert in table T in a sharded database you simply
+say <code class="docutils literal notranslate"><span class="pre">shard.T:insert{...}</span></code> instead of <code class="docutils literal notranslate"><span class="pre">box.space.T:insert{...}</span></code>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">shard.T:select{}</span></code> request without a primary key will cause an error.</p>
+<p>Every queued data-access function has an analogue in the <cite>shard</cite> module:</p>
+<pre class="highlight literal-block">
+shard[<em>space-name</em>].q_insert{...}
+shard[<em>space-name</em>].q_replace{...}
+shard[<em>space-name</em>].q_delete{...}
+shard[<em>space-name</em>].q_select{...}
+shard[<em>space-name</em>].q_update{...}
+shard[<em>space-name</em>].q_auto_increment{...}
+</pre>
+<p>The user must add an <cite>operation_id</cite>. For details of queued data-access functions,
+and of maintenance-related functions, see the
+<a class="reference external" href="https://github.com/tarantool/shard">README</a>.</p>
+</div>
+<div class="section" id="example-shard-minimal-configuration">
+<h2>Example: shard, minimal configuration<a class="headerlink" href="#example-shard-minimal-configuration" title="Permalink to this headline">¶</a></h2>
+<p>There is only one shard, and that shard contains only one replicated data copy.
+So this isn’t
+illustrating the features of either replication or sharding, it’s only
+illustrating what the syntax is, and what the messages look like, that anyone
+could duplicate in a minute or two with the magic of cut-and-paste.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/tarantool_sandbox_1
+$ cd ~/tarantool_sandbox_1
+$ rm -r *.snap
+$ rm -r *.xlog
+$ ~/tarantool-1.7/src/tarantool
+
+tarantool&gt; box.cfg{listen = 3301}
+tarantool&gt; box.schema.space.create(&#39;tester&#39;)
+tarantool&gt; box.space.tester:create_index(&#39;primary&#39;, {})
+tarantool&gt; box.schema.user.create(&#39;test_user&#39;, {password = &#39;pass&#39;})
+tarantool&gt; box.schema.user.grant(&#39;test_user&#39;, &#39;read,write,execute&#39;, &#39;universe&#39;)
+tarantool&gt; cfg = {
+         &gt;   servers = {
+         &gt;       { uri = &#39;localhost:3301&#39;, zone = &#39;1&#39; },
+         &gt;   },
+         &gt;   login = &#39;test_user&#39;;
+         &gt;   password = &#39;pass&#39;;
+         &gt;   redundancy = 1;
+         &gt;   binary = 3301;
+         &gt; }
+tarantool&gt; shard = require(&#39;shard&#39;)
+tarantool&gt; shard.init(cfg)
+tarantool&gt; -- Now put something in ...
+tarantool&gt; shard.tester:insert{1,&#39;Tuple #1&#39;}
+</pre></div>
+</div>
+<p>If you cut and paste the above, then the result,
+showing only the requests and responses for <cite>shard.init</cite>
+and <cite>shard.tester</cite>, should look approximately like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>&lt;...&gt;
+tarantool&gt; shard.init(cfg)
+2017-09-06 ... I&gt; Sharding initialization started...
+2017-09-06 ... I&gt; establishing connection to cluster servers...
+2017-09-06 ... I&gt; connected to all servers
+2017-09-06 ... I&gt; started
+2017-09-06 ... I&gt; redundancy = 1
+2017-09-06 ... I&gt; Adding localhost:3301 to shard 1
+2017-09-06 ... I&gt; shards = 1
+2017-09-06 ... I&gt; Done
+---
+- true
+...
+tarantool&gt; -- Now put something in ...
+---
+...
+tarantool&gt; shard.tester:insert{1,&#39;Tuple #1&#39;}
+---
+- - [1, &#39;Tuple #1&#39;]
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-shard-scaling-out">
+<h2>Example: shard, scaling out<a class="headerlink" href="#example-shard-scaling-out" title="Permalink to this headline">¶</a></h2>
+<p>There are two shards, and each shard contains one replicated data copy.
+This requires two nodes. In real life the two nodes would be two computers,
+but for this illustration the requirement is merely: start two shells,
+which we’ll call Terminal#1 and Terminal #2.</p>
+<p>On Terminal #1, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/tarantool_sandbox_1
+$ cd ~/tarantool_sandbox_1
+$ rm -r *.snap
+$ rm -r *.xlog
+$ ~/tarantool-1.7/src/tarantool
+
+tarantool&gt; box.cfg{listen = 3301}
+tarantool&gt; box.schema.space.create(&#39;tester&#39;)
+tarantool&gt; box.space.tester:create_index(&#39;primary&#39;, {})
+tarantool&gt; box.schema.user.create(&#39;test_user&#39;, {password = &#39;pass&#39;})
+tarantool&gt; box.schema.user.grant(&#39;test_user&#39;, &#39;read,write,execute&#39;, &#39;universe&#39;)
+tarantool&gt; console = require(&#39;console&#39;)
+tarantool&gt; cfg = {
+         &gt;   servers = {
+         &gt;     { uri = &#39;localhost:3301&#39;, zone = &#39;1&#39; },
+         &gt;     { uri = &#39;localhost:3302&#39;, zone = &#39;2&#39; },
+         &gt;   },
+         &gt;   login = &#39;test_user&#39;,
+         &gt;   password = &#39;pass&#39;,
+         &gt;   redundancy = 1,
+         &gt;   binary = 3301,
+         &gt; }
+tarantool&gt; shard = require(&#39;shard&#39;)
+tarantool&gt; shard.init(cfg)
+tarantool&gt; -- Now put something in ...
+tarantool&gt; shard.tester:insert{1,&#39;Tuple #1&#39;}
+</pre></div>
+</div>
+<p>On Terminal #2, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/tarantool_sandbox_2
+$ cd ~/tarantool_sandbox_2
+$ rm -r *.snap
+$ rm -r *.xlog
+$ ~/tarantool-1.7/src/tarantool
+
+tarantool&gt; box.cfg{listen = 3302}
+tarantool&gt; box.schema.space.create(&#39;tester&#39;)
+tarantool&gt; box.space.tester:create_index(&#39;primary&#39;, {})
+tarantool&gt; box.schema.user.create(&#39;test_user&#39;, {password = &#39;pass&#39;})
+tarantool&gt; box.schema.user.grant(&#39;test_user&#39;, &#39;read,write,execute&#39;, &#39;universe&#39;)
+tarantool&gt; console = require(&#39;console&#39;)
+tarantool&gt; cfg = {
+         &gt;   servers = {
+         &gt;     { uri = &#39;localhost:3301&#39;, zone = &#39;1&#39; };
+         &gt;     { uri = &#39;localhost:3302&#39;, zone = &#39;2&#39; };
+         &gt;   };
+         &gt;   login = &#39;test_user&#39;;
+         &gt;   password = &#39;pass&#39;;
+         &gt;   redundancy = 1;
+         &gt;   binary = 3302;
+         &gt; }
+tarantool&gt; shard = require(&#39;shard&#39;)
+tarantool&gt; shard.init(cfg)
+tarantool&gt; -- Now get something out ...
+tarantool&gt; shard.tester:select{1}
+</pre></div>
+</div>
+<p>What will appear on Terminal #1 is: a loop of error messages saying “Connection
+refused” and “server check failure”. This is normal. It will go on until
+Terminal #2 process starts.</p>
+<p>What will appear on Terminal #2, at the end, should look like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; shard.tester:select{1}
+---
+- - - [1, &#39;Tuple #1&#39;]
+...
+</pre></div>
+</div>
+<p>This shows that what was inserted by Terminal #1 can be selected by Terminal #2,
+via the <cite>shard</cite> module.</p>
+<p>For details, see the <a class="reference external" href="https://github.com/tarantool/shard">README</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

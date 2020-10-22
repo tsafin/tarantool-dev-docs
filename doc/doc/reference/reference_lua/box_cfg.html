@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.cfg &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.cfg</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_cfg.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.cfg">
+<span id="submodule-box-cfg"></span><span id="box-introspection-box-cfg"></span><h1>Submodule <cite>box.cfg</cite><a class="headerlink" href="#module-box.cfg" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> submodule is used for specifying
+<a class="reference internal" href="../configuration/index.html#box-cfg-params"><span class="std std-ref">server configuration parameters</span></a>.</p>
+<p>To view the current configuration, say <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> without braces:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg
+---
+- checkpoint_count: 2
+  too_long_threshold: 0.5
+  slab_alloc_factor: 1.1
+  memtx_max_tuple_size: 1048576
+  background: false
+  &lt;...&gt;
+...
+</pre></div>
+</div>
+<p>To set particular parameters, use the following syntax: <code class="docutils literal notranslate"><span class="pre">box.cfg{key</span> <span class="pre">=</span> <span class="pre">value</span> <span class="pre">[,</span> <span class="pre">key</span> <span class="pre">=</span> <span class="pre">value</span> <span class="pre">...]}</span></code>
+(further referred to as <code class="docutils literal notranslate"><span class="pre">box.cfg{...}</span></code> for short). For example:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{listen = 3301}
+</pre></div>
+</div>
+<p>Parameters that are not specified in the <code class="docutils literal notranslate"><span class="pre">box.cfg{...}</span></code> call explicitly will
+be set to the <a class="reference internal" href="#box-cfg-default"><span class="std std-ref">default values</span></a>.</p>
+<p>If you say <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> with no parameters, Tarantool applies the following
+default settings to all the parameters:</p>
+<div class="highlight-tarantoolsession notranslate" id="box-cfg-default"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{}
+tarantool&gt; box.cfg -- sorted in the alphabetic order
+---
+- background                   = false
+  checkpoint_count             = 2
+  checkpoint_interval          = 3600
+  coredump                     = false
+  custom_proc_title            = nil
+  feedback_enabled             = true
+  feedback_host                = &#39;https://feedback.tarantool.io&#39;
+  feedback_interval            = 3600
+  force_recovery               = false
+  hot_standby                  = false
+  io_collect_interval          = nil
+  listen                       = nil
+  log                          = nil
+  log_format                   = plain
+  log_level                    = 5
+  log_nonblock                 = true
+  memtx_dir                    = &#39;.&#39;
+  memtx_max_tuple_size         = 1024 * 1024
+  memtx_memory                 = 256 * 1024 *1024
+  memtx_min_tuple_size         = 16
+  net_msg_max                  = 768
+  pid_file                     = nil
+  readahead                    = 16320
+  read_only                    = false
+  replication                  = nil
+  replication_connect_quorum   = nil
+  replication_connect_timeout  = 30
+  replication_skip_conflict    = false
+  replication_sync_lag         = 10
+  replication_sync_timeout     = 300
+  replication_timeout          = 1
+  slab_alloc_factor            = 1.05
+  snap_io_rate_limit           = nil
+  too_long_threshold           = 0.5
+  username                     = nil
+  vinyl_bloom_fpr              = 0.05
+  vinyl_cache                  = 128 * 1024 * 1024
+  vinyl_dir                    = &#39;.&#39;
+  vinyl_max_tuple_size         = 1024 * 1024* 1024 * 1024
+  vinyl_memory                 = 128 * 1024 * 1024
+  vinyl_page_size              = 8 * 1024
+  vinyl_range_size             = nil
+  vinyl_read_threads           = 1
+  vinyl_run_count_per_level    = 2
+  vinyl_run_size_ratio         = 3.5
+  vinyl_timeout                = 60
+  vinyl_write_threads          = 4
+  wal_dir                      = &#39;.&#39;
+  wal_dir_rescan_delay         = 2
+  wal_max_size                 = 256 * 1024 * 1024
+  wal_mode                     = &#39;write&#39;
+  worker_pool_threads          = 4
+  work_dir                     = nil
+</pre></div>
+</div>
+<p>The first call to <code class="docutils literal notranslate"><span class="pre">box.cfg{...}</span></code> (with or without parameters) initiates
+Tarantool’s database module <a class="reference internal" href="box.html#box-module"><span class="std std-ref">box</span></a>.
+To perform any database operations, you must call <code class="docutils literal notranslate"><span class="pre">box.cfg{...}</span></code> first.</p>
+<p><code class="docutils literal notranslate"><span class="pre">box.cfg{...}</span></code> is also the command that reloads
+<a class="reference internal" href="../../book/box/data_model.html#index-box-persistence"><span class="std std-ref">persistent data files</span></a> into RAM upon restart
+once we have data.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

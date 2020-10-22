@@ -1,0 +1,540 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bootstrapping a replica set &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Bootstrapping a replica set</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/replication/repl_bootstrap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bootstrapping-a-replica-set">
+<span id="replication-bootstrap"></span><h1>Bootstrapping a replica set<a class="headerlink" href="#bootstrapping-a-replica-set" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="master-replica-bootstrap">
+<span id="replication-master-replica-bootstrap"></span><h2>Master-replica bootstrap<a class="headerlink" href="#master-replica-bootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Let us first bootstrap a simple <strong>master-replica</strong> set containing two instances,
+each located on its own machine. For easier administration, we make the
+<a class="reference internal" href="../admin/instance_config.html#admin-instance-file"><span class="std std-ref">instance files</span></a> almost identical.</p>
+<img alt="../../../../_images/mr-1m-1r-twoway.png" class="align-center" src="../../../../_images/mr-1m-1r-twoway.png" />
+<p>Here is an example of the master’s instance file:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- instance file for the master</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+  <span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">,</span>
+  <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;replicator:password@192.168.0.101:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.102:3301&#39;</span><span class="p">},</span> <span class="c1">-- replica URI</span>
+  <span class="n">read_only</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">})</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="s1">&#39;replication&#39;</span><span class="p">)</span> <span class="c1">-- grant replication role</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.once executed on master&#39;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul>
+<li><p class="first">the <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listen</span></a> parameter defines a URI
+(port 3301 in our example), on which the master can accept connections from
+replicas.</p>
+</li>
+<li><p class="first">the <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a> parameter
+defines the URIs at which all instances in the replica set can accept connections.
+It includes the replica’s URI as well, although the replica is not a replication
+source right now. This parameter is mandatory only for master-master or full-mesh
+cluster setups.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For security reasons, we recommend that administrators prevent unauthorized
+replication sources by associating a password with every user that has a
+replication <a class="reference internal" href="../box/authentication_index.html#authentication-roles"><span class="std std-ref">role</span></a>. That way, the <a class="reference internal" href="../../reference/configuration/index.html#index-uri"><span class="std std-ref">URI</span></a> for <code class="docutils literal notranslate"><span class="pre">replication</span></code> parameter must have the long form
+<code class="docutils literal notranslate"><span class="pre">username:password&#64;host:port</span></code>.</p>
+</div>
+</li>
+<li><p class="first">the <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-read-only"><span class="std std-ref">read_only = false</span></a> parameter setting enables
+data-change operations on the instance and makes the instance act as a master,
+not as a replica. <em>That is the only parameter setting in our instance files
+that will differ.</em></p>
+</li>
+<li><p class="first">the <a class="reference internal" href="../../reference/reference_lua/box_once.html#box-once"><span class="std std-ref">box.once()</span></a> function contains database initialization logic
+that should be executed only once during the replica set lifetime.</p>
+</li>
+</ul>
+<p>In this example, we create a space with a primary index, and a user for
+replication purposes. We also say <code class="docutils literal notranslate"><span class="pre">print('box.once</span> <span class="pre">executed</span> <span class="pre">on</span> <span class="pre">master')</span></code>
+so that it will later be visible on a console whether <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> was executed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Replication requires privileges. We can grant privileges for accessing spaces
+directly to the user who will start the instance. However, it is more usual
+to grant privileges for accessing spaces to a
+<a class="reference internal" href="../box/authentication_index.html#authentication-roles"><span class="std std-ref">role</span></a>, and then grant the role to the user who
+will start the replica.</p>
+</div>
+<p>Here we use Tarantool’s predefined role named “replication” which by default
+grants “read” privileges for all database objects (“universe”), and we can
+change privileges for this role as required.</p>
+<p>In the replica’s instance file, we set the <code class="docutils literal notranslate"><span class="pre">read_only</span></code> parameter to “true”, and
+say <code class="docutils literal notranslate"><span class="pre">print('box.once</span> <span class="pre">executed</span> <span class="pre">on</span> <span class="pre">replica')</span></code> so that later it will be visible
+that <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> was not executed more than once.
+Otherwise the replica’s instance file is identical to the master’s instance file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- instance file for the replica</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+  <span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">,</span>
+  <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;replicator:password@192.168.0.101:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.102:3301&#39;</span><span class="p">},</span> <span class="c1">-- replica URI</span>
+  <span class="n">read_only</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">})</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="s1">&#39;replication&#39;</span><span class="p">)</span> <span class="c1">-- grant replication role</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.once executed on replica&#39;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The replica does not inherit the master’s configuration parameters, such as
+those making the <a class="reference internal" href="../../reference/configuration/index.html#book-cfg-checkpoint-daemon"><span class="std std-ref">checkpoint daemon</span></a> run on
+the master. To get the same behavior, set the relevant parameters
+explicitly so that they are the same on both master and replica.</p>
+</div>
+<p>Now we can launch the two instances. The master…</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching the master</span>
+<span class="gp">$</span> tarantool master.lua
+<span class="go">2017-06-14 14:12:03.847 [18933] main/101/master.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 14:12:03.848 [18933] main/101/master.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 14:12:03.849 [18933] main/101/master.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 14:12:03.859 [18933] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 14:12:03.861 [18933] main/105/applier/replicator@192.168.0. I&gt; can&#39;t connect to master</span>
+<span class="go">2017-06-14 14:12:03.861 [18933] main/105/applier/replicator@192.168.0. coio.cc:105 !&gt; SystemError connect, called on fd 14, aka 192.168.0.102:56736: Connection refused</span>
+<span class="go">2017-06-14 14:12:03.861 [18933] main/105/applier/replicator@192.168.0. I&gt; will retry every 1 second</span>
+<span class="go">2017-06-14 14:12:03.861 [18933] main/104/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:12:19.878 [18933] main/105/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+<span class="go">2017-06-14 14:12:19.879 [18933] main/101/master.lua I&gt; initializing an empty data directory</span>
+<span class="go">2017-06-14 14:12:19.908 [18933] snapshot/101/main I&gt; saving snapshot `/var/lib/tarantool/master/00000000000000000000.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 14:12:19.914 [18933] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 14:12:19.914 [18933] main/101/master.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 14:12:19.917 [18933] main/101/master.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 14:12:19.918 [18933] main/105/applier/replicator@192.168.0. I&gt; failed to authenticate</span>
+<span class="go">2017-06-14 14:12:19.918 [18933] main/105/applier/replicator@192.168.0. xrow.cc:431 E&gt; ER_LOADING: Instance bootstrap hasn&#39;t finished yet</span>
+<span class="go">box.once executed on master</span>
+<span class="go">2017-06-14 14:12:19.920 [18933] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+<p>… (the display confirms that <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> was executed on the master) – and the replica:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching the replica</span>
+<span class="gp">$</span> tarantool replica.lua
+<span class="go">2017-06-14 14:12:19.486 [18934] main/101/replica.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 14:12:19.486 [18934] main/101/replica.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 14:12:19.487 [18934] main/101/replica.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 14:12:19.494 [18934] iproto/101/main I&gt; binary: bound to [::]:3311</span>
+<span class="go">2017-06-14 14:12:19.495 [18934] main/104/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:12:19.495 [18934] main/105/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.102:3302</span>
+<span class="go">2017-06-14 14:12:19.496 [18934] main/104/applier/replicator@192.168.0. I&gt; failed to authenticate</span>
+<span class="go">2017-06-14 14:12:19.496 [18934] main/104/applier/replicator@192.168.0. xrow.cc:431 E&gt; ER_LOADING: Instance bootstrap hasn&#39;t finished yet</span>
+</pre></div>
+</div>
+<p>In both logs, there are messages saying that the replica was bootstrapped from the master:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># bootstrapping the replica (from the master&#39;s log)</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">2017-06-14 14:12:20.503 [18933] main/106/main I&gt; initial data sent.</span>
+<span class="go">2017-06-14 14:12:20.505 [18933] relay/[::ffff:192.168.0.101]:/101/main I&gt; recover from `/var/lib/tarantool/master/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 14:12:20.505 [18933] main/106/main I&gt; final data sent.</span>
+<span class="go">2017-06-14 14:12:20.522 [18933] relay/[::ffff:192.168.0.101]:/101/main I&gt; recover from `/Users/e.shebunyaeva/work/tarantool-test-repl/master_dir/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 14:12:20.922 [18933] main/105/applier/replicator@192.168.0. I&gt; authenticated</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># bootstrapping the replica (from the replica&#39;s log)</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">2017-06-14 14:12:20.498 [18934] main/104/applier/replicator@192.168.0. I&gt; authenticated</span>
+<span class="go">2017-06-14 14:12:20.498 [18934] main/101/replica.lua I&gt; bootstrapping replica from 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:12:20.512 [18934] main/104/applier/replicator@192.168.0. I&gt; initial data received</span>
+<span class="go">2017-06-14 14:12:20.512 [18934] main/104/applier/replicator@192.168.0. I&gt; final data received</span>
+<span class="go">2017-06-14 14:12:20.517 [18934] snapshot/101/main I&gt; saving snapshot `/var/lib/tarantool/replica/00000000000000000005.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 14:12:20.518 [18934] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 14:12:20.519 [18934] main/101/replica.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 14:12:20.520 [18934] main/101/replica.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 14:12:20.520 [18934] main/101/replica.lua I&gt; set &#39;read_only&#39; configuration option to true</span>
+<span class="go">2017-06-14 14:12:20.520 [18934] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> was executed only at the master, although we added
+<code class="docutils literal notranslate"><span class="pre">box.once()</span></code> to both instance files.</p>
+<p>We could as well launch the replica first:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching the replica</span>
+<span class="gp">$</span> tarantool replica.lua
+<span class="go">2017-06-14 14:35:36.763 [18952] main/101/replica.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 14:35:36.765 [18952] main/101/replica.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 14:35:36.765 [18952] main/101/replica.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 14:35:36.772 [18952] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 14:35:36.772 [18952] main/104/applier/replicator@192.168.0. I&gt; can&#39;t connect to master</span>
+<span class="go">2017-06-14 14:35:36.772 [18952] main/104/applier/replicator@192.168.0. coio.cc:105 !&gt; SystemError connect, called on fd 13, aka 192.168.0.101:56820: Connection refused</span>
+<span class="go">2017-06-14 14:35:36.772 [18952] main/104/applier/replicator@192.168.0. I&gt; will retry every 1 second</span>
+<span class="go">2017-06-14 14:35:36.772 [18952] main/105/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+</pre></div>
+</div>
+<p>… and the master later:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching the master</span>
+<span class="gp">$</span> tarantool master.lua
+<span class="go">2017-06-14 14:35:43.701 [18953] main/101/master.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 14:35:43.702 [18953] main/101/master.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 14:35:43.702 [18953] main/101/master.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 14:35:43.709 [18953] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 14:35:43.709 [18953] main/105/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+<span class="go">2017-06-14 14:35:43.709 [18953] main/104/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:35:43.709 [18953] main/101/master.lua I&gt; initializing an empty data directory</span>
+<span class="go">2017-06-14 14:35:43.721 [18953] snapshot/101/main I&gt; saving snapshot `/var/lib/tarantool/master/00000000000000000000.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 14:35:43.722 [18953] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 14:35:43.723 [18953] main/101/master.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 14:35:43.723 [18953] main/101/master.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 14:35:43.724 [18953] main/105/applier/replicator@192.168.0. I&gt; failed to authenticate</span>
+<span class="go">2017-06-14 14:35:43.724 [18953] main/105/applier/replicator@192.168.0. xrow.cc:431 E&gt; ER_LOADING: Instance bootstrap hasn&#39;t finished yet</span>
+<span class="go">box.once executed on master</span>
+<span class="go">2017-06-14 14:35:43.726 [18953] main C&gt; entering the event loop</span>
+<span class="go">2017-06-14 14:35:43.779 [18953] main/103/main I&gt; initial data sent.</span>
+<span class="go">2017-06-14 14:35:43.780 [18953] relay/[::ffff:192.168.0.101]:/101/main I&gt; recover from `/var/lib/tarantool/master/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 14:35:43.780 [18953] main/103/main I&gt; final data sent.</span>
+<span class="go">2017-06-14 14:35:43.796 [18953] relay/[::ffff:192.168.0.102]:/101/main I&gt; recover from `/var/lib/tarantool/master/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 14:35:44.726 [18953] main/105/applier/replicator@192.168.0. I&gt; authenticated</span>
+</pre></div>
+</div>
+<p>In this case, the replica would wait for the master to become available, so the
+launch order doesn’t matter. Our <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> logic would also be executed
+only once, at the master.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># the replica has eventually connected to the master</span>
+<span class="gp">$</span> <span class="c1"># and got bootstrapped (from the replica&#39;s log)</span>
+<span class="go">2017-06-14 14:35:43.777 [18952] main/104/applier/replicator@192.168.0. I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 14:35:43.777 [18952] main/104/applier/replicator@192.168.0. I&gt; authenticated</span>
+<span class="go">2017-06-14 14:35:43.777 [18952] main/101/replica.lua I&gt; bootstrapping replica from 192.168.0.199:3310</span>
+<span class="go">2017-06-14 14:35:43.788 [18952] main/104/applier/replicator@192.168.0. I&gt; initial data received</span>
+<span class="go">2017-06-14 14:35:43.789 [18952] main/104/applier/replicator@192.168.0. I&gt; final data received</span>
+<span class="go">2017-06-14 14:35:43.793 [18952] snapshot/101/main I&gt; saving snapshot `/var/lib/tarantool/replica/00000000000000000005.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 14:35:43.793 [18952] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 14:35:43.795 [18952] main/101/replica.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 14:35:43.795 [18952] main/101/replica.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 14:35:43.795 [18952] main/101/replica.lua I&gt; set &#39;read_only&#39; configuration option to true</span>
+<span class="go">2017-06-14 14:35:43.795 [18952] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="controlled-failover">
+<span id="replication-controlled-failover"></span><h2>Controlled failover<a class="headerlink" href="#controlled-failover" title="Permalink to this headline">¶</a></h2>
+<p>To perform a <strong>controlled failover</strong>, that is, swap the roles of the master and
+replica, all we need to do is to set <code class="docutils literal notranslate"><span class="pre">read_only=true</span></code> at the master, and
+<code class="docutils literal notranslate"><span class="pre">read_only=false</span></code> at the replica. The order of actions is important here.
+If a system is running in production, we do not want concurrent writes happening
+both at the replica and the master. Nor do we want the new replica to accept
+any writes until it has finished fetching all replication data from the old
+master. To compare replica and master state, we can use
+<a class="reference internal" href="../../reference/reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info.signature</span></a>.</p>
+<ol class="arabic">
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">read_only=true</span></code> at the master.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># at the master
+tarantool&gt; box.cfg{read_only=true}
+</pre></div>
+</div>
+</li>
+<li><p class="first">Record the master’s current position with <code class="docutils literal notranslate"><span class="pre">box.info.signature</span></code>, containing
+the sum of all LSNs in the master’s vector clock.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># at the master
+tarantool&gt; box.info.signature
+</pre></div>
+</div>
+</li>
+<li><p class="first">Wait until the replica’s signature is the same as the master’s.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># at the replica
+tarantool&gt; box.info.signature
+</pre></div>
+</div>
+</li>
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">read_only=false</span></code> at the replica to enable write operations.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span># at the replica
+tarantool&gt; box.cfg{read_only=false}
+</pre></div>
+</div>
+</li>
+</ol>
+<p>These four steps ensure that the replica doesn’t accept new writes until it’s done
+fetching writes from the master.</p>
+</div>
+<div class="section" id="master-master-bootstrap">
+<span id="replication-master-master-bootstrap"></span><h2>Master-master bootstrap<a class="headerlink" href="#master-master-bootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Now let us bootstrap a two-instance <strong>master-master</strong> set. For easier
+administration, we make master#1 and master#2 instance files fully identical.</p>
+<img alt="../../../../_images/mm-2m-mesh.png" class="align-center" src="../../../../_images/mm-2m-mesh.png" />
+<p>We re-use the master’s instance file from the
+<a class="reference internal" href="#replication-master-replica-bootstrap"><span class="std std-ref">master-replica example</span></a> above.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- instance file for any of the two masters</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+  <span class="n">listen</span>      <span class="o">=</span> <span class="mi">3301</span><span class="p">,</span>
+  <span class="n">replication</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;replicator:password@192.168.0.101:3301&#39;</span><span class="p">,</span>  <span class="c1">-- master1 URI</span>
+                 <span class="s1">&#39;replicator:password@192.168.0.102:3301&#39;</span><span class="p">},</span> <span class="c1">-- master2 URI</span>
+  <span class="n">read_only</span>   <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span><span class="p">})</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;replicator&#39;</span><span class="p">,</span> <span class="s1">&#39;replication&#39;</span><span class="p">)</span> <span class="c1">-- grant replication role</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+   <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">test</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.once executed on master #1&#39;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the <a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a> parameter, we define the
+URIs of both masters in the replica set and say
+<code class="docutils literal notranslate"><span class="pre">print('box.once</span> <span class="pre">executed</span> <span class="pre">on</span> <span class="pre">master</span> <span class="pre">#1')</span></code> so it will be clear when and where the
+<code class="docutils literal notranslate"><span class="pre">box.once()</span></code> logic is executed.</p>
+<p>Now we can launch the two masters.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Tarantool guarantees that <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> logic will be executed once only
+for a single instance. Starting a master-master replica set in parallel
+can cause repeated execution of <code class="docutils literal notranslate"><span class="pre">box.once</span></code>. That, particularly, can result
+in data inconsistency.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching master #1</span>
+<span class="gp">$</span> tarantool master1.lua
+<span class="go">2017-06-14 15:39:03.062 [47021] main/101/master1.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 15:39:03.062 [47021] main/101/master1.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 15:39:03.063 [47021] main/101/master1.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 15:39:03.065 [47021] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 15:39:03.065 [47021] main/105/applier/replicator@192.168.0.10 I&gt; can&#39;t connect to master</span>
+<span class="go">2017-06-14 15:39:03.065 [47021] main/105/applier/replicator@192.168.0.10 coio.cc:107 !&gt; SystemError connect, called on fd 14, aka 192.168.0.102:57110: Connection refused</span>
+<span class="go">2017-06-14 15:39:03.065 [47021] main/105/applier/replicator@192.168.0.10 I&gt; will retry every 1 second</span>
+<span class="go">2017-06-14 15:39:03.065 [47021] main/104/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 15:39:08.070 [47021] main/105/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+<span class="go">2017-06-14 15:39:08.071 [47021] main/105/applier/replicator@192.168.0.10 I&gt; authenticated</span>
+<span class="go">2017-06-14 15:39:08.071 [47021] main/101/master1.lua I&gt; bootstrapping replica from 192.168.0.102:3301</span>
+<span class="go">2017-06-14 15:39:08.073 [47021] main/105/applier/replicator@192.168.0.10 I&gt; initial data received</span>
+<span class="go">2017-06-14 15:39:08.074 [47021] main/105/applier/replicator@192.168.0.10 I&gt; final data received</span>
+<span class="go">2017-06-14 15:39:08.074 [47021] snapshot/101/main I&gt; saving snapshot `/Users/e.shebunyaeva/work/tarantool-test-repl/master1_dir/00000000000000000008.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 15:39:08.074 [47021] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 15:39:08.076 [47021] main/101/master1.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 15:39:08.076 [47021] main/101/master1.lua I&gt; ready to accept requests</span>
+<span class="go">box.once executed on master #1</span>
+<span class="go">2017-06-14 15:39:08.077 [47021] main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># launching master #2</span>
+<span class="gp">$</span> tarantool master2.lua
+<span class="go">2017-06-14 15:39:07.452 [47022] main/101/master2.lua C&gt; version 1.7.4-52-g980d30092</span>
+<span class="go">2017-06-14 15:39:07.453 [47022] main/101/master2.lua C&gt; log level 5</span>
+<span class="go">2017-06-14 15:39:07.453 [47022] main/101/master2.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-06-14 15:39:07.455 [47022] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-06-14 15:39:07.455 [47022] main/104/applier/replicator@192.168.0.19 I&gt; remote master is 1.7.4 at 192.168.0.101:3301</span>
+<span class="go">2017-06-14 15:39:07.455 [47022] main/105/applier/replicator@192.168.0.10 I&gt; remote master is 1.7.4 at 192.168.0.102:3301</span>
+<span class="go">2017-06-14 15:39:07.455 [47022] main/101/master2.lua I&gt; initializing an empty data directory</span>
+<span class="go">2017-06-14 15:39:07.457 [47022] snapshot/101/main I&gt; saving snapshot `/Users/e.shebunyaeva/work/tarantool-test-repl/master2_dir/00000000000000000000.snap.inprogress&#39;</span>
+<span class="go">2017-06-14 15:39:07.457 [47022] snapshot/101/main I&gt; done</span>
+<span class="go">2017-06-14 15:39:07.458 [47022] main/101/master2.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-06-14 15:39:07.459 [47022] main/101/master2.lua I&gt; ready to accept requests</span>
+<span class="go">2017-06-14 15:39:07.460 [47022] main C&gt; entering the event loop</span>
+<span class="go">2017-06-14 15:39:08.072 [47022] main/103/main I&gt; initial data sent.</span>
+<span class="go">2017-06-14 15:39:08.073 [47022] relay/[::ffff:192.168.0.102]:/101/main I&gt; recover from `/Users/e.shebunyaeva/work/tarantool-test-repl/master2_dir/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 15:39:08.073 [47022] main/103/main I&gt; final data sent.</span>
+<span class="go">2017-06-14 15:39:08.077 [47022] relay/[::ffff:192.168.0.102]:/101/main I&gt; recover from `/Users/e.shebunyaeva/work/tarantool-test-repl/master2_dir/00000000000000000000.xlog&#39;</span>
+<span class="go">2017-06-14 15:39:08.461 [47022] main/104/applier/replicator@192.168.0.10 I&gt; authenticated</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

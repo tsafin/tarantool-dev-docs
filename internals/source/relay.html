@@ -1,0 +1,576 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Relay &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Write-ahead logging" href="wal.html" />
+    <link rel="prev" title="Replication" href="replication.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc/doc/contributing/index.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tarantool internals</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fiber.html">Fibers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Replication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Relay</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relay-start-up">Relay start up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relay-lifecycle">Relay lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wal.html">Write-ahead logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wal-fmt.html">WAL file binary format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Tarantool internals</a> &raquo;</li>
+        
+      <li>Relay</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/internals/source/relay.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="relay">
+<h1>Relay<a class="headerlink" href="#relay" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Relay serves as a counterpart to replication procedure.</p>
+<p>When replication is set in the box configuration we connect
+to the remote peer from which we will fetch database updates,
+to keep all nodes with data up to day.</p>
+<p>Same time the local changes made on the node should be
+sent out to the remote peers. For this sake we run
+the relay service.</p>
+</div>
+<div class="section" id="relay-start-up">
+<h2>Relay start up<a class="headerlink" href="#relay-start-up" title="Permalink to this headline">¶</a></h2>
+<p>When remote node connects to us it passes <code class="docutils literal notranslate"><span class="pre">IPROTO_JOIN</span></code> code
+via network message (the full process about message exchange
+is described in replication section)</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">tx_process_replication</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cmsg</span> <span class="o">*</span><span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">coio_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">io</span><span class="p">,</span> <span class="n">con</span><span class="o">-&gt;</span><span class="n">input</span><span class="p">.</span><span class="n">fd</span><span class="p">);</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">.</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nl">IPROTO_JOIN</span><span class="p">:</span>
+        <span class="n">box_process_join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>First we start the joining procedure</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">box_process_join</span><span class="p">(</span><span class="k">struct</span> <span class="nc">ev_io</span> <span class="o">*</span><span class="n">io</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="o">*</span><span class="n">header</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">struct</span> <span class="nc">tt_uuid</span> <span class="n">instance_uuid</span> <span class="o">=</span> <span class="n">uuid_nil</span><span class="p">;</span>
+    <span class="n">xrow_decode_join_xc</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">instance_uuid</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">replica</span> <span class="o">=</span> <span class="n">replica_by_uuid</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instance_uuid</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">replica</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">replica</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">==</span> <span class="n">REPLICA_ID_NIL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">box_check_writable_xc</span><span class="p">();</span>
+        <span class="k">struct</span> <span class="nc">space</span> <span class="o">*</span><span class="n">space</span> <span class="o">=</span> <span class="n">space_cache_find_xc</span><span class="p">(</span><span class="n">BOX_CLUSTER_ID</span><span class="p">);</span>
+        <span class="n">access_check_space_xc</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">PRIV_W</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">wal_mode</span><span class="p">()</span> <span class="o">==</span> <span class="n">WAL_NONE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tnt_raise</span><span class="p">(</span><span class="n">ClientError</span><span class="p">,</span> <span class="n">ER_UNSUPPORTED</span><span class="p">,</span> <span class="p">...);</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="nc">gc_consumer</span> <span class="o">*</span><span class="n">gc</span> <span class="o">=</span> <span class="n">gc_consumer_register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span>
+        <span class="s">&quot;replica %s&quot;</span><span class="p">,</span> <span class="n">tt_uuid_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instance_uuid</span><span class="p">));</span>
+    <span class="k">auto</span> <span class="n">gc_guard</span> <span class="o">=</span> <span class="n">make_scoped_guard</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span> <span class="n">gc_consumer_unregister</span><span class="p">(</span><span class="n">gc</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>Here we test if replica has rights to join the cluster, make sure that
+the WAL is enabled and register the consumer. The consumers makes sure
+that WAL file is not rotated while there are some records which are not
+yet propagated to the whole cluster.</p>
+<p>Then  we create the relay instance itself</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">box_process_join</span><span class="p">(</span><span class="k">struct</span> <span class="nc">ev_io</span> <span class="o">*</span><span class="n">io</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="o">*</span><span class="n">header</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">struct</span> <span class="nc">vclock</span> <span class="n">start_vclock</span><span class="p">;</span>
+    <span class="n">relay_initial_join</span><span class="p">(</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">,</span> <span class="n">header</span><span class="o">-&gt;</span><span class="n">sync</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">start_vclock</span><span class="p">);</span>
+        <span class="c1">// relay_initial_join code</span>
+        <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay_new</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+            <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="n">relay</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="p">)</span><span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">...);</span>
+            <span class="n">relay</span><span class="o">-&gt;</span><span class="n">replica</span> <span class="o">=</span> <span class="n">replica</span><span class="p">;</span>
+            <span class="n">relay</span><span class="o">-&gt;</span><span class="n">last_row_time</span> <span class="o">=</span> <span class="n">ev_monotonic_now</span><span class="p">(</span><span class="n">loop</span><span class="p">());</span>
+            <span class="n">fiber_cond_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">reader_cond</span><span class="p">);</span>
+            <span class="n">diag_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">diag</span><span class="p">);</span>
+            <span class="n">stailq_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">pending_gc</span><span class="p">);</span>
+            <span class="n">relay</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">RELAY_OFF</span><span class="p">;</span>
+        <span class="n">relay_start</span><span class="p">(</span><span class="n">relay</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">sync</span><span class="p">,</span> <span class="n">relay_send_initial_join_row</span><span class="p">);</span>
+            <span class="p">...</span>
+            <span class="n">relay</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">RELAY_FOLLOW</span><span class="p">;</span>
+        <span class="p">...</span>
+        <span class="n">engine_prepare_join_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">wal_sync</span><span class="p">(</span><span class="n">vclock</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">xrow_encode_vclock_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="n">vclock</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">coio_write_xrow</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+        <span class="n">engine_join_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">stream</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">relay_send_initial_join_row</span></code> creates new relay structure then
+prepares data to be sent to the remote replica. First we get a read view
+from engine, then check that there is rollback in progress in WAL engine
+and fetch the latest vclock from it. Then we encode the tuples which
+are matched the WAL record and send them out to remote replica.</p>
+<p>Note the <code class="docutils literal notranslate"><span class="pre">relay_initial_join</span></code> frees <code class="docutils literal notranslate"><span class="pre">relay</span></code> upon completion.</p>
+<p>Then we continue joining procedure</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">box_process_join</span><span class="p">(</span><span class="k">struct</span> <span class="nc">ev_io</span> <span class="o">*</span><span class="n">io</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="o">*</span><span class="n">header</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="c1">// Check for replicaid or register new one</span>
+    <span class="n">box_on_join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">instance_uuid</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="c1">// Master&#39;s vclock</span>
+    <span class="k">struct</span> <span class="nc">vclock</span> <span class="n">stop_vclock</span><span class="p">;</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stop_vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+
+    <span class="c1">// Send it to the peer</span>
+    <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="n">row</span><span class="p">;</span>
+    <span class="n">xrow_encode_vclock_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stop_vclock</span><span class="p">);</span>
+    <span class="n">row</span><span class="p">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">header</span><span class="o">-&gt;</span><span class="n">sync</span><span class="p">;</span>
+    <span class="n">coio_write_xrow</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+
+    <span class="c1">// The WAL range (start_vclock; stop_vclock) with rows</span>
+    <span class="n">relay_final_join</span><span class="p">(</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">,</span> <span class="n">header</span><span class="o">-&gt;</span><span class="n">sync</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">start_vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stop_vclock</span><span class="p">);</span>
+
+    <span class="c1">// End of WAL marker</span>
+    <span class="n">xrow_encode_vclock_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">row</span><span class="p">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">header</span><span class="o">-&gt;</span><span class="n">sync</span><span class="p">;</span>
+    <span class="n">coio_write_xrow</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">row</span><span class="p">);</span>
+
+    <span class="c1">// Advance the consumer position</span>
+    <span class="n">gc_consumer_advance</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stop_vclock</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>We fetch master’s node vclock (the <code class="docutils literal notranslate"><span class="pre">replicaset.vclock</span></code> is updated
+by WAL engine upon on commit when data is already written to the storage)
+and send it out. Then we send the vlock range from <code class="docutils literal notranslate"><span class="pre">start_vclock</span></code>
+to <code class="docutils literal notranslate"><span class="pre">stop_vclock</span></code> together with rows bound to the range and end it
+sending end of WAL marker.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">relay_final_join</span></code> is a bit tricky</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">relay_final_join</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">sync</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">vclock</span> <span class="o">*</span><span class="n">start_vclock</span><span class="p">,</span>
+                 <span class="k">struct</span> <span class="nc">vclock</span> <span class="o">*</span><span class="n">stop_vclock</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay_new</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="n">relay_start</span><span class="p">(</span><span class="n">relay</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">sync</span><span class="p">,</span> <span class="n">relay_send_row</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">relay_guard</span> <span class="o">=</span> <span class="n">make_scoped_guard</span><span class="p">([</span><span class="o">=</span><span class="p">]</span> <span class="p">{</span>
+        <span class="n">relay_stop</span><span class="p">(</span><span class="n">relay</span><span class="p">);</span>
+        <span class="n">relay_delete</span><span class="p">(</span><span class="n">relay</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="n">relay</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">=</span> <span class="n">recovery_new</span><span class="p">(</span><span class="n">cfg_gets</span><span class="p">(</span><span class="s">&quot;wal_dir&quot;</span><span class="p">),</span> <span class="nb">false</span><span class="p">,</span>
+                            <span class="n">start_vclock</span><span class="p">);</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">stop_vclock</span><span class="p">,</span> <span class="n">stop_vclock</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">cord_costart</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">cord</span><span class="p">,</span> <span class="s">&quot;final_join&quot;</span><span class="p">,</span>
+                          <span class="n">relay_final_join_f</span><span class="p">,</span> <span class="n">relay</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">cord_cojoin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">cord</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">diag_raise</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It runs <code class="docutils literal notranslate"><span class="pre">relay_final_join_f</span></code> in a separate thread waiting for
+its completion. This function runs <code class="docutils literal notranslate"><span class="pre">recover_remaining_wals</span></code>
+which scans the WAL files (they can rotate) for rows associated
+with <code class="docutils literal notranslate"><span class="pre">{start_vclock;</span> <span class="pre">stop_vclock}</span></code> range and send them all to
+the remote peer.</p>
+<p>After this stage our node is joined and we need to wait for
+subscribe request from remote peer. Once received we prepare
+our node to send local updates to the peer.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="n">tx_process_replication</span><span class="p">(</span><span class="k">struct</span> <span class="nc">cmsg</span> <span class="o">*</span><span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">.</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">case</span> <span class="nl">IPROTO_SUBSCRIBE</span><span class="p">:</span>
+        <span class="n">box_process_subscribe</span><span class="p">(</span><span class="o">&amp;</span><span class="n">io</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">...</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">box_process_subscribe</span></code> never returns but rather watches
+for local changes and sends them up.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">box_process_subscribe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">ev_io</span> <span class="o">*</span><span class="n">io</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="o">*</span><span class="n">header</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="c1">// Fetch vclock of the remote peer</span>
+    <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replica_clock</span><span class="p">);</span>
+    <span class="n">xrow_decode_subscribe_xc</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replica_uuid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replica_clock</span><span class="p">,</span>
+                             <span class="o">&amp;</span><span class="n">replica_version_id</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">anon</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">id_filter</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="c1">//</span>
+    <span class="c1">// Remember current WAL clock</span>
+    <span class="n">vclock_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vclock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+
+    <span class="c1">// Send it to the peer</span>
+    <span class="k">struct</span> <span class="nc">xrow_header</span> <span class="n">row</span><span class="p">;</span>
+    <span class="n">xrow_encode_subscribe_response_xc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">row</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">REPLICASET_UUID</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vclock</span><span class="p">);</span>
+
+    <span class="c1">// Set 0 component to ours 0 component value</span>
+    <span class="n">vclock_reset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replica_clock</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vclock_get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+    <span class="c1">// Initiate subscription procedure</span>
+    <span class="n">relay_subscribe</span><span class="p">(</span><span class="n">replica</span><span class="p">,</span> <span class="n">io</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">,</span> <span class="n">header</span><span class="o">-&gt;</span><span class="n">sync</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replica_clock</span><span class="p">,</span>
+                    <span class="n">replica_version_id</span><span class="p">,</span> <span class="n">id_filter</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Everything should be clear from code comments except dropping
+0th component. FIXME: describe why 0th component is so important.</p>
+<p>The subscription routine runs until explicitly canceled</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">relay_subscribe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">replica</span> <span class="o">*</span><span class="n">replica</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">sync</span><span class="p">,</span>
+                <span class="k">struct</span> <span class="nc">vclock</span> <span class="o">*</span><span class="n">replica_clock</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">replica_version_id</span><span class="p">,</span>
+                <span class="kt">uint32_t</span> <span class="n">replica_id_filter</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="n">relay</span> <span class="o">=</span> <span class="n">replica</span><span class="o">-&gt;</span><span class="n">relay</span><span class="p">;</span>
+    <span class="n">relay_start</span><span class="p">(</span><span class="n">relay</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">sync</span><span class="p">,</span> <span class="n">relay_send_row</span><span class="p">);</span>
+    <span class="p">...</span>
+
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">local_vclock_at_subscribe</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">replicaset</span><span class="p">.</span><span class="n">vclock</span><span class="p">);</span>
+    <span class="n">relay</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">=</span> <span class="n">recovery_new</span><span class="p">(</span><span class="n">cfg_gets</span><span class="p">(</span><span class="s">&quot;wal_dir&quot;</span><span class="p">),</span> <span class="nb">false</span><span class="p">,</span> <span class="n">replica_clock</span><span class="p">);</span>
+    <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">tx</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="n">replica_clock</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">cord_costart</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">cord</span><span class="p">,</span> <span class="s">&quot;subscribe&quot;</span><span class="p">,</span>
+                          <span class="n">relay_subscribe_f</span><span class="p">,</span> <span class="n">relay</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">cord_cojoin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">cord</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">relay-&gt;r</span> <span class="pre">=</span> <span class="pre">recovery_new</span></code> provides us access to the WAL files
+while <code class="docutils literal notranslate"><span class="pre">relay_subscribe_f</span></code> runs inside a separate thread.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">relay_subscribe_f</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="n">relay</span> <span class="o">=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">relay</span> <span class="o">*</span><span class="p">);</span>
+    <span class="k">struct</span> <span class="nc">recovery</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="n">relay</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">;</span>
+
+    <span class="n">coio_enable</span><span class="p">();</span>
+    <span class="n">relay_set_cord_name</span><span class="p">(</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">io</span><span class="p">.</span><span class="n">fd</span><span class="p">);</span>
+
+    <span class="cm">/* Create cpipe to tx for propagating vclock. */</span>
+    <span class="n">cbus_endpoint_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">endpoint</span><span class="p">,</span>
+            <span class="n">tt_sprintf</span><span class="p">(</span><span class="s">&quot;relay_%p&quot;</span><span class="p">,</span> <span class="n">relay</span><span class="p">),</span>
+            <span class="n">fiber_schedule_cb</span><span class="p">,</span> <span class="n">fiber</span><span class="p">());</span>
+    <span class="n">cbus_pair</span><span class="p">(</span><span class="s">&quot;tx&quot;</span><span class="p">,</span> <span class="n">relay</span><span class="o">-&gt;</span><span class="n">endpoint</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">tx_pipe</span><span class="p">,</span>
+              <span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">relay_pipe</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">cbus_process</span><span class="p">);</span>
+    <span class="p">...</span>
+
+    <span class="cm">/* Setup WAL watcher for sending new rows to the replica. */</span>
+    <span class="n">wal_set_watcher</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">wal_watcher</span><span class="p">,</span> <span class="n">relay</span><span class="o">-&gt;</span><span class="n">endpoint</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">relay_process_wal_event</span><span class="p">,</span> <span class="n">cbus_process</span><span class="p">);</span>
+
+    <span class="cm">/* Start fiber for receiving replica acks. */</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">FIBER_NAME_MAX</span><span class="p">];</span>
+    <span class="n">snprintf</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s">&quot;%s:%s&quot;</span><span class="p">,</span> <span class="n">fiber</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;reader&quot;</span><span class="p">);</span>
+    <span class="k">struct</span> <span class="nc">fiber</span> <span class="o">*</span><span class="n">reader</span> <span class="o">=</span> <span class="n">fiber_new_xc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">relay_reader_f</span><span class="p">);</span>
+    <span class="n">fiber_set_joinable</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="n">fiber_start</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">fiber</span><span class="p">());</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * If the replica happens to be up to date on subscribe,</span>
+<span class="cm">     * don&#39;t wait for timeout to happen - send a heartbeat</span>
+<span class="cm">     * message right away to update the replication lag as</span>
+<span class="cm">     * soon as possible.</span>
+<span class="cm">     */</span>
+    <span class="n">relay_send_heartbeat</span><span class="p">(</span><span class="n">relay</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>First we create <code class="docutils literal notranslate"><span class="pre">relay-&gt;endpoint</span></code> endpoint and pair it with
+<code class="docutils literal notranslate"><span class="pre">tx</span></code> endpoint (the <code class="docutils literal notranslate"><span class="pre">tx</span></code> endpoint comes from net thread
+spinning inside <code class="docutils literal notranslate"><span class="pre">net_cord_f</span></code>). Once paired we will have
+<code class="docutils literal notranslate"><span class="pre">relay-&gt;tx_pipe</span></code> which responsible to notify <code class="docutils literal notranslate"><span class="pre">tx</span></code> thread
+to send out the data we provide, and <code class="docutils literal notranslate"><span class="pre">relay-&gt;relay_pipe</span></code>
+which notifies relay thread from <code class="docutils literal notranslate"><span class="pre">tx</span></code> thread side.</p>
+<p>Then we setup a watcher on WAL changes. On every new commit
+the <code class="docutils literal notranslate"><span class="pre">relay_process_wal_event</span></code> will be called which calls
+the <code class="docutils literal notranslate"><span class="pre">recover_remaining_wals</span></code> helper to advance xlog cursor
+in the WAL file and send new rows to the remote replica.</p>
+<p>The reader of new Acks coming from remote node is implemented
+via <code class="docutils literal notranslate"><span class="pre">relay_reader_f</span></code> fiber. The one of the key moment is
+that all replicas are sending heartbeat messages each other
+pointing that they are alive.</p>
+</div>
+<div class="section" id="relay-lifecycle">
+<h2>Relay lifecycle<a class="headerlink" href="#relay-lifecycle" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="n">relay_subscribe_f</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">fiber_is_cancelled</span><span class="p">())</span> <span class="p">{</span>
+        <span class="c1">//</span>
+        <span class="c1">// Wait for incoming data from remote</span>
+        <span class="c1">// peer (it is Ack/Heartbeat message)</span>
+        <span class="kt">double</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">replication_timeout</span><span class="p">;</span>
+        <span class="n">fiber_cond_wait_deadline</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">reader_cond</span><span class="p">,</span>
+                                 <span class="n">relay</span><span class="o">-&gt;</span><span class="n">last_row_time</span> <span class="o">+</span> <span class="n">timeout</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="c1">//</span>
+        <span class="c1">// Send the heartbeat packet if needed</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ev_monotonic_now</span><span class="p">(</span><span class="n">loop</span><span class="p">())</span> <span class="o">-</span> <span class="n">relay</span><span class="o">-&gt;</span><span class="n">last_row_time</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">)</span>
+            <span class="n">relay_send_heartbeat</span><span class="p">(</span><span class="n">relay</span><span class="p">);</span>
+
+        <span class="c1">//</span>
+        <span class="c1">// Make sure that vlock has been updated</span>
+        <span class="c1">// and the previous status is delievered.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">msg</span><span class="p">.</span><span class="n">route</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+
+        <span class="k">struct</span> <span class="nc">vclock</span> <span class="o">*</span><span class="n">send_vclock</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">version_id</span> <span class="o">&lt;</span> <span class="n">version_id</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+            <span class="n">send_vclock</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">vclock</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">send_vclock</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">recv_vclock</span><span class="p">;</span>
+        <span class="c1">//</span>
+        <span class="c1">// Nothing to do</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vclock_sum</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">vclock</span><span class="p">)</span> <span class="o">==</span> <span class="n">vclock_sum</span><span class="p">(</span><span class="n">send_vclock</span><span class="p">))</span>
+            <span class="k">continue</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="nc">cmsg_hop</span> <span class="n">route</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">{</span><span class="n">tx_status_update</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="n">cmsg_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">msg</span><span class="p">,</span> <span class="n">route</span><span class="p">);</span>
+        <span class="n">vclock_copy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">vclock</span><span class="p">,</span> <span class="n">send_vclock</span><span class="p">);</span>
+        <span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay</span><span class="p">;</span>
+        <span class="n">cpipe_push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">tx_pipe</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">relay</span><span class="o">-&gt;</span><span class="n">status_msg</span><span class="p">.</span><span class="n">msg</span><span class="p">);</span>
+
+        <span class="cm">/* Collect xlog files received by the replica. */</span>
+        <span class="n">relay_schedule_pending_gc</span><span class="p">(</span><span class="n">relay</span><span class="p">,</span> <span class="n">send_vclock</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As expected we wait for heartbeat packet from remote peer first
+(the <code class="docutils literal notranslate"><span class="pre">relay_reader_f</span></code> will wake us up via <code class="docutils literal notranslate"><span class="pre">relay-&gt;reader_cond</span></code>).
+Then we send our own heartbeat message if needed. And finally
+we send the last received vclock from the remote peer. Same
+time we notify xlog engine about wal files we no longer need
+since they are propagated.</p>
+<p>Note that WAL commits runs <code class="docutils literal notranslate"><span class="pre">relay_process_wal_event</span></code> by
+self, still the even is delivered to main event loop and then
+to the relay thread.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="wal.html" class="btn btn-neutral float-right" title="Write-ahead logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="replication.html" class="btn btn-neutral float-left" title="Replication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

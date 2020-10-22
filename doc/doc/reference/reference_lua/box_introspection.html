@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.cfg &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.cfg</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_introspection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.cfg">
+<span id="submodule-box-cfg"></span><span id="box-introspection-box-cfg"></span><h1>Submodule <cite>box.cfg</cite><a class="headerlink" href="#module-box.cfg" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> submodule is for administrators to specify all the server
+configuration parameters (see “Configuration reference” for
+<a class="reference internal" href="../configuration/index.html#box-cfg-params"><span class="std std-ref">a complete description of all configuration parameters</span></a>).
+Use <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> without braces to get read-only access to those parameters.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg
+---
+- checkpoint_count: 2
+  too_long_threshold: 0.5
+  slab_alloc_factor: 1.1
+  memtx_max_tuple_size: 1048576
+  background: false
+  &lt;...&gt;
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-box.info">
+<span id="submodule-box-info"></span><span id="box-introspection-box-info"></span><h1>Submodule <cite>box.info</cite><a class="headerlink" href="#module-box.info" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.info</span></code> submodule provides access to information about server instance variables.
+Some of this information is also available from the <a class="reference internal" href="tarantool.html#tarantool-module"><span class="std std-ref">tarantool module</span></a>.</p>
+<ul class="simple">
+<li><strong>server.lsn</strong> Log Sequence Number for the latest entry in the <a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">WAL</span></a>.</li>
+<li><strong>server.ro</strong>  True if the instance is in “read_only” mode
+(same as <a class="reference internal" href="../configuration/index.html#cfg-basic-read-only"><span class="std std-ref">read_only</span></a> in box.cfg).</li>
+<li><strong>server.uuid</strong> The unique identifier of this instance,
+as stored in the database. This value is also
+in the <a class="reference internal" href="box_space_index.html#box-space-cluster"><span class="std std-ref">box.space._cluster</span></a> system space.</li>
+<li><strong>server.id</strong> The number of this server’s instance within a replica set.</li>
+<li><strong>version</strong> Tarantool version. This value is also shown by
+<a class="reference internal" href="../configuration/index.html#index-tarantool-version"><span class="std std-ref">tarantool –version</span></a>.</li>
+<li><strong>status</strong> Usually this is ‘running’, but it can be ‘loading’, ‘orphan’, or ‘hot_standby’.</li>
+<li><strong>vclock</strong> Same as <a class="reference internal" href="../../book/replication/repl_add_instances.html#replication-vector"><span class="std std-ref">replication.vclock</span></a>.</li>
+<li><strong>pid</strong> Process ID. This value is also shown by the
+<a class="reference internal" href="tarantool.html#tarantool-build"><span class="std std-ref">tarantool</span></a> module.
+This value is also shown by the Linux “ps -A” command.</li>
+<li><strong>cluster.uuid</strong> UUID of the <a class="reference internal" href="../../book/replication/repl_architecture.html#replication-mechanism"><span class="std std-ref">replica set</span></a>. Every instance in a replica set will have the same cluster.uuid value.
+This value is also in the <a class="reference internal" href="box_space_index.html#box-space-schema"><span class="std std-ref">box.space._schema</span></a> system space.</li>
+<li><strong>vinyl()</strong> Returns runtime statistics for the vinyl storage engine.</li>
+<li><strong>replication.lag</strong> Number of seconds that the replica is behind the master.</li>
+<li><strong>replication.status</strong> Usually this is ‘follow’, but it can be
+‘off’, ‘stopped’, ‘connecting’, ‘auth’, or ‘disconnected’.</li>
+<li><strong>replication.idle</strong> Number of seconds that the instancehas been idle.</li>
+<li><strong>replication.vclock</strong> See the <a class="reference internal" href="../../book/replication/repl_add_instances.html#replication-vector"><span class="std std-ref">discussion of “vector clock”</span></a> in the Internals section.</li>
+<li><strong>replication.uuid</strong> The unique identifier of a master to which this instance is connected.</li>
+<li><strong>replication.uptime</strong> Number of seconds since the instance started.
+This value can also be retrieved with <a class="reference internal" href="tarantool.html#tarantool-build"><span class="std std-ref">tarantool.uptime()</span></a>.</li>
+</ul>
+<p>The replication fields are blank unless the instance is a <span class="xref std std-ref">replica</span>.
+The replication fields are in an array if the instance is a replica for more than one master.</p>
+<dl class="function">
+<dt id="box.info.box.info">
+<code class="descclassname">box.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.info.box.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Since <code class="docutils literal notranslate"><span class="pre">box.info</span></code> contents are dynamic, it’s not possible to iterate over
+keys with the Lua <code class="docutils literal notranslate"><span class="pre">pairs()</span></code> function. For this purpose, <code class="docutils literal notranslate"><span class="pre">box.info()</span></code>
+builds and returns a Lua table with all keys and values provided in the
+submodule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">keys and values in the submodule.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info()
+---
+- server:
+    lsn: 158
+    ro: false
+    uuid: a2684219-b2b1-4334-88ab-50b0722283fd
+    id: 1
+  version: 1.7.2-435-g6ba8500
+  pid: 12932
+  status: running
+  vclock:
+  - 158
+  replication:
+    status: off
+  uptime: 908
+...
+tarantool&gt; box.info.pid
+---
+- 12932
+...
+tarantool&gt; box.info.status
+---
+- running
+...
+tarantool&gt; box.info.uptime
+---
+- 1065
+...
+tarantool&gt; box.info.version
+---
+- 1.7.2-435-g6ba8500
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-box.slab">
+<span id="submodule-box-slab"></span><span id="box-introspection-box-slab"></span><h1>Submodule <cite>box.slab</cite><a class="headerlink" href="#module-box.slab" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.slab</span></code> submodule provides access to slab allocator statistics. The
+slab allocator is the main allocator used to store tuples. This can be used
+to monitor the total memory use and memory fragmentation.</p>
+<p>The display of slabs is broken down by the slab size – 64-byte, 136-byte,
+and so on. The example omits the slabs which are empty. The example display
+is saying that:
+* there are 16 items stored in the 64-byte slab (and 16*64=102 so bytes_used = 1024);
+* there is 1 item stored in the 136-byte slab (and 136*1=136 so bytes_used = 136);
+* the <code class="docutils literal notranslate"><span class="pre">arena_used</span></code> value is the total of all the bytes_used values (1024+136 = 1160);
+* the <code class="docutils literal notranslate"><span class="pre">arena_size</span></code> value is the <code class="docutils literal notranslate"><span class="pre">arena_used</span></code> value plus the total of all the</p>
+<blockquote>
+<div>bytes_free values (1160+4193200+4194088 = 8388448).</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">arena_size</span></code> and <code class="docutils literal notranslate"><span class="pre">arena_used</span></code> values are the amount of the % of
+<a class="reference internal" href="../configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a> that is already distributed to the
+slab allocator.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.slab.info().arena_used
+---
+- 4194304
+...
+tarantool&gt; box.slab.info().arena_size
+---
+- 104857600
+...
+tarantool&gt; box.slab.stats()
+---
+- - mem_free: 16248
+    mem_used: 48
+    item_count: 2
+    item_size: 24
+    slab_count: 1
+    slab_size: 16384
+  - mem_free: 15736
+    mem_used: 560
+    item_count: 14
+    item_size: 40
+    slab_count: 1
+    slab_size: 16384
+    &lt;...&gt;
+...
+tarantool&gt; box.slab.stats()[1]
+---
+- mem_free: 15736
+  mem_used: 560
+  item_count: 14
+  item_size: 40
+  slab_count: 1
+  slab_size: 16384
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="submodule-box-stat">
+<span id="box-introspection-box-stat"></span><h1>Submodule <cite>box.stat</cite><a class="headerlink" href="#submodule-box-stat" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.stat</span></code> submodule provides access to request and network statistics.
+Show the average number of requests per second, and the total number of
+requests since startup, broken down by request type.
+Also, show network activity statistics.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; type(box.stat), type(box.stat.net) -- virtual tables
+---
+- table
+- table
+...
+tarantool&gt; box.stat, box.stat.net
+---
+- net: []
+- []
+...
+tarantool&gt; box.stat()
+---
+- DELETE:
+    total: 1873949
+    rps: 123
+  SELECT:
+    total: 1237723
+    rps: 4099
+  INSERT:
+    total: 0
+    rps: 0
+  EVAL:
+    total: 0
+    rps: 0
+  CALL:
+    total: 0
+    rps: 0
+  REPLACE:
+    total: 1239123
+    rps: 7849
+  UPSERT:
+    total: 0
+    rps: 0
+  AUTH:
+    total: 0
+    rps: 0
+  ERROR:
+    total: 0
+    rps: 0
+  UPDATE:
+    total: 0
+    rps: 0
+...
+tarantool&gt; box.stat().DELETE -- a selected item of the table
+---
+- total: 0
+  rps: 0
+...
+tarantool&gt; box.stat.net()
+---
+- SENT:
+    total: 0
+    rps: 0
+  RECEIVED:
+    total: 0
+    rps: 0
+...
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

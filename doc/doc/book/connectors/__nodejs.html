@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Node.js &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Node.js</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/connectors/__nodejs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="node-js">
+<h1>Node.js<a class="headerlink" href="#node-js" title="Permalink to this headline">¶</a></h1>
+<p>The most commonly used node.js driver is the <a class="reference external" href="https://github.com/KlonD90/node-tarantool-driver">Node Tarantool driver</a>. It is not supplied as part
+of the Tarantool repository; it must be installed separately. The most common
+way to install it is with <a class="reference external" href="https://www.sitepoint.com/beginners-guide-node-package-manager/">npm</a>. For
+example, on Ubuntu, the installation could look like this after npm has been
+installed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> npm install tarantool-driver --global
+</pre></div>
+</div>
+<p>Here is a complete node.js program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'BB']</span></code> into
+<code class="docutils literal notranslate"><span class="pre">space[999]</span></code> via the node.js API. Before trying to run, check that the server instance
+is <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listening</span></a> at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="index.html#index-connector-setting"><span class="std std-ref">described earlier</span></a>. To run, paste the code into
+a file named <code class="file docutils literal notranslate"><span class="pre">example.rs</span></code> and say <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">example.rs</span></code>. The program will
+connect using an application-specific definition of the space. The program will
+open a socket connection with the Tarantool instance at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>, then
+send an <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a> request, then — if all is well — end after saying “Insert
+succeeded”. If Tarantool is not running on <code class="docutils literal notranslate"><span class="pre">localhost</span></code> with listen port =
+3301, the program will print “Connect failed”. If <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">the ‘guest’ user</span></a> does not have
+authorization to connect, the program will print “Auth failed”. If the insert
+request fails for any reason, for example because the tuple already exists,
+the program will print “Insert failed”.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">TarantoolConnection</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tarantool-driver&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TarantoolConnection</span><span class="p">({</span><span class="nx">port</span><span class="o">:</span> <span class="mf">3301</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">insertTuple</span> <span class="o">=</span> <span class="p">[</span><span class="mf">99999</span><span class="p">,</span> <span class="s2">&quot;BB&quot;</span><span class="p">];</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nx">connect</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s2">&quot;guest&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">conn</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="mf">999</span><span class="p">,</span> <span class="nx">insertTuple</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Insert succeeded&quot;</span><span class="p">);</span>
+            <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Insert failed&quot;</span><span class="p">);</span>  <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Auth failed&quot;</span><span class="p">);</span>    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Connect failed&quot;</span><span class="p">);</span> <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+</pre></div>
+</div>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see  <a class="reference external" href="https://github.com/KlonD90/node-tarantool-driver">The node.js driver
+repository</a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Limitations &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Limitations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/box/limitations.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="limitations">
+<span id="limitations-fields-in-index"></span><h1>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h1>
+<p><strong>Number of parts in an index</strong></p>
+<blockquote>
+<div>For TREE or HASH indexes, the maximum
+is 255 (<code class="docutils literal notranslate"><span class="pre">box.schema.INDEX_PART_MAX</span></code>). For <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-rtree"><span class="std std-ref">RTREE</span></a> indexes, the
+maximum is 1 but the field is an ARRAY of up to 20 dimensions.
+For BITSET indexes, the maximum is 1.</div></blockquote>
+<p id="limitations-indexes-in-space"><strong>Number of indexes in a space</strong></p>
+<blockquote>
+<div>128 (<code class="docutils literal notranslate"><span class="pre">box.schema.INDEX_MAX</span></code>).</div></blockquote>
+<p id="limitations-fields-in-tuple"><strong>Number of fields in a tuple</strong></p>
+<blockquote>
+<div>The theoretical maximum is 2,147,483,647 (<code class="docutils literal notranslate"><span class="pre">box.schema.FIELD_MAX</span></code>). The
+practical maximum is whatever is specified by the space’s
+<a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-field-count"><span class="std std-ref">field_count</span></a>
+member, or the maximal tuple length.</div></blockquote>
+<p id="limitations-bytes-in-tuple"><strong>Number of bytes in a tuple</strong></p>
+<blockquote>
+<div>The maximal number of bytes in a tuple is roughly equal to
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-storage-memtx-max-tuple-size"><span class="std std-ref">memtx_max_tuple_size</span></a> or
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-storage-vinyl-max-tuple-size"><span class="std std-ref">vinyl_max_tuple_size</span></a>
+(with a metadata
+overhead of about 20 bytes per tuple, which is added on top of useful bytes).
+By default, the value of either <code class="docutils literal notranslate"><span class="pre">memtx_max_tuple_size</span></code> or
+<code class="docutils literal notranslate"><span class="pre">vinyl_max_tuple_size</span></code> is 1,048,576. To increase it,
+specify a larger value when starting the Tarantool instance.
+For example, <code class="docutils literal notranslate"><span class="pre">box.cfg{memtx_max_tuple_size=2*1048576}</span></code>.</div></blockquote>
+<p id="limitations-bytes-in-index-key"><strong>Number of bytes in an index key</strong></p>
+<blockquote>
+<div>If a field in a tuple can contain a million bytes, then the index key
+can contain a million bytes, so the maximum is determined by factors
+such as <a class="reference internal" href="#limitations-bytes-in-tuple"><span class="std std-ref">Number of bytes in a tuple</span></a>,
+not by the index support.</div></blockquote>
+<p id="limitations-number-of-spaces"><strong>Number of spaces</strong></p>
+<blockquote>
+<div>The theoretical maximum is 2147483647 (<code class="docutils literal notranslate"><span class="pre">box.schema.SPACE_MAX</span></code>)
+but the practical maximum is around 65,000.</div></blockquote>
+<p id="limitations-number-of-connections"><strong>Number of connections</strong></p>
+<blockquote>
+<div>The practical limit is the number of file descriptors that one can set
+with the operating system.</div></blockquote>
+<p id="limitations-space-size"><strong>Space size</strong></p>
+<blockquote>
+<div>The total maximum size for all spaces is in effect set by
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a>, which in turn
+is limited by the total available memory.</div></blockquote>
+<p id="limitations-update-ops"><strong>Update operations count</strong></p>
+<blockquote>
+<div>The maximum number of operations per tuple that can be in a single update
+is 4000 (<code class="docutils literal notranslate"><span class="pre">BOX_UPDATE_OP_CNT_MAX</span></code>).</div></blockquote>
+<p id="limitations-users-and-roles"><strong>Number of users and roles</strong></p>
+<blockquote>
+<div>32 (<code class="docutils literal notranslate"><span class="pre">BOX_USER_MAX</span></code>).</div></blockquote>
+<p id="limitations-length"><strong>Length of an index name or space name or user name</strong></p>
+<blockquote>
+<div>65000 (<code class="docutils literal notranslate"><span class="pre">box.schema.NAME_MAX</span></code>).</div></blockquote>
+<p id="limitations-replicas"><strong>Number of replicas in a replica set</strong></p>
+<blockquote>
+<div>32 (<code class="docutils literal notranslate"><span class="pre">vclock.VCLOCK_MAX</span></code>).</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

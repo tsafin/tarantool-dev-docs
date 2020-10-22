@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Disaster recovery &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Disaster recovery</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/disaster_recovery.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="disaster-recovery">
+<span id="admin-disaster-recovery"></span><h1>Disaster recovery<a class="headerlink" href="#disaster-recovery" title="Permalink to this headline">¶</a></h1>
+<p>The minimal fault-tolerant Tarantool configuration would be a
+<a class="reference internal" href="../replication/repl_architecture.html#replication-topologies"><span class="std std-ref">replication cluster</span></a>
+that includes a master and a replica, or two masters.</p>
+<p>The basic recommendation is to configure all Tarantool instances in a cluster to
+create <a class="reference internal" href="../box/data_model.html#index-box-persistence"><span class="std std-ref">snapshot files</span></a> at a regular basis.</p>
+<p>Here follow action plans for typical crash scenarios.</p>
+<div class="section" id="master-replica">
+<span id="admin-disaster-recovery-master-replica"></span><h2>Master-replica<a class="headerlink" href="#master-replica" title="Permalink to this headline">¶</a></h2>
+<p>Configuration: One master and one replica.</p>
+<p>Problem: The master has crashed.</p>
+<p>Your actions:</p>
+<ol class="arabic simple">
+<li>Ensure the master is stopped for good. For example, log in to the master
+machine and use <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">stop</span> <span class="pre">tarantool&#64;&lt;instance_name&gt;</span></code>.</li>
+<li>Switch the replica to master mode by setting
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-read-only"><span class="std std-ref">box.cfg.read_only</span></a> parameter to <em>false</em> and let
+the load be handled by the replica (effective master).</li>
+<li>Set up a replacement for the crashed master on a spare host, with
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-replication-replication"><span class="std std-ref">replication</span></a> parameter set to replica
+(effective master), so it begins to catch up with the new master’s state.
+The new instance should have <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-read-only"><span class="std std-ref">box.cfg.read_only</span></a>
+parameter set to <em>true</em>.</li>
+</ol>
+<p>You lose the few transactions in the master
+<a class="reference internal" href="../box/data_model.html#index-box-persistence"><span class="std std-ref">write ahead log file</span></a>, which it may have not
+transferred to the replica before crash. If you were able to salvage the master
+.xlog file, you may be able to recover these. In order to do it:</p>
+<ol class="arabic">
+<li><p class="first">Find out the position of the crashed master, as reflected on the new master.</p>
+<ol class="loweralpha">
+<li><p class="first">Find out instance UUID from the crashed master <a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">xlog</span></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> head -5 *.xlog <span class="p">|</span> grep Instance
+<span class="go">Instance: ed607cad-8b6d-48d8-ba0b-dae371b79155</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">On the new master, use the UUID to find the position:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.vclock[box.space._cluster.index.uuid:select{&#39;ed607cad-8b6d-48d8-ba0b-dae371b79155&#39;}[1][1]]
+---
+- 23425
+&lt;...&gt;
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p class="first">Play the records from the crashed .xlog to the new master, starting from the
+new master position:</p>
+<ol class="loweralpha">
+<li><p class="first">Issue this request locally at the new master’s machine to find out
+instance ID of the new master:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space._cluster:select{}
+---
+- - [1, &#39;88580b5c-4474-43ab-bd2b-2409a9af80d2&#39;]
+...
+</pre></div>
+</div>
+</li>
+<li><p class="first">Play the records to the new master:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl &lt;new_master_uri&gt; &lt;xlog_file&gt; play --from <span class="m">23425</span> --replica <span class="m">1</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="master-master">
+<span id="admin-disaster-recovery-master-master"></span><h2>Master-master<a class="headerlink" href="#master-master" title="Permalink to this headline">¶</a></h2>
+<p>Configuration: Two masters.</p>
+<p>Problem: Master#1 has crashed.</p>
+<p>Your actions:</p>
+<ol class="arabic simple">
+<li>Let the load be handled by master#2 (effective master) alone.</li>
+</ol>
+<p>2. Follow the same steps as in the
+<a class="reference internal" href="#admin-disaster-recovery-master-replica"><span class="std std-ref">master-replica</span></a> recovery scenario
+to create a new master and salvage lost data.</p>
+</div>
+<div class="section" id="data-loss">
+<span id="admin-disaster-recovery-data-loss"></span><h2>Data loss<a class="headerlink" href="#data-loss" title="Permalink to this headline">¶</a></h2>
+<p>Configuration: Master-master or master-replica.</p>
+<p>Problem: Data was deleted at one master and this data loss was propagated to the
+other node (master or replica).</p>
+<p>The following steps are applicable only to data in memtx storage engine.
+Your actions:</p>
+<ol class="arabic simple">
+<li>Put all nodes in <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-read-only"><span class="std std-ref">read-only mode</span></a> and disable
+deletion of expired checkpoints with <a class="reference internal" href="../../reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-start"><span class="std std-ref">box.backup.start()</span></a>.
+This will prevent the Tarantool garbage collector from removing files
+made with older checkpoints until <a class="reference internal" href="../../reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-stop"><span class="std std-ref">box.backup.stop()</span></a> is called.</li>
+<li>Get the latest valid <a class="reference internal" href="../../dev_guide/internals_index.html#internals-snapshot"><span class="std std-ref">.snap file</span></a> and
+use <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">cat</span></code> command to calculate at which lsn the data loss occurred.</li>
+<li>Start a new instance (instance#1) and use <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">play</span></code> command to
+play to it the contents of .snap/.xlog files up to the calculated lsn.</li>
+<li>Bootstrap a new replica from the recovered master (instance#1).</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

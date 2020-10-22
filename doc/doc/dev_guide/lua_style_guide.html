@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lua Style Guide &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Contributing" href="../contributing/index.html" />
+    <link rel="prev" title="Python Style Guide" href="python_style_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributor’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="reference_capi/index.html">C API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals_index.html">Internals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_contribute_index.html">Build and contribute</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="guidelines_index.html">Guidelines</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="developer_guidelines.html">Developer guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="c_style_guide.html">C Style Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python_style_guide.html">Python Style Guide</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Lua Style Guide</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#indentation-and-formatting">Indentation and Formatting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#avoid-global-variable">Avoid global variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#naming">Naming</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#idioms-and-patterns">Idioms and patterns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commenting">Commenting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="guidelines_index.html">Guidelines</a> &raquo;</li>
+        
+      <li>Lua Style Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/dev_guide/lua_style_guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lua-style-guide">
+<span id="id1"></span><h1>Lua Style Guide<a class="headerlink" href="#lua-style-guide" title="Permalink to this headline">¶</a></h1>
+<p>Inspiration:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/Olivine-Labs/lua-style-guide">https://github.com/Olivine-Labs/lua-style-guide</a></li>
+<li><a class="reference external" href="http://dev.minetest.net/Lua_code_style_guidelines">http://dev.minetest.net/Lua_code_style_guidelines</a></li>
+<li><a class="reference external" href="http://sputnik.freewisdom.org/en/Coding_Standard">http://sputnik.freewisdom.org/en/Coding_Standard</a></li>
+</ul>
+<p>Programming style is an art. There is some arbitrariness to the rules, but there
+are sound rationales for them. It is useful not only to provide sound advice on
+style but to understand the underlying rationale and human aspect of why the
+style recommendations are formed:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://mindprod.com/jgloss/unmain.html">http://mindprod.com/jgloss/unmain.html</a></li>
+<li><a class="reference external" href="http://www.oreilly.com/catalog/perlbp/">http://www.oreilly.com/catalog/perlbp/</a></li>
+<li><a class="reference external" href="http://books.google.com/books?id=QnghAQAAIAAJ">http://books.google.com/books?id=QnghAQAAIAAJ</a></li>
+</ul>
+<p>Zen of Python is good; understand it and use wisely:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Beautiful is better than ugly.</div>
+<div class="line">Explicit is better than implicit.</div>
+<div class="line">Simple is better than complex.</div>
+<div class="line">Complex is better than complicated.</div>
+<div class="line">Flat is better than nested.</div>
+<div class="line">Sparse is better than dense.</div>
+<div class="line">Readability counts.</div>
+<div class="line">Special cases aren’t special enough to break the rules.</div>
+<div class="line">Although practicality beats purity.</div>
+<div class="line">Errors should never pass silently.</div>
+<div class="line">Unless explicitly silenced.</div>
+<div class="line">In the face of ambiguity, refuse the temptation to guess.</div>
+<div class="line">There should be one – and preferably only one – obvious way to do it.</div>
+<div class="line">Although that way may not be obvious at first unless you’re Dutch.</div>
+<div class="line">Now is better than never.</div>
+<div class="line">Although never is often better than <em>right</em> now.</div>
+<div class="line">If the implementation is hard to explain, it’s a bad idea.</div>
+<div class="line">If the implementation is easy to explain, it may be a good idea.</div>
+<div class="line">Namespaces are one honking great idea – let’s do more of those!</div>
+<div class="line"><br /></div>
+<div class="line"><a class="reference external" href="https://www.python.org/dev/peps/pep-0020/">https://www.python.org/dev/peps/pep-0020/</a></div>
+</div>
+</div></blockquote>
+<div class="section" id="indentation-and-formatting">
+<h2>Indentation and Formatting<a class="headerlink" href="#indentation-and-formatting" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">4 spaces instead tabs. PIL suggests using of two spaces, but programmer looks
+at code 4 up to 8 hours a day, so it’s simplier to distinguish indentation
+with 4 spaces. Why spaces? Similar representation everywhere.</p>
+<p>You can use vim modelines:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- vim:ts=4 ss=4 sw=4 expandtab</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">A file should ends w/ one newline symbol, but shouldn’t ends w/ blank line
+(two newline symbols).</p>
+</li>
+<li><p class="first">Every do/while/for/if/function should indent 4 spaces.</p>
+</li>
+<li><p class="first">related <code class="docutils literal notranslate"><span class="pre">or</span></code>/<code class="docutils literal notranslate"><span class="pre">and</span></code> in <code class="docutils literal notranslate"><span class="pre">if</span></code> must be enclosed in the round brackets (). Example:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+<span class="kr">end</span> <span class="c1">-- good</span>
+
+<span class="kr">if</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+    <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+<span class="kr">end</span> <span class="c1">-- bad</span>
+
+<span class="kr">if</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+<span class="kr">end</span> <span class="c1">-- good, but not explicit</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Type conversion</p>
+<p>Do not use concatenation to convert to string or addition to convert to number
+(use <code class="docutils literal notranslate"><span class="pre">tostring</span></code>/<code class="docutils literal notranslate"><span class="pre">tonumber</span></code> instead):</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">123</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">..</span> <span class="s1">&#39;&#39;</span>
+<span class="c1">-- bad</span>
+
+<span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">123</span>
+<span class="n">a</span> <span class="o">=</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="c1">-- good</span>
+
+<span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;123&#39;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c1">-- 128</span>
+<span class="c1">-- bad</span>
+
+<span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;123&#39;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span> <span class="c1">-- 128</span>
+<span class="c1">-- good</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Try to avoid multiple nested <code class="docutils literal notranslate"><span class="pre">if</span></code>’s with common body:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="kc">false</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="n">do_something</span><span class="p">()</span>
+<span class="kr">end</span>
+<span class="c1">-- good</span>
+
+<span class="kr">if</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+    <span class="kr">if</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">false</span> <span class="kr">then</span>
+        <span class="n">do_something</span><span class="p">()</span>
+    <span class="kr">end</span>
+<span class="kr">if</span> <span class="n">b</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+    <span class="kr">if</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">false</span> <span class="kr">then</span>
+        <span class="n">do_something</span><span class="p">()</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+<span class="c1">-- bad</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Avoid multiple concatenations in one statement, use <code class="docutils literal notranslate"><span class="pre">string.format</span></code> instead:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">say_greeting</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;good  &quot;</span> <span class="o">..</span> <span class="n">period</span> <span class="o">..</span> <span class="s2">&quot;, &quot;</span> <span class="o">..</span> <span class="n">name</span>
+<span class="kr">end</span>
+<span class="c1">-- bad</span>
+
+<span class="kr">function</span> <span class="nf">say_greeting</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="nb">string.format</span><span class="p">(</span><span class="s2">&quot;good %s, %s&quot;</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="c1">-- good</span>
+
+<span class="kd">local</span> <span class="n">say_greeting_fmt</span> <span class="o">=</span> <span class="s2">&quot;good %s, %s&quot;</span>
+<span class="kr">function</span> <span class="nf">say_greeting</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="n">say_greeting_fmt</span><span class="p">:</span><span class="n">format</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="c1">-- best</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">and</span></code>/<code class="docutils literal notranslate"><span class="pre">or</span></code> for default variable values</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="n">input</span> <span class="o">=</span> <span class="n">input</span> <span class="ow">or</span> <span class="s1">&#39;default_value&#39;</span>
+<span class="kr">end</span> <span class="c1">-- good</span>
+
+<span class="kr">function</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">input</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+        <span class="n">input</span> <span class="o">=</span> <span class="s1">&#39;default_value&#39;</span>
+    <span class="kr">end</span>
+<span class="kr">end</span> <span class="c1">-- ok, but excessive</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">if</span></code>’s and return statements:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="n">do_something</span><span class="p">()</span>
+<span class="kr">end</span>
+<span class="n">do_other_thing</span><span class="p">()</span> <span class="c1">-- good</span>
+
+<span class="kr">if</span> <span class="n">a</span> <span class="o">==</span> <span class="kc">true</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="n">do_something</span><span class="p">()</span>
+<span class="kr">else</span>
+    <span class="n">do_other_thing</span><span class="p">()</span>
+<span class="kr">end</span> <span class="c1">-- bad</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Using spaces:</p>
+<ul>
+<li><p class="first">one shouldn’t use spaces between function name and opening round bracket,
+but arguments must be splitted with one whitespace charachter</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">name</span> <span class="p">(</span><span class="n">arg1</span><span class="p">,</span><span class="n">arg2</span><span class="p">,...)</span>
+<span class="kr">end</span> <span class="c1">-- bad</span>
+
+<span class="kr">function</span> <span class="nf">name</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="p">...)</span>
+<span class="kr">end</span> <span class="c1">-- good</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">use space after comment marker</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span> <span class="c1">-- inline comment</span>
+<span class="c1">-- comment</span>
+<span class="n">do_something</span><span class="p">()</span>
+<span class="kr">end</span>
+<span class="cm">--[[</span>
+<span class="cm">  multiline</span>
+<span class="cm">  comment</span>
+<span class="cm">]]</span><span class="c1">--</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">surrounding operators</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">thing</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span><span class="o">*</span><span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span><span class="o">..</span><span class="s1">&#39;s&#39;</span>
+<span class="c1">-- bad</span>
+
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="n">thing</span> <span class="o">*</span> <span class="mi">1</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span> <span class="o">..</span> <span class="s1">&#39;s&#39;</span>
+<span class="c1">-- good</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">use space after commas in tables</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">2</span> <span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span> <span class="p">,</span><span class="mi">2</span> <span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+<span class="c1">-- bad</span>
+
+<span class="kd">local</span> <span class="n">thing</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+<span class="c1">-- good</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">use space in map definitions around equality sign and commas</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">return</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span> <span class="c1">-- bad</span>
+<span class="kr">return</span> <span class="p">{</span>
+    <span class="n">key1</span> <span class="o">=</span> <span class="n">val1</span><span class="p">,</span><span class="n">key2</span><span class="o">=</span><span class="n">val2</span>
+<span class="p">}</span> <span class="c1">-- bad</span>
+
+<span class="kr">return</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span>
+    <span class="n">key1</span> <span class="o">=</span> <span class="n">val1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">val2</span><span class="p">,</span>
+    <span class="n">key3</span> <span class="o">=</span> <span class="n">vallll</span>
+<span class="p">}</span> <span class="c1">-- good</span>
+</pre></div>
+</div>
+<p>also, you may use alignment:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">return</span> <span class="p">{</span>
+    <span class="n">long_key</span>  <span class="o">=</span> <span class="s1">&#39;vaaaaalue&#39;</span><span class="p">,</span>
+    <span class="n">key</span>       <span class="o">=</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span>
+    <span class="n">something</span> <span class="o">=</span> <span class="s1">&#39;even better&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">extra blank lines may be used (sparingly) to separate groups of related
+functions. Blank lines may be omitted between a bunch of related one-liners
+(e.g. a set of dummy implementations)</p>
+<p>use blank lines in function, sparingly, to indicate logical sections</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span> <span class="n">thing</span> <span class="kr">then</span>
+    <span class="c1">-- ...stuff...</span>
+<span class="kr">end</span>
+<span class="kr">function</span> <span class="nf">derp</span><span class="p">()</span>
+    <span class="c1">-- ...stuff...</span>
+<span class="kr">end</span>
+<span class="kd">local</span> <span class="n">wat</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="c1">-- bad</span>
+
+<span class="kr">if</span> <span class="n">thing</span> <span class="kr">then</span>
+    <span class="c1">-- ...stuff...</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">derp</span><span class="p">()</span>
+    <span class="c1">-- ...stuff...</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">wat</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="c1">-- good</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Delete whitespace at EOL (strongly forbidden. Use <code class="docutils literal notranslate"><span class="pre">:s/\s\+$//gc</span></code> in vim
+to delete them)</p>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="avoid-global-variable">
+<h2>Avoid global variable<a class="headerlink" href="#avoid-global-variable" title="Permalink to this headline">¶</a></h2>
+<p>You must avoid global variables. If you have an exceptional case, use <code class="docutils literal notranslate"><span class="pre">_G</span></code>
+variable to set it, add prefix or add table instead of prefix:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">bad_global_example</span><span class="p">()</span>
+<span class="kr">end</span> <span class="c1">-- very, very bad</span>
+
+<span class="kr">function</span> <span class="nf">good_local_example</span><span class="p">()</span>
+<span class="kr">end</span>
+<span class="n">_G</span><span class="p">.</span><span class="n">modulename_good_local_example</span> <span class="o">=</span> <span class="n">good_local_example</span> <span class="c1">-- good</span>
+<span class="n">_G</span><span class="p">.</span><span class="n">modulename</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">_G</span><span class="p">.</span><span class="n">modulename</span><span class="p">.</span><span class="n">good_local_example</span> <span class="o">=</span> <span class="n">good_local_example</span> <span class="c1">-- better</span>
+</pre></div>
+</div>
+<p>Always use prefix to avoid name clash</p>
+</div>
+<div class="section" id="naming">
+<h2>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>names of variables/”objects” and “methods”/functions: snake_case</li>
+<li>names of “classes”: CamelCase</li>
+<li>private variables/methods (properties in the future) of object starts with
+underscores <code class="docutils literal notranslate"><span class="pre">&lt;object&gt;._&lt;name&gt;</span></code>. Avoid using of
+<code class="docutils literal notranslate"><span class="pre">local</span> <span class="pre">function</span> <span class="pre">private_methods(self)</span> <span class="pre">end</span></code></li>
+<li>boolean - naming <code class="docutils literal notranslate"><span class="pre">is_&lt;...&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">isnt_&lt;...&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">has_</span></code>, <code class="docutils literal notranslate"><span class="pre">hasnt_</span></code> is a good style.</li>
+<li>for “very local” variables:
+- <code class="docutils literal notranslate"><span class="pre">t</span></code> is for tables
+- <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">j</span></code> are for indexing
+- <code class="docutils literal notranslate"><span class="pre">n</span></code> is for counting
+- <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code> is what you get out of <code class="docutils literal notranslate"><span class="pre">pairs()</span></code> (are acceptable, <code class="docutils literal notranslate"><span class="pre">_</span></code> if unused)
+- <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code> is what you get out of <code class="docutils literal notranslate"><span class="pre">ipairs()</span></code> (are acceptable, <code class="docutils literal notranslate"><span class="pre">_</span></code> if unused)
+- <code class="docutils literal notranslate"><span class="pre">k</span></code>/<code class="docutils literal notranslate"><span class="pre">key</span></code> is for table keys
+- <code class="docutils literal notranslate"><span class="pre">v</span></code>/<code class="docutils literal notranslate"><span class="pre">val</span></code>/<code class="docutils literal notranslate"><span class="pre">value</span></code> is for values that are passed around
+- <code class="docutils literal notranslate"><span class="pre">x</span></code>/<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">z</span></code> is for generic math quantities
+- <code class="docutils literal notranslate"><span class="pre">s</span></code>/<code class="docutils literal notranslate"><span class="pre">str</span></code>/<code class="docutils literal notranslate"><span class="pre">string</span></code> is for strings
+- <code class="docutils literal notranslate"><span class="pre">c</span></code> is for 1-char strings
+- <code class="docutils literal notranslate"><span class="pre">f</span></code>/<code class="docutils literal notranslate"><span class="pre">func</span></code>/<code class="docutils literal notranslate"><span class="pre">cb</span></code> are for functions
+- <code class="docutils literal notranslate"><span class="pre">status,</span> <span class="pre">&lt;rv&gt;..</span></code> or <code class="docutils literal notranslate"><span class="pre">ok,</span> <span class="pre">&lt;rv&gt;..</span></code> is what you get out of pcall/xpcall
+- <code class="docutils literal notranslate"><span class="pre">buf,</span> <span class="pre">sz</span></code> is a (buffer, size) pair
+- <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_p</span></code> is for pointers
+- <code class="docutils literal notranslate"><span class="pre">t0</span></code>.. is for timestamps
+- <code class="docutils literal notranslate"><span class="pre">err</span></code> is for errors</li>
+<li>abbrevations are acceptable if they’re unambigous and if you’ll document (or
+they’re too common) them.</li>
+<li>global variables are written with ALL_CAPS. If it’s some system variable, then
+they’re using underscore to define it (<code class="docutils literal notranslate"><span class="pre">_G</span></code>/<code class="docutils literal notranslate"><span class="pre">_VERSION</span></code>/..)</li>
+<li>module naming snake_case (avoid underscores and dashes) - ‘luasql’, instead of
+‘Lua-SQL’</li>
+<li><code class="docutils literal notranslate"><span class="pre">*_mt</span></code> and <code class="docutils literal notranslate"><span class="pre">*_methods</span></code> defines metatable and methods table</li>
+</ul>
+</div>
+<div class="section" id="idioms-and-patterns">
+<h2>Idioms and patterns<a class="headerlink" href="#idioms-and-patterns" title="Permalink to this headline">¶</a></h2>
+<p>Always use round brackets in call of functions except multiple cases (common lua
+style idioms):</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">*.cfg{</span> <span class="pre">}</span></code> functions (<code class="docutils literal notranslate"><span class="pre">box.cfg</span></code>/<code class="docutils literal notranslate"><span class="pre">memcached.cfg</span></code>/..)</li>
+<li><code class="docutils literal notranslate"><span class="pre">ffi.cdef[[</span> <span class="pre">]]</span></code> function</li>
+</ul>
+<p>Avoid these kind of constructions:</p>
+<ul class="simple">
+<li>&lt;func&gt;’&lt;name&gt;’ (strongly avoid require’..’)</li>
+<li><code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">object:method()</span> <span class="pre">end</span></code> (use <code class="docutils literal notranslate"><span class="pre">functon</span> <span class="pre">object.method(self)</span> <span class="pre">end</span></code> instead)</li>
+<li>do not use semicolon as table separator (only comma)</li>
+<li>semicolons at the end of line (only to split multiple statements on one line)</li>
+<li>try to avoid unnecessary function creation (closures/..)</li>
+</ul>
+</div>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>Don’t start modules with license/authors/descriptions, you can write it in
+LICENSE/AUTHORS/README files.
+For writing modules use one of the two patterns (dont use <code class="docutils literal notranslate"><span class="pre">modules()</span></code>):</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">M</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="kr">function</span> <span class="nc">M</span><span class="p">.</span><span class="nf">foo</span><span class="p">()</span>
+<span class="p">...</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">M</span><span class="p">.</span><span class="nf">bar</span><span class="p">()</span>
+<span class="p">...</span>
+<span class="kr">end</span>
+
+<span class="kr">return</span> <span class="n">M</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="kr">function</span> <span class="nf">foo</span><span class="p">()</span>
+<span class="p">...</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">bar</span><span class="p">()</span>
+<span class="p">...</span>
+<span class="kr">end</span>
+
+<span class="kr">return</span> <span class="p">{</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">foo</span><span class="p">,</span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">bar</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="commenting">
+<h2>Commenting<a class="headerlink" href="#commenting" title="Permalink to this headline">¶</a></h2>
+<p>You should write code the way it shouldn’t be described, but don’t forget about
+commenting it. You shouldn’t comment Lua syntax (assume that reader already
+knows Lua language). Try to tell about functions/variable names/etc.</p>
+<p>Multiline comments: use matching (<code class="docutils literal notranslate"><span class="pre">--[[</span> <span class="pre">]]--</span></code>) instead of simple
+(<code class="docutils literal notranslate"><span class="pre">--[[</span> <span class="pre">]]</span></code>).</p>
+<p>Public function comments (??):</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">--- Copy any table (shallow and deep version)</span>
+<span class="c1">-- * deepcopy: copies all levels</span>
+<span class="c1">-- * shallowcopy: copies only first level</span>
+<span class="c1">-- Supports __copy metamethod for copying custom tables with metatables</span>
+<span class="c1">-- @function gsplit</span>
+<span class="c1">-- @table         inp  original table</span>
+<span class="c1">-- @shallow[opt]  sep  flag for shallow copy</span>
+<span class="c1">-- @returns            table (copy)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">tap</span></code> module for writing efficient tests. Example of test file:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">test</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">).</span><span class="n">test</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">)</span>
+<span class="n">test</span><span class="p">:</span><span class="n">plan</span><span class="p">(</span><span class="mi">31</span><span class="p">)</span>
+
+<span class="kr">do</span> <span class="c1">-- check basic table.copy (deepcopy)</span>
+    <span class="kd">local</span> <span class="n">example_table</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;help, I&#39;m very nested&quot;</span><span class="p">,</span> <span class="p">{{{</span> <span class="p">}}}</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">local</span> <span class="n">copy_table</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">example_table</span><span class="p">)</span>
+
+    <span class="n">test</span><span class="p">:</span><span class="n">is_deeply</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">,</span>
+        <span class="n">copy_table</span><span class="p">,</span>
+        <span class="s2">&quot;checking, that deepcopy behaves ok&quot;</span>
+    <span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">,</span>
+        <span class="n">copy_table</span><span class="p">,</span>
+        <span class="s2">&quot;checking, that tables are different&quot;</span>
+    <span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">copy_table</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;checking, that tables are different&quot;</span>
+    <span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">copy_table</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">&quot;checking, that tables are different&quot;</span>
+    <span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">copy_table</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">&quot;checking, that tables are different&quot;</span>
+    <span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span>
+        <span class="n">example_table</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">copy_table</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;checking, that tables are different&quot;</span>
+    <span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+
+<span class="nb">os.exit</span><span class="p">(</span><span class="n">test</span><span class="p">:</span><span class="n">check</span><span class="p">()</span> <span class="ow">and</span> <span class="mi">0</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When you’ll test your code output will be something like this:</p>
+<div class="highlight-tap notranslate"><div class="highlight"><pre><span></span><span class="nn">TAP version 13</span>
+<span class="kd">1..31</span><span class="c"></span>
+<span class="kr">ok</span> - checking, that deepcopy behaves ok
+<span class="kr">ok</span> - checking, that tables are different
+<span class="kr">ok</span> - checking, that tables are different
+<span class="kr">ok</span> - checking, that tables are different
+<span class="kr">ok</span> - checking, that tables are different
+<span class="kr">ok</span> - checking, that tables are different
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
+<p>Be generous in what you accept and strict in what you return.</p>
+<p>With error handling this means that you must provide an error object as second
+multi-return value in case of error. The error object can be a string, a Lua
+table or cdata, in the latter cases it must have <code class="docutils literal notranslate"><span class="pre">__tostring</span></code> metamethod
+defined.</p>
+<p>In case of error, use <code class="docutils literal notranslate"><span class="pre">nil</span></code> for the first return value. This makes the error
+hard to ignore.</p>
+<p>When checking function return values, check the first argument first. If it’s
+<code class="docutils literal notranslate"><span class="pre">nil</span></code>, look for error in the second argument:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">data</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">foo</span><span class="p">()</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">data</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">err</span>
+<span class="kr">end</span>
+<span class="kr">return</span> <span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unless performance of your code is paramount, try to avoid using more than two
+return values.</p>
+<p>In rare cases you may want to return <code class="docutils literal notranslate"><span class="pre">nil</span></code> as a legal return value. In this
+case it’s OK to check for error first, and return second:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">data</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">foo</span><span class="p">()</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">err</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="n">data</span>
+<span class="kr">end</span>
+<span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">err</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../contributing/index.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python_style_guide.html" class="btn btn-neutral float-left" title="Python Style Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

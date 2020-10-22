@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module fiber &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module index" href="box_index.html" />
+    <link rel="prev" title="Module error" href="error.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>fiber</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/fiber.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fiber">
+<h1>Module <cite>fiber</cite><a class="headerlink" href="#module-fiber" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.fiber">
+struct <code class="descname">fiber</code><a class="headerlink" href="#c.fiber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fiber - contains information about a <a class="reference internal" href="../../book/box/atomic_index.html#atomic-threads-fibers-yields"><span class="std std-ref">fiber</span></a>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.fiber_func">
+typedef int <code class="descname">(*fiber_func)</code><span class="sig-paren">(</span>va_list<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to run inside a fiber.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_new">
+struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a> *<code class="descname">fiber_new</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em>, <a class="reference internal" href="#c.fiber_func" title="fiber_func">fiber_func</a><em>&nbsp;f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new fiber.</p>
+<p>Takes a fiber from the fiber cache, if it’s not empty. Can fail only if there is
+not enough memory for the fiber structure or fiber stack.</p>
+<p>The created fiber automatically returns itself to the fiber cache when its
+“main” function completes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>char* name</strong> (<em>const</em>) – string with fiber name</li>
+<li><strong>f</strong> (<a class="reference internal" href="#c.fiber_func" title="fiber_func"><em>fiber_func</em></a>) – func for run inside fiber</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-fiber-fiber-start"><span class="std std-ref">fiber_start()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_new_ex">
+struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a> *<code class="descname">fiber_new_ex</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em>, const struct <a class="reference internal" href="#c.fiber_attr" title="fiber_attr">fiber_attr</a><em>&nbsp;*fiber_attr</em>, <a class="reference internal" href="#c.fiber_func" title="fiber_func">fiber_func</a><em>&nbsp;f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_new_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new fiber with defined attributes.</p>
+<p>Can fail only if there is not enough memory for
+the fiber structure or fiber stack.</p>
+<p>The created fiber automatically returns itself
+to the fiber cache if has a default stack size
+when its “main” function completes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>char*                    name</strong> (<em>const</em>) – string with fiber name</li>
+<li><strong>struct fiber_attr* fiber_attr</strong> (<em>const</em>) – fiber attributes container</li>
+<li><strong>f</strong> (<a class="reference internal" href="#c.fiber_func" title="fiber_func"><em>fiber_func</em></a>) – function to run inside the fiber</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c-api-fiber-fiber-start"><span class="std std-ref">fiber_start()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-fiber-start"></span><dl class="function">
+<dt id="c.fiber_start">
+void <code class="descname">fiber_start</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a><em>&nbsp;*callee</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start execution of created fiber.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber* callee</strong> (<em>struct</em>) – fiber to start</li>
+<li><strong>...</strong> – arguments to start the fiber with</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_yield">
+void <code class="descname">fiber_yield</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_yield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return control to another fiber and wait until it’ll be woken.</p>
+<p>See also: <a class="reference internal" href="#c-api-fiber-fiber-wakeup"><span class="std std-ref">fiber_wakeup()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-fiber-wakeup"></span><dl class="function">
+<dt id="c.fiber_wakeup">
+void <code class="descname">fiber_wakeup</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a><em>&nbsp;*f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_wakeup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interrupt a synchronous wait of a fiber</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber* f</strong> (<em>struct</em>) – fiber to be woken up</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-fiber-cancel"></span><dl class="function">
+<dt id="c.fiber_cancel">
+void <code class="descname">fiber_cancel</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a><em>&nbsp;*f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel the subject fiber (set <code class="docutils literal notranslate"><span class="pre">FIBER_IS_CANCELLED</span></code> flag)</p>
+<p>If target fiber’s flag <code class="docutils literal notranslate"><span class="pre">FIBER_IS_CANCELLABLE</span></code> set, then it would be woken
+up (maybe prematurely). Then current fiber yields until the target fiber is
+dead (or is woken up by <a class="reference internal" href="#c-api-fiber-fiber-wakeup"><span class="std std-ref">fiber_wakeup()</span></a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber* f</strong> (<em>struct</em>) – fiber to be cancelled</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_set_cancellable">
+bool <code class="descname">fiber_set_cancellable</code><span class="sig-paren">(</span>bool<em>&nbsp;yesno</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_set_cancellable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make it possible or not possible to wakeup the current fiber immediately
+when it’s cancelled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fiber* f</strong> (<em>struct</em>) – fiber</li>
+<li><strong>yesno</strong> (<em>bool</em>) – status to set</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">previous state</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-fiber-set-joinable"></span><dl class="function">
+<dt id="c.fiber_set_joinable">
+void <code class="descname">fiber_set_joinable</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a><em>&nbsp;*fiber</em>, bool<em>&nbsp;yesno</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_set_joinable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set fiber to be joinable (<code class="docutils literal notranslate"><span class="pre">false</span></code> by default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber* f</strong> (<em>struct</em>) – fiber</li>
+<li><strong>yesno</strong> (<em>bool</em>) – status to set</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_join">
+void <code class="descname">fiber_join</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a><em>&nbsp;*f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the fiber is dead and then move its execution status to the
+caller. The fiber must not be detached.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber* f</strong> (<em>struct</em>) – fiber to be woken up</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Before: <code class="docutils literal notranslate"><span class="pre">FIBER_IS_JOINABLE</span></code> flag is set.</p>
+<p>See also: <a class="reference internal" href="#c-api-fiber-fiber-set-joinable"><span class="std std-ref">fiber_set_joinable()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_sleep">
+void <code class="descname">fiber_sleep</code><span class="sig-paren">(</span>double<em>&nbsp;s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_sleep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put the current fiber to sleep for at least ‘s’ seconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>s</strong> (<em>double</em>) – time to sleep</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note: this is a cancellation point.</p>
+<p>See also: <a class="reference internal" href="#c-api-fiber-fiber-is-cancelled"><span class="std std-ref">fiber_is_cancelled()</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-fiber-is-cancelled"></span><dl class="function">
+<dt id="c.fiber_is_cancelled">
+bool <code class="descname">fiber_is_cancelled</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_is_cancelled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check current fiber for cancellation (it must be checked manually).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_time">
+double <code class="descname">fiber_time</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report loop begin time as double (cheap).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_time64">
+uint64_t <code class="descname">fiber_time64</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_time64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report loop begin time as 64-bit int.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_reschedule">
+void <code class="descname">fiber_reschedule</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_reschedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reschedule fiber to end of event loop cycle.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.slab_cache">
+struct <code class="descname">slab_cache</code><a class="headerlink" href="#c.slab_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.cord_slab_cache">
+struct <a class="reference internal" href="#c.slab_cache" title="slab_cache">slab_cache</a> *<code class="descname">cord_slab_cache</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.cord_slab_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">slab_cache</span></code> suitable to use with <code class="docutils literal notranslate"><span class="pre">tarantool/small</span></code> library</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_self">
+struct <a class="reference internal" href="#c.fiber" title="fiber">fiber</a> *<code class="descname">fiber_self</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_self" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current fiber.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.fiber_attr">
+struct <code class="descname">fiber_attr</code><a class="headerlink" href="#c.fiber_attr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_attr_new">
+void <code class="descname">fiber_attr_new</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_attr_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new fiber attributes container and initialize it
+with default parameters.</p>
+<p>Can be used for creating many fibers: corresponding fibers
+will not take ownership.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_attr_delete">
+void <code class="descname">fiber_attr_delete</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_attr" title="fiber_attr">fiber_attr</a><em>&nbsp;*fiber_attr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_attr_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the <code class="docutils literal notranslate"><span class="pre">fiber_attr</span></code> and free all allocated resources.
+This is safe when fibers created with this attribute still exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber_attr* fiber_attribute</strong> (<em>struct</em>) – fiber attributes container</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_attr_setstacksize">
+int <code class="descname">fiber_attr_setstacksize</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_attr" title="fiber_attr">fiber_attr</a><em>&nbsp;*fiber_attr</em>, size_t<em>&nbsp;stack_size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_attr_setstacksize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the fiber’s stack size in the fiber attributes container.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fiber_attr* fiber_attr</strong> (<em>struct</em>) – fiber attributes container</li>
+<li><strong>stack_size</strong> (<em>size_t</em>) – stack size for new fibers (in bytes)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0 on success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">-1 on failure (if <code class="docutils literal notranslate"><span class="pre">stack_size</span></code> is smaller than the minimum
+allowable fiber stack size)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_attr_getstacksize">
+size_t <code class="descname">fiber_attr_getstacksize</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_attr" title="fiber_attr">fiber_attr</a><em>&nbsp;*fiber_attr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_attr_getstacksize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the fiber’s stack size from the fiber attributes container.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fiber_attr* fiber_attr</strong> (<em>struct</em>) – fiber attributes container,
+or NULL for default</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">stack size (in bytes)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-cond"></span><dl class="type">
+<dt id="c.fiber_cond">
+struct <code class="descname">fiber_cond</code><a class="headerlink" href="#c.fiber_cond" title="Permalink to this definition">¶</a></dt>
+<dd><p>A conditional variable: a synchronization primitive that allow fibers in
+Tarantool’s <a class="reference internal" href="../../book/box/atomic_index.html#atomic-cooperative-multitasking"><span class="std std-ref">cooperative multitasking</span></a>
+environment to yield until some predicate is satisfied.</p>
+<p>Fiber conditions have two basic operations – “wait” and “signal”, – where
+“wait” suspends the execution of a fiber (i.e. yields) until “signal” is
+called.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">pthread_cond</span></code>, <code class="docutils literal notranslate"><span class="pre">fiber_cond</span></code> doesn’t require mutex/latch wrapping.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_cond_new">
+struct <a class="reference internal" href="#c.fiber_cond" title="fiber_cond">fiber_cond</a> *<code class="descname">fiber_cond_new</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_cond_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new conditional variable.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_cond_delete">
+void <code class="descname">fiber_cond_delete</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_cond" title="fiber_cond">fiber_cond</a><em>&nbsp;*cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_cond_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the conditional variable.</p>
+<p>Note: behavior is undefined if there are fibers waiting for the conditional
+variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber_cond* cond</strong> (<em>struct</em>) – conditional variable to delete</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-cond-signal"></span><dl class="function">
+<dt>
+<code class="descname">void fiber_cond_signal(struct fiber_cond *cond);</code></dt>
+<dd><p>Wake up <strong>one</strong> (any) of the fibers waiting for the conditional variable.</p>
+<p>Does nothing if no one is waiting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber_cond* cond</strong> (<em>struct</em>) – conditional variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">void fiber_cond_broadcast(struct fiber_cond *cond);</code></dt>
+<dd><p>Wake up <strong>all</strong> fibers waiting for the conditional variable.</p>
+<p>Does nothing if no one is waiting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fiber_cond* cond</strong> (<em>struct</em>) – conditional variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-fiber-cond-wait-timeout"></span><dl class="function">
+<dt id="c.fiber_cond_wait_timeout">
+int <code class="descname">fiber_cond_wait_timeout</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_cond" title="fiber_cond">fiber_cond</a><em>&nbsp;*cond</em>, double<em>&nbsp;timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_cond_wait_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suspend the execution of the current fiber (i.e. yield) until
+<a class="reference internal" href="#c-api-fiber-cond-signal"><span class="std std-ref">fiber_cond_signal()</span></a> is called.</p>
+<p>Like <code class="docutils literal notranslate"><span class="pre">pthread_cond</span></code>, <code class="docutils literal notranslate"><span class="pre">fiber_cond</span></code> can issue spurious wake ups caused by
+explicit <a class="reference internal" href="#c-api-fiber-fiber-wakeup"><span class="std std-ref">fiber_wakeup()</span></a> or
+<a class="reference internal" href="#c-api-fiber-fiber-cancel"><span class="std std-ref">fiber_cancel()</span></a> calls. It is highly
+recommended to wrap calls to this function into a loop and check the actual
+predicate and <a class="reference internal" href="#c-api-fiber-fiber-is-cancelled"><span class="std std-ref">fiber_is_cancelled()</span></a>
+on every iteration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fiber_cond* cond</strong> (<em>struct</em>) – conditional variable</li>
+<li><strong>double timeout</strong> (<em>struct</em>) – timeout in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0 on <a class="reference internal" href="#c-api-fiber-cond-signal"><span class="std std-ref">fiber_cond_signal()</span></a> call or a
+spurious wake up</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">-1 on timeout, and the error code is set to ‘TimedOut’</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.fiber_cond_wait">
+int <code class="descname">fiber_cond_wait</code><span class="sig-paren">(</span>struct <a class="reference internal" href="#c.fiber_cond" title="fiber_cond">fiber_cond</a><em>&nbsp;*cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.fiber_cond_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for <a class="reference internal" href="#c-api-fiber-cond-wait-timeout"><span class="std std-ref">fiber_cond_wait_timeout()</span></a>.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="box_index.html" class="btn btn-neutral float-right" title="Module index" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="error.html" class="btn btn-neutral float-left" title="Module error" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

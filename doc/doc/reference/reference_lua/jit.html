@@ -1,0 +1,447 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module jit &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>jit</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/jit.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-jit">
+<span id="module-jit"></span><span id="jit-module"></span><h1>Module <cite>jit</cite><a class="headerlink" href="#module-jit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">jit</span></code> module has functions for tracing the
+<a class="reference external" href="http://luajit.org">LuaJIT</a> Just-In-Time compiler’s
+progress, showing the byte-code or assembler output that the compiler produces,
+and in general providing information about what LuaJIT does with Lua code.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">jit</span></code> functions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<dl class="last docutils">
+<dt>In this document, we will use:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">jit_dis_x64</span></code> for <code class="docutils literal notranslate"><span class="pre">require('jit.dis_x64')</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">jit_v</span></code> for <code class="docutils literal notranslate"><span class="pre">require('jit.v')</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">jit_dump</span></code> for <code class="docutils literal notranslate"><span class="pre">require('jit.dump')</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#jit-bc-dump"><span class="std std-ref">jit_bc.dump()</span></a></td>
+<td>Print the byte code of
+a function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jit-dis-x86-disass"><span class="std std-ref">jit_dis_x86.disass()</span></a></td>
+<td>Print the i386 assembler code
+of a string of bytes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jit-dis-x64-disass"><span class="std std-ref">jit_dis_x64.disass()</span></a></td>
+<td>Print the x86-64 assembler code
+of a string of bytes</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jit-dump-on"><span class="std std-ref">jit_dump.on()</span></a>,
+<a class="reference internal" href="#jit-dump-off"><span class="std std-ref">jit_dump.off()</span></a></td>
+<td>Print the intermediate or
+machine code of the following
+Lua code</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jit-v-on"><span class="std std-ref">jit_v.on()</span></a>,
+<a class="reference internal" href="#jit-v-off"><span class="std std-ref">jit_v.off()</span></a></td>
+<td>Print a trace of LuaJIT’s
+progress compiling and
+interpreting code</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="jit-bc-dump"></span><dl class="function">
+<dt id="jit.jit_bc.dump">
+<code class="descclassname">jit_bc.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_bc.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the byte code of a function.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; jit_bc = require(&#39;jit.bc&#39;)
+---
+...
+
+tarantool&gt; function f()
+         &gt; print(&quot;D&quot;)
+         &gt; end
+---
+...
+
+tarantool&gt; jit_bc.dump(f)
+-- BYTECODE -- 0x01113163c8:1-3
+0001    GGET     0   0      ; &quot;print&quot;
+0002    KSTR     2   1      ; &quot;D&quot;
+0003    CALL     0   1   2
+0004    RET0     0   1
+
+---
+...
+</pre></div>
+</div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">f</span><span class="p">()</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">)</span>
+<span class="kr">end</span>
+<span class="nb">require</span><span class="p">(</span><span class="s1">&#39;jit.bc&#39;</span><span class="p">).</span><span class="n">dump</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For a list of available options, read <a class="reference external" href="https://github.com/tarantool/luajit/tree/tarantool-1.7/src/jit/bc.lua">the source code of bc.lua</a>.</p>
+</dd></dl>
+
+<span class="target" id="jit-dis-x86-disass"></span><dl class="function">
+<dt id="jit.jit_dis_x86.disass">
+<code class="descclassname">jit_dis_x86.</code><code class="descname">disass</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_dis_x86.disass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the i386 assembler code of a string of bytes.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- Disassemble hexadecimal 97 which is the x86 code for xchg eax, edi
+---
+...
+
+tarantool&gt; jit_dis_x86 = require(&#39;jit.dis_x86&#39;)
+---
+...
+
+tarantool&gt; jit_dis_86.disass(&#39;\x97&#39;)
+00000000  97                xchg eax, edi
+---
+...
+</pre></div>
+</div>
+<p>For a list of available options, read <a class="reference external" href="https://github.com/tarantool/luajit/tree/tarantool-1.7/src/jit/dis_x86.lua">the source code of dis_x86.lua</a>.</p>
+</dd></dl>
+
+<span class="target" id="jit-dis-x64-disass"></span><dl class="function">
+<dt id="jit.jit_dis_x64.disass">
+<code class="descclassname">jit_dis_x64.</code><code class="descname">disass</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_dis_x64.disass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the x86-64 assembler code of a string of bytes.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- Disassemble hexadecimal 97 which is the x86-64 code for xchg eax, edi
+---
+...
+
+tarantool&gt; jit_dis_x64 = require(&#39;jit.dis_x64&#39;)
+---
+...
+
+tarantool&gt; jit_dis_64.disass(&#39;\x97&#39;)
+00000000  97                xchg eax, edi
+---
+...
+</pre></div>
+</div>
+<p>For a list of available options, read <a class="reference external" href="https://github.com/tarantool/luajit/tree/tarantool-1.7/src/jit/dis_x64.lua">the source code of dis_x64.lua</a>.</p>
+</dd></dl>
+
+<span class="target" id="jit-dump-off"><span id="jit-dump-on"></span></span><dl class="function">
+<dt id="jit.jit_dump.on">
+<code class="descclassname">jit_dump.</code><code class="descname">on</code><span class="sig-paren">(</span><em>option</em><span class="optional">[</span>, <em>output file</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_dump.on" title="Permalink to this definition">¶</a></dt>
+<dt id="jit.jit_dump.off">
+<code class="descclassname">jit_dump.</code><code class="descname">off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_dump.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the intermediate or machine code of the following Lua code.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- Show the machine code of a Lua &quot;for&quot; loop
+tarantool&gt; jit_dump = require(&#39;jit.dump&#39;)
+tarantool&gt; jit_dump.on(&#39;m&#39;)
+tarantool&gt; x = 0;
+tarantool&gt; for i = 1, 1e6 do
+         &gt; x = x + i
+         &gt; end
+---- TRACE 1 start 0x01047fbc38:1
+---- TRACE 1 mcode 148
+104c29f6b  mov dword [r14-0xed0], 0x1
+104c29f76  cvttsd2si ebp, [rdx]
+104c29f7a  rorx rbx, [rdx-0x10], 0x2f
+104c29f81  shr rbx, 0x11
+104c29f85  mov rdx, [rbx+0x10]
+104c29f89  cmp dword [rdx+0x34], +0x3f
+104c29f8d  jnz 0x104c1a010  -&gt;0
+104c29f93  mov rcx, [rdx+0x28]
+104c29f97  mov rdi, 0xfffd8001046b3d58
+104c29fa1  cmp rdi, [rcx+0x320]
+104c29fa8  jnz 0x104c1a010  -&gt;0
+104c29fae  lea rax, [rcx+0x318]
+104c29fb5  cmp dword [rax+0x4], 0xfff90000
+104c29fbc  jnb 0x104c1a010  -&gt;0
+104c29fc2  xorps xmm7, xmm7
+104c29fc5  cvtsi2sd xmm7, ebp
+104c29fc9  addsd xmm7, [rax]
+104c29fcd  movsd [rax], xmm7
+104c29fd1  add ebp, +0x01
+104c29fd4  cmp ebp, 0x000f4240
+104c29fda  jg 0x104c1a014   -&gt;1
+-&gt;LOOP:
+104c29fe0  xorps xmm6, xmm6
+104c29fe3  cvtsi2sd xmm6, ebp
+104c29fe7  addsd xmm7, xmm6
+104c29feb  movsd [rax], xmm7
+104c29fef  add ebp, +0x01
+104c29ff2  cmp ebp, 0x000f4240
+104c29ff8  jle 0x104c29fe0  -&gt;LOOP
+104c29ffa  jmp 0x104c1a01c  -&gt;3
+---- TRACE 1 stop -&gt; loop
+
+---
+...
+
+tarantool&gt; print(x)
+500000500000
+---
+...
+
+tarantool&gt; jit_dump.off()
+---
+...
+</pre></div>
+</div>
+<p>For a list of available options, read <a class="reference external" href="https://github.com/tarantool/luajit/tree/tarantool-1.7/src/jit/dump.lua">the source code of dump.lua</a>.</p>
+</dd></dl>
+
+<span class="target" id="jit-v-off"><span id="jit-v-on"></span></span><dl class="function">
+<dt id="jit.jit_v.on">
+<code class="descclassname">jit_v.</code><code class="descname">on</code><span class="sig-paren">(</span><em>option</em><span class="optional">[</span>, <em>output file</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_v.on" title="Permalink to this definition">¶</a></dt>
+<dt id="jit.jit_v.off">
+<code class="descclassname">jit_v.</code><code class="descname">off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jit.jit_v.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a trace of LuaJIT’s progress compiling and interpreting code.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; -- Show what LuaJIT is doing for a Lua &quot;for&quot; loop
+tarantool&gt; jit_v = require(&#39;jit.v&#39;)
+tarantool&gt; jit_v.on()
+tarantool&gt; l = 0
+tarantool&gt; for i = 1, 1e6 do
+         &gt;     l = l + i
+         &gt; end
+[TRACE   3 &quot;for i = 1, 1e6 do
+    l = l + i
+end&quot;:1 loop]
+---
+...
+
+tarantool&gt; print(l)
+500000500000
+---
+...
+
+tarantool&gt; jit_v.off()
+---
+...
+</pre></div>
+</div>
+<p>For a list of available options, read <a class="reference external" href="https://github.com/tarantool/luajit/tree/tarantool-1.7/src/jit/v.lua">the source code of v.lua</a>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

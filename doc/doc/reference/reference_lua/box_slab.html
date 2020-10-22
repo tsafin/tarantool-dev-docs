@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.slab &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.slab</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_slab.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.slab">
+<span id="submodule-box-slab"></span><span id="box-introspection-box-slab"></span><h1>Submodule <cite>box.slab</cite><a class="headerlink" href="#module-box.slab" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.slab</span></code> submodule provides access to slab allocator statistics. The
+slab allocator is the main allocator used to store <a class="reference internal" href="../../book/box/data_model.html#index-box-tuple"><span class="std std-ref">tuples</span></a>.
+This can be used to monitor the total memory usage and memory fragmentation.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">box.slab</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#box-runtime-info"><span class="std std-ref">box.runtime.info()</span></a></td>
+<td>Show a memory usage report for
+Lua runtime</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-slab-info"><span class="std std-ref">box.slab.info()</span></a></td>
+<td>Show an aggregated memory usage
+report for slab allocator</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-slab-stats"><span class="std std-ref">box.slab.stats()</span></a></td>
+<td>Show a detailed memory usage
+report for slab allocator</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="box-runtime-info"></span><dl class="function">
+<dt id="box.slab.box.runtime.info">
+<code class="descclassname">box.runtime.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.slab.box.runtime.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a memory usage report (in bytes) for the Lua runtime.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">lua</span></code> is the heap size of the Lua garbage collector;</li>
+<li><code class="docutils literal notranslate"><span class="pre">maxalloc</span></code> is the maximal memory quota that can be allocated for Lua;</li>
+<li><code class="docutils literal notranslate"><span class="pre">used</span></code> is the current memory size used by Lua.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.runtime.info()
+---
+- lua: 913710
+  maxalloc: 4398046510080
+  used: 12582912
+...
+tarantool&gt; box.runtime.info().used
+---
+- used: 12582912
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-slab-info"></span><dl class="function">
+<dt id="box.slab.box.slab.info">
+<code class="descclassname">box.slab.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.slab.box.slab.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show an aggregated memory usage report (in bytes) for the slab allocator.
+This report is useful for assessing out-of-memory risks.</p>
+<p><code class="docutils literal notranslate"><span class="pre">box.slab.info</span></code> gives a few ratios:</p>
+<ul class="simple">
+<li>items_used_ratio</li>
+<li>arena_used_ratio</li>
+<li>quota_used_ratio</li>
+</ul>
+<p>Here are two possible cases for monitoring memtx memory usage:</p>
+<p><strong>Case 1:</strong> 0.5 &lt; <code class="docutils literal notranslate"><span class="pre">items_used_ratio</span></code> &lt; 0.9</p>
+<div align="center" class="align-center"><img alt="../../../../_images/items_used_ratio1.svg" src="../../../../_images/items_used_ratio1.svg" /></div>
+<p>Apparently your memory is highly fragmented. Check how many
+slab classes you have by looking at <code class="docutils literal notranslate"><span class="pre">box.slab.stats()</span></code> and counting the number
+of different classes. If there are many slab classes (more than a few
+dozens), you may run out of memory even though memory utilization is not high.
+While each slab may have few items used, whenever a tuple of a size different
+from any existing slab class size is allocated, Tarantool may need to get a
+new slab from the slab arena, and since the arena has few empty slabs left, it will
+attempt to increase its quota usage, which, in turn, may end up with an out-of-memory
+error due to the low remaining quota.</p>
+<p><strong>Case 2:</strong> <code class="docutils literal notranslate"><span class="pre">items_used_ratio</span></code> &gt; 0.9</p>
+<div align="center" class="align-center"><img alt="../../../../_images/items_used_ratio2.svg" src="../../../../_images/items_used_ratio2.svg" /></div>
+<p>You are running out of memory. All memory utilization indicators
+are high. Your memory is not fragmented, but there are few reserves left on
+each slab allocator level. You should consider increasing Tarantool’s
+memory limit (<code class="docutils literal notranslate"><span class="pre">box.cfg.memtx_memory</span></code>).</p>
+<p><strong>To sum up:</strong> your main out-of-memory indicator is <code class="docutils literal notranslate"><span class="pre">quota_used_ratio</span></code>.
+However, there are lots of perfectly stable setups with a high <code class="docutils literal notranslate"><span class="pre">quota_used_ratio</span></code>,
+so you only need to pay attention to it when both arena and item used ratio
+are also high.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">quota_size</span></code> - memory limit for slab allocator (as configured in the
+<a class="reference internal" href="../configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a> parameter,
+the default is 2^28 bytes = 268,435,456 bytes)</li>
+<li><code class="docutils literal notranslate"><span class="pre">quota_used</span></code> - used by slab allocator</li>
+<li><code class="docutils literal notranslate"><span class="pre">items_size</span></code> - allocated only for tuples</li>
+<li><code class="docutils literal notranslate"><span class="pre">items_used</span></code> - used only for tuples</li>
+<li><code class="docutils literal notranslate"><span class="pre">arena_size</span></code> - allocated for both tuples and indexes</li>
+<li><code class="docutils literal notranslate"><span class="pre">arena_used</span></code> - used for both tuples and indexes</li>
+<li><code class="docutils literal notranslate"><span class="pre">items_used_ratio</span></code> = <code class="docutils literal notranslate"><span class="pre">items_used</span></code> / <code class="docutils literal notranslate"><span class="pre">items_size</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">quota_used_ratio</span></code> = <code class="docutils literal notranslate"><span class="pre">quota_used</span></code> / <code class="docutils literal notranslate"><span class="pre">quota_size</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">arena_used_ratio</span></code> = <code class="docutils literal notranslate"><span class="pre">arena_used</span></code> / <code class="docutils literal notranslate"><span class="pre">arena_size</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.slab.info()
+---
+- items_size: 228128
+  items_used_ratio: 1.8%
+  quota_size: 1073741824
+  quota_used_ratio: 0.8%
+  arena_used_ratio: 43.2%
+  items_used: 4208
+  quota_used: 8388608
+  arena_size: 2325176
+  arena_used: 1003632
+...
+
+tarantool&gt; box.slab.info().arena_used
+---
+- 1003632
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-slab-stats"></span><dl class="function">
+<dt id="box.slab.box.slab.stats">
+<code class="descclassname">box.slab.</code><code class="descname">stats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.slab.box.slab.stats" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Show a detailed memory usage report (in bytes) for the slab allocator.
+The report is broken down into groups by <em>data item size</em> as well as by
+<em>slab size</em> (64-byte, 136-byte, etc). The report includes the memory
+allocated for storing both tuples and indexes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">mem_free</span></code> is the allocated, but currently unused memory;</li>
+<li><code class="docutils literal notranslate"><span class="pre">mem_used</span></code> is the memory used for storing data items (tuples and indexes);</li>
+<li><code class="docutils literal notranslate"><span class="pre">item_count</span></code> is the number of stored items;</li>
+<li><code class="docutils literal notranslate"><span class="pre">item_size</span></code> is the size of each data item;</li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_count</span></code> is the number of slabs allocated;</li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_size</span></code> is the size of each allocated slab.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>Here is a sample report for the first group:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.slab.stats()[1]
+---
+- mem_free: 16232
+  mem_used: 48
+  item_count: 2
+  item_size: 24
+  slab_count: 1
+  slab_size: 16384
+...
+</pre></div>
+</div>
+<p>This report is saying that there are 2 data items (<code class="docutils literal notranslate"><span class="pre">item_count</span></code> = 2) stored
+in one (<code class="docutils literal notranslate"><span class="pre">slab_count</span></code> = 1) 24-byte slab (<code class="docutils literal notranslate"><span class="pre">item_size</span></code> = 24), so
+<code class="docutils literal notranslate"><span class="pre">mem_used</span></code> = 2 * 24 = 48 bytes. Also, <code class="docutils literal notranslate"><span class="pre">slab_size</span></code> is 16384 bytes, of
+which 16384 - 48 = 16232 bytes are free (<code class="docutils literal notranslate"><span class="pre">mem_free</span></code>).</p>
+<p>A complete report would show memory usage statistics for all groups:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.slab.stats()
+---
+- - mem_free: 16232
+    mem_used: 48
+    item_count: 2
+    item_size: 24
+    slab_count: 1
+    slab_size: 16384
+  - mem_free: 15720
+    mem_used: 560
+    item_count: 14
+    item_size: 40
+    slab_count: 1
+    slab_size: 16384
+  &lt;...&gt;
+  - mem_free: 32472
+    mem_used: 192
+    item_count: 1
+    item_size: 192
+    slab_count: 1
+    slab_size: 32768
+  - mem_free: 1097624
+    mem_used: 999424
+    item_count: 61
+    item_size: 16384
+    slab_count: 1
+    slab_size: 2097152
+  ...
+</pre></div>
+</div>
+</div></blockquote>
+<p>The total <code class="docutils literal notranslate"><span class="pre">mem_used</span></code> for all groups in this report equals <code class="docutils literal notranslate"><span class="pre">arena_used</span></code>
+in <a class="reference internal" href="#box-slab-info"><span class="std std-ref">box.slab.info()</span></a> report.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1122 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data model &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Data model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/box/data_model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-model">
+<span id="box-data-model"></span><h1>Data model<a class="headerlink" href="#data-model" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how Tarantool stores values and what operations with data
+it supports.</p>
+<p>If you tried to create a database as suggested in our
+<a class="reference internal" href="../../getting_started/getting_started_db.html#getting-started-db"><span class="std std-ref">“Getting started” exercises</span></a>,
+then your test database now looks like this:</p>
+<img alt="../../../../_images/data_model.png" src="../../../../_images/data_model.png" />
+<div class="section" id="spaces">
+<span id="index-box-space"></span><h2>Spaces<a class="headerlink" href="#spaces" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>space</strong> – ‘tester’ in our example – is a container.</p>
+<p>When Tarantool is being used to store data, there is always at least one space.
+Each space has a unique <strong>name</strong> specified by the user.
+Besides, each space has a unique <strong>numeric identifier</strong> which can be specified by
+the user, but usually is assigned automatically by Tarantool.
+Finally, a space always has an <strong>engine</strong>: <em>memtx</em> (default) – in-memory engine,
+fast but limited in size, or <em>vinyl</em> – on-disk engine for huge data sets.</p>
+<p>A space is a container for <a class="reference internal" href="#index-box-tuple"><span class="std std-ref">tuples</span></a>.
+To be functional, it needs to have a <a class="reference internal" href="indexes.html#index-box-index"><span class="std std-ref">primary index</span></a>.
+It can also have secondary indexes.</p>
+</div>
+<div class="section" id="tuples">
+<span id="index-box-tuple"></span><h2>Tuples<a class="headerlink" href="#tuples" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>tuple</strong> plays the same role as a “row” or a “record”, and the components of
+a tuple (which we call “fields”) play the same role as a “row column” or
+“record field”, except that:</p>
+<ul class="simple">
+<li>fields can be composite structures, such as arrays or maps, and</li>
+<li>fields don’t need to have names.</li>
+</ul>
+<p>Any given tuple may have any number of fields, and the fields may be of
+different <a class="reference internal" href="#index-box-data-types"><span class="std std-ref">types</span></a>.
+The identifier of a field is the field’s number, base 1
+(in Lua and other 1-based languages) or base 0 (in PHP or C/C++).
+For example, <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code> can be used in some contexts to refer to the first
+field of a tuple.</p>
+<p>The number of tuples in a space is unlimited.</p>
+<p>Tuples in Tarantool are stored as
+<a class="reference external" href="https://en.wikipedia.org/wiki/MessagePack">MsgPack</a> arrays.</p>
+<p>When Tarantool returns a tuple value in console, it uses the
+<a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a> format,
+for example: <code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">'Ace</span> <span class="pre">of</span> <span class="pre">Base',</span> <span class="pre">1993]</span></code>.</p>
+</div>
+<div class="section" id="indexes">
+<span id="index-box-index"></span><h2>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">¶</a></h2>
+<p>An <strong>index</strong> is a group of key values and pointers.</p>
+<p>As with spaces, you should specify the index <strong>name</strong>, and let Tarantool
+come up with a unique <strong>numeric identifier</strong> (“index id”).</p>
+<p>An index always has a <strong>type</strong>. The default index type is ‘TREE’.
+TREE indexes are provided by all Tarantool engines, can index unique and
+non-unique values, support partial key searches, comparisons and ordered results.
+Additionally, memtx engine supports HASH, RTREE and BITSET indexes.</p>
+<p>An index may be <strong>multi-part</strong>, that is, you can declare that an index key value
+is composed of two or more fields in the tuple, in any order.
+For example, for an ordinary TREE index, the maximum number of parts is 255.</p>
+<p>An index may be <strong>unique</strong>, that is, you can declare that it would be illegal
+to have the same key value twice.</p>
+<p>The first index defined on a space is called the <strong>primary key index</strong>,
+and it must be unique. All other indexes are called <strong>secondary indexes</strong>,
+and they may be non-unique.</p>
+<p>An index definition may include identifiers of tuple fields and their expected
+<strong>types</strong>. See allowed indexed field types
+<a class="reference internal" href="#index-box-indexed-field-types"><span class="std std-ref">here</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A recommended design pattern for a data model is to base primary keys on the
+first fields of a tuple, because this speeds up tuple comparison.</p>
+</div>
+<p>In our example, we first defined the primary index (named ‘primary’) based on
+field #1 of each tuple:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; i = s:create_index(&#39;primary&#39;, {type = &#39;hash&#39;, parts = {{field = 1, type = &#39;unsigned&#39;}}}
+</pre></div>
+</div>
+<p>The effect is that, for all tuples in space ‘tester’, field #1 must exist and
+must contain an unsigned integer.
+The index type is ‘hash’, so values in field #1 must be unique, because keys
+in HASH indexes are unique.</p>
+<p>After that, we defined a secondary index (named ‘secondary’) based on field #2
+of each tuple:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; i = s:create_index(&#39;secondary&#39;, {type = &#39;tree&#39;, parts = {2, &#39;string&#39;}})
+</pre></div>
+</div>
+<p>The effect is that, for all tuples in space ‘tester’, field #2 must exist and
+must contain a string.
+The index type is ‘tree’, so values in field #2 must not be unique, because keys
+in TREE indexes may be non-unique.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Space definitions and index definitions are stored permanently in Tarantool’s
+system spaces <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-space"><span class="std std-ref">_space</span></a> and <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-index"><span class="std std-ref">_index</span></a>
+(for details, see reference on <a class="reference internal" href="../../reference/reference_lua/box_space.html#box-space"><span class="std std-ref">box.space</span></a> submodule).</p>
+<p class="last">You can add, drop, or alter the definitions at runtime, with some restrictions.
+See syntax details in reference on <a class="reference internal" href="../../reference/reference_lua/box.html#box-module"><span class="std std-ref">box</span></a> module.</p>
+</div>
+<p>Read more about index operations <a class="reference internal" href="#index-box-index-operations"><span class="std std-ref">here</span></a>.</p>
+</div>
+<div class="section" id="data-types">
+<span id="index-box-data-types"></span><h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool is both a database and an application server.
+Hence a developer often deals with two type sets:
+the programming language types (e.g. Lua) and
+the types of the Tarantool storage format (MsgPack).</p>
+<div class="section" id="lua-vs-msgpack">
+<span id="index-box-lua-vs-msgpack"></span><h3>Lua vs MsgPack<a class="headerlink" href="#lua-vs-msgpack" title="Permalink to this headline">¶</a></h3>
+<div class="table docutils container">
+<table border="1" class="right-align-column-1 left-align-column-2 left-align-column-3 left-align-column-4 docutils">
+<colgroup>
+<col width="19%" />
+<col width="22%" />
+<col width="32%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Scalar / compound</th>
+<th class="head">MsgPack <a href="#id3"><span class="problematic" id="id4">|nbsp|</span></a> type</th>
+<th class="head">Lua type</th>
+<th class="head">Example value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>scalar</td>
+<td>nil</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.1.html">nil</a>”</td>
+<td>msgpack.NULL</td>
+</tr>
+<tr class="row-odd"><td>scalar</td>
+<td>boolean</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.2.html">boolean</a>”</td>
+<td>true</td>
+</tr>
+<tr class="row-even"><td>scalar</td>
+<td>string</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.4.html">string</a>”</td>
+<td>‘A B C’</td>
+</tr>
+<tr class="row-odd"><td>scalar</td>
+<td>integer</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.3.html">number</a>”</td>
+<td>12345</td>
+</tr>
+<tr class="row-even"><td>scalar</td>
+<td>double</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.3.html">number</a>”</td>
+<td>1.2345</td>
+</tr>
+<tr class="row-odd"><td>compound</td>
+<td>map</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.5.html">table</a>” (with string keys)</td>
+<td>{‘a’: 5, ‘b’: 6}</td>
+</tr>
+<tr class="row-even"><td>compound</td>
+<td>array</td>
+<td>“<a class="reference external" href="http://www.lua.org/pil/2.5.html">table</a>” (with integer keys)</td>
+<td>[1, 2, 3, 4, 5]</td>
+</tr>
+<tr class="row-odd"><td>compound</td>
+<td>array</td>
+<td>tuple (“<a class="reference external" href="http://luajit.org/ext_ffi.html#call">cdata</a>”)</td>
+<td>[12345, ‘A B C’]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In Lua, a <strong>nil</strong> type has only one possible value, also called <em>nil</em>
+(displayed as <strong>null</strong> on Tarantool’s command line, since the output is in the
+YAML format).
+Nils may be compared to values of any types with == (is-equal)
+or ~= (is-not-equal), but other operations will not work.
+Nils may not be used in Lua tables; the workaround is to use
+<a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-null"><span class="std std-ref">msgpack.NULL</span></a></p>
+<p>A <strong>boolean</strong> is either <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p id="index-box-string">A <strong>string</strong> is a variable-length sequence of bytes, usually represented with
+alphanumeric characters inside single quotes. In both Lua and MsgPack, strings
+are treated as binary data, with no attempts to determine a string’s
+character set or to perform any string conversion – unless there is an optional
+<a class="reference internal" href="#index-collation"><span class="std std-ref">collation</span></a>.
+So, usually, string sorting and comparison are done byte-by-byte, without any special
+collation rules applied.
+(Example: numbers are ordered by their point on the number line, so 2345 is
+greater than 500; meanwhile, strings are ordered by the encoding of the first
+byte, then the encoding of the second byte, and so on, so ‘2345’ is less than ‘500’.)</p>
+<p id="index-box-number">In Lua, a <strong>number</strong> is double-precision floating-point, but Tarantool allows both
+integer and floating-point values. Tarantool will try to store a Lua number as
+floating-point if the value contains a decimal point or is very large
+(greater than 100 trillion = 1e14), otherwise Tarantool will store it as an integer.
+To ensure that even very large numbers are stored as integers, use the
+<a class="reference internal" href="../../reference/reference_lua/other.html#other-tonumber64"><span class="std std-ref">tonumber64</span></a> function, or the LL (Long Long) suffix,
+or the ULL (Unsigned Long Long) suffix.
+Here are examples of numbers using regular notation, exponential notation,
+the ULL suffix and the <code class="docutils literal notranslate"><span class="pre">tonumber64</span></code> function:
+<code class="docutils literal notranslate"><span class="pre">-55</span></code>, <code class="docutils literal notranslate"><span class="pre">-2.7e+20</span></code>, <code class="docutils literal notranslate"><span class="pre">100000000000000ULL</span></code>, <code class="docutils literal notranslate"><span class="pre">tonumber64('18446744073709551615')</span></code>.</p>
+<p>Lua <strong>tables</strong> with string keys are stored as MsgPack maps;
+Lua tables with integer keys starting with 1 – as MsgPack arrays.
+Nils may not be used in Lua tables; the workaround is to use
+<a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-null"><span class="std std-ref">msgpack.NULL</span></a></p>
+<p>A <strong>tuple</strong> is a light reference to a MsgPack array stored in the database.
+It is a special type (cdata) to avoid conversion to a Lua table on retrieval.
+A few functions may return tables with multiple tuples. For more tuple examples,
+see <a class="reference internal" href="../../reference/reference_lua/box_tuple.html#box-tuple"><span class="std std-ref">box.tuple</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Tarantool uses the MsgPack format for database storage, which is variable-length.
+So, for example, the smallest number requires only one byte, but the largest number
+requires nine bytes.</p>
+</div>
+<p>Examples of insert requests with different data types:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.K:insert{1,nil,true,&#39;A B C&#39;,12345,1.2345}
+---
+- [1, null, true, &#39;A B C&#39;, 12345, 1.2345]
+...
+tarantool&gt; box.space.K:insert{2,{[&#39;a&#39;]=5,[&#39;b&#39;]=6}}
+---
+- [2, {&#39;a&#39;: 5, &#39;b&#39;: 6}]
+...
+tarantool&gt; box.space.K:insert{3,{1,2,3,4,5}}
+---
+- [3, [1, 2, 3, 4, 5]]
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="indexed-field-types">
+<span id="index-box-indexed-field-types"></span><h3>Indexed field types<a class="headerlink" href="#indexed-field-types" title="Permalink to this headline">¶</a></h3>
+<p>Indexes restrict values which Tarantool’s MsgPack may contain. This is why,
+for example, ‘unsigned’ is a separate <strong>indexed field type</strong>, compared to ‘integer’
+data type in MsgPack: they both store ‘integer’ values, but an ‘unsigned’ index
+contains only <em>non-negative</em> integer values and an ‘integer’ index contains <em>all</em>
+integer values.</p>
+<p>Here’s how Tarantool indexed field types correspond to MsgPack data types.</p>
+<div class="table docutils container">
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="33%" />
+<col width="21%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Indexed field type</th>
+<th class="head">MsgPack data type <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+(and possible values)</th>
+<th class="head">Index type</th>
+<th class="head">Examples</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>unsigned</strong>
+(may also be called ‘uint’
+or ‘num’, but ‘num’ is
+deprecated)</td>
+<td><strong>integer</strong>
+(integer between 0 and
+18446744073709551615, i.e.
+about 18 quintillion)</td>
+<td>TREE, BITSET or HASH</td>
+<td>123456</td>
+</tr>
+<tr class="row-odd"><td><strong>integer</strong>
+(may also be called ‘int’)</td>
+<td><strong>integer</strong>
+(integer between
+-9223372036854775808 and
+18446744073709551615)</td>
+<td>TREE or HASH</td>
+<td>-2^63</td>
+</tr>
+<tr class="row-even"><td><strong>number</strong></td>
+<td><p class="first"><strong>integer</strong>
+(integer between
+-9223372036854775808 and
+18446744073709551615)</p>
+<p class="last"><strong>double</strong>
+(single-precision floating
+point number or double-precision
+floating point number)</p>
+</td>
+<td>TREE or HASH</td>
+<td><p class="first">1.234</p>
+<p>-44</p>
+<p class="last">1.447e+44</p>
+</td>
+</tr>
+<tr class="row-odd"><td><strong>string</strong>
+(may also be called ‘str’)</td>
+<td><strong>string</strong>
+(any set of octets,
+up to the maximum length)</td>
+<td>TREE, BITSET or HASH</td>
+<td><p class="first">‘A B C’</p>
+<p class="last">‘65 66 67’</p>
+</td>
+</tr>
+<tr class="row-even"><td><strong>boolean</strong></td>
+<td><strong>bool</strong>
+(true or false)</td>
+<td>TREE or HASH</td>
+<td>true</td>
+</tr>
+<tr class="row-odd"><td><strong>array</strong></td>
+<td><strong>array</strong>
+(list of numbers representing
+points in a geometric figure)</td>
+<td>RTREE</td>
+<td><p class="first">{10, 11}</p>
+<p class="last">{3, 5, 9, 10}</p>
+</td>
+</tr>
+<tr class="row-even"><td><strong>scalar</strong></td>
+<td><p class="first"><strong>bool</strong>
+(true or false)</p>
+<p><strong>integer</strong>
+(integer between
+-9223372036854775808 and
+18446744073709551615)</p>
+<p><strong>double</strong>
+(single-precision floating
+point number or double-precision
+floating point number)</p>
+<p><strong>string</strong> (any set of octets)</p>
+<p class="last">Note: When there is a mix of
+types, the key order is:
+booleans, then numbers,
+then strings.</p>
+</td>
+<td>TREE or HASH</td>
+<td><p class="first">true</p>
+<p>-1</p>
+<p>1.234</p>
+<p>‘’</p>
+<p class="last">‘ру’</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="collations">
+<span id="index-collation"></span><h2>Collations<a class="headerlink" href="#collations" title="Permalink to this headline">¶</a></h2>
+<p>By default, when Tarantool compares strings, it uses what we call a
+<strong>“binary” collation</strong>. The only consideration here is the numeric value
+of each byte in the string. Therefore, if the string is encoded
+with ASCII or UTF-8, then <code class="docutils literal notranslate"><span class="pre">'A'</span> <span class="pre">&lt;</span> <span class="pre">'B'</span> <span class="pre">&lt;</span> <span class="pre">'a'</span></code>, because the encoding of ‘A’
+(what used to be called the “ASCII value”) is 65, the encoding of
+‘B’ is 66, and the encoding of ‘a’ is 98. Binary collation is best
+if you prefer fast deterministic simple maintenance and searching
+with Tarantool indexes.</p>
+<p>But if you want the ordering that you see in phone books and dictionaries,
+then you need Tarantool’s <strong>optional collations</strong> – <code class="docutils literal notranslate"><span class="pre">unicode</span></code> and
+<code class="docutils literal notranslate"><span class="pre">unicode_ci</span></code> – that allow for <code class="docutils literal notranslate"><span class="pre">'a'</span> <span class="pre">&lt;</span> <span class="pre">'A'</span> <span class="pre">&lt;</span> <span class="pre">'B'</span></code> and <code class="docutils literal notranslate"><span class="pre">'a'</span> <span class="pre">=</span> <span class="pre">'A'</span> <span class="pre">&lt;</span> <span class="pre">'B'</span></code>
+respectively.</p>
+<p>Optional collations use the ordering according to the
+<a class="reference external" href="http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table">Default Unicode Collation Element Table (DUCET)</a>
+and the rules described in
+<a class="reference external" href="http://unicode.org/reports/tr10">Unicode® Technical Standard #10 Unicode Collation Algorithm (UTS #10 UCA)</a>.
+The only difference between the two collations is about
+<a class="reference external" href="https://unicode.org/reports/tr10/#Weight_Level_Defn">weights</a>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">unicode</span></code> collation observes L1 and L2 and L3 weights (strength = ‘tertiary’),</li>
+<li><code class="docutils literal notranslate"><span class="pre">unicode_ci</span></code> collation observes only L1 weights (strength = ‘primary’), so for example ‘a’ = ‘A’ = ‘á’ = ‘Á’.</li>
+</ul>
+<p>As an example, let’s take some Russian words:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;ЕЛЕ&#39;
+&#39;елейный&#39;
+&#39;ёлка&#39;
+&#39;еловый&#39;
+&#39;елозить&#39;
+&#39;Ёлочка&#39;
+&#39;ёлочный&#39;
+&#39;ЕЛь&#39;
+&#39;ель&#39;
+</pre></div>
+</div>
+<p>…and show the difference in ordering and selecting by index:</p>
+<ul>
+<li><p class="first">with <code class="docutils literal notranslate"><span class="pre">unicode</span></code> collation:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.T:create_index(&#39;I&#39;, {parts = {{1,&#39;str&#39;, collation=&#39;unicode&#39;}}})
+...
+tarantool&gt; box.space.T.index.I:select()
+---
+- - [&#39;ЕЛЕ&#39;]
+  - [&#39;елейный&#39;]
+  - [&#39;ёлка&#39;]
+  - [&#39;еловый&#39;]
+  - [&#39;елозить&#39;]
+  - [&#39;Ёлочка&#39;]
+  - [&#39;ёлочный&#39;]
+  - [&#39;ель&#39;]
+  - [&#39;ЕЛь&#39;]
+...
+tarantool&gt; box.space.T.index.I:select{&#39;ЁлКа&#39;}
+---
+- []
+...
+</pre></div>
+</div>
+</li>
+<li><p class="first">with <code class="docutils literal notranslate"><span class="pre">unicode_ci</span></code> collation:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.T:create_index(&#39;I&#39;, {parts = {{1,&#39;str&#39;, collation=&#39;unicode_ci&#39;}}})
+...
+tarantool&gt; box.space.S.index.I:select()
+---
+- - [&#39;ЕЛЕ&#39;]
+  - [&#39;елейный&#39;]
+  - [&#39;ёлка&#39;]
+  - [&#39;еловый&#39;]
+  - [&#39;елозить&#39;]
+  - [&#39;Ёлочка&#39;]
+  - [&#39;ёлочный&#39;]
+  - [&#39;ЕЛь&#39;]
+...
+tarantool&gt; box.space.S.index.I:select{&#39;ЁлКа&#39;}
+---
+- - [&#39;ёлка&#39;]
+...
+</pre></div>
+</div>
+</li>
+</ul>
+<p>In fact, though, good collation involves much more than these simple examples of
+upper case / lower case and accented / unaccented equivalence in alphabets.
+We also consider variations of the same character, non-alphabetic writing systems,
+and special rules that apply for combinations of characters.</p>
+</div>
+<div class="section" id="sequences">
+<span id="index-box-sequence"></span><h2>Sequences<a class="headerlink" href="#sequences" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>sequence</strong> is a generator of ordered integer values.</p>
+<p>As with spaces and indexes, you should specify the sequence <strong>name</strong>, and let
+Tarantool come up with a unique <strong>numeric identifier</strong> (“sequence id”).</p>
+<p>As well, you can specify several options when creating a new sequence.
+The options determine what value will be generated whenever the sequence is used.</p>
+<div class="section" id="options-for-box-schema-sequence-create">
+<span id="index-box-sequence-options"></span><h3>Options for <code class="docutils literal notranslate"><span class="pre">box.schema.sequence.create()</span></code><a class="headerlink" href="#options-for-box-schema-sequence-create" title="Permalink to this headline">¶</a></h3>
+<div class="table docutils container">
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="33%" />
+<col width="21%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option name</th>
+<th class="head">Type and meaning</th>
+<th class="head">Default</th>
+<th class="head">Examples</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>start</strong></td>
+<td>Integer. The value to generate
+the first time a sequence is
+used</td>
+<td>1</td>
+<td>start=0</td>
+</tr>
+<tr class="row-odd"><td><strong>min</strong></td>
+<td>Integer. Values smaller than
+this cannot be generated</td>
+<td>1</td>
+<td>min=-1000</td>
+</tr>
+<tr class="row-even"><td><strong>max</strong></td>
+<td>Integer. Values larger than
+this cannot be generated</td>
+<td>9223372036854775807</td>
+<td>max=0</td>
+</tr>
+<tr class="row-odd"><td><strong>cycle</strong></td>
+<td>Boolean. Whether to start again
+when values cannot be generated</td>
+<td>false</td>
+<td>cycle=true</td>
+</tr>
+<tr class="row-even"><td><strong>cache</strong></td>
+<td>Integer. The number of values
+to store in a cache</td>
+<td>0</td>
+<td>cache=0</td>
+</tr>
+<tr class="row-odd"><td><strong>step</strong></td>
+<td>Integer. What to add to the
+previous generated value, when
+generating a new value</td>
+<td>1</td>
+<td>step=-1</td>
+</tr>
+<tr class="row-even"><td><strong>if_not_exists</strong></td>
+<td>Boolean. If this is true and
+a sequence with this name exists
+already, ignore other options
+and use the existing values</td>
+<td>false</td>
+<td>if_not_exists=true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Once a sequence exists, it can be altered, dropped, reset, forced to generate
+the next value, or associated with an index.</p>
+<p>For an initial example, we generate a sequence named ‘S’.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.sequence.create(&#39;S&#39;,{min=5, start=5})
+---
+- step: 1
+  id: 5
+  min: 5
+  cache: 0
+  uid: 1
+  max: 9223372036854775807
+  cycle: false
+  name: S
+  start: 5
+...
+</pre></div>
+</div>
+<p>The result shows that the new sequence has all default values,
+except for the two that were specified, <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">start</span></code>.</p>
+<p>Then we get the next value, with the <code class="docutils literal notranslate"><span class="pre">next()</span></code> function.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.sequence.S:next()
+---
+- 5
+...
+</pre></div>
+</div>
+<p>The result is the same as the start value. If we called <code class="docutils literal notranslate"><span class="pre">next()</span></code>
+again, we would get 6 (because the previous value plus the
+step value is 6), and so on.</p>
+<p>Then we create a new table, and say that its primary key may be
+generated from the sequence.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; s=box.schema.space.create(&#39;T&#39;);s:create_index(&#39;I&#39;,{sequence=&#39;S&#39;})
+---
+...
+</pre></div>
+</div>
+<p>Then we insert a tuple, without specifying a value for the primary key.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.T:insert{nil,&#39;other stuff&#39;}
+---
+- [6, &#39;other stuff&#39;]
+...
+</pre></div>
+</div>
+<p>The result is a new tuple where the first field has a value of 6.
+This arrangement, where the system automatically generates the
+values for a primary key, is sometimes called “auto-incrementing”
+or “identity”.</p>
+<p>For syntax and implementation details, see the reference for
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-sequence"><span class="std std-ref">box.schema.sequence</span></a>.</p>
+</div>
+</div>
+<div class="section" id="persistence">
+<span id="index-box-persistence"></span><h2>Persistence<a class="headerlink" href="#persistence" title="Permalink to this headline">¶</a></h2>
+<p>In Tarantool, updates to the database are recorded in the so-called
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write ahead log (WAL)</span></a> files. This ensures data persistence.
+When a power outage occurs or the Tarantool instance is killed incidentally,
+the in-memory database is lost. In this situation, WAL files are used
+to restore the data. Namely, Tarantool reads the WAL files and redoes
+the requests (this is called the “recovery process”). You can change
+the timing of the WAL writer, or turn it off, by setting
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-binary-logging-snapshots-wal-mode"><span class="std std-ref">wal_mode</span></a>.</p>
+<p>Tarantool also maintains a set of <a class="reference internal" href="../../dev_guide/internals_index.html#internals-snapshot"><span class="std std-ref">snapshot files</span></a>.
+These files contain an on-disk copy of the entire data set for a given moment.
+Instead of reading every WAL file since the databases were created, the recovery
+process can load the latest snapshot file and then read only those WAL files
+that were produced after the snapshot file was made. After checkpointing, old
+WAL files can be removed to free up space.</p>
+<p>To force immediate creation of a snapshot file, you can use Tarantool’s
+<a class="reference internal" href="../../reference/reference_lua/box_snapshot.html#box-snapshot"><span class="std std-ref">box.snapshot()</span></a> request. To enable automatic creation
+of snapshot files, you can use Tarantool’s
+<a class="reference internal" href="../../reference/configuration/index.html#book-cfg-checkpoint-daemon"><span class="std std-ref">checkpoint daemon</span></a>. The checkpoint
+daemon sets intervals for forced checkpoints. It makes sure that the states
+of both memtx and vinyl storage engines are synchronized and saved to disk,
+and automatically removes old WAL files.</p>
+<p>Snapshot files can be created even if there is no WAL file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The memtx engine makes only regular checkpoints with the interval set in
+<a class="reference internal" href="../../reference/configuration/index.html#book-cfg-checkpoint-daemon"><span class="std std-ref">checkpoint daemon</span></a> configuration.</p>
+<p class="last">The vinyl engine runs checkpointing in the background at all times.</p>
+</div>
+<p>See the <a class="reference internal" href="../../dev_guide/internals_index.html#internals-data-persistence"><span class="std std-ref">Internals</span></a> section for more details
+about the WAL writer and the recovery process.</p>
+</div>
+<div class="section" id="operations">
+<span id="index-box-operations"></span><h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data-operations">
+<span id="index-box-data-operations"></span><h3>Data operations<a class="headerlink" href="#data-operations" title="Permalink to this headline">¶</a></h3>
+<p>The basic data operations supported in Tarantool are:</p>
+<ul class="simple">
+<li>five data-manipulation operations (INSERT, UPDATE, UPSERT, DELETE, REPLACE), and</li>
+<li>one data-retrieval operation (SELECT).</li>
+</ul>
+<p>All of them are implemented as functions in <a class="reference internal" href="../../reference/reference_lua/box_space.html#box-space"><span class="std std-ref">box.space</span></a> submodule.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a>: Add a new tuple to space ‘tester’.</p>
+<p>The first field, field[1], will be 999 (MsgPack type is <cite>integer</cite>).</p>
+<p>The second field, field[2], will be ‘Taranto’ (MsgPack type is <cite>string</cite>).</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:insert{999, &#39;Taranto&#39;}
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-update"><span class="std std-ref">UPDATE</span></a>: Update the tuple, changing field field[2].</p>
+<p>The clause “{999}”, which has the value to look up in the index of the tuple’s
+primary-key field, is mandatory, because <code class="docutils literal notranslate"><span class="pre">update()</span></code> requests must always have
+a clause that specifies a unique key, which in this case is field[1].</p>
+<p>The clause “{{‘=’, 2, ‘Tarantino’}}” specifies that assignment will happen to
+field[2] with the new value.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:update({999}, {{&#39;=&#39;, 2, &#39;Tarantino&#39;}})
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-upsert"><span class="std std-ref">UPSERT</span></a>: Upsert the tuple, changing field field[2]
+again.</p>
+<p>The syntax of <code class="docutils literal notranslate"><span class="pre">upsert()</span></code> is similar to the syntax of <code class="docutils literal notranslate"><span class="pre">update()</span></code>. However,
+the execution logic of these two requests is different.
+UPSERT is either UPDATE or INSERT, depending on the database’s state.
+Also, UPSERT execution is postponed until after transaction commit, so, unlike
+<code class="docutils literal notranslate"><span class="pre">update()</span></code>, <code class="docutils literal notranslate"><span class="pre">upsert()</span></code> doesn’t return data back.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:upsert({999, &#39;Taranted&#39;}, {{&#39;=&#39;, 2, &#39;Tarantism&#39;}})
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-replace"><span class="std std-ref">REPLACE</span></a>: Replace the tuple, adding a new field.</p>
+<p>This is also possible with the <code class="docutils literal notranslate"><span class="pre">update()</span></code> request, but the <code class="docutils literal notranslate"><span class="pre">update()</span></code>
+request is usually more complicated.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:replace{999, &#39;Tarantella&#39;, &#39;Tarantula&#39;}
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-select"><span class="std std-ref">SELECT</span></a>: Retrieve the tuple.</p>
+<p>The clause “{999}” is still mandatory, although it does not have to mention
+the primary key.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:select{999}
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-delete"><span class="std std-ref">DELETE</span></a>: Delete the tuple.</p>
+<p>In this example, we identify the primary-key field.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:delete{999}
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Summarizing the examples:</p>
+<ul class="simple">
+<li>Functions <code class="docutils literal notranslate"><span class="pre">insert</span></code> and <code class="docutils literal notranslate"><span class="pre">replace</span></code> accept a tuple
+(where a primary key comes as part of the tuple).</li>
+<li>Function <code class="docutils literal notranslate"><span class="pre">upsert</span></code> accepts a tuple
+(where a primary key comes as part of the tuple),
+and also the update operations to execute.</li>
+<li>Function <code class="docutils literal notranslate"><span class="pre">delete</span></code> accepts a full key of any unique index
+(primary or secondary).</li>
+<li>Function <code class="docutils literal notranslate"><span class="pre">update</span></code> accepts a full key of any unique index
+(primary or secondary),
+and also the operations to execute.</li>
+<li>Function <code class="docutils literal notranslate"><span class="pre">select</span></code> accepts any key: primary/secondary, unique/non-unique,
+full/partial.</li>
+</ul>
+<p>See reference on <code class="docutils literal notranslate"><span class="pre">box.space</span></code> for more
+<a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-operations-detailed-examples"><span class="std std-ref">details on using data operations</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Besides Lua, you can use
+<a class="reference internal" href="../connectors/index.html#index-box-connectors"><span class="std std-ref">Perl, PHP, Python or other programming language connectors</span></a>.
+The client server protocol is open and documented.
+See this <a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">annotated BNF</span></a>.</p>
+</div>
+</div>
+<div class="section" id="index-operations">
+<span id="index-box-index-operations"></span><h3>Index operations<a class="headerlink" href="#index-operations" title="Permalink to this headline">¶</a></h3>
+<p>Index operations are automatic: if a data-manipulation request changes a tuple,
+then it also changes the index keys defined for the tuple.</p>
+<p>The simple index-creation operation that we’ve illustrated before is:</p>
+<pre class="highlight literal-block">
+<code class="samp docutils literal notranslate"><span class="pre">box.space.</span><em><span class="pre">space-name</span></em><span class="pre">:create_index('</span><em><span class="pre">index-name</span></em><span class="pre">')</span></code>
+</pre>
+<p>This creates a unique TREE index on the first field of all tuples
+(often called “Field#1”), which is assumed to be numeric.</p>
+<p>The simple SELECT request that we’ve illustrated before is:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span>:extsamp:`box.space.{*{space-name}*}:select({*{value}*})`
+</pre></div>
+</div>
+<p>This looks for a single tuple via the first index. Since the first index
+is always unique, the maximum number of returned tuples will be: one.
+You can call <code class="docutils literal notranslate"><span class="pre">select()</span></code> without arguments, causing all tuples to be returned.</p>
+<p>Let’s continue working with the space ‘tester’ created in the <a class="reference internal" href="../../getting_started/getting_started_db.html#getting-started-db"><span class="std std-ref">“Getting
+started” exercises</span></a> but first modify it:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:format({
+         &gt; {name = &#39;id&#39;, type = &#39;unsigned&#39;},
+         &gt; {name = &#39;band_name&#39;, type = &#39;string&#39;},
+         &gt; {name = &#39;year&#39;, type = &#39;unsigned&#39;},
+         &gt; {name = &#39;rate&#39;, type = &#39;unsigned&#39;, is_nullable=true}})
+---
+...
+</pre></div>
+</div>
+<p>Add the rate to the tuple #1 and #2:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:update(1, {{&#39;=&#39;, 4, 5}})
+---
+- [1, &#39;Roxette&#39;, 1986, 5]
+...
+tarantool&gt; box.space.tester:update(2, {{&#39;=&#39;, 4, 4}})
+---
+- [2, &#39;Scorpions&#39;, 2015, 4]
+...
+</pre></div>
+</div>
+<p>And insert another tuple:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:insert({4, &#39;Roxette&#39;, 2016, 3})
+---
+- [4, &#39;Roxette&#39;, 2016, 3]
+...
+</pre></div>
+</div>
+<p><strong>The existing SELECT variations:</strong></p>
+<ol class="arabic simple">
+<li>The search can use comparisons other than equality.</li>
+</ol>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:select(1, {iterator = &#39;GT&#39;})
+---
+- - [2, &#39;Scorpions&#39;, 2015, 4]
+  - [3, &#39;Ace of Base&#39;, 1993]
+  - [4, &#39;Roxette&#39;, 2016, 3]
+...
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-iterator-types"><span class="std std-ref">comparison operators</span></a> are LT, LE, EQ, REQ, GE, GT
+(for “less than”, “less than or equal”, “equal”, “reversed equal”,
+“greater than or equal”, “greater than” respectively).
+Comparisons make sense if and only if the index type is ‘TREE’.</p>
+<p>This type of search may return more than one tuple; if so, the tuples will be
+in descending order by key when the comparison operator is LT or LE or REQ,
+otherwise in ascending order.</p>
+<ol class="arabic simple" start="2">
+<li>The search can use a secondary index.</li>
+</ol>
+<p>For a primary-key search, it is optional to specify an index name.
+For a secondary-key search, it is mandatory.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester:create_index(&#39;secondary&#39;, {parts = {{field=3, type=&#39;unsigned&#39;}}})
+---
+- unique: true
+  parts:
+  - type: unsigned
+    is_nullable: false
+    fieldno: 3
+  id: 2
+  space_id: 512
+  type: TREE
+  name: secondary
+...
+tarantool&gt; box.space.tester.index.secondary:select({1993})
+---
+- - [3, &#39;Ace of Base&#39;, 1993]
+...
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>The search may be for some key parts starting with the prefix of
+the key. Notice that partial key searches are available only in TREE indexes.</li>
+</ol>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- Create an index with three parts
+tarantool&gt; box.space.tester:create_index(&#39;tertiary&#39;, {parts = {{field = 2, type = &#39;string&#39;}, {field=3, type=&#39;unsigned&#39;}, {field=4, type=&#39;unsigned&#39;}}})
+---
+- unique: true
+  parts:
+  - type: string
+    is_nullable: false
+    fieldno: 2
+  - type: unsigned
+    is_nullable: false
+    fieldno: 3
+  - type: unsigned
+    is_nullable: true
+    fieldno: 4
+  id: 6
+  space_id: 513
+  type: TREE
+  name: tertiary
+...
+-- Make a partial search
+tarantool&gt; box.space.tester.index.tertiary:select({&#39;Scorpions&#39;, 2015})
+---
+- - [2, &#39;Scorpions&#39;, 2015, 4]
+...
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>The search may be for all fields, using a table for the value:</li>
+</ol>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester.index.tertiary:select({&#39;Roxette&#39;, 2016, 3})
+---
+- - [4, &#39;Roxette&#39;, 2016, 3]
+...
+</pre></div>
+</div>
+<p>or the search can be for one field, using a table or a scalar:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.tester.index.tertiary:select({&#39;Roxette&#39;})
+---
+- - [1, &#39;Roxette&#39;, 1986, 5]
+  - [4, &#39;Roxette&#39;, 2016, 3]
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-bitset-and-rtree">
+<h3>Working with BITSET and RTREE<a class="headerlink" href="#working-with-bitset-and-rtree" title="Permalink to this headline">¶</a></h3>
+<p><strong>BITSET example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.space.create(&#39;bitset_example&#39;)
+tarantool&gt; box.space.bitset_example:create_index(&#39;primary&#39;)
+tarantool&gt; box.space.bitset_example:create_index(&#39;bitset&#39;,{unique=false,type=&#39;BITSET&#39;, parts={2,&#39;unsigned&#39;}})
+tarantool&gt; box.space.bitset_example:insert{1,1}
+tarantool&gt; box.space.bitset_example:insert{2,4}
+tarantool&gt; box.space.bitset_example:insert{3,7}
+tarantool&gt; box.space.bitset_example:insert{4,3}
+tarantool&gt; box.space.bitset_example.index.bitset:select(2, {iterator=&#39;BITS_ANY_SET&#39;})
+</pre></div>
+</div>
+<p>The result will be:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>---
+- - [3, 7]
+  - [4, 3]
+...
+</pre></div>
+</div>
+<p>because (7 AND 2) is not equal to 0, and (3 AND 2) is not equal to 0.</p>
+<p><strong>RTREE example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.space.create(&#39;rtree_example&#39;)
+tarantool&gt; box.space.rtree_example:create_index(&#39;primary&#39;)
+tarantool&gt; box.space.rtree_example:create_index(&#39;rtree&#39;,{unique=false,type=&#39;RTREE&#39;, parts={2,&#39;ARRAY&#39;}})
+tarantool&gt; box.space.rtree_example:insert{1, {3, 5, 9, 10}}
+tarantool&gt; box.space.rtree_example:insert{2, {10, 11}}
+tarantool&gt; box.space.rtree_example.index.rtree:select({4, 7, 5, 9}, {iterator = &#39;GT&#39;})
+</pre></div>
+</div>
+<p>The result will be:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>---
+- - [1, [3, 5, 9, 10]]
+...
+</pre></div>
+</div>
+<p>because a rectangle whose corners are at coordinates <code class="docutils literal notranslate"><span class="pre">4,7,5,9</span></code> is entirely
+within a rectangle whose corners are at coordinates <code class="docutils literal notranslate"><span class="pre">3,5,9,10</span></code>.</p>
+<p>Additionally, there exist <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-index-pairs"><span class="std std-ref">index iterator operations</span></a>.
+They can only be used with code in Lua and C/C++. Index iterators are for
+traversing indexes one key at a time, taking advantage of features that are
+specific to an index type, for example evaluating Boolean expressions when
+traversing BITSET indexes, or going in descending order when traversing TREE indexes.</p>
+<p>See also other index operations like <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-alter"><span class="std std-ref">alter()</span></a>
+(modify index) and <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-drop"><span class="std std-ref">drop()</span></a> (delete index) in reference
+for <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index"><span class="std std-ref">box.index</span></a> submodule.</p>
+</div>
+<div class="section" id="complexity-factors">
+<h3>Complexity factors<a class="headerlink" href="#complexity-factors" title="Permalink to this headline">¶</a></h3>
+<p>In reference for <a class="reference internal" href="../../reference/reference_lua/box_space.html#box-space"><span class="std std-ref">box.space</span></a> and <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index"><span class="std std-ref">box.index</span></a>
+submodules, there are notes about which complexity factors might affect the
+resource usage of each function.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Complexity
+factor</th>
+<th class="head">Effect</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Index size</td>
+<td>The number of index keys is the same as the number
+of tuples in the data set. For a TREE index, if
+there are more keys, then the lookup time will be
+greater, although of course the effect is not
+linear. For a HASH index, if there are more keys,
+then there is more RAM used, but the number of
+low-level steps tends to remain constant.</td>
+</tr>
+<tr class="row-odd"><td>Index type</td>
+<td>Typically, a HASH index is faster than a TREE index
+if the number of tuples in the space is greater
+than one.</td>
+</tr>
+<tr class="row-even"><td>Number of indexes
+accessed</td>
+<td><p class="first">Ordinarily, only one index is accessed to retrieve
+one tuple. But to update the tuple, there must be N
+accesses if the space has N different indexes.</p>
+<p class="last">Note re storage engine: Vinyl optimizes away such
+accesses if secondary index fields are unchanged by
+the update. So, this complexity factor applies only to
+memtx, since it always makes a full-tuple copy on every
+update.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>Number of tuples
+accessed</td>
+<td>A few requests, for example SELECT, can retrieve
+multiple tuples. This factor is usually less
+important than the others.</td>
+</tr>
+<tr class="row-even"><td>WAL settings</td>
+<td>The important setting for the write-ahead log is
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-binary-logging-snapshots-wal-mode"><span class="std std-ref">wal_mode</span></a>.
+If the setting causes no writing or
+delayed writing, this factor is unimportant. If the
+setting causes every data-change request to wait
+for writing to finish on a slow device, this factor
+is more important than all the others.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

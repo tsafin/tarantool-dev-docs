@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Function box.snapshot &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Function <cite>box.snapshot</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_snapshot.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="function-box-snapshot">
+<span id="box-snapshot"></span><h1>Function <cite>box.snapshot</cite><a class="headerlink" href="#function-box-snapshot" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="box.snapshot">
+<code class="descclassname">box.</code><code class="descname">snapshot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Memtx</strong></p>
+<p>Take a snapshot of all data and store it in
+<a class="reference internal" href="../configuration/index.html#cfg-basic-memtx-dir"><span class="std std-ref">memtx_dir</span></a><code class="samp docutils literal notranslate"><span class="pre">/</span><em><span class="pre">&lt;latest-lsn&gt;</span></em><span class="pre">.snap</span></code>.
+To take a snapshot, Tarantool first enters the delayed garbage collection
+mode for all data. In this mode, the
+<a class="reference internal" href="../configuration/index.html#cfg-checkpoint-daemon-garbage-collector"><span class="std std-ref">Tarantool garbage collector</span></a>
+will not remove files which were created before the snapshot started, it will
+not remove them until the snapshot has finished. To preserve consistency of
+the primary key, used to iterate over tuples, a copy-on-write technique is
+employed. If the master process changes part of a primary key, the
+corresponding process page is split, and the snapshot process obtains an old
+copy of the page.
+In effect, the snapshot process uses multi-version concurrency control
+in order to avoid copying changes which are superseded while it is running.</p>
+<p>Since a snapshot is written sequentially, you can expect a very high write
+performance (averaging to 80MB/second on modern disks), which means an average
+database instance gets saved in a matter of minutes.
+You may restrict the speed by changing
+<a class="reference internal" href="../configuration/index.html#cfg-binary-logging-snapshots-snap-io-rate-limit"><span class="std std-ref">snap_io_rate_limit</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As long as there are any changes to the parent index memory through
+concurrent updates, there are going to be page splits, and therefore you
+need to have some extra free memory to run this command. 10% of
+<a class="reference internal" href="../configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a> is, on average, sufficient.
+This statement waits until a snapshot is taken and returns operation result.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>Change notice:</strong> Prior to Tarantool version 1.6.6, the snapshot process
+caused a fork, which could cause occasional latency spikes. Starting with
+Tarantool version 1.6.6, the snapshot process creates a consistent
+read view and this view is written to the snapshot file by a separate thread
+(the “Write Ahead Log” thread).</p>
+<p class="last">Although <code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code> does not cause a fork, there is a separate fiber
+which may produce snapshots at regular intervals – see the discussion of
+the <a class="reference internal" href="../configuration/index.html#book-cfg-checkpoint-daemon"><span class="std std-ref">checkpoint daemon</span></a>.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.info.version
+---
+- 1.7.0-1216-g73f7154
+...
+tarantool&gt; box.snapshot()
+---
+- ok
+...
+tarantool&gt; box.snapshot()
+---
+- error: can&#39;t save snapshot, errno 17 (File exists)
+...
+</pre></div>
+</div>
+<p>Taking a snapshot does not cause the server to start a new write-ahead log.
+Once a snapshot is taken, old WALs can be deleted as long as all replicated
+data is up to date. But the WAL which was current at the time <code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code>
+started must be kept for recovery, since it still contains log records
+written after the start of <code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code>.</p>
+<p>An alternative way to save a snapshot is to send a SIGUSR1 signal to the instance.
+While this approach could be handy, it is not recommended for use
+in automation: a signal provides no way to find out whether the snapshot
+was taken successfully or not.</p>
+<p><strong>Vinyl</strong></p>
+<p>In vinyl, inserted data is stacked in memory until the limit, set in the
+<a class="reference internal" href="../configuration/index.html#cfg-storage-vinyl-memory"><span class="std std-ref">vinyl_memory</span></a> parameter, is reached. Then
+vinyl automatically dumps it to the disc. <code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code> forces
+this dump in order to have the ability to recover from this checkpoint.
+The snapshot files are stored in <code class="samp docutils literal notranslate"><em><span class="pre">space_id</span></em><span class="pre">/</span><em><span class="pre">index_id</span></em><span class="pre">/*.run</span></code>.
+Thus, strictly all the data that was written at the time of LSN of the
+checkpoint is in the <code class="docutils literal notranslate"><span class="pre">*.run</span></code> files on the disk, and all operations that happened
+after the checkpoint will be written in the <code class="docutils literal notranslate"><span class="pre">*.xlog</span></code>. All dump files created
+by <code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code> are consistent and have the same LSN as checkpoint.</p>
+<p>At the checkpoint vinyl also rotates the metadata log <code class="docutils literal notranslate"><span class="pre">*.vylog</span></code>, containing
+data manipulation operations like “create file” and “delete file”. It goes
+through the log, removes duplicating operations from the memory and creates
+a new <code class="docutils literal notranslate"><span class="pre">*.vylog</span></code> file, giving it the name according to the
+<a class="reference internal" href="box_introspection.html#box-introspection-box-info"><span class="std std-ref">vclock</span></a> of the new checkpoint, with
+“create” operations only. This procedure cleans <code class="docutils literal notranslate"><span class="pre">*.vylog</span></code> and is useful for
+recovery because the name of the log is the same as the checkpoint signature.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

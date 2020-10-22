@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick start guide &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Quick start guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../../_sources/doc/doc/reference/reference_rock/vshard/vshard_quick.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start-guide">
+<span id="vshard-quick-start"></span><h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<p>For installation instructions, check out the <a class="reference internal" href="vshard_admin.html#vshard-install"><span class="std std-ref">vshard installation manual</span></a>.</p>
+<p>For a pre-configured development cluster, check out the <code class="docutils literal notranslate"><span class="pre">example/</span></code> directory in
+the <a class="reference external" href="https://github.com/tarantool/vshard/">vshard repository</a>.
+This example includes 5 Tarantool instances and 2 replica sets:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">router_1</span></code> – a <code class="docutils literal notranslate"><span class="pre">router</span></code> instance</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage_1_a</span></code> – a <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance, the <strong>master</strong> of the <strong>first</strong> replica set</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage_1_b</span></code> – a <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance, the <strong>replica</strong> of the <strong>first</strong> replica set</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage_2_a</span></code> – a <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance, the <strong>master</strong> of the <strong>second</strong> replica set</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage_2_b</span></code> – a <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance, the <strong>replica</strong> of the <strong>second</strong> replica set</li>
+</ul>
+<p>All instances are managed using the <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> utility which comes with Tarantool.</p>
+<p>Change the directory to <code class="docutils literal notranslate"><span class="pre">example/</span></code> and use <code class="docutils literal notranslate"><span class="pre">make</span></code> to run the development cluster:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> example/
+<span class="gp">$</span> make
+<span class="go">tarantoolctl stop storage_1_a  # stop the first storage instance</span>
+<span class="go">Stopping instance storage_1_a...</span>
+<span class="go">tarantoolctl stop storage_1_b</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">rm -rf data/</span>
+<span class="go">tarantoolctl start storage_1_a # start the first storage instance</span>
+<span class="go">Starting instance storage_1_a...</span>
+<span class="go">Starting configuration of replica 8a274925-a26d-47fc-9e1b-af88ce939412</span>
+<span class="go">I am master</span>
+<span class="go">Taking on replicaset master role...</span>
+<span class="go">Run console at unix/:./data/storage_1_a.control</span>
+<span class="go">started</span>
+<span class="go">mkdir ./data/storage_1_a</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">tarantoolctl start router_1 # start the router</span>
+<span class="go">Starting instance router_1...</span>
+<span class="go">Starting router configuration</span>
+<span class="go">Calling box.cfg()...</span>
+<span class="go">&lt;...&gt;</span>
+<span class="go">Run console at unix/:./data/router_1.control</span>
+<span class="go">started</span>
+<span class="go">mkdir ./data/router_1</span>
+<span class="go">Waiting cluster to start</span>
+<span class="go">echo &quot;vshard.router.bootstrap()&quot; | tarantoolctl enter router_1</span>
+<span class="go">connected to unix/:./data/router_1.control</span>
+<span class="go">unix/:./data/router_1.control&gt; vshard.router.bootstrap()</span>
+<span class="go">---</span>
+<span class="go">- true</span>
+<span class="go">...</span>
+<span class="go">unix/:./data/router_1.control&gt;</span>
+<span class="go">tarantoolctl enter router_1 # enter the admin console</span>
+<span class="go">connected to unix/:./data/router_1.control</span>
+<span class="go">unix/:./data/router_1.control&gt;</span>
+</pre></div>
+</div>
+<p>Some <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> commands:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">start</span> <span class="pre">router_1</span></code> – start the router instance</li>
+<li><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">enter</span> <span class="pre">router_1</span></code>  – enter the admin console</li>
+</ul>
+<p>The full list of <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> commands for managing Tarantool instances is
+available in the <a class="reference internal" href="../../tarantoolctl.html#tarantoolctl"><span class="std std-ref">tarantoolctl reference</span></a>.</p>
+<p>Essential <code class="docutils literal notranslate"><span class="pre">make</span></code> commands you need to know:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">start</span></code> – start all Tarantool instances</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">stop</span></code> – stop all Tarantool instances</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">logcat</span></code> – show logs from all instances</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">enter</span></code> – enter the admin console on <code class="docutils literal notranslate"><span class="pre">router_1</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code> – clean up all persistent data</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> – run the test suite (you can also run <code class="docutils literal notranslate"><span class="pre">test-run.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">test</span></code> directory)</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span></code> – execute <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">stop</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">enter</span></code></li>
+</ul>
+<p>For example, to start all instances, use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">start</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> make start
+<span class="gp">$</span> ps x<span class="p">|</span>grep tarantool
+<span class="go">46564   ??  Ss     0:00.34 tarantool storage_1_a.lua &lt;running&gt;</span>
+<span class="go">46566   ??  Ss     0:00.19 tarantool storage_1_b.lua &lt;running&gt;</span>
+<span class="go">46568   ??  Ss     0:00.35 tarantool storage_2_a.lua &lt;running&gt;</span>
+<span class="go">46570   ??  Ss     0:00.20 tarantool storage_2_b.lua &lt;running&gt;</span>
+<span class="go">46572   ??  Ss     0:00.25 tarantool router_1.lua &lt;running&gt;</span>
+</pre></div>
+</div>
+<p>To perform commands in the admin console, use the router’s
+<a class="reference internal" href="vshard_ref.html#vshard-api-reference-router-public-api"><span class="std std-ref">public API</span></a>:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>unix/:./data/router_1.control&gt; vshard.router.info()
+---
+- replicasets:
+    ac522f65-aa94-4134-9f64-51ee384f1a54:
+      replica: &amp;0
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3303
+        uuid: 1e02ae8a-afc0-4e91-ba34-843a356b8ed7
+      uuid: ac522f65-aa94-4134-9f64-51ee384f1a54
+      master: *0
+    cbf06940-0790-498b-948d-042b62cf3d29:
+      replica: &amp;1
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3301
+        uuid: 8a274925-a26d-47fc-9e1b-af88ce939412
+      uuid: cbf06940-0790-498b-948d-042b62cf3d29
+      master: *1
+  bucket:
+    unreachable: 0
+    available_ro: 0
+    unknown: 0
+    available_rw: 3000
+  status: 0
+  alerts: []
+...
+</pre></div>
+</div>
+<div class="section" id="sample-configuration">
+<span id="vshard-config-cluster-example"></span><h2>Sample configuration<a class="headerlink" href="#sample-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The configuration of a simple sharded cluster can look like this:</p>
+<div class="highlight-kconfig notranslate"><div class="highlight"><pre><span></span>local cfg <span class="o">=</span> {
+    memtx_memory <span class="o">=</span> <span class="mi">100</span> * <span class="mi">1024</span> * <span class="mi">1024</span>,
+    replication_connect_quorum <span class="o">=</span> <span class="mi">0</span>,
+    bucket_count <span class="o">=</span> <span class="mi">10000</span>,
+    rebalancer_disbalance_threshold <span class="o">=</span> <span class="mi">10</span>,
+    rebalancer_max_receiving <span class="o">=</span> <span class="mi">100</span>,
+    sharding <span class="o">=</span> {
+        [&#39;cbf06940-0790-498b-948d-042b62cf3d29&#39;] <span class="o">=</span> {
+            replicas <span class="o">=</span> {
+                [&#39;8a274925-a26d-47fc-9e1b-af88ce939412&#39;] <span class="o">=</span> {
+                    uri <span class="o">=</span> <span class="s1">&#39;storage:storage@127.0.0.1:3301&#39;</span>,
+                    name <span class="o">=</span> <span class="s1">&#39;storage_1_a&#39;</span>,
+                    master <span class="o">=</span> true
+                },
+                [&#39;3de2e3e1-9ebe-4d0d-abb1-26d301b84633&#39;] <span class="o">=</span> {
+                    uri <span class="o">=</span> <span class="s1">&#39;storage:storage@127.0.0.1:3302&#39;</span>,
+                    name <span class="o">=</span> <span class="s1">&#39;storage_1_b&#39;</span>
+                }
+            },
+        },
+        [&#39;ac522f65-aa94-4134-9f64-51ee384f1a54&#39;] <span class="o">=</span> {
+            replicas <span class="o">=</span> {
+                [&#39;1e02ae8a-afc0-4e91-ba34-843a356b8ed7&#39;] <span class="o">=</span> {
+                    uri <span class="o">=</span> <span class="s1">&#39;storage:storage@127.0.0.1:3303&#39;</span>,
+                    name <span class="o">=</span> <span class="s1">&#39;storage_2_a&#39;</span>,
+                    master <span class="o">=</span> true
+                },
+                [&#39;001688c3-66f8-4a31-8e19-036c17d489c2&#39;] <span class="o">=</span> {
+                    uri <span class="o">=</span> <span class="s1">&#39;storage:storage@127.0.0.1:3304&#39;</span>,
+                    name <span class="o">=</span> <span class="s1">&#39;storage_2_b&#39;</span>
+                }
+            },
+        },
+    },
+}
+</pre></div>
+</div>
+<p>This cluster includes one <code class="docutils literal notranslate"><span class="pre">router</span></code> instance and two <code class="docutils literal notranslate"><span class="pre">storage</span></code> instances.
+Each <code class="docutils literal notranslate"><span class="pre">storage</span></code> instance includes one master and one replica.
+The <code class="docutils literal notranslate"><span class="pre">sharding</span></code> field defines the logical topology of a sharded Tarantool cluster.
+All the other fields are passed to <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> as they are, without modifications.
+See the <a class="reference internal" href="vshard_ref.html#vshard-config-reference"><span class="std std-ref">Configuration reference</span></a> section for details.</p>
+<p>On routers, call <code class="docutils literal notranslate"><span class="pre">vshard.router.cfg(cfg)</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">cfg</span><span class="p">.</span><span class="n">listen</span> <span class="o">=</span> <span class="mi">3300</span>
+
+<span class="c1">-- Start the database with sharding</span>
+<span class="n">vshard</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;vshard&#39;</span><span class="p">)</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">router</span><span class="p">.</span><span class="n">cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On storages, call <code class="docutils literal notranslate"><span class="pre">vshard.storage.cfg(cfg,</span> <span class="pre">instance_uuid)</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Get instance name</span>
+<span class="kd">local</span> <span class="n">MY_UUID</span> <span class="o">=</span> <span class="s2">&quot;de0ea826-e71d-4a82-bbf3-b04a6413e417&quot;</span>
+
+<span class="c1">-- Call a configuration provider</span>
+<span class="kd">local</span> <span class="n">cfg</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;localcfg&#39;</span><span class="p">)</span>
+
+<span class="c1">-- Start the database with sharding</span>
+<span class="n">vshard</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;vshard&#39;</span><span class="p">)</span>
+<span class="n">vshard</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="n">cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">MY_UUID</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">vshard.storage.cfg()</span></code> automatically calls <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> and configures the listen
+port and replication parameters.</p>
+<p>For a sample configuration, see <code class="docutils literal notranslate"><span class="pre">router.lua</span></code> and <code class="docutils literal notranslate"><span class="pre">storage.lua</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">example/</span></code> directory of the <a class="reference external" href="https://github.com/tarantool/vshard">vshard repository</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

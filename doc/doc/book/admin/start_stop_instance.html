@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Starting/stopping an instance &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Starting/stopping an instance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/start_stop_instance.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="starting-stopping-an-instance">
+<span id="admin-start-stop-instance"></span><h1>Starting/stopping an instance<a class="headerlink" href="#starting-stopping-an-instance" title="Permalink to this headline">¶</a></h1>
+<p>While a Lua application is executed by Tarantool, an instance file is executed
+by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> which is a Tarantool script.</p>
+<p>Here is what <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> does when you issue the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl start &lt;instance_name&gt;
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p class="first">Read and parse the command line arguments. The last argument, in our case,
+contains an instance name.</p>
+</li>
+<li><p class="first">Read and parse its own configuration file. This file contains <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>
+defaults, like the path to the directory where instances should be searched
+for.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> is invoked by root, it looks for a configuration file in
+<code class="docutils literal notranslate"><span class="pre">/etc/default/tarantool</span></code>. When <code class="docutils literal notranslate"><span class="pre">tarantool</span></code> is invoked by a local (non-root)
+user, it looks for a configuration file first in the current directory
+(<code class="docutils literal notranslate"><span class="pre">$PWD/.tarantoolctl</span></code>), and then in the current user’s home directory
+(<code class="docutils literal notranslate"><span class="pre">$HOME/.config/tarantool/tarantool</span></code>). If no configuration file is found
+there, or in the <code class="docutils literal notranslate"><span class="pre">/usr/local/etc/default/tarantool</span></code> file,
+then <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> falls back to
+<a class="reference internal" href="instance_config.html#admin-tarantoolctl-config-file"><span class="std std-ref">built-in defaults</span></a>.</p>
+</li>
+<li><p class="first">Look up the instance file in the instance directory, for example
+<code class="docutils literal notranslate"><span class="pre">/etc/tarantool/instances.enabled</span></code>. To build the instance file path,
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> takes the instance name, prepends the instance directory and
+appends “.lua” extension to the instance file.</p>
+</li>
+<li><p class="first">Override <a class="reference internal" href="../../reference/reference_lua/box_introspection.html#box-introspection-box-cfg"><span class="std std-ref">box.cfg{}</span></a> function to pre-process
+its parameters and ensure that instance paths are pointing to the paths
+defined in the <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> configuration file. For example, if the
+configuration file specifies that instance work directory must be in
+<code class="docutils literal notranslate"><span class="pre">/var/tarantool</span></code>, then the new implementation of <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> ensures that
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-work-dir"><span class="std std-ref">work_dir</span></a> parameter in <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">/var/tarantool/&lt;instance_name&gt;</span></code>, regardless of what the path is set to in
+the instance file itself.</p>
+</li>
+<li><p class="first">Create a so-called “instance control file”. This is a Unix socket with Lua
+console attached to it. This file is used later by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> to query
+the instance state, send commands to the instance and so on.</p>
+</li>
+<li><p class="first">Set the TARANTOOLCTL environment variable to ‘true’. This allows the user to
+know that the instance was started by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.</p>
+</li>
+<li><p class="first">Finally, use Lua <code class="docutils literal notranslate"><span class="pre">dofile</span></code> command to execute the instance file.</p>
+</li>
+</ol>
+<p>If you start an instance using <code class="docutils literal notranslate"><span class="pre">systemd</span></code> tools, like this (the instance name
+is <code class="docutils literal notranslate"><span class="pre">my_app</span></code>):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> systemctl start tarantool@my_app
+<span class="gp">$</span> ps axuf<span class="p">|</span>grep my_app
+<span class="go">taranto+  5350  1.3  0.3 1448872 7736 ?        Ssl  20:05   0:28 tarantool my_app.lua &lt;running&gt;</span>
+</pre></div>
+</div>
+<p>… this actually calls <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> like in case of
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">start</span> <span class="pre">my_app</span></code>.</p>
+<p>To check the instance file for syntax errors prior to starting <code class="docutils literal notranslate"><span class="pre">my_app</span></code>
+instance, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl check my_app
+</pre></div>
+</div>
+<p>To enable <code class="docutils literal notranslate"><span class="pre">my_app</span></code> instance for auto-load during system startup, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> systemctl <span class="nb">enable</span> tarantool@my_app
+</pre></div>
+</div>
+<p>To stop a running <code class="docutils literal notranslate"><span class="pre">my_app</span></code> instance, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl stop my_app
+<span class="gp">$</span> <span class="c1"># - OR -</span>
+<span class="gp">$</span> systemctl stop tarantool@my_app
+</pre></div>
+</div>
+<p>To restart (i.e. stop and start) a running <code class="docutils literal notranslate"><span class="pre">my_app</span></code> instance, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl restart my_app
+<span class="gp">$</span> <span class="c1"># - OR -</span>
+<span class="gp">$</span> systemctl restart tarantool@my_app
+</pre></div>
+</div>
+<div class="section" id="running-tarantool-locally">
+<span id="admin-start-stop-instance-running-locally"></span><h2>Running Tarantool locally<a class="headerlink" href="#running-tarantool-locally" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you may need to run a Tarantool instance locally, e.g. for test
+purposes. Let’s configure a local instance, then start and monitor it with
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.</p>
+<p>First, we create a sandbox directory on the user’s path:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> mkdir ~/tarantool_test
+</pre></div>
+</div>
+<p>… and set default <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> configuration in
+<code class="docutils literal notranslate"><span class="pre">$HOME/.config/tarantool/tarantool</span></code>. Let the file contents be:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">default_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">pid_file</span>  <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test/my_app.pid&quot;</span><span class="p">,</span>
+    <span class="n">wal_dir</span>   <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test&quot;</span><span class="p">,</span>
+    <span class="n">snap_dir</span>  <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test&quot;</span><span class="p">,</span>
+    <span class="n">vinyl_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test&quot;</span><span class="p">,</span>
+    <span class="n">log</span>       <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test/log&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">instance_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/user/tarantool_test&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Specify a full path to the user’s home directory instead of “~/”.</li>
+<li>Omit <code class="docutils literal notranslate"><span class="pre">username</span></code> parameter. <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> normally doesn’t have
+permissions to switch current user when invoked by a local user. The
+instance will be running under ‘admin’.</li>
+</ul>
+</div>
+<p>Next, we create the instance file <code class="docutils literal notranslate"><span class="pre">~/tarantool_test/my_app.lua</span></code>. Let the file
+contents be:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span> <span class="o">=</span> <span class="mi">3301</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;Gx5!&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span><span class="s1">&#39;read,write,execute&#39;</span><span class="p">,</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,{})</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">while</span> <span class="mi">0</span> <span class="o">==</span> <span class="mi">0</span> <span class="kr">do</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;insert &#39;</span> <span class="o">..</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tester</span><span class="p">:</span><span class="n">insert</span><span class="p">{</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;my_app tuple&#39;</span><span class="p">}</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Let’s verify our instance file by starting it without <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> first:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~/tarantool_test
+<span class="gp">$</span> tarantool my_app.lua
+<span class="go">2017-04-06 10:42:15.762 [54085] main/101/my_app.lua C&gt; version 1.7.3-489-gd86e36d5b</span>
+<span class="go">2017-04-06 10:42:15.763 [54085] main/101/my_app.lua C&gt; log level 5</span>
+<span class="go">2017-04-06 10:42:15.764 [54085] main/101/my_app.lua I&gt; mapping 268435456 bytes for tuple arena...</span>
+<span class="go">2017-04-06 10:42:15.774 [54085] iproto/101/main I&gt; binary: bound to [::]:3301</span>
+<span class="go">2017-04-06 10:42:15.774 [54085] main/101/my_app.lua I&gt; initializing an empty data directory</span>
+<span class="go">2017-04-06 10:42:15.789 [54085] snapshot/101/main I&gt; saving snapshot `./00000000000000000000.snap.inprogress&#39;</span>
+<span class="go">2017-04-06 10:42:15.790 [54085] snapshot/101/main I&gt; done</span>
+<span class="go">2017-04-06 10:42:15.791 [54085] main/101/my_app.lua I&gt; vinyl checkpoint done</span>
+<span class="go">2017-04-06 10:42:15.791 [54085] main/101/my_app.lua I&gt; ready to accept requests</span>
+<span class="go">insert 1</span>
+<span class="go">insert 2</span>
+<span class="go">insert 3</span>
+<span class="go">&lt;...&gt;</span>
+</pre></div>
+</div>
+<p>Now we tell <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> to start the Tarantool instance:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl start my_app
+</pre></div>
+</div>
+<p>Expect to see messages indicating that the instance has started. Then:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ls -l ~/tarantool_test/my_app
+</pre></div>
+</div>
+<p>Expect to see the .snap file and the .xlog file. Then:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> less ~/tarantool_test/log/my_app.log
+</pre></div>
+</div>
+<p>Expect to see the contents of <code class="docutils literal notranslate"><span class="pre">my_app</span></code>‘s log, including error messages, if
+any. Then:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl enter my_app
+<span class="go">tarantool&gt; box.cfg{}</span>
+<span class="go">tarantool&gt; console = require(&#39;console&#39;)</span>
+<span class="go">tarantool&gt; console.connect(&#39;localhost:3301&#39;)</span>
+<span class="go">tarantool&gt; box.space.tester:select({0}, {iterator = &#39;GE&#39;})</span>
+</pre></div>
+</div>
+<p>Expect to see several tuples that <code class="docutils literal notranslate"><span class="pre">my_app</span></code> has created.</p>
+<p>Stop now. A polite way to stop <code class="docutils literal notranslate"><span class="pre">my_app</span></code> is with <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>, thus we say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl stop my_app
+</pre></div>
+</div>
+<p>Finally, we make a cleanup.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> rm -R tarantool_test
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

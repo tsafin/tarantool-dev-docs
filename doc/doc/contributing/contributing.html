@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to be involved in Tarantool &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Tarantool internals" href="../../../internals/source/index.html" />
+    <link rel="prev" title="Contributing" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributing</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">How to be involved in Tarantool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-tarantool">What is Tarantool?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-get-help">How to get help?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-leave-feedback-idea-or-suggestion">How to leave feedback, idea or suggestion?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute">How to contribute?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tarantool-ecosystem">Tarantool Ecosystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#you-have-a-problem-in-documentation-how-to-tell-about-it-and-how-to-fix-it">You have a problem in documentation. How to tell about it and how to fix it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute-to-modules">How to contribute to modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#want-to-contribute-to-an-existing-module">Want to contribute to an existing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#want-to-create-a-new-module">Want to create a new module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute-to-tarantool-core">How to contribute to Tarantool Core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-write-a-test">How to write a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute-to-language-connectors">How to contribute to language connectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute-to-tools">How to contribute to tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-become-a-maintainer">How to become a maintainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dev_guide/build_contribute_index.html">Build and contribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev_guide/guidelines_index.html">Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Contributing</a> &raquo;</li>
+        
+      <li>How to be involved in Tarantool</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/contributing/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-be-involved-in-tarantool">
+<span id="contributing"></span><h1>How to be involved in Tarantool<a class="headerlink" href="#how-to-be-involved-in-tarantool" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-tarantool">
+<h2>What is Tarantool?<a class="headerlink" href="#what-is-tarantool" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool is an open source database that can store everything in RAM.
+Use Tarantool as a cache with the ability to save data to disk.
+Tarantool serves up to a million requests per second, secondary index searches,
+and SQL support.</p>
+<p>In Tarantool, you can execute code alongside data.
+This allows for faster operations.
+Implement any business logic in Lua.
+Get rid of stale entries, sync with other data sources, implement an HTTP service.</p>
+<p>Go to <a class="reference internal" href="../getting_started/index.html#getting-started"><span class="std std-ref">Getting Started</span></a> and try Tarantool.</p>
+</div>
+<div class="section" id="how-to-get-help">
+<h2>How to get help?<a class="headerlink" href="#how-to-get-help" title="Permalink to this headline">¶</a></h2>
+<p>We have a <a class="reference external" href="https://t.me/tarantool_contrib">special Telegram chat</a>
+for contributors.
+We speak Russian and English in the chat.</p>
+<p>This is the easiest way to get your questions answered.
+Many people are afraid to ask questions because they think they are
+“wasting the experts’ time,” but no one really thinks so.
+Contributors are important to us.</p>
+<p>Also we have a
+<a class="reference external" href="https://stackoverflow.com/questions/tagged/tarantool">Stackoverflow tag</a>.</p>
+<p>Join the chat and ask questions.</p>
+</div>
+<div class="section" id="how-to-leave-feedback-idea-or-suggestion">
+<h2>How to leave feedback, idea or suggestion?<a class="headerlink" href="#how-to-leave-feedback-idea-or-suggestion" title="Permalink to this headline">¶</a></h2>
+<p>You can leave your feedback or share ideas in different ways:</p>
+<ul class="simple">
+<li><strong>The simplest way</strong> is to write
+<a class="reference external" href="https://docs.google.com/forms/d/1iwBj_2in-rBIYEcPeeVPQa4JfUIU_m14IUbAK4NojIE/edit?usp=sharing">here</a>.
+All you need to do is fill in one product comment field and send it to us.
+If you don’t mind – leave your email address.
+If you wish, we can involve you in the product development process.</li>
+<li><strong>A more technical way</strong> is to create a ticket on Github.
+If you have a suggestion for a new feature or information about a bug,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/new">follow the link</a>
+and leave a ticket.
+The link leads to the <code class="docutils literal notranslate"><span class="pre">tarantool/tarantool</span></code> repository.
+For any other projects on Github select “Issues” - “New issue”.</li>
+</ul>
+<p>See <a class="reference external" href="https://github.com/tarantool/tarantool/issues/5046">an example of a feature request</a>.</p>
+<p>You can chat with the team in the general product chat.
+They are divided by language:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://t.me/tarantoolru">Russian-speaking</a></li>
+<li><a class="reference external" href="https://t.me/tarantool">English-speaking</a></li>
+</ul>
+<p>If this communication channel is inconvenient for you or there is simply no Telegram,
+you can leave your comment on <a class="reference external" href="http://www.tarantool.io">tarantool.io</a>.
+Fill out the form at the bottom of the site and leave your email.
+We read each request and respond to them usually within 2 days.</p>
+</div>
+<div class="section" id="how-to-contribute">
+<h2>How to contribute?<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h2>
+<p>There are many ways to contribute to Tarantool:</p>
+<ul class="simple">
+<li>Code – Contribute to the code.
+We have components written in C, Lua, Python, Go, and other languages.</li>
+<li>Write – Improve documentation, write blogposts, create tutorials or solution pages.</li>
+<li>Q&amp;A – Share your acknowledgments at Stackoverflow with tag
+<a class="reference external" href="https://stackoverflow.com/questions/tagged/tarantool">#tarantool</a>.</li>
+<li>Spread the word – Share your accomplishments in social media using the
+<code class="docutils literal notranslate"><span class="pre">#tarantool</span></code> hashtags (or CC <code class="docutils literal notranslate"><span class="pre">&#64;tarantooldb</span></code> in Twitter).</li>
+</ul>
+</div>
+<div class="section" id="tarantool-ecosystem">
+<h2>Tarantool Ecosystem<a class="headerlink" href="#tarantool-ecosystem" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool has a large ecosystem of tools around the product itself.</p>
+<p>We divide the Tarantool ecosystem into 4 types:</p>
+<ul class="simple">
+<li>Tarantool itself.</li>
+<li>Modules for Tarantool. They can be written in C and Lua.</li>
+<li>Connectors for programming languages.</li>
+<li>Applied tools. For example, Kubernetes operator, Ansible role for deployment,
+or <code class="docutils literal notranslate"><span class="pre">tarantool-admin</span></code> utility for viewing data in Tarantool via GUI.</li>
+</ul>
+<p>First-time tasks can be easily found in the issues section of any repository by
+the “good first issue” tag. These are beginner to intermediate tasks that will
+help you get comfortable with the tool.</p>
+<p>See the <a class="reference external" href="https://github.com/tarantool/tarantool/labels/good%20first%20issue">list of tasks</a>
+for the <code class="docutils literal notranslate"><span class="pre">tarantool/tarantool</span></code> repository.</p>
+<p>For each repository we have a queue for reviewing,
+and reviewing your changes can be delayed.
+We try to give the first answer within two days.
+Depending on the ticket and its complexity, the review time may take a week or more.</p>
+<p>Please do not hesitate to tag the maintainer in your Github ticket.</p>
+<p>Read further about the contribution to each of the blocks.</p>
+</div>
+<div class="section" id="you-have-a-problem-in-documentation-how-to-tell-about-it-and-how-to-fix-it">
+<h2>You have a problem in documentation. How to tell about it and how to fix it?<a class="headerlink" href="#you-have-a-problem-in-documentation-how-to-tell-about-it-and-how-to-fix-it" title="Permalink to this headline">¶</a></h2>
+<p>There are several ways to improve the documentation:</p>
+<ul class="simple">
+<li><strong>The easiest one</strong> is to leave your comment on the web documentation page.
+All you need to do is click on the red button in the bottom right corner
+of the page and fill in the comment field. You can point out an error,
+provide feedback on the current article, or suggest changes.
+We review each comment and take it to work.
+This form is built into the documentation on the Tarantool website.</li>
+<li><strong>Advanced</strong> – All Tarantool documentation tasks are
+<a class="reference external" href="https://github.com/tarantool/doc/issues">in the repository</a>.
+Here you can take any tasks and suggest your changes.
+Our documentation is written in the <a class="reference external" href="https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html">ReST format</a>.
+<a class="reference internal" href="../dev_guide/documentation_guidelines.html#documentation-guidelines"><span class="std std-ref">Here</span></a> is our Style Guide for writers.
+After making the change, you need to build the documentation locally and
+see how it was laid out. This is done automatically in Docker.
+<a class="reference external" href="https://github.com/tarantool/doc">Read more in the README of the tarantool/doc repository.</a></li>
+</ul>
+<p>Some projects have their documentation in the code repository.
+For example, <a class="reference external" href="https://github.com/tarantool/cartridge/">Tarantool Cartridge</a>.
+This is done on purpose, so the developers themselves can update it faster.
+Instructions for building such documentation sets are in the code repository.</p>
+<p>If you find that the documentation in the README of a module or, for example,
+a connector is incomplete or wrong, the best way to influence this is to fix it
+yourself. Clone the repository, fix the bug, and suggest changes as a PR.
+It will take you 5 minutes and will help the whole community.</p>
+<p>If for some reason you cannot fix it, create a ticket in this repository
+and report the error. Such errors are fixed quickly.</p>
+</div>
+<div class="section" id="how-to-contribute-to-modules">
+<h2>How to contribute to modules<a class="headerlink" href="#how-to-contribute-to-modules" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool is a database with an embedded application server.
+You can write any code in C and Lua and pack it in distributable modules.</p>
+<p>Here are examples of official modules:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/http">HTTP server</a> – HTTP server implementation
+with middleware support.</li>
+<li><a class="reference external" href="https://github.com/tarantool/queue">queue</a> - Tarantool implementation of
+a persistent message queue.</li>
+<li><a class="reference external" href="https://github.com/tarantool/metrics">metrics</a> - ready-to-use solution for
+collecting metrics.</li>
+<li><a class="reference external" href="https://github.com/tarantool/cartridge">cartridge</a> - framework for writing
+distributed applications.</li>
+</ul>
+<p>Modules are distributed through our package manager, which is already
+preinstalled with Tarantool.</p>
+<p>We have official modules and unofficial ones.
+The official ones are those that are in our organization on Github.
+But we distribute unofficial ones via our package manager too so that other
+users can get your module easily.
+If you want to add your module to our Github organization –
+<a class="reference external" href="https://t.me/arturbrsg">text us here</a>.</p>
+<div class="section" id="want-to-contribute-to-an-existing-module">
+<h3>Want to contribute to an existing module<a class="headerlink" href="#want-to-contribute-to-an-existing-module" title="Permalink to this headline">¶</a></h3>
+<p>Tasks for contributors can be easily found in the issues section of any repository
+by the “good first issue” tag. These are tasks of an initial or intermediate
+level of difficulty that will help you get comfortable in the module of interest.</p>
+<p>Look at the
+<a class="reference external" href="https://github.com/tarantool/http/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">currently open tasks</a>
+for the HTTP Server module.</p>
+<p>The style guide for the Lua code we are following is <a class="reference internal" href="../dev_guide/lua_style_guide.html#lua-style-guide"><span class="std std-ref">here</span></a>.</p>
+<p>You can contact the current maintainer through MAINTAINERS, which is located
+in the root of the repository. If there is not such a file –
+<a class="reference external" href="https://t.me/arturbrsg">let us know</a>.
+We will respond within one to two days.</p>
+<p>If you see that the project does not have a maintainer or is inactive, you can
+become one yourself.
+See the section <a class="reference internal" href="#how-to-become-a-maintainer"><span class="std std-ref">How to become a maintainer</span></a>.</p>
+</div>
+<div class="section" id="want-to-create-a-new-module">
+<h3>Want to create a new module<a class="headerlink" href="#want-to-create-a-new-module" title="Permalink to this headline">¶</a></h3>
+<p>You can also create any custom modules and share them with the community.
+<a class="reference external" href="https://github.com/tarantool/modulekit">Look at the module template</a>
+and write your own one.</p>
+</div>
+</div>
+<div class="section" id="how-to-contribute-to-tarantool-core">
+<h2>How to contribute to Tarantool Core<a class="headerlink" href="#how-to-contribute-to-tarantool-core" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool is written mostly in C.
+Some parts are written in C++ and Lua.
+Review can take longer because we want it to be reliable.</p>
+<p>To start:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../dev_guide/building_from_source.html#building-from-source"><span class="std std-ref">learn how to build Tarantool</span></a></li>
+<li><a class="reference internal" href="../dev_guide/building_from_source.html#run-test-suite"><span class="std std-ref">run the test suite</span></a></li>
+<li>read about Tarantool architecture and main modules
+(<a class="reference external" href="https://docs.tarantool.dev/en/latest/">here</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/wiki/Developer-information">here</a>)</li>
+</ul>
+<p>We have standards that we try to adhere to when developing in Tarantool.
+These are Style Guide and Contribution Guide <a class="reference internal" href="../dev_guide/developer_guidelines.html#developer-guidelines"><span class="std std-ref">links</span></a>.
+They tell you how to format your code, how to format your commits, and how to
+write your test and make sure you don’t break anything.</p>
+<p>They will also help you make a patch that is easier to check, which will allow
+you to quickly push changes to master.</p>
+<p>Before your first commit, read
+<a class="reference external" href="https://github.com/tarantool/tarantool/wiki/Code-review-procedure#general-coding-points-to-check">this article</a>!</p>
+<p>A patch can be offered in two ways:</p>
+<ul class="simple">
+<li>(preferred) Using a fork and pull mechanism on Github: make changes to your
+copy of the repository and submit to us for review.
+See details <a class="reference external" href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork">here</a>.</li>
+<li>Suggest a patch via the mailing list. Our developers are discussing most of
+the features there.
+See details <a class="reference internal" href="../dev_guide/developer_guidelines.html#dev-guidelines-patch-review"><span class="std std-ref">here</span></a>.</li>
+</ul>
+</div>
+<div class="section" id="how-to-write-a-test">
+<h2>How to write a test<a class="headerlink" href="#how-to-write-a-test" title="Permalink to this headline">¶</a></h2>
+<p>The database is the product that is expected to be as reliable as possible.
+We at Tarantool have developed a dedicated test framework for developing
+test scripts that test Tarantool itself. The framework is called <code class="docutils literal notranslate"><span class="pre">test-run</span></code>.</p>
+<p>Writing your own test is not difficult. See test examples here:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/tarantool/blob/7b7a0c088f4fd25245d1d34544a2cd30589436e9/test/unit/csv.c">C unit test</a></li>
+<li><a class="reference external" href="https://github.com/tarantool/tarantool/blob/7b7a0c088f4fd25245d1d34544a2cd30589436e9/test/app/fio.test.lua">Lua unit test</a></li>
+</ul>
+<p>We also have a CI that automatically checks build and test coverage for new
+changes on all supported operating systems.
+This happens after any commit to the repository.</p>
+<p>The QA team has many tasks for specialists who are involved in checking the
+quality of the product and tools. They provide test coverage for products,
+help develop the test framework, and introduce and maintain new tools to test
+the stability of releases.</p>
+<p>We test modules differently: for modules, we use the
+<a class="reference external" href="https://github.com/tarantool/luatest">luatest</a> framework.
+This is a fork of the popular framework in the Lua community, which we have
+enhanced and optimized for our tasks.
+See <a class="reference external" href="https://github.com/tarantool/metrics/tree/master/test">examples</a>.
+of writing tests for a module.</p>
+<p>Read: writing tests in Tarantool, writing unit tests. ???</p>
+</div>
+<div class="section" id="how-to-contribute-to-language-connectors">
+<h2>How to contribute to language connectors<a class="headerlink" href="#how-to-contribute-to-language-connectors" title="Permalink to this headline">¶</a></h2>
+<p>A connector is a library that provides an API for accessing Tarantool from
+a programming language. Tarantool uses its own binary protocol for access,
+and the connector’s task is to transfer user requests to the database and
+application server in the required format.</p>
+<p>Data access connectors have already been implemented for all major languages.
+If you want to write your own connector, you first need to familiarize yourself with the Tarantool binary protocol. Its current description can be found <a class="reference internal" href="../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">here</span></a>.</p>
+<p>We consider the following connectors as reference:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool-php/client">https://github.com/tarantool-php/client</a></li>
+<li><a class="reference external" href="https://github.com/tarantool/tarantool/blob/master/src/box/lua/net_box.lua">net.box</a> — binary protocol client in Tarantool</li>
+</ul>
+<p>You can look at them to understand how to do it right.</p>
+<p>The Tarantool ecosystem has connectors that are supported by the Tarantool team
+itself, and there are those that are developed and supported exclusively by the
+community. All of them have their pros and cons. See a
+<a class="reference external" href="https://www.tarantool.io/en/download/connectors">complete list of connectors and their recommended versions</a>.</p>
+<p>If you are using an existing connector from the community and want to implement
+new features or fix a bug, then send your PRs via Github to the desired repository.</p>
+<p>To contact the author of the connector in case of questions, look in the
+MAINTAINERS file: there will be contacts of the repository maintainer.
+If there is no such file – <a class="reference external" href="https://t.me/arturbrsg">text us here</a>.
+We will help you figure it out. We usually answer within one day.</p>
+</div>
+<div class="section" id="how-to-contribute-to-tools">
+<h2>How to contribute to tools<a class="headerlink" href="#how-to-contribute-to-tools" title="Permalink to this headline">¶</a></h2>
+<p>The Tarantool ecosystem has tools that help in operation, deploy applications,
+or allow working with Kubernetes.</p>
+<p>Examples of tools from the Tarantool team:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/ansible-cartridge">ansible-cartridge</a>:
+Ansible role for deploying an application on Cartridge</li>
+<li><a class="reference external" href="https://github.com/tarantool/cartridge-cli">cartridge-cli</a>:
+CLI utility for creating applications, launching clusters locally on Cartridge
+and solving operational problems</li>
+<li><a class="reference external" href="https://github.com/tarantool/tarantool-operator">tarantool-operator</a>:
+Kubernetes operator for cluster orchestration</li>
+</ul>
+<p>These tools can be installed via standard package managers:
+<code class="docutils literal notranslate"><span class="pre">ansible</span> <span class="pre">galaxy</span></code>, <code class="docutils literal notranslate"><span class="pre">yum</span></code>, <code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, respectively.</p>
+</div>
+<div class="section" id="how-to-become-a-maintainer">
+<span id="id5"></span><h2>How to become a maintainer<a class="headerlink" href="#how-to-become-a-maintainer" title="Permalink to this headline">¶</a></h2>
+<p>Maintainers are people who can merge PRs or commit to master.
+We expect maintainers to answer questions and tickets in time, and do code reviews.</p>
+<p>If you need to get a review but no one responds for a week, take a look at the
+Maintainers section of the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> in the repository.
+Write to the person listed there.
+If you have not received an answer in 3-4 days, you can escalate the question
+<a class="reference external" href="https://t.me/arturbrsg">here</a>.</p>
+<p>A repository may have no maintainers (the Maintainers list in <code class="docutils literal notranslate"><span class="pre">README.md</span></code> is empty),
+or existing maintainers may be inactive. Then you can become a maintainer yourself.
+We think it’s better if the repository is maintained by a newbie than if the
+repository is dead. So don’t be shy: we love maintainers and help them figure it out.</p>
+<p>All you need to do is fill out
+<a class="reference external" href="https://docs.google.com/forms/d/1RihU9hQkbY5n7hU-3ZOr6t1L6cJKOlJcETowD_cNeOk/edit?usp=sharing">this form</a>.
+Indicate which repository you want to access,
+the reason (inactivity, the maintainer is not responding),
+and how to contact you.
+We will consider the application in 1 day and either give you the rights
+or tell you what else needs to be done.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../internals/source/index.html" class="btn btn-neutral float-right" title="Tarantool internals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

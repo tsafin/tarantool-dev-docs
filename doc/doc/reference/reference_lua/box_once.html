@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Function box.once &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Function <cite>box.once</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_once.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="function-box-once">
+<span id="box-once"></span><h1>Function <cite>box.once</cite><a class="headerlink" href="#function-box-once" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="box.once">
+<code class="descclassname">box.</code><code class="descname">once</code><span class="sig-paren">(</span><em>key</em>, <em>function</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.once" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a function, provided it has not been executed before. A passed value
+is checked to see whether the function has already been executed. If it has
+been executed before, nothing happens. If it has not been executed before,
+the function is invoked.</p>
+<p>See an example of using <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> while
+<a class="reference internal" href="../../book/replication/repl_bootstrap.html#replication-bootstrap"><span class="std std-ref">bootstrapping a replica set</span></a>.</p>
+<p><strong>Warning:</strong> If an error occurs inside <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> when initializing a
+database, you can re-execute the failed <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> block without
+stopping the database. The solution is to delete the <code class="docutils literal notranslate"><span class="pre">once</span></code> object from
+the system space <a class="reference internal" href="box_space_index.html#box-space-schema"><span class="std std-ref">_schema</span></a>.
+Say <code class="docutils literal notranslate"><span class="pre">box.space._schema:select{}</span></code>, find your <code class="docutils literal notranslate"><span class="pre">once</span></code> object there and
+delete it. For example, re-executing a block with <code class="docutils literal notranslate"><span class="pre">key='hello'</span></code> :</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> is used for initialization, it may be useful to
+wait until the database is in an appropriate state (read-only or read-write).
+In that case, see the functions in the <a class="reference internal" href="box_ctl.html#box-ctl"><span class="std std-ref">box.ctl submodule</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space._schema:select{}
+---
+- - [&#39;cluster&#39;, &#39;b4e15788-d962-4442-892e-d6c1dd5d13f2&#39;]
+  - [&#39;max_id&#39;, 512]
+  - [&#39;oncebye&#39;]
+  - [&#39;oncehello&#39;]
+  - [&#39;version&#39;, 1, 7, 2]
+...
+
+tarantool&gt; box.space._schema:delete(&#39;oncehello&#39;)
+---
+- [&#39;oncehello&#39;]
+...
+
+tarantool&gt; box.once(&#39;hello&#39;, function() end)
+---
+...
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>string</em>) – a value that will be checked</li>
+<li><strong>function</strong> (<em>function</em>) – a function</li>
+<li><strong>..</strong> – arguments that must be passed to function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The parameter <code class="docutils literal notranslate"><span class="pre">key</span></code> will be stored in the <a class="reference internal" href="box_space_index.html#box-space-schema"><span class="std std-ref">_schema</span></a>
+system space after <code class="docutils literal notranslate"><span class="pre">box.once()</span></code> is called in order to prevent a double
+run. These keys are global per replica set. So a simultaneous call of
+<code class="docutils literal notranslate"><span class="pre">box.once()</span></code> with the same key on two instances of the same replica set
+may succeed on both of them, but it’ll lead to a transaction conflict.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

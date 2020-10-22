@@ -1,0 +1,1282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.schema &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.schema</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_schema.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.schema">
+<span id="submodule-box-schema"></span><span id="box-schema"></span><h1>Submodule <cite>box.schema</cite><a class="headerlink" href="#module-box.schema" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.schema</span></code> submodule has data-definition functions
+for spaces, users, roles, function tuples, and sequences.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">box.schema</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-space-create"><span class="std std-ref">box.schema.space.create()</span></a> or
+<a class="reference internal" href="#box-schema-space-create"><span class="std std-ref">box.schema.create_space()</span></a></td>
+<td>Create a space</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../../book/admin/upgrades.html#admin-upgrades"><span class="std std-ref">box.schema.upgrade</span></a></td>
+<td>Upgrade a database</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-user-create"><span class="std std-ref">box.schema.user.create()</span></a></td>
+<td>Create a user</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-user-drop"><span class="std std-ref">box.schema.user.drop()</span></a></td>
+<td>Drop a user</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-user-exists"><span class="std std-ref">box.schema.user.exists()</span></a></td>
+<td>Check if a user exists</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-user-grant"><span class="std std-ref">box.schema.user.grant()</span></a></td>
+<td>Grant privileges to a user or
+a role</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-user-revoke"><span class="std std-ref">box.schema.user.revoke()</span></a></td>
+<td>Revoke privileges from a user
+or a role</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-user-password"><span class="std std-ref">box.schema.user.password()</span></a></td>
+<td>Get a hash of a user’s password</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-user-passwd"><span class="std std-ref">box.schema.user.passwd()</span></a></td>
+<td>Associate a password with
+a user</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-user-info"><span class="std std-ref">box.schema.user.info()</span></a></td>
+<td>Get a description of a user’s
+privileges</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-role-create"><span class="std std-ref">box.schema.role.create()</span></a></td>
+<td>Create a role</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-role-drop"><span class="std std-ref">box.schema.role.drop()</span></a></td>
+<td>Drop a role</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-role-exists"><span class="std std-ref">box.schema.role.exists()</span></a></td>
+<td>Check if a role exists</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-role-grant"><span class="std std-ref">box.schema.role.grant()</span></a></td>
+<td>Grant privileges to a role</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-role-revoke"><span class="std std-ref">box.schema.role.revoke()</span></a></td>
+<td>Revoke privileges from a role</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-role-info"><span class="std std-ref">box.schema.role.info()</span></a></td>
+<td>Get a description of a role’s
+privileges</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-func-create"><span class="std std-ref">box.schema.func.create()</span></a></td>
+<td>Create a function tuple</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-func-drop"><span class="std std-ref">box.schema.func.drop()</span></a></td>
+<td>Drop a function tuple</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-func-exists"><span class="std std-ref">box.schema.func.exists()</span></a></td>
+<td>Check if a function tuple
+exists</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-sequence-create"><span class="std std-ref">box.schema.sequence.create()</span></a></td>
+<td>Create a new sequence generator</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-sequence-next"><span class="std std-ref">sequence_object:next()</span></a></td>
+<td>Generate and return the next
+value</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-sequence-alter"><span class="std std-ref">sequence_object:alter()</span></a></td>
+<td>Change sequence options</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-sequence-reset"><span class="std std-ref">sequence_object:reset()</span></a></td>
+<td>Reset sequence state</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-sequence-set"><span class="std std-ref">sequence_object:set()</span></a></td>
+<td>Set the new value</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-schema-sequence-drop"><span class="std std-ref">sequence_object:drop()</span></a></td>
+<td>Drop the sequence</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-schema-sequence-create-index"><span class="std std-ref">space_object:create_index()</span></a></td>
+<td>Create an index</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="box-schema-space-create"></span><dl class="function">
+<dt id="box.schema.box.schema.space.create">
+<code class="descclassname">box.schema.space.</code><code class="descname">create</code><span class="sig-paren">(</span><em>space-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.space.create" title="Permalink to this definition">¶</a></dt>
+<dt id="box.schema.box.schema.create_space">
+<code class="descclassname">box.schema.</code><code class="descname">create_space</code><span class="sig-paren">(</span><em>space-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.create_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="../../book/box/data_model.html#index-box-space"><span class="std std-ref">space</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space-name</strong> (<em>string</em>) – name of space, which should
+conform to the <a class="reference internal" href="../lua_tips.html#app-server-names"><span class="std std-ref">rules for object names</span></a></li>
+<li><strong>options</strong> (<em>table</em>) – see “Options for box.schema.space.create” chart, below</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">space object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">userdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can use either syntax. For example,
+<code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">box.schema.space.create('tester')</span></code> has the same effect as
+<code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">box.schema.create_space('tester')</span></code>.</p>
+<div class="table docutils container">
+<p><strong>Options for box.schema.space.create</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="54%" />
+<col width="9%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Effect</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>engine</td>
+<td>‘memtx’ or ‘vinyl’</td>
+<td>string</td>
+<td>‘memtx’</td>
+</tr>
+<tr class="row-odd"><td>field_count</td>
+<td>fixed count of <a class="reference internal" href="../../book/box/data_model.html#index-box-tuple"><span class="std std-ref">fields</span></a>:
+for example if
+field_count=5, it is illegal
+to insert a tuple with fewer
+than or more than 5 fields</td>
+<td>number</td>
+<td>0 i.e. not fixed</td>
+</tr>
+<tr class="row-even"><td>format</td>
+<td>field names and types:
+See the illustrations of format clauses in the
+<a class="reference internal" href="box_space_index.html#box-space-format"><span class="std std-ref">space_object:format()</span></a>
+description and in the
+<a class="reference internal" href="box_space_index.html#box-space-space"><span class="std std-ref">box.space._space</span></a>
+example. Optional and usually not specified.</td>
+<td>table</td>
+<td>(blank)</td>
+</tr>
+<tr class="row-odd"><td>id</td>
+<td>unique identifier:
+users can refer to spaces with
+the id instead of the name</td>
+<td>number</td>
+<td>last space’s id, +1</td>
+</tr>
+<tr class="row-even"><td>if_not_exists</td>
+<td>create space only if a space
+with the same name does not
+exist already, otherwise do
+nothing but do not cause an
+error</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr class="row-odd"><td>is_local</td>
+<td>space contents are
+<a class="reference internal" href="../../book/replication/repl_architecture.html#replication-local"><span class="std std-ref">replication-local</span></a>:
+changes are stored in the
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write-ahead log</span></a>
+of the local node but there is no
+<a class="reference internal" href="../../book/replication/index.html#replication"><span class="std std-ref">replication</span></a>.</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr class="row-even"><td>temporary</td>
+<td>space contents are temporary:
+changes are not stored in the
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write-ahead log</span></a>
+and there is no
+<a class="reference internal" href="../../book/replication/index.html#replication"><span class="std std-ref">replication</span></a>.
+Note re storage engine: vinyl
+does not support temporary spaces.</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr class="row-odd"><td>user</td>
+<td>name of the user who is considered to be
+the space’s
+<a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">owner</span></a>
+for authorization purposes</td>
+<td>string</td>
+<td>current user’s name</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="box-schema-space-create-options">Saying <code class="docutils literal notranslate"><span class="pre">box.cfg{read_only=true...}</span></code> during <a class="reference internal" href="../configuration/index.html#cfg-basic-read-only"><span class="std std-ref">configuration</span></a>
+affects spaces differently depending on the options that were used during
+<code class="docutils literal notranslate"><span class="pre">box.schema.space.create</span></code>, as summarized by this chart:</p>
+<div class="table docutils container">
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="21%" />
+<col width="25%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Can be created?</th>
+<th class="head">Can be written to?</th>
+<th class="head">Is replicated?</th>
+<th class="head">Is persistent?</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>(default)</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="row-odd"><td>temporary</td>
+<td>no</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr class="row-even"><td>is_local</td>
+<td>no</td>
+<td>yes</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There are three <a class="reference internal" href="../lua_tips.html#app-server-object-reference"><span class="std std-ref">syntax variations</span></a>
+for object references targeting space objects, for example
+<code class="samp docutils literal notranslate"><span class="pre">box.schema.space.drop(</span><em><span class="pre">space-id</span></em><span class="pre">)</span></code>
+will drop a space. However, the common approach is to use functions
+attached to the space objects, for example
+<a class="reference internal" href="box_space_index.html#box-space-drop"><span class="std std-ref">space_object:drop()</span></a>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; s = box.schema.space.create(&#39;space55&#39;)
+---
+...
+tarantool&gt; s = box.schema.space.create(&#39;space55&#39;, {
+         &gt;   id = 555,
+         &gt;   temporary = false
+         &gt; })
+---
+- error: Space &#39;space55&#39; already exists
+...
+tarantool&gt; s = box.schema.space.create(&#39;space55&#39;, {
+         &gt;   if_not_exists = true
+         &gt; })
+---
+...
+</pre></div>
+</div>
+<p>After a space is created, usually the next step is to
+<a class="reference internal" href="box_space_index.html#box-space-create-index"><span class="std std-ref">create an index</span></a> for it, and then it is
+available for insert, select, and all the other <a class="reference internal" href="box_space.html#box-space"><span class="std std-ref">box.space</span></a>
+functions.</p>
+</dd></dl>
+
+<span class="target" id="box-schema-user-create"></span><dl class="function">
+<dt id="box.schema.box.schema.user.create">
+<code class="descclassname">box.schema.user.</code><code class="descname">create</code><span class="sig-paren">(</span><em>user-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a user.
+For explanation of how Tarantool maintains user data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-users"><span class="std std-ref">Users</span></a> and reference on
+<a class="reference internal" href="box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space.</p>
+<p>The possible options are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the user already exists,</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code> (default = ‘’) - string; the <code class="docutils literal notranslate"><span class="pre">password</span></code> = <em>password</em>
+specification is good because in a <a class="reference internal" href="../configuration/index.html#index-uri"><span class="std std-ref">URI</span></a>
+(Uniform Resource Identifier) it is usually illegal to include a
+user-name without a password.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The maximum number of users is 32.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user-name</strong> (<em>string</em>) – name of user, which should
+conform to the <a class="reference internal" href="../lua_tips.html#app-server-names"><span class="std std-ref">rules for object names</span></a></li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code>, <code class="docutils literal notranslate"><span class="pre">password</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nil</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">if_not_exists</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-drop"></span><dl class="function">
+<dt id="box.schema.box.schema.user.drop">
+<code class="descclassname">box.schema.user.</code><code class="descname">drop</code><span class="sig-paren">(</span><em>user-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop a user.
+For explanation of how Tarantool maintains user data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-users"><span class="std std-ref">Users</span></a> and reference on
+<a class="reference internal" href="box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user-name</strong> (<em>string</em>) – the name of the user</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the user does not exist.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,{</span><span class="n">if_exists</span><span class="o">=</span><span class="kc">false</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-exists"></span><dl class="function">
+<dt id="box.schema.box.schema.user.exists">
+<code class="descclassname">box.schema.user.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>user-name</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a user exists; return <code class="docutils literal notranslate"><span class="pre">false</span></code> if a user does not exist.
+For explanation of how Tarantool maintains user data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-users"><span class="std std-ref">Users</span></a> and reference on
+<a class="reference internal" href="box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user-name</strong> (<em>string</em>) – the name of the user</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-grant"></span><dl class="function">
+<dt id="box.schema.box.schema.user.grant">
+<code class="descclassname">box.schema.user.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>user-name</em>, <em>privileges</em>, <em>object-type</em>, <em>object-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.grant" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">box.schema.user.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>user-name</em>, <em>privileges</em>, <em>'universe'</em><span class="optional">[</span>, <em>nil</em>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dt>
+<code class="descclassname">box.schema.user.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>user-name</em>, <em>role-name</em><span class="optional">[</span>, <em>nil</em>, <em>nil</em>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Grant <a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a> to a user or
+to another role.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user-name</strong> (<em>string</em>) – the name of the user.</li>
+<li><strong>privileges</strong> (<em>string</em>) – ‘read’ or ‘write’ or ‘execute’ or ‘create’ or
+‘alter’ or ‘drop’ or a combination.</li>
+<li><strong>object-type</strong> (<em>string</em>) – ‘space’ or ‘function’ or ‘sequence’ or ‘role’.</li>
+<li><strong>object-name</strong> (<em>string</em>) – name of object to grant permissions for.</li>
+<li><strong>role-name</strong> (<em>string</em>) – name of role to grant to user.</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">grantor</span></code>, <code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <code class="samp docutils literal notranslate"><span class="pre">'function','</span><em><span class="pre">object-name</span></em><span class="pre">'</span></code> is specified, then a _func tuple with
+that object-name must exist.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">object-type,</span> <span class="pre">object-name</span></code> say ‘universe’ which
+means ‘all object-types and all objects’. In this case, object name is omitted.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">privilege,</span> <span class="pre">object-type,</span> <span class="pre">object-name</span></code> say
+<code class="docutils literal notranslate"><span class="pre">role-name</span></code> (see section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-roles"><span class="std std-ref">Roles</span></a>).</p>
+<p><strong>Variation:</strong> instead of
+<code class="samp docutils literal notranslate"><span class="pre">box.schema.user.grant('</span><em><span class="pre">user-name</span></em><span class="pre">','usage,session','universe',nil,</span></code> <code class="code docutils literal notranslate"><span class="pre">{if_not_exists=true})</span></code>
+say <code class="samp docutils literal notranslate"><span class="pre">box.schema.user.enable('</span><em><span class="pre">user-name</span></em><span class="pre">')</span></code>.</p>
+<p>The possible options are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">grantor</span></code> = <em>grantor_name_or_id</em> – string or number, for custom grantor,</li>
+<li><code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the user already has the privilege.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write,execute&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="p">{</span><span class="n">if_not_exists</span><span class="o">=</span><span class="kc">true</span><span class="p">}))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-revoke"></span><dl class="function">
+<dt id="box.schema.box.schema.user.revoke">
+<code class="descclassname">box.schema.user.</code><code class="descname">revoke</code><span class="sig-paren">(</span><em>user-name</em>, <em>privileges</em>, <em>object-type</em>, <em>object-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.revoke" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">box.schema.user.</code><code class="descname">revoke</code><span class="sig-paren">(</span><em>user-name</em>, <em>privileges</em>, <em>'universe'</em><span class="optional">[</span>, <em>nil</em>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dt>
+<code class="descclassname">box.schema.user.</code><code class="descname">revoke</code><span class="sig-paren">(</span><em>user-name</em>, <em>role-name</em><span class="optional">[</span>, <em>nil</em>, <em>nil</em>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Revoke <a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a> from a user
+or from another role.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user-name</strong> (<em>string</em>) – the name of the user.</li>
+<li><strong>privilege</strong> (<em>string</em>) – ‘read’ or ‘write’ or ‘execute’ or ‘create’ or
+‘alter’ or ‘drop’ or a combination.</li>
+<li><strong>object-type</strong> (<em>string</em>) – ‘space’ or ‘function’ or ‘sequence’.</li>
+<li><strong>object-name</strong> (<em>string</em>) – the name of a function or space or sequence.</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_exists</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The user must exist, and the object must exist,
+but if the option setting is <code class="docutils literal notranslate"><span class="pre">{if_exists=true}</span></code> then
+it is not an error if the user does not have the privilege.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">object-type,</span> <span class="pre">object-name</span></code> say ‘universe’
+which means ‘all object-types and all objects’.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">privilege,</span> <span class="pre">object-type,</span> <span class="pre">object-name</span></code> say
+<code class="docutils literal notranslate"><span class="pre">role-name</span></code> (see section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-roles"><span class="std std-ref">Roles</span></a>).</p>
+<p><strong>Variation:</strong> instead of
+<code class="samp docutils literal notranslate"><span class="pre">box.schema.user.revoke('</span><em><span class="pre">user-name</span></em><span class="pre">','usage,session','universe',nil,</span></code> <code class="code docutils literal notranslate"><span class="pre">{if_exists=true})</span></code>
+say <code class="samp docutils literal notranslate"><span class="pre">box.schema.user.disable('</span><em><span class="pre">user-name</span></em><span class="pre">')</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-password"></span><dl class="function">
+<dt id="box.schema.box.schema.user.password">
+<code class="descclassname">box.schema.user.</code><code class="descname">password</code><span class="sig-paren">(</span><em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a hash of a user’s password. For explanation of how Tarantool maintains
+passwords, see section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-passwords"><span class="std std-ref">Passwords</span></a> and reference on
+<a class="reference internal" href="box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>If a non-‘guest’ user has no password, it’s <strong>impossible</strong> to connect to Tarantool
+using this user. The user is regarded as “internal” only, not usable from a remote
+connection. Such users can be useful if they have defined some procedures with the
+<a class="reference internal" href="#box-schema-func-create"><span class="std std-ref">SETUID</span></a> option, on which privileges are granted
+to externally-connectable users. This way, external users cannot create/drop objects,
+they can only invoke procedures.</li>
+<li>For the ‘guest’ user, it’s impossible to set a password: that would be misleading,
+since ‘guest’ is the default user on a newly-established connection over a
+<a class="reference internal" href="../../book/admin/security.html#admin-security"><span class="std std-ref">binary port</span></a>, and Tarantool does not require
+a password to establish a <a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">binary connection</span></a>.
+It is, however, possible to change the
+current user to ‘guest’ by providing the
+<a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-authentication"><span class="std std-ref">AUTH packet</span></a> with no password at all or an
+empty password. This feature is useful for connection pools, which want to reuse a
+connection for a different user without re-establishing it.</li>
+</ul>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>password</strong> (<em>string</em>) – password to be hashed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">password</span><span class="p">(</span><span class="s1">&#39;ЛЕНА&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-passwd"></span><dl class="function">
+<dt id="box.schema.box.schema.user.passwd">
+<code class="descclassname">box.schema.user.</code><code class="descname">passwd</code><span class="sig-paren">(</span><span class="optional">[</span><em>user-name</em>, <span class="optional">]</span><em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associate a password with the user who is currently logged in,
+or with the user specified by user-name. The user must exist and must not be ‘guest’.</p>
+<p>Users who wish to change their own passwords should
+use <code class="docutils literal notranslate"><span class="pre">box.schema.user.passwd(password)</span></code> syntax.</p>
+<p>Administrators who wish to change passwords of other users should
+use <code class="docutils literal notranslate"><span class="pre">box.schema.user.passwd(user-name,</span> <span class="pre">password)</span></code> syntax.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user-name</strong> (<em>string</em>) – user-name</li>
+<li><strong>password</strong> (<em>string</em>) – password</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;ЛЕНА&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">passwd</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">,</span> <span class="s1">&#39;ЛЕНА&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-user-info"></span><dl class="function">
+<dt id="box.schema.box.schema.user.info">
+<code class="descclassname">box.schema.user.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="optional">[</span><em>user-name</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.user.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of a user’s <a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a>.
+For explanation of how Tarantool maintains user data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-users"><span class="std std-ref">Users</span></a> and reference on
+<a class="reference internal" href="box_space_index.html#box-space-user"><span class="std std-ref">_user</span></a> space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user-name</strong> (<em>string</em>) – the name of the user.
+This is optional; if it is not
+supplied, then the information
+will be for the user who is
+currently logged in.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Lena&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-create"></span><dl class="function">
+<dt id="box.schema.box.schema.role.create">
+<code class="descclassname">box.schema.role.</code><code class="descname">create</code><span class="sig-paren">(</span><em>role-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a role.
+For explanation of how Tarantool maintains role data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-roles"><span class="std std-ref">Roles</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>role-name</strong> (<em>string</em>) – name of role, which should
+conform to the <a class="reference internal" href="../lua_tips.html#app-server-names"><span class="std std-ref">rules for object names</span></a></li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the
+role already exists</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nil</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">if_not_exists</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-drop"></span><dl class="function">
+<dt id="box.schema.box.schema.role.drop">
+<code class="descclassname">box.schema.role.</code><code class="descname">drop</code><span class="sig-paren">(</span><em>role-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop a role.
+For explanation of how Tarantool maintains role data, see
+section <a class="reference internal" href="../../book/box/authentication_index.html#authentication-roles"><span class="std std-ref">Roles</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>role-name</strong> (<em>string</em>) – the name of the role</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the role does not exist.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-exists"></span><dl class="function">
+<dt id="box.schema.box.schema.role.exists">
+<code class="descclassname">box.schema.role.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>role-name</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a role exists; return <code class="docutils literal notranslate"><span class="pre">false</span></code> if a role does not exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>role-name</strong> (<em>string</em>) – the name of the role</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-grant"></span><dl class="function">
+<dt id="box.schema.box.schema.role.grant">
+<code class="descclassname">box.schema.role.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>role-name</em>, <em>privilege</em>, <em>object-type</em>, <em>object-name</em><span class="optional">[</span>, <em>option</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.grant" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descclassname">box.schema.role.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>role-name</em>, <em>privilege</em>, <em>'universe'</em><span class="optional">[</span>, <em>nil</em>, <em>option</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dt>
+<code class="descclassname">box.schema.role.</code><code class="descname">grant</code><span class="sig-paren">(</span><em>role-name</em>, <em>role-name</em><span class="optional">[</span>, <em>nil</em>, <em>nil</em>, <em>option</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Grant <a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a> to a role.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>role-name</strong> (<em>string</em>) – the name of the role.</li>
+<li><strong>privilege</strong> (<em>string</em>) – ‘read’ or ‘write’ or ‘execute’ or ‘create’ or
+‘alter’ or ‘drop’ or a combination.</li>
+<li><strong>object-type</strong> (<em>string</em>) – ‘space’ or ‘function’ or ‘sequence’ or ‘role’.</li>
+<li><strong>object-name</strong> (<em>string</em>) – the name of a function or space or sequence or role.</li>
+<li><strong>option</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the role already
+has the privilege.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The role must exist, and the object must exist.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">object-type,</span> <span class="pre">object-name</span></code> say ‘universe’
+which means ‘all object-types and all objects’. In this case, object name is omitted.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">privilege,</span> <span class="pre">object-type,</span> <span class="pre">object-name</span></code> say
+<code class="docutils literal notranslate"><span class="pre">role-name</span></code> – to grant a role to a role.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;role1&#39;</span><span class="p">,</span> <span class="s1">&#39;role2&#39;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="p">{</span><span class="n">if_not_exists</span><span class="o">=</span><span class="kc">false</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-revoke"></span><dl class="function">
+<dt id="box.schema.box.schema.role.revoke">
+<code class="descclassname">box.schema.role.</code><code class="descname">revoke</code><span class="sig-paren">(</span><em>role-name</em>, <em>privilege</em>, <em>object-type</em>, <em>object-name</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.revoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Revoke <a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a> from a role.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>role-name</strong> (<em>string</em>) – the name of the role.</li>
+<li><strong>privilege</strong> (<em>string</em>) – ‘read’ or ‘write’ or ‘execute’ or ‘create’ or
+‘alter’ or ‘drop’ or a combination.</li>
+<li><strong>object-type</strong> (<em>string</em>) – ‘space’ or ‘function’ or ‘sequence’ or ‘role’.</li>
+<li><strong>object-name</strong> (<em>string</em>) – the name of a function or space or sequence or role.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The role must exist, and the object must exist,
+but it is not an error if the role does not have the privilege.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">object-type,</span> <span class="pre">object-name</span></code> say ‘universe’
+which means ‘all object-types and all objects’.</p>
+<p><strong>Variation:</strong> instead of <code class="docutils literal notranslate"><span class="pre">privilege,</span> <span class="pre">object-type,</span> <span class="pre">object-name</span></code> say
+<code class="docutils literal notranslate"><span class="pre">role-name</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="s1">&#39;tester&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;execute&#39;</span><span class="p">,</span> <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">revoke</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-role-info"></span><dl class="function">
+<dt id="box.schema.box.schema.role.info">
+<code class="descclassname">box.schema.role.</code><code class="descname">info</code><span class="sig-paren">(</span><em>role-name</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.role.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of a role’s privileges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>role-name</strong> (<em>string</em>) – the name of the role.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Accountant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-func-create"></span><dl class="function">
+<dt id="box.schema.box.schema.func.create">
+<code class="descclassname">box.schema.func.</code><code class="descname">create</code><span class="sig-paren">(</span><em>func-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.func.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a function <a class="reference internal" href="../../book/box/data_model.html#index-box-tuple"><span class="std std-ref">tuple</span></a>.
+This does not create the function itself – that is done with Lua –
+but if it is necessary to grant privileges for a function,
+box.schema.func.create must be done first.
+For explanation of how Tarantool maintains function data, see
+reference on <a class="reference internal" href="box_space_index.html#box-space-func"><span class="std std-ref">_func</span></a> space.</p>
+<p>The possible options are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the <code class="docutils literal notranslate"><span class="pre">_func</span></code> tuple already exists.</li>
+<li><code class="docutils literal notranslate"><span class="pre">setuid</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = false) - with <code class="docutils literal notranslate"><span class="pre">true</span></code> to make Tarantool
+treat the function’s caller as the function’s creator, with full privileges.
+Remember that SETUID works only over
+<a class="reference internal" href="../../book/admin/security.html#admin-security"><span class="std std-ref">binary ports</span></a>.
+SETUID doesn’t work if you invoke a function via an
+<a class="reference internal" href="../../book/admin/security.html#admin-security"><span class="std std-ref">admin console</span></a> or inside a Lua script.</li>
+<li><code class="docutils literal notranslate"><span class="pre">language</span></code> = ‘LUA’|’C’ (default = ‘LUA’).</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func-name</strong> (<em>string</em>) – name of function, which should
+conform to the <a class="reference internal" href="../lua_tips.html#app-server-names"><span class="std std-ref">rules for object names</span></a></li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_not_exists</span></code>, <code class="docutils literal notranslate"><span class="pre">setuid</span></code>, <code class="docutils literal notranslate"><span class="pre">language</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nil</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">if_not_exists</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">setuid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">language</span> <span class="o">=</span> <span class="s1">&#39;LUA&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-func-drop"></span><dl class="function">
+<dt id="box.schema.box.schema.func.drop">
+<code class="descclassname">box.schema.func.</code><code class="descname">drop</code><span class="sig-paren">(</span><em>func-name</em><span class="optional">[</span>, <em>{options}</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.func.drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop a function tuple.
+For explanation of how Tarantool maintains function data, see
+reference on <a class="reference internal" href="box_space_index.html#box-space-func"><span class="std std-ref">_func space</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>func-name</strong> (<em>string</em>) – the name of the function</li>
+<li><strong>options</strong> (<em>table</em>) – <code class="docutils literal notranslate"><span class="pre">if_exists</span></code> = <code class="docutils literal notranslate"><span class="pre">true|false</span></code> (default = <code class="docutils literal notranslate"><span class="pre">false</span></code>) - boolean;
+<code class="docutils literal notranslate"><span class="pre">true</span></code> means there should be no error if the _func tuple does not exist.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-func-exists"></span><dl class="function">
+<dt id="box.schema.box.schema.func.exists">
+<code class="descclassname">box.schema.func.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>func-name</em><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.func.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if a function tuple exists; return false if a function tuple
+does not exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func-name</strong> (<em>string</em>) – the name of the function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;calculate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-func-reload"></span><dl class="function">
+<dt id="box.schema.box.schema.func.reload">
+<code class="descclassname">box.schema.func.</code><code class="descname">reload</code><span class="sig-paren">(</span><span class="optional">[</span><em>name</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.func.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload a C module with all its functions without restarting the server.</p>
+<p>Under the hood, Tarantool loads a new copy of the module (<code class="docutils literal notranslate"><span class="pre">*.so</span></code> shared
+library) and starts routing all new request to the new version.
+The previous version remains active until all started calls are finished.
+All shared libraries are loaded with <code class="docutils literal notranslate"><span class="pre">RTLD_LOCAL</span></code> (see “man 3 dlopen”),
+therefore multiple copies can co-exist without any problems.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Reload will fail if a module was loaded from Lua script with
+<a class="reference external" href="http://luajit.org/ext_ffi_api.html#ffi_load">ffi.load()</a>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>string</em>) – the name of the module to reload</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- reload the entire module contents</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">func</span><span class="p">.</span><span class="n">reload</span><span class="p">(</span><span class="s1">&#39;module&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="sequences">
+<span id="box-schema-sequence"></span><h3>Sequences<a class="headerlink" href="#sequences" title="Permalink to this headline">¶</a></h3>
+<p>An introduction to sequences is in the <a class="reference internal" href="../../book/box/data_model.html#index-box-sequence"><span class="std std-ref">Sequences</span></a>
+section of the “Data model” chapter.
+Here are the details for each function and option.</p>
+<p>All functions related to sequences require appropriate
+<a class="reference internal" href="../../book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">privileges</span></a>.</p>
+<span class="target" id="box-schema-sequence-create"></span><dl class="function">
+<dt id="box.schema.box.schema.sequence.create">
+<code class="descclassname">box.schema.sequence.</code><code class="descname">create</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>options</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.schema.box.schema.sequence.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new sequence generator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>string</em>) – the name of the sequence</li>
+<li><strong>options</strong> (<em>table</em>) – see a quick overview in the
+“Options for <code class="docutils literal notranslate"><span class="pre">box.schema.sequence.create()</span></code>”
+<a class="reference internal" href="../../book/box/data_model.html#index-box-sequence-options"><span class="std std-ref">chart</span></a>
+(in the <a class="reference internal" href="../../book/box/data_model.html#index-box-sequence"><span class="std std-ref">Sequences</span></a>
+section of the “Data model” chapter),
+and see more details below.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a reference to a new sequence object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Options:</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">start</span></code> – the STARTS WITH value. Type = integer, Default = 1.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">min</span></code> – the MINIMUM value. Type = integer, Default = 1.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">max</span></code> - the MAXIMUM value. Type = integer, Default = 9223372036854775807.</p>
+<p>There is a rule: <code class="docutils literal notranslate"><span class="pre">min</span></code> &lt;= <code class="docutils literal notranslate"><span class="pre">start</span></code> &lt;= <code class="docutils literal notranslate"><span class="pre">max</span></code>.
+For example it is illegal to say <code class="docutils literal notranslate"><span class="pre">{start=0}</span></code> because then the
+specified start value (0) would be less than the default min value (1).</p>
+<p>There is a rule: <code class="docutils literal notranslate"><span class="pre">min</span></code> &lt;= next-value &lt;= <code class="docutils literal notranslate"><span class="pre">max</span></code>.
+For example, if the next generated value would be 1000,
+but the maximum value is 999, then that would be considered
+“overflow”.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">cycle</span></code> – the CYCLE value. Type = bool. Default = false.</p>
+<p>If the sequence generator’s next value is an overflow number,
+it causes an error return – unless <code class="docutils literal notranslate"><span class="pre">cycle</span> <span class="pre">==</span> <span class="pre">true</span></code>.</p>
+<p>But if <code class="docutils literal notranslate"><span class="pre">cycle</span> <span class="pre">==</span> <span class="pre">true</span></code>, the count is started again, at the
+MINIMUM value or at the MAXIMUM value (not the STARTS WITH value).</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">cache</span></code> – the CACHE value. Type = unsigned integer. Default = 0.</p>
+<p>Currently Tarantool ignores this value, it is reserved for future use.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">step</span></code> – the INCREMENT BY value. Type = integer. Default = 1.</p>
+<p>Ordinarily this is what is added to the previous value.</p>
+</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-next"></span><dl class="function">
+<dt>
+<code class="descname">sequence_object:next()</code></dt>
+<dd><p>Generate the next value and return it.</p>
+<p>The generation algorithm is simple:</p>
+<ul class="simple">
+<li>If this is the first time, then return the STARTS WITH value.</li>
+<li>If the previous value plus the INCREMENT value is less than the
+MINIMUM value or greater than the MAXIMUM value, that is “overflow”,
+so either raise an error (if <code class="docutils literal notranslate"><span class="pre">cycle</span></code> = <code class="docutils literal notranslate"><span class="pre">false</span></code>) or return the
+MAXIMUM value (if <code class="docutils literal notranslate"><span class="pre">cycle</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">step</span></code> &lt; 0)
+or return the MINIMUM value (if <code class="docutils literal notranslate"><span class="pre">cycle</span></code> = <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">step</span></code> &gt; 0).</li>
+</ul>
+<p>If there was no error, then save the returned result, it is now
+the “previous value”.</p>
+<p>For example, suppose sequence ‘S’ has:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">min</span></code> == -6,</li>
+<li><code class="docutils literal notranslate"><span class="pre">max</span></code> == -1,</li>
+<li><code class="docutils literal notranslate"><span class="pre">step</span></code> == -3,</li>
+<li><code class="docutils literal notranslate"><span class="pre">start</span></code> = -2,</li>
+<li><code class="docutils literal notranslate"><span class="pre">cycle</span></code> = true,</li>
+<li>previous value = -2.</li>
+</ul>
+<p>Then <code class="docutils literal notranslate"><span class="pre">box.sequence.S:next()</span></code> returns -5 because -2 + (-3) == -5.</p>
+<p>Then <code class="docutils literal notranslate"><span class="pre">box.sequence.S:next()</span></code> again returns -1 because -5 + (-3) &lt; -6,
+which is overflow, causing cycle, and <code class="docutils literal notranslate"><span class="pre">max</span></code> == -1.</p>
+<p>This function requires a <a class="reference internal" href="#box-schema-user-grant"><span class="std std-ref">‘write’ privilege</span></a>
+on the sequence.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This function should not be used in “cross-engine” transactions
+(transactions which use both the memtx and the vinyl storage engines).</p>
+<p class="last">To see what the previous value was, without changing it, you can
+select from the <a class="reference internal" href="box_space_index.html#box-space-sequence-data"><span class="std std-ref">_sequence_data</span></a>
+system space.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-alter"></span><dl class="function">
+<dt>
+<code class="descname">sequence_object:alter(options)</code></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">alter()</span></code> function can be used to change any of the sequence’s
+options. Requirements and restrictions are the same as for
+<a class="reference internal" href="#box-schema-sequence-create"><span class="std std-ref">box.schema.sequence.create()</span></a>.</p>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-reset"></span><dl class="function">
+<dt>
+<code class="descname">sequence_object:reset()</code></dt>
+<dd><p>Set the sequence back to its original state.
+The effect is that a subsequent <code class="docutils literal notranslate"><span class="pre">next()</span></code> will return the <code class="docutils literal notranslate"><span class="pre">start</span></code> value.
+This function requires a <a class="reference internal" href="#box-schema-user-grant"><span class="std std-ref">‘write’ privilege</span></a>
+on the sequence.</p>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-set"></span><dl class="function">
+<dt>
+<code class="descname">sequence_object:set(new-previous-value)</code></dt>
+<dd><p>Set the “previous value” to <code class="docutils literal notranslate"><span class="pre">new-previous-value</span></code>.
+This function requires a <a class="reference internal" href="#box-schema-user-grant"><span class="std std-ref">‘write’ privilege</span></a>
+on the sequence.</p>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-drop"></span><dl class="function">
+<dt>
+<code class="descname">sequence_object:drop()</code></dt>
+<dd><p>Drop an existing sequence.</p>
+<p><strong>Example:</strong></p>
+<p>Here is an example showing all sequence options and operations:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">sequence</span><span class="p">.</span><span class="n">create</span><span class="p">(</span>
+               <span class="s1">&#39;S2&#39;</span><span class="p">,</span>
+               <span class="p">{</span><span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+               <span class="n">min</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+               <span class="n">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+               <span class="n">cache</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span>
+               <span class="n">cycle</span><span class="o">=</span><span class="kc">false</span><span class="p">,</span>
+               <span class="n">step</span><span class="o">=</span><span class="mi">100</span>
+               <span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="n">alter</span><span class="p">({</span><span class="n">step</span><span class="o">=</span><span class="mi">6</span><span class="p">})</span>
+<span class="n">s</span><span class="p">:</span><span class="nb">next</span><span class="p">()</span>
+<span class="n">s</span><span class="p">:</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">s</span><span class="p">:</span><span class="n">set</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">s</span><span class="p">:</span><span class="n">drop</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-schema-sequence-create-index"></span><dl class="function">
+<dt>
+<code class="descname">space_object:create_index(... [sequence='...' option] ...)</code></dt>
+<dd><p>You can use the <code class="samp docutils literal notranslate"><span class="pre">sequence=</span><em><span class="pre">sequence-name</span></em></code>
+(or <code class="samp docutils literal notranslate"><span class="pre">sequence=</span><em><span class="pre">sequence-id</span></em></code> or <code class="samp docutils literal notranslate"><span class="pre">sequence=true</span></code>)
+option when <a class="reference internal" href="box_space_index.html#box-space-create-index"><span class="std std-ref">creating</span></a> or
+<a class="reference internal" href="box_index.html#box-index-alter"><span class="std std-ref">altering</span></a> a primary-key index.
+The sequence becomes associated with the index, so that the next
+<code class="docutils literal notranslate"><span class="pre">insert()</span></code> will put the next generated number into the primary-key
+field, if the field would otherwise be nil.</p>
+<p>For example, if ‘Q’ is a sequence and ‘T’ is a new space, then this will
+work:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.T:create_index(&#39;Q&#39;,{sequence=&#39;Q&#39;})
+---
+- unique: true
+  parts:
+  - type: unsigned
+    is_nullable: false
+    fieldno: 1
+  sequence_id: 8
+  id: 0
+  space_id: 514
+  name: Q
+  type: TREE
+...
+</pre></div>
+</div>
+<p>(Notice that the index now has a <code class="docutils literal notranslate"><span class="pre">sequence_id</span></code> field.)</p>
+<p>And this will work:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.space.T:insert{box.NULL,0}
+---
+- [1, 0]
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you are using negative numbers for the sequence options,
+make sure that the index key type is ‘integer’. Otherwise
+the index key type may be either ‘integer’ or ‘unsigned’.</p>
+<p class="last">A sequence cannot be dropped if it is associated with an index.
+However, <a class="reference internal" href="box_index.html#box-index-alter"><span class="std std-ref">index_object:alter()</span></a>
+can be used to say that a sequence
+is not associated with an index, for example
+<code class="docutils literal notranslate"><span class="pre">box.space.T.index.I:alter({sequence=false})</span></code>.</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

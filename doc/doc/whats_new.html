@@ -1,0 +1,1822 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Release notes &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Release notes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/doc/doc/whats_new.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="release-notes">
+<span id="id1"></span><h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<p>The Release Notes are summaries of significant changes introduced in Tarantool
+<a class="reference internal" href="#whats-new-1104"><span class="std std-ref">1.10.4</span></a>,
+<a class="reference internal" href="#whats-new-1103"><span class="std std-ref">1.10.3</span></a>,
+<a class="reference internal" href="#whats-new-1102"><span class="std std-ref">1.10.2</span></a>,
+<a class="reference internal" href="#whats-new-190"><span class="std std-ref">1.9.0</span></a>,
+<a class="reference internal" href="#whats-new-176"><span class="std std-ref">1.7.6</span></a>,
+<a class="reference internal" href="#whats-new-175"><span class="std std-ref">1.7.5</span></a>,
+<a class="reference internal" href="#whats-new-174"><span class="std std-ref">1.7.4</span></a>,
+<a class="reference internal" href="#whats-new-173"><span class="std std-ref">1.7.3</span></a>,
+<a class="reference internal" href="#whats-new-172"><span class="std std-ref">1.7.2</span></a>,
+<a class="reference internal" href="#whats-new-171"><span class="std std-ref">1.7.1</span></a>,
+<a class="reference internal" href="#whats-new-169"><span class="std std-ref">1.6.9</span></a>,
+<a class="reference internal" href="#whats-new-168"><span class="std std-ref">1.6.8</span></a>, and
+<a class="reference internal" href="#whats-new-166"><span class="std std-ref">1.6.6</span></a>.</p>
+<p>For smaller feature changes and bug fixes, see closed
+<a class="reference external" href="https://github.com/tarantool/tarantool/milestones?state=closed">milestones</a>
+at GitHub.</p>
+<div class="section" id="version-1-10">
+<span id="whats-new-110"></span><h2>Version 1.10<a class="headerlink" href="#version-1-10" title="Permalink to this headline">¶</a></h2>
+<p id="whats-new-1104"><strong>Release 1.10.4</strong></p>
+<p>Release type: stable (lts). Release date: 2019-09-26.  Tag: 1-10-4.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.10.4">https://github.com/tarantool/tarantool/releases/tag/1.10.4</a>.</p>
+<p>Overview</p>
+<p>1.10.4 is the next <a class="reference internal" href="dev_guide/release_management.html#release-policy"><span class="std std-ref">stable (lts)</span></a> release in the 1.10 series.
+The label ‘stable’ means we have had systems running in production without known crashes,
+bad results or other showstopper bugs for quite a while now.</p>
+<p>This release resolves about 50 issues since 1.10.3.</p>
+<p>Compatibility</p>
+<p>Tarantool 1.10.x is backward compatible with Tarantool 1.9.x in binary data layout,
+client-server protocol and replication protocol.
+Please <a class="reference internal" href="book/admin/upgrades.html#admin-upgrades"><span class="std std-ref">upgrade</span></a> using the <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code>
+procedure to unlock all the new features of the 1.10.x series when migrating
+from 1.9 version.</p>
+<p>Functionality added or changed</p>
+<ul>
+<li><p class="first">(Engines) Improve dump start/stop logging. When initiating memory dump, print
+how much memory is going to be dumped, expected dump rate, ETA, and the recent
+write rate. Upon dump completion, print observed dump rate in addition to dump
+size and duration.</p>
+</li>
+<li><p class="first">(Engines) Look up key in reader thread. If a key isn’t found in the tuple cache,
+we fetch it from a run file. In this case disk read and page decompression is
+done by a reader thread, however key lookup in the fetched page is still
+performed by the TX thread. Since pages are immutable, this could as well
+be done by the reader thread, which would allow us to save some precious CPU
+cycles for TX.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4257">4257</a>.</p>
+</li>
+<li><p class="first">(Core) Improve <a class="reference internal" href="reference/reference_lua/box_stat.html#box-introspection-box-stat"><span class="std std-ref">box.stat.net</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4150">4150</a>.</p>
+</li>
+<li><p class="first">(Core) Add <code class="docutils literal notranslate"><span class="pre">idle</span></code> to downstream status in <code class="docutils literal notranslate"><span class="pre">box.info</span></code>.
+When a relay sends a row it updates <code class="docutils literal notranslate"><span class="pre">last_row_time</span></code> value with the
+current time. When <code class="docutils literal notranslate"><span class="pre">box.info()</span></code> is called, <code class="docutils literal notranslate"><span class="pre">idle</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">current_time</span></code> - <code class="docutils literal notranslate"><span class="pre">last_row_time</span></code>.</p>
+</li>
+<li><p class="first">(Replication) Print corrupted rows on decoding error.
+Improve row printing to log. Print the header row by row, 16 bytes in a row,
+and format output to match <code class="docutils literal notranslate"><span class="pre">xxd</span></code> output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="m">001</span><span class="o">]</span> <span class="m">2019</span>-04-05 <span class="m">18</span>:22:46.679 <span class="o">[</span><span class="m">11859</span><span class="o">]</span> iproto V&gt; Got a corrupted row:
+<span class="o">[</span><span class="m">001</span><span class="o">]</span> <span class="m">2019</span>-04-05 <span class="m">18</span>:22:46.679 <span class="o">[</span><span class="m">11859</span><span class="o">]</span> iproto V&gt; <span class="m">00000000</span>: A3 <span class="m">02</span> D6 5A E4 D9 E7 <span class="m">68</span> A1 <span class="m">53</span> 8D <span class="m">53</span> <span class="m">60</span> 5F <span class="m">20</span> 3F
+<span class="o">[</span><span class="m">001</span><span class="o">]</span> <span class="m">2019</span>-04-05 <span class="m">18</span>:22:46.679 <span class="o">[</span><span class="m">11859</span><span class="o">]</span> iproto V&gt; <span class="m">00000010</span>: D8 E2 D6 E2 A3 <span class="m">02</span> D6 5A E4 D9 E7 <span class="m">68</span> A1 <span class="m">53</span> 8D <span class="m">53</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">(Lua) Add type of operation to space <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-on-replace"><span class="std std-ref">trigger parameters</span></a>.
+For example, a trigger function may now look like this:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">before_replace_trig</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">,</span> <span class="n">space_name</span><span class="p">,</span> <span class="n">op_type</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">op_type</span> <span class="o">==</span> <span class="s1">&#39;INSERT&#39;</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="n">old</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">new</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4099">4099</a>.</p>
+</li>
+<li><p class="first">(Lua) Add <code class="docutils literal notranslate"><span class="pre">debug.sourcefile()</span></code> and <code class="docutils literal notranslate"><span class="pre">debug.sourcedir()</span></code> helpers
+(and <code class="docutils literal notranslate"><span class="pre">debug.__file__</span></code> and <code class="docutils literal notranslate"><span class="pre">debug.__dir__</span> <span class="pre">shortcuts</span></code>) to determine
+the location of a current Lua source file.
+Part of issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4193">4193</a>.</p>
+</li>
+<li><p class="first">(HTTP client) Add <code class="docutils literal notranslate"><span class="pre">max_total_connections</span></code> option in addition to
+<code class="docutils literal notranslate"><span class="pre">max_connections</span></code> to allow more fine-grained tuning of <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>
+connection cache. Don’t restrict the total connections` with a constant value
+by default, but use <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>’s default, which scales the threshold according
+to easy handles count.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3945">3945</a>.</p>
+</li>
+</ul>
+<p>Bugs fixed</p>
+<ul class="simple">
+<li>(Vinyl) Fix assertion failure in <cite>vy_tx_handle_deferred_delete</cite>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4294">4294</a>.</li>
+<li>(Vinyl) Don’t purge deleted runs from vylog on compaction.
+Cherry-picked from issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4218">4218</a>.</li>
+<li>(Vinyl) Don’t throttle DDL.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4238">4238</a>.</li>
+<li>(Vinyl) Fix deferred DELETE statement lost on commit.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4248">4248</a>.</li>
+<li>(Vinyl) Fix assertion while recovering dumped statement.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4222">4222</a>.</li>
+<li>(Vinyl) Reset dump watermark after updating memory limit.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3864">3864</a>.</li>
+<li>(Vinyl) Be pessimistic about write rate when setting dump watermark.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4166">4166</a>.</li>
+<li>(Vinyl) Fix crash if space is dropped while space.get is reading from it.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4109">4109</a>.</li>
+<li>(Vinyl) Fix crash during index build.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4152">4152</a>.</li>
+<li>(Vinyl) Don’t compress L1 runs.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2389">2389</a>.</li>
+<li>(Vinyl) Account statements skipped on read.</li>
+<li>(Vinyl) Take into account primary key lookup in latency accounting.</li>
+<li>(Vinyl) Fix <code class="docutils literal notranslate"><span class="pre">vy_range_update_compaction_priority</span></code> hang.</li>
+<li>(Vinyl) Free region on vylog commit instead of resetting it and clean up
+region after allocating surrogate statement.</li>
+<li>(Vinyl) Increase even more the open file limit in <code class="docutils literal notranslate"><span class="pre">systemd</span></code> unit file.</li>
+<li>(Vinyl) Increment min range size to 128MB</li>
+<li>(Memtx) Cancel checkpoint thread at exit.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4170">4170</a>.</li>
+<li>(Core) Fix crash for update with empty tuple.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4041">4041</a>.</li>
+<li>(Core) Fix use-after-free in <code class="docutils literal notranslate"><span class="pre">space_truncate</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4093">4093</a>.</li>
+<li>(Core) Fix error while altering index with sequence.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4214">4214</a>.</li>
+<li>(Core) Detect a new invalid json path case.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4419">4419</a>.</li>
+<li>(Core) Fix empty password authentication.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4327">4327</a>.</li>
+<li>(Core) Fix <code class="docutils literal notranslate"><span class="pre">txn::sub_stmt_begin</span></code> array size.</li>
+<li>(Core) Account <code class="docutils literal notranslate"><span class="pre">index.pairs</span></code> in <code class="docutils literal notranslate"><span class="pre">box.stat.SELECT()</span></code>.</li>
+<li>(Replication) Disallow bootstrap of read-only masters.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4321">4321</a>.</li>
+<li>(Replication) Enter orphan mode on manual replication configuration change.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4424">4424</a>.</li>
+<li>(Replication) Set <code class="docutils literal notranslate"><span class="pre">last_row_time</span></code> to <code class="docutils literal notranslate"><span class="pre">now</span></code> in <code class="docutils literal notranslate"><span class="pre">relay_new</span></code> and <code class="docutils literal notranslate"><span class="pre">relay_start</span></code>.
+PR <a class="reference external" href="https://github.com/tarantool/tarantool/pull/4431">4431</a>.</li>
+<li>(Replication) Stop relay on subscribe error.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4399">4399</a>.</li>
+<li>(Replication) Init <code class="docutils literal notranslate"><span class="pre">coio</span></code> watcher before join/subscribe.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4110">4110</a>.</li>
+<li>(Replication) Allow to change instance id during join.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4107">4107</a>.</li>
+<li>(Replication) Fix garbage collection logic.</li>
+<li>(Replication) Revert packet boundary checking for iproto.</li>
+<li>(Replication) Do not abort replication on ER_UNKNOWN_REPLICA.</li>
+<li>(Replication) Reduce effects of input buffer fragmentation on large <code class="docutils literal notranslate"><span class="pre">cfg.readahead</span></code>.</li>
+<li>(Replication) Fix upgrade from 1.7 (it doesn’t recognize IPROTO_VOTE request type).</li>
+<li>(Replication) Fix memory leak in call / eval in the case when a transaction
+is not committed.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4388">4388</a>.</li>
+<li>(Lua) Fix <code class="docutils literal notranslate"><span class="pre">fio.mktree()</span></code> error reporting.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4044">4044</a>.</li>
+<li>(Lua) Fix segfault on <code class="docutils literal notranslate"><span class="pre">ffi.C_say()</span></code> without filename.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4336">4336</a>.</li>
+<li>(Lua) Fix segfault on <code class="docutils literal notranslate"><span class="pre">json.encode()</span></code> on a recursive table.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4366">4366</a>.</li>
+<li>(Lua) Fix <code class="docutils literal notranslate"><span class="pre">pwd.getpwall()</span></code> and <code class="docutils literal notranslate"><span class="pre">pwd.getgrall()</span></code> hang on CentOS 6
+and FreeBSD 12.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4447">4447</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/4428">4428</a>.</li>
+<li>(Lua) Fix a segfault during initialization of a cipher from <code class="docutils literal notranslate"><span class="pre">crypto</span></code> module.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4223">4223</a>.</li>
+<li>(HTTP client) Reduce stack consumption during waiting for a DNS resolving result.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4179">4179</a>.</li>
+<li>(HTTP client) Increase max outgoing header size to 8 KiB.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3959">3959</a>.</li>
+<li>(HTTP client) Verify “headers” option stronger.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4281">4281</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3679">3679</a>.</li>
+<li>(HTTP client) Use bundled <code class="docutils literal notranslate"><span class="pre">libcurl</span></code> rather than system-wide by default.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4318">4318</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/4180">4180</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/4288">4288</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/4389">4389</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/4397">4397</a>.</li>
+<li>(HTTP client) This closes several known problems that were fixed in recent
+<code class="docutils literal notranslate"><span class="pre">libcurl</span></code> versions, including segfaults, hangs, memory leaks and performance
+problems.</li>
+<li>(LuaJIT) Fix overflow of snapshot map offset.
+Part of issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4171">4171</a>.</li>
+<li>(LuaJIT) Fix rechaining of pseudo-resurrected string keys.
+Part of issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4171">4171</a>.</li>
+<li>(LuaJIT) Fix fold machinery misbehaves.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4376">4376</a>.</li>
+<li>(LuaJIT) Fix for <cite>debug.getinfo(1,’&gt;S’)</cite>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3833">3833</a>.</li>
+<li>(LuaJIT) Fix <cite>string.find</cite> recording.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4476">4476</a>.</li>
+<li>(LuaJIT) Fixed a segfault when unsinking 64-bit pointers.</li>
+<li>(Misc) Increase even more the open file limit in <code class="docutils literal notranslate"><span class="pre">systemd</span></code> unit file.</li>
+<li>(Misc) Raise error in <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> when <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> isn’t called.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3953">3953</a>.</li>
+<li>(Misc) Support <code class="docutils literal notranslate"><span class="pre">systemd</span></code>’s NOTIFY_SOCKET on OS X.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4436">4436</a>.</li>
+<li>(Misc) Fix <code class="docutils literal notranslate"><span class="pre">coio_getaddrinfo()</span></code> when 0 timeout is passed
+(affects <code class="docutils literal notranslate"><span class="pre">netbox</span></code>’s <code class="docutils literal notranslate"><span class="pre">connect_timeout</span></code>).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4209">4209</a>.</li>
+<li>(Misc) Fix <code class="docutils literal notranslate"><span class="pre">coio_do_copyfile()</span></code> to perform truncate of destination
+(affects <code class="docutils literal notranslate"><span class="pre">fio.copyfile()</span></code>).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4181">4181</a>.</li>
+<li>(Misc) Make hints in <code class="docutils literal notranslate"><span class="pre">coio_getaddrinfo()</span></code> optional.</li>
+<li>(Misc) Validate <code class="docutils literal notranslate"><span class="pre">msgpack.decode()</span></code> cdata size argument.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4224">4224</a>.</li>
+<li>(Misc) Fix linking with static <code class="docutils literal notranslate"><span class="pre">openssl</span></code> library.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4437">4437</a>.</li>
+</ul>
+<p>Deprecations</p>
+<ul class="simple">
+<li>(Core) Deprecate <code class="docutils literal notranslate"><span class="pre">rows_per_wal</span></code> in favor of <code class="docutils literal notranslate"><span class="pre">wal_max_size</span></code>.
+Part of issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3762">3762</a>.</li>
+</ul>
+<p id="whats-new-1103"><strong>Release 1.10.3</strong></p>
+<p>Release type: stable (lts). Release date: 2019-04-01.  Tag: 1-10-3.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.10.3">https://github.com/tarantool/tarantool/releases/tag/1.10.3</a>.</p>
+<p>Overview</p>
+<p>1.10.3 is the next <a class="reference internal" href="dev_guide/release_management.html#release-policy"><span class="std std-ref">stable (lts)</span></a> release in the 1.10 series.
+The label ‘stable’ means we have had systems running in production without known crashes,
+bad results or other showstopper bugs for quite a while now.</p>
+<p>This release resolves 69 issues since 1.10.2.</p>
+<p>Compatibility</p>
+<p>Tarantool 1.10.x is backward compatible with Tarantool 1.9.x in binary data layout, client-server protocol and replication protocol.
+Please <a class="reference internal" href="book/admin/upgrades.html#admin-upgrades"><span class="std std-ref">upgrade</span></a> using the <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code> procedure to unlock all the new features of the 1.10.x series when migrating from 1.9 version.</p>
+<p>Functionality added or changed</p>
+<ul class="simple">
+<li>(Engines) Randomize vinyl index compaction
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3944">3944</a>.</li>
+<li>(Engines) Throttle tx thread if compaction doesn’t keep up with dumps
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3721">3721</a>.</li>
+<li>(Engines) Do not apply run_count_per_level to the last level
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3657">3657</a>.</li>
+<li>(Server) Report the number of active iproto connections
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3905">3905</a>.</li>
+<li>(Replication) Never keep a dead replica around if running out of disk space
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3397">3397</a>.</li>
+<li>(Replication) Report join progress to the replica log
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3165">3165</a>.</li>
+<li>(Lua) Expose snapshot status in box.info.gc()
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3935">3935</a>.</li>
+<li>(Lua) Show names of Lua functions in backtraces in fiber.info()
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3538">3538</a>.</li>
+<li>(Lua) Check if transaction opened
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3518">3518</a>.</li>
+</ul>
+<p>Bugs fixed</p>
+<ul class="simple">
+<li>(Engines) Tarantool crashes if DML races with DDL
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3420">3420</a>.</li>
+<li>(Engines) Recovery error if DDL is aborted
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4066">4066</a>.</li>
+<li>(Engines) Tarantool could commit in the read-only mode
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4016">4016</a>.</li>
+<li>(Engines) Vinyl iterator crashes if used throughout DDL
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4000">4000</a>.</li>
+<li>(Engines) Vinyl doesn’t exit until dump/compaction is complete
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3949">3949</a>.</li>
+<li>(Engines) After re-creating secondary index no data is visible
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3903">3903</a>.</li>
+<li>(Engines) box.info.memory().tx underflow
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3897">3897</a>.</li>
+<li>(Engines) Vinyl stalls on intensive random insertion
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3603">3603</a>.</li>
+<li>(Server) Newer version of libcurl explodes fiber stack
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3569">3569</a>.</li>
+<li>(Server) SIGHUP crashes tarantool
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4063">4063</a>.</li>
+<li>(Server) checkpoint_daemon.lua:49: bad argument #2 to ‘format’
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4030">4030</a>.</li>
+<li>(Server) fiber:name() show only part of name
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4011">4011</a>.</li>
+<li>(Server) Second hot standby switch may fail
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3967">3967</a>.</li>
+<li>(Server) Updating box.cfg.readahead doesn’t affect existing connections
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3958">3958</a>.</li>
+<li>(Server) fiber.join() blocks in ‘suspended’ if fiber has cancelled
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3948">3948</a>.</li>
+<li>(Server) Tarantool can be crashed by sending gibberish to a binary socket
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3900">3900</a>.</li>
+<li>(Server) Stored procedure to produce push-messages never breaks on client disconnect
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3559">3859</a>.</li>
+<li>(Server) Tarantool crashed in lj_vm_return
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3840">3840</a>.</li>
+<li>(Server) Fiber executing box.cfg() may process messages from iproto
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3779">3779</a>.</li>
+<li>(Server) Possible regression on nosqlbench
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3747">3747</a>.</li>
+<li>(Server) Assertion after improper index creation
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3744">3744</a>.</li>
+<li>(Server) Tarantool crashes on vshard startup (lj_gc_step)
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3725">3725</a>.</li>
+<li>(Server) Do not restart replication on box.cfg if the configuration didn’t change
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3711">3711</a>.</li>
+<li>(Replication) Applier times out too fast when reading large tuples
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4042">4042</a>.</li>
+<li>(Replication) Vinyl replica join fails
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3968">3968</a>.</li>
+<li>(Replication) Error during replication
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3910">3910</a>.</li>
+<li>(Replication) Downstream status doesn’t show up in replication.info unless the channel is broken
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3904">3904</a>.</li>
+<li>(Replication) replication fails: tx checksum mismatch
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3883">3993</a>.</li>
+<li>(Replication) Rebootstrap crashes if master has replica’s rows
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3740">3740</a>.</li>
+<li>(Replication) After restart tuples revert back to their old state which was before replica sync
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3722">3722</a>.</li>
+<li>(Replication) Add vclock for safer hot standby switch
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3002">3002</a>.</li>
+<li>(Replication) Master row is skipped forever in case of wal write failure
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2283">2283</a>.</li>
+<li>(Lua) space:frommap():tomap() conversion fail
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/4045">4045</a>.</li>
+<li>(Lua) Non-informative message when trying to read a negative count of bytes from socket
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3979">3979</a>.</li>
+<li>(Lua) space:frommap raise “tuple field does not match…” even for nullable field
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3883">3883</a>.</li>
+<li>(Lua) Tarantool crashes on net.box.call after some uptime with vshard internal fiber
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3751">3751</a>.</li>
+<li>(Lua) Heap use after free in lbox_error
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1955">1955</a>.</li>
+<li>(Misc) http.client doesn’t honour ‘connection: keep-alive’
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3955">3955</a>.</li>
+<li>(Misc) net.box wait_connected is broken
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3856">3856</a>.</li>
+<li>(Misc) Mac build fails on Mojave
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3797">3797</a>.</li>
+<li>(Misc) FreeBSD build error: no SSL support
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3750">3750</a>.</li>
+<li>(Misc) ‘http.client’ sets invalid (?) reason
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3681">3681</a>.</li>
+<li>(Misc) Http client silently modifies headers when value is not a “string” or a “number”
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3679">3679</a>.</li>
+<li>(Misc) yaml.encode uses multiline format for ‘false’ and ‘true’
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3662">3662</a>.</li>
+<li>(Misc) yaml.encode encodes ‘null’ incorrectly
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3583">3583</a>.</li>
+<li>(Misc) Error object message is empty
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3604">3604</a>.</li>
+<li>(Misc) Log can be flooded by warning messages
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2218">2218</a>.</li>
+</ul>
+<p>Deprecations</p>
+<ul class="simple">
+<li>Deprecate <code class="docutils literal notranslate"><span class="pre">console=true</span></code> option for <a class="reference internal" href="reference/reference_lua/net_box.html#net-box-new"><span class="std std-ref">net.box.new()</span></a>.</li>
+</ul>
+<p id="whats-new-1102"><strong>Release 1.10.2</strong></p>
+<p>Release type: stable (lts). Release date: 2018-10-13.  Tag: 1-10-2.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.10.2">https://github.com/tarantool/tarantool/releases/tag/1.10.2</a>.</p>
+<p>This is the first <a class="reference internal" href="dev_guide/release_management.html#release-policy"><span class="std std-ref">stable (lts)</span></a> release in the 1.10
+series.
+Also, Tarantool 1.10.2 is a major release that deprecates Tarantool 1.9.2.
+It resolves 95 issues since 1.9.2.</p>
+<p>Tarantool 1.10.x is backward compatible with Tarantool 1.9.x in binary data
+layout, client-server protocol and replication protocol.
+You can <a class="reference internal" href="book/admin/upgrades.html#admin-upgrades"><span class="std std-ref">upgrade</span></a> using the <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code>
+procedure.</p>
+<p>The goal of this release is to significantly increase <code class="docutils literal notranslate"><span class="pre">vinyl</span></code> stability and
+introduce automatic rebootstrap of a Tarantool replica set.</p>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>(Engines) support ALTER for non-empty vinyl spaces.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1653">1653</a>.</li>
+<li>(Engines) tuples stored in the vinyl cache are not shared among the indexes
+of the same space.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3478">3478</a>.</li>
+<li>(Engines) keep a stack of UPSERTS in <code class="docutils literal notranslate"><span class="pre">vy_read_iterator</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1833">1833</a>.</li>
+<li>(Engines) <code class="docutils literal notranslate"><span class="pre">box.ctl.reset_stat()</span></code>, a function to reset vinyl statistics.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3198">3198</a>.</li>
+<li>(Server) <a class="reference internal" href="reference/configuration/index.html#cfg-logging-log"><span class="std std-ref">configurable syslog destination</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3487">3487</a>.</li>
+<li>(Server) allow different nullability in indexes and format.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3430">3430</a>.</li>
+<li>(Server) allow to
+<a class="reference internal" href="reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-start"><span class="std std-ref">back up any checkpoint</span></a>,
+not just the last one.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3410">3410</a>.</li>
+<li>(Server) a way to detect that a Tarantool process was
+started / restarted by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>
+(<a class="reference internal" href="reference/tarantoolctl.html#tarantoolctl-instance-management"><span class="std std-ref">TARANTOOLCTL and TARANTOOL_RESTARTED</span></a>
+env vars).
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3384">3384</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3215">3215</a>.</li>
+<li>(Server) <a class="reference internal" href="reference/configuration/index.html#cfg-networking-net-msg-max"><span class="std std-ref">net_msg_max</span></a>
+configuration parameter to restrict the number of allocated fibers.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3320">3320</a>.</li>
+<li>(Replication)
+display the connection status if the downstream gets disconnected from
+the upstream
+(<a class="reference internal" href="reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication.downstream.status</span></a>
+<code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">disconnected</span></code>).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3365">3365</a>.</li>
+<li>(Replication) <a class="reference internal" href="book/replication/repl_architecture.html#replication-local"><span class="std std-ref">replica-local spaces</span></a>
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3443">3443</a>.</li>
+<li>(Replication)
+<a class="reference internal" href="reference/configuration/index.html#cfg-replication-replication-skip-conflict"><span class="std std-ref">replication_skip_conflict</span></a>,
+a new option in <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> to skip conflicting rows in replication.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3270">3270</a>.</li>
+<li>(Replication)
+remove old snapshots which are not needed by replicas.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3444">3444</a>.</li>
+<li>(Replication)
+log records which tried to commit twice.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3105">3105</a>.</li>
+<li>(Lua) new function <a class="reference internal" href="reference/reference_lua/fiber.html#fiber-object-join"><span class="std std-ref">fiber.join()</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1397">1397</a>.</li>
+<li>(Lua) new option <code class="docutils literal notranslate"><span class="pre">names_only</span></code> to <a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-tomap"><span class="std std-ref">tuple:tomap()</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3280">3280</a>.</li>
+<li>(Lua) support custom rock servers (<code class="docutils literal notranslate"><span class="pre">server</span></code> and <code class="docutils literal notranslate"><span class="pre">only-server</span></code>
+options for <a class="reference internal" href="reference/tarantoolctl.html#tarantoolctl-module-management"><span class="std std-ref">tarantoolctl rocks</span></a>
+command).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2640">2640</a>.</li>
+<li>(Lua) expose <code class="docutils literal notranslate"><span class="pre">on_commit</span></code>/<code class="docutils literal notranslate"><span class="pre">on_rollback</span></code> triggers to Lua;
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/857">857</a>.</li>
+<li>(Lua) new function <a class="reference internal" href="reference/reference_lua/box_txn_management.html#box-is-in-txn"><span class="std std-ref">box.is_in_txn()</span></a>
+to check if a transaction is open;
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3518">3518</a>.</li>
+<li>(Lua) tuple field access via a json path
+(by <a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-field-number"><span class="std std-ref">number</span></a>,
+<a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-field-name"><span class="std std-ref">name</span></a>, and
+<a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-field-path"><span class="std std-ref">path</span></a>);
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1285">1285</a>.</li>
+<li>(Lua) new function <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-frommap"><span class="std std-ref">space:frommap()</span></a>;
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3282">3282</a>.</li>
+<li>(Lua) new module <a class="reference internal" href="reference/reference_lua/utf8.html#utf8-module"><span class="std std-ref">utf8</span></a> that implements libicu’s bindings
+for use in Lua;
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3290">3290</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3385">3385</a>.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-1-9">
+<span id="whats-new-19"></span><h2>Version 1.9<a class="headerlink" href="#version-1-9" title="Permalink to this headline">¶</a></h2>
+<p id="whats-new-190"><strong>Release 1.9.0</strong></p>
+<p>Release type: stable. Release date: 2018-02-26.  Tag: 1.9.0-4-g195d446.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.9.0">https://github.com/tarantool/tarantool/releases/tag/1.9.0</a>.</p>
+<p>This is the successor of the 1.7.6 stable release.
+The goal of this release is increased maturity of vinyl and master-master replication,
+and it contributes a number of features to this cause. Please follow the download
+instructions at <a class="reference external" href="https://tarantool.io/en/download/download.html">https://tarantool.io/en/download/download.html</a> to download and install
+a package for your operating system.</p>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>(Security) it is now possible to
+<a class="reference internal" href="book/box/authentication_index.html#authentication-owners-privileges"><span class="std std-ref">block/unblock</span></a> users.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2898">2898</a>.</li>
+<li>(Security) new function <a class="reference internal" href="reference/reference_lua/box_session.html#box-session-euid"><span class="std std-ref">box.session.euid()</span></a> to return effective user.
+Effective user can be different from authenticated user in case of <code class="docutils literal notranslate"><span class="pre">setuid</span></code>
+functions or <code class="docutils literal notranslate"><span class="pre">box.session.su</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2994">2994</a>.</li>
+<li>(Security) new <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">super</span></a> role, with superuser access. Grant ‘super’ to guest to
+disable access control.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3022">3022</a>.</li>
+<li>(Security) <a class="reference internal" href="reference/reference_lua/box_session.html#box-session-on-auth"><span class="std std-ref">on_auth</span></a> trigger is now fired in case of both successful and
+failed authentication.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3039">3039</a>.</li>
+<li>(Replication/recovery) new replication configuration algorithm: if replication
+doesn’t connect to replication_quorum peers in <a class="reference internal" href="reference/configuration/index.html#cfg-replication-replication-connect-timeout"><span class="std std-ref">replication_connect_timeout</span></a>
+seconds, the server start continues but the server enters the new <a class="reference internal" href="book/replication/repl_add_instances.html#replication-orphan-status"><span class="std std-ref">orphan</span></a> status,
+which is basically read-only, until the replicas connect to each other.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3151">3151</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2958">2958</a>.</li>
+<li>(Replication/recovery) after replication connect at startup, the server does
+not start processing write requests before
+<a class="reference internal" href="book/replication/repl_add_instances.html#replication-orphan-status"><span class="std std-ref">syncing up</span></a> syncing up with all connected peers.</li>
+<li>(Replication/recovery) it is now possible to explicitly set
+<a class="reference internal" href="reference/configuration/index.html#cfg-replication-instance-uuid"><span class="std std-ref">instance_uuid</span></a> and
+<a class="reference internal" href="reference/configuration/index.html#cfg-replication-replicaset-uuid"><span class="std std-ref">replica set uuid</span></a> as configuration parameters.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2967">2967</a>.</li>
+<li>(Replication/recovery) <a class="reference internal" href="reference/reference_lua/box_once.html#box-once"><span class="std std-ref">box.once()</span></a> no longer fails on a read-only replica
+but waits.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2537">2537</a>.</li>
+<li>(Replication/recovery) <a class="reference internal" href="reference/configuration/index.html#cfg-binary-logging-snapshots-force-recovery"><span class="std std-ref">force_recovery</span></a> can now skip a corrupted xlog file.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3076">3076</a>.</li>
+<li>(Replication/recovery) improved replication monitoring: <a class="reference internal" href="reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication</span></a>
+shows peer ip:port and correct replication lag even for idle peers.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2753">2753</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2689">2689</a>.</li>
+<li>(Application server) new <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-before-replace"><span class="std std-ref">before</span></a> triggers which can be used for conflict
+resolution in master-master replication.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2993">2993</a>.</li>
+<li>(Application server) <a class="reference internal" href="reference/reference_lua/http.html#http-module"><span class="std std-ref">http client</span></a> now correctly parses cookies and supports
+http+unix:// paths.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3040">3040</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2801">2801</a>.</li>
+<li>(Application server) <code class="docutils literal notranslate"><span class="pre">fio</span></code> rock now supports <code class="docutils literal notranslate"><span class="pre">file_exists()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rename()</span></code> works across filesystems, and <code class="docutils literal notranslate"><span class="pre">read()</span></code> without arguments
+reads the whole file.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2924">2924</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2751">2751</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2925">2925</a>.</li>
+<li>(Application server) <code class="docutils literal notranslate"><span class="pre">fio</span></code> rock errors now follow Tarantool function call
+conventions and always return an error message in addition to the error flag.</li>
+<li>(Application server) <code class="docutils literal notranslate"><span class="pre">digest</span></code> rock now supports pbkdf2 password hashing
+algorithm, useful in PCI/DSS compliant applications.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2874">2874</a>.</li>
+<li>(Application server) <a class="reference internal" href="reference/reference_lua/box_info.html#box-info-memory"><span class="std std-ref">box.info.memory()</span></a> provides a high-level overview of
+server memory usage, including networking, Lua, transaction and index memory.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/934">934</a>.</li>
+<li>(Database) it is now possible to <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-is-nullable"><span class="std std-ref">add missing tuple fields</span></a> to an index,
+which is very useful when adding an index along with the evolution of the
+database schema.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2988">2988</a>.</li>
+<li>(Database) lots of improvements in field type support when creating or
+<a class="reference internal" href="reference/reference_lua/box_index.html#box-index-alter"><span class="std std-ref">altering</span></a> spaces and indexes.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2893">2893</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3011">3011</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3008">3008</a>.</li>
+<li>(Database) it is now possible to turn on <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-is-nullable"><span class="std std-ref">is_nullable</span></a> property on a field
+even if the space is not empty, the change is instantaneous.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2973">2973</a>.</li>
+<li>(Database) <a class="reference internal" href="reference/reference_lua/log.html#log-module"><span class="std std-ref">logging</span></a> has been improved in many respects: individual messages
+(issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1972">1972</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2743">2743</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2900">2900</a>),
+more logging in cases when it was useful
+(issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3096">3096</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2871">2871</a>).</li>
+<li>(Vinyl storage engine) it is now possible to make a <a class="reference internal" href="reference/reference_lua/box_index.html#box-index-unique"><span class="std std-ref">unique</span></a> vinyl index
+non-unique without index rebuild.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2449">2449</a>.</li>
+<li>(Vinyl storage engine) improved UPDATE, REPLACE and recovery performance in
+presence of secondary keys.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2289">2289</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2875">2875</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/3154">3154</a>.</li>
+<li>(Vinyl storage engine) <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-len"><span class="std std-ref">space:len()</span></a> and
+<a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-bsize"><span class="std std-ref">space:bsize()</span></a> now work for
+vinyl (although they are still not exact).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3056">3056</a>.</li>
+<li>(Vinyl storage engine) recovery speed has improved in presence of secondary
+keys.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2099">2099</a>.</li>
+<li>(Builds) Alpine Linux support.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/3067">3067</a>.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-1-7">
+<span id="whats-new-17"></span><h2>Version 1.7<a class="headerlink" href="#version-1-7" title="Permalink to this headline">¶</a></h2>
+<p id="whats-new-176"><strong>Release 1.7.6</strong></p>
+<p>Release type: stable. Release date: 2017-11-07.  Tag: 1.7.6-0-g7b2945d6c.</p>
+<p>Announcement: <a class="reference external" href="https://groups.google.com/forum/#!topic/tarantool/hzc7O2YDZUc">https://groups.google.com/forum/#!topic/tarantool/hzc7O2YDZUc</a>.</p>
+<p>This is the next stable release in the 1.7 series.
+It resolves more than 75 issues since 1.7.5.</p>
+<p>What’s new in Tarantool 1.7.6?</p>
+<blockquote>
+<div><ul class="simple">
+<li>In addition to <a class="reference internal" href="reference/reference_lua/box_txn_management.html#box-rollback"><span class="std std-ref">rollback</span></a> of a transaction, there is now
+rollback to a defined point within a transaction – <a class="reference internal" href="reference/reference_lua/box_txn_management.html#box-savepoint"><span class="std std-ref">savepoint</span></a> support.</li>
+<li>There is a new object type: <a class="reference internal" href="book/box/data_model.html#index-box-sequence"><span class="std std-ref">sequences</span></a>.
+The older option, <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-auto-increment"><span class="std std-ref">auto-increment</span></a>, will be deprecated.</li>
+<li>String indexes can have <a class="reference internal" href="book/box/data_model.html#index-collation"><span class="std std-ref">collations</span></a>.</li>
+</ul>
+</div></blockquote>
+<p>New options are available for:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="reference/reference_lua/net_box.html#net-box-module"><span class="std std-ref">net_box</span></a> (timeouts),</li>
+<li><a class="reference internal" href="reference/reference_lua/string.html#string-module"><span class="std std-ref">string</span></a> functions,</li>
+<li>space <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-format"><span class="std std-ref">formats</span></a> (user-defined field names and types),</li>
+<li><a class="reference internal" href="reference/reference_lua/digest.html#digest-base64-encode"><span class="std std-ref">base64</span></a> (<code class="docutils literal notranslate"><span class="pre">urlsafe</span></code> option), and</li>
+<li>index <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-create-index"><span class="std std-ref">creation</span></a>
+(collation, <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-is-nullable"><span class="std std-ref">is-nullable</span></a>, field names).</li>
+</ul>
+</div></blockquote>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Layout of <code class="docutils literal notranslate"><span class="pre">box.space._index</span></code> has been extended to support
+<a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-is-nullable"><span class="std std-ref">is_nullable</span></a>
+and <a class="reference internal" href="book/box/data_model.html#index-collation"><span class="std std-ref">collation</span></a> features.
+All new indexes created on columns with <code class="docutils literal notranslate"><span class="pre">is_nullable</span></code> or <code class="docutils literal notranslate"><span class="pre">collation</span></code>
+properties will have the new definition format.
+Please update your client libraries if you plan to use these new features.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2802">2802</a></li>
+<li><a class="reference internal" href="reference/reference_lua/fiber.html#fiber-object-name-get"><span class="std std-ref">fiber_name()</span></a> now raises an exception instead of truncating long fiber names.
+We found that some Lua modules such as <a class="reference internal" href="reference/reference_rock/expirationd.html#expirationd-module"><span class="std std-ref">expirationd</span></a> use <code class="docutils literal notranslate"><span class="pre">fiber.name()</span></code>
+as a key to identify background tasks. If a name is truncated, this fact was
+silently missed. The new behavior allows to detect bugs caused by <code class="docutils literal notranslate"><span class="pre">fiber.name()</span></code>
+truncation. Please use <code class="docutils literal notranslate"><span class="pre">fiber.name(name,</span> <span class="pre">{</span> <span class="pre">truncate</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">})</span></code> to emulate
+the old behavior.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2622">2622</a></li>
+<li><a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-format"><span class="std std-ref">space:format()</span></a> is now validated on DML operations.
+Previously <code class="docutils literal notranslate"><span class="pre">space:format()</span></code> was only used by client libraries, but starting
+from Tarantoool 1.7.6, field types in <code class="docutils literal notranslate"><span class="pre">space:format()</span></code> are validated on the
+server side on every DML operation, and field names can be used in indexes
+and Lua code. If you used <code class="docutils literal notranslate"><span class="pre">space:format()</span></code> in a non-standard way,
+please update layout and type names according to the official documentation for
+space formats.</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Hybrid schema-less + schemaful data model.
+Earlier Tarantool versions allowed to store arbitrary MessagePack documents in spaces.
+Starting from Tarantool 1.7.6, you can use
+<a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-format"><span class="std std-ref">space:format()</span></a> to define schema restrictions and constraints
+for tuples in spaces. Defined field types are automatically validated on every DML operation,
+and defined field names can be used instead of field numbers in Lua code.
+A new function <a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-tomap"><span class="std std-ref">tuple:tomap()</span></a> was added to convert a tuple into a key-value Lua dictionary.</li>
+<li>Collation and Unicode support.
+By default, when Tarantool compares strings, it takes into consideration only the numeric
+value of each byte in the string. To allow the ordering that you see in phone books and dictionaries,
+Tarantool 1.7.6 introduces support for collations based on the
+<a class="reference external" href="http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table">Default Unicode Collation Element Table (DUCET)</a>
+and the rules described in
+<a class="reference external" href="http://unicode.org/reports/tr10">Unicode® Technical Standard #10 Unicode Collation Algorithm (UTS #10 UCA)</a>
+See <a class="reference internal" href="book/box/data_model.html#index-collation"><span class="std std-ref">collations</span></a>.</li>
+<li>NULL values in unique and non-unique indexes.
+By default, all fields in Tarantool are  “NOT NULL”.
+Starting from Tarantool 1.7.6, you can use
+<code class="docutils literal notranslate"><span class="pre">is_nullable</span></code> option in <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-format"><span class="std std-ref">space:format()</span></a>
+or <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-is-nullable"><span class="std std-ref">inside an index part definition</span></a>
+to allow storing NULL in indexes.
+Tarantool partially implements
+<a class="reference external" href="https://en.wikipedia.org/wiki/Three-valued_logic">three-valued logic</a>
+from the SQL standard and allows storing multiple NULL values in unique indexes.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1557">1557</a>.</li>
+<li>Sequences and a new implementation of <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-auto-increment"><span class="std std-ref">auto_increment()</span></a>.
+Tarantool 1.7.6 introduces new
+<a class="reference internal" href="book/box/data_model.html#index-box-sequence"><span class="std std-ref">sequence number generators</span></a> (like CREATE SEQUENCE in SQL).
+This feature is used to implement new persistent auto increment in spaces.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/389">389</a>.</li>
+<li>Vinyl: introduced gap locks in Vinyl transaction manager.
+The new locking mechanism in Vinyl TX manager reduces the number of conflicts in transactions.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2671">2671</a>.</li>
+<li>net.box: <a class="reference internal" href="reference/reference_lua/box_session.html#box-session-on-connect"><span class="std std-ref">on_connect</span></a>
+and <a class="reference internal" href="reference/reference_lua/box_session.html#box-session-on-disconnect"><span class="std std-ref">on_disconnect</span></a> triggers.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2858">2858</a>.</li>
+<li>Structured logging in <a class="reference internal" href="reference/configuration/index.html#cfg-logging-log-format"><span class="std std-ref">JSON format</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2795">2795</a>.</li>
+<li>(Lua) Lua: <a class="reference internal" href="reference/reference_lua/string.html#string-strip"><span class="std std-ref">string.strip()</span></a>
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2785">2785</a>.</li>
+<li>(Lua) added <a class="reference internal" href="reference/reference_lua/digest.html#digest-base64-encode"><span class="std std-ref">base64_urlsafe_encode()</span></a> to <code class="docutils literal notranslate"><span class="pre">digest</span></code> module.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2777">2777</a>.</li>
+<li>Log conflicted keys in master-master replication.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2779">2779</a>.</li>
+<li>Allow to disable backtrace in <a class="reference internal" href="reference/reference_lua/fiber.html#fiber-info"><span class="std std-ref">fiber.info()</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2878">2878</a>.</li>
+<li>Implemented <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">make</span> <span class="pre">*.spec</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2846">2846</a>.</li>
+<li>Extended the default loader to look for <code class="docutils literal notranslate"><span class="pre">.rocks</span></code> in the parent dir hierarchy.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2676">2676</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SOL_TCP</span></code> options support in <a class="reference internal" href="reference/reference_lua/socket.html#socket-setsockopt"><span class="std std-ref">socket:setsockopt()</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/598">598</a>.</li>
+<li>Partial emulation of LuaSocket on top of Tarantool Socket.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2727">2727</a>.</li>
+</ul>
+</div></blockquote>
+<p>Developer tools:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Integration with IntelliJ IDEA with debugging support.
+Now you can use IntelliJ IDEA as an IDE to develop and debug Lua applications for Tarantool.
+See <a class="reference internal" href="book/app_server/using_ide.html#app-server-using-ide"><span class="std std-ref">Using IDE</span></a>.</li>
+<li>Integration with <a class="reference external" href="https://github.com/pkulchenko/MobDebug">MobDebug</a> remote Lua debugger.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2728">2728</a>.</li>
+<li>Configured <code class="docutils literal notranslate"><span class="pre">/usr/bin/tarantool</span></code> as an alternative Lua interpreter on Debian/Ubuntu.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2730">2730</a>.</li>
+</ul>
+</div></blockquote>
+<p>New rocks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/smtp">smtp.client</a> - support SMTP via <code class="docutils literal notranslate"><span class="pre">libcurl</span></code>.</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-175"><strong>Release 1.7.5</strong></p>
+<p>Release type: stable. Release date: 2017-08-22.  Tag: 1.7.5.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/doc/issues/289">https://github.com/tarantool/doc/issues/289</a>.</p>
+<p>This is a stable release in the 1.7 series.
+This release resolves more than 160 issues since 1.7.4.</p>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>(Vinyl) a new <a class="reference internal" href="reference/configuration/index.html#cfg-binary-logging-snapshots-force-recovery"><span class="std std-ref">force_recovery</span></a>
+mode to recover broken disk files.
+Use <code class="docutils literal notranslate"><span class="pre">box.cfg{force_recovery=true}</span></code> to recover corrupted data files
+after hardware issues or power outages.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2253">2253</a>.</li>
+<li>(Vinyl) index options can be changed on the fly without rebuild.
+Now <a class="reference internal" href="reference/configuration/index.html#cfg-storage-vinyl-page-size"><span class="std std-ref">page_size</span></a>,
+<a class="reference internal" href="reference/configuration/index.html#cfg-storage-vinyl-run-size-ratio"><span class="std std-ref">run_size_ratio</span></a>,
+<a class="reference internal" href="reference/configuration/index.html#cfg-storage-vinyl-run-count-per-level"><span class="std std-ref">run_count_per_level</span></a>
+and <a class="reference internal" href="reference/configuration/index.html#cfg-storage-vinyl-bloom-fpr"><span class="std std-ref">bloom_fpr</span></a>
+index options can be dynamically changed via <a class="reference internal" href="reference/reference_lua/box_index.html#box-index-alter"><span class="std std-ref">index:alter()</span></a>.
+The changes take effect in newly created data files only.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2109">2109</a>.</li>
+<li>(Vinyl) improve <a class="reference internal" href="reference/reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info.vinyl()</span></a> and <code class="docutils literal notranslate"><span class="pre">index:info()</span></code> output.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1662">1662</a>.</li>
+<li>(Vinyl) introduce <a class="reference internal" href="reference/configuration/index.html#cfg-basic-vinyl-timeout"><span class="std std-ref">box.cfg.vinyl_timeout</span></a> option to control quota throttling.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2014">2014</a>.</li>
+<li>Memtx: stable <a class="reference internal" href="reference/reference_lua/box_index.html#box-index-index-pairs"><span class="std std-ref">index:pairs()</span></a> iterators for the TREE index.
+TREE iterators are automatically restored to a proper position after index’s modifications.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1796">1796</a>.</li>
+<li>(Memtx) <a class="reference internal" href="reference/reference_lua/box_index.html#box-index-index-pairs"><span class="std std-ref">predictable order</span></a> for non-unique TREE indexes.
+Non-unique TREE indexes preserve the sort order for duplicate entries.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2476">2476</a>.</li>
+<li>(Memtx+Vinyl) dynamic configuration of <a class="reference internal" href="reference/configuration/index.html#cfg-storage-memtx-max-tuple-size"><span class="std std-ref">max tuple size</span></a>.
+Now <code class="docutils literal notranslate"><span class="pre">box.cfg.memtx_max_tuple_size</span></code> and <code class="docutils literal notranslate"><span class="pre">box.cfg.vinyl_max_tuple_size</span></code>
+configuration options can be changed on the fly without need to restart the server.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2667">2667</a>.</li>
+<li>(Memtx+Vinyl) new implementation.
+Space <a class="reference internal" href="reference/reference_lua/box_space_index.html#box-space-truncate"><span class="std std-ref">truncation</span></a> doesn’t cause re-creation of all indexes any more.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/618">618</a>.</li>
+<li>Extended the <a class="reference internal" href="book/box/limitations.html#limitations-length"><span class="std std-ref">maximal length</span></a> of all identifiers from 32 to 65k characters.
+Space, user and function names are not limited by 32 characters anymore.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/944">944</a>.</li>
+<li><a class="reference internal" href="reference/configuration/index.html#cfg-replication-replication-timeout"><span class="std std-ref">Heartbeat</span></a> messages for replication.
+Replication client now sends the selective acknowledgments for processed
+records and automatically re-establish stalled connections.
+This feature also changes <a class="reference internal" href="reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication[replica_id].vclock</span></a>.
+to display committed vclock of remote replica.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2484">2484</a>.</li>
+<li>Keep track of remote replicas during WAL maintenance.
+Replication master now automatically preserves xlogs needed for remote replicas.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/748">748</a>.</li>
+<li>Enabled <a class="reference internal" href="reference/reference_lua/box_tuple.html#box-tuple-new"><span class="std std-ref">box.tuple.new()</span></a> to work without <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2047">2047</a>.</li>
+<li><a class="reference internal" href="reference/reference_lua/box_txn_management.html#box-atomic"><span class="std std-ref">box.atomic(fun, …)</span></a> wrapper to execute function in a transaction.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/818">818</a>.</li>
+<li><a class="reference internal" href="reference/reference_lua/box_session.html#box-session-type"><span class="std std-ref">box.session.type()</span></a> helper to determine session type.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2642">2642</a>.</li>
+<li>Hot code <a class="reference internal" href="reference/reference_lua/box_schema.html#box-schema-func-reload"><span class="std std-ref">reload</span></a> for stored C stored procedures.
+Use <code class="docutils literal notranslate"><span class="pre">box.schema.func.reload('modulename.function')</span></code>
+to reload dynamic shared libraries on the fly.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/910">910</a>.</li>
+<li><a class="reference internal" href="reference/reference_lua/string.html#string-hex"><span class="std std-ref">string.hex()</span></a> and <code class="docutils literal notranslate"><span class="pre">str:hex()</span></code> Lua API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2522">2522</a>.</li>
+<li>Package manager based on LuaRocks.
+Use <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">install</span> <span class="pre">MODULENAME</span></code> to install MODULENAME Lua module
+from <a class="reference external" href="https://rocks.tarantool.org/">https://rocks.tarantool.org/</a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2067">2067</a>.</li>
+<li>Lua 5.1 command line options.
+Tarantool binary now supports ‘-i’, ‘-e’, ‘-m’ and ‘-l’ command line options.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1265">1265</a>.</li>
+<li>Experimental GC64 mode for LuaJIT.
+GC64 mode allow to operate the full address space on 64-bit hosts.
+Enable via <code class="docutils literal notranslate"><span class="pre">-DLUAJIT_ENABLE_GC64=ON</span> <span class="pre">compile-time</span></code> configuration option.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2643">2643</a>.</li>
+<li>Syslog logger now support non-blocking mode.
+<a class="reference internal" href="reference/configuration/index.html#cfg-logging-log-nonblock"><span class="std std-ref">box.cfg{log_nonblock=true}</span></a> now also works for syslog logger.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2466">2466</a>.</li>
+<li>Added a VERBOSE <a class="reference internal" href="reference/configuration/index.html#cfg-logging-log-level"><span class="std std-ref">log level</span></a> beyond INFO.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2467">2467</a>.</li>
+<li>Tarantool now automatically makes snapshots every hour.
+Please set <a class="reference internal" href="reference/configuration/index.html#cfg-checkpoint-daemon-checkpoint-interval"><span class="std std-ref">box.cfg{checkpoint_interval=0</span></a> to restore pre-1.7.5 behaviour.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2496">2496</a>.</li>
+<li>Increase precision for percentage ratios provoded by <a class="reference internal" href="reference/reference_lua/box_slab.html#box-slab-info"><span class="std std-ref">box.slab.info()</span></a>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2082">2082</a>.</li>
+<li>Stack traces now contain symbols names on all supported platforms.
+Previous versions of Tarantool didn’t display meaningful function names in
+<a class="reference internal" href="reference/reference_lua/fiber.html#fiber-info"><span class="std std-ref">fiber.info()</span></a> on non-x86 platforms.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2103">2103</a>.</li>
+<li>Allowed to create fiber with custom stack size from C API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2438">2438</a>.</li>
+<li>Added <code class="docutils literal notranslate"><span class="pre">ipc_cond</span></code> to public C API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1451">1451</a>.</li>
+</ul>
+</div></blockquote>
+<p>New rocks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="reference/reference_lua/http.html#http-module"><span class="std std-ref">http.client</span></a> (built-in) - libcurl-based HTTP client with SSL/TLS support.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/x2083">2083</a>.</li>
+<li><a class="reference internal" href="reference/reference_lua/iconv.html#iconv-converter"><span class="std std-ref">iconv</span></a> (built-in) - bindings for iconv.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2587">2587</a>.</li>
+<li><a class="reference external" href="https://github.com/mailru/tarantool-authman">authman</a> - API for
+user registration and login in your site using email and social networks.</li>
+<li><a class="reference external" href="https://github.com/tarantool/document">document</a> - store nested documents in Tarantool.</li>
+<li><a class="reference external" href="https://github.com/tarantool/synchronized">synchronized</a> - critical sections for Lua.</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-174"><strong>Release 1.7.4</strong></p>
+<p>Release type: release candidate. Release date: 2017-05-12. Release tag: Tag: 1.7.4.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.7.4">https://github.com/tarantool/tarantool/releases/tag/1.7.4</a>
+or <a class="reference external" href="https://groups.google.com/forum/#!topic/tarantool/3x88ATX9YbY">https://groups.google.com/forum/#!topic/tarantool/3x88ATX9YbY</a></p>
+<p>This is a release candidate in the 1.7 series.
+Vinyl Engine, the flagship feature of 1.7.x, is now feature complete.</p>
+<p>Incompatible changes</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code> options were changed to add Vinyl support:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">snap_dir</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">memtx_dir</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_arena</span></code> (gigabytes) renamed to <code class="docutils literal notranslate"><span class="pre">memtx_memory</span></code> (bytes),
+default value changed from 1Gb to 256MB</li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_minimal</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">memtx_min_tuple_size</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_maximal</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">memtx_max_tuple_size</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_factor</span></code> is deprecated, not relevant in 1.7.x</li>
+<li><code class="docutils literal notranslate"><span class="pre">snapshot_count</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">checkpoint_count</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">snapshot_period</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">checkpoint_interval</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">logger</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">log</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">logger_nonblock</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">log_nonblock</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">logger_level</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">log_level</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">replication_source</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">replication</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">panic_on_snap_error</span> <span class="pre">=</span> <span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">panic_on_wal_error</span> <span class="pre">=</span> <span class="pre">true</span></code>
+superseded by <code class="docutils literal notranslate"><span class="pre">force_recovery</span> <span class="pre">=</span> <span class="pre">false</span></code></li>
+</ul>
+<p>Until Tarantool 1.8, you can use deprecated parameters for both
+initial and runtime configuration, but such usage will print
+a warning in the server log.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1927">1927</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2042">2042</a>.</p>
+</li>
+<li><p class="first">Hot standy mode is now off by default. Tarantool automatically detects
+another running instance in the same <code class="docutils literal notranslate"><span class="pre">wal_dir</span></code> and refuses to start.
+Use <code class="docutils literal notranslate"><span class="pre">box.cfg</span> <span class="pre">{hot_standby</span> <span class="pre">=</span> <span class="pre">true}</span></code> to enable the hot standby mode.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/775">775</a>.</p>
+</li>
+<li><p class="first">UPSERT via a secondary key was banned to avoid unclear semantics.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2226">2226</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.info</span></code> and <code class="docutils literal notranslate"><span class="pre">box.info.replication</span></code> format was changed to display
+information about upstream and downstream connections
+(Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/723">723</a>):</p>
+<ul class="simple">
+<li>Added <code class="docutils literal notranslate"><span class="pre">box.info.replication[instance_id].downstream.vclock</span></code> to display
+the last sent row to remote replica.</li>
+<li>Added <code class="docutils literal notranslate"><span class="pre">box.info.replication[instance_id].id</span></code>.</li>
+<li>Added <code class="docutils literal notranslate"><span class="pre">box.info.replication[instance_id].lsn</span></code>.</li>
+<li>Moved <code class="docutils literal notranslate"><span class="pre">box.info.replication[instance_id].{vclock,status,error}</span></code> to
+<code class="docutils literal notranslate"><span class="pre">box.info.replication[instance_id].upstream.{vclock,status,error}</span></code>.</li>
+<li>All registered replicas from <code class="docutils literal notranslate"><span class="pre">box.space._cluster</span></code> are included to
+<code class="docutils literal notranslate"><span class="pre">box.info.replication</span></code> output.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.server.id</span></code> renamed <code class="docutils literal notranslate"><span class="pre">box.info.id</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.server.lsn</span></code> renamed <code class="docutils literal notranslate"><span class="pre">box.info.lsn</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.server.uuid</span></code> renamed <code class="docutils literal notranslate"><span class="pre">box.info.uuid</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.cluster.signature</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">box.info.signature</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.id</span></code> and <code class="docutils literal notranslate"><span class="pre">box.info.lsn</span></code> now return <cite>nil</cite> instead of <cite>-1</cite>
+during initial cluster bootstrap.</li>
+</ul>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">net.box</span></code>: added per-request options to all requests:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">conn.call(func_name,</span> <span class="pre">arg1,</span> <span class="pre">arg2,...)</span></code> changed to
+<code class="docutils literal notranslate"><span class="pre">conn.call(func_name,</span> <span class="pre">{arg1,</span> <span class="pre">arg2,</span> <span class="pre">...},</span> <span class="pre">opts)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">conn.eval(func_name,</span> <span class="pre">arg1,</span> <span class="pre">arg2,...)</span></code> changed to
+<code class="docutils literal notranslate"><span class="pre">conn.eval(func_name,</span> <span class="pre">{arg1,</span> <span class="pre">arg2,</span> <span class="pre">...},</span> <span class="pre">opts)</span></code></li>
+</ul>
+</li>
+<li><p class="first">All requests now support <code class="docutils literal notranslate"><span class="pre">timeout</span> <span class="pre">=</span> <span class="pre">&lt;seconds&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">buffer</span> <span class="pre">=</span> <span class="pre">&lt;ibuf&gt;</span></code> options.</p>
+</li>
+<li><p class="first">Added <code class="docutils literal notranslate"><span class="pre">connect_timeout</span></code> option to <code class="docutils literal notranslate"><span class="pre">netbox.connect()</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">netbox:timeout()</span></code> and <code class="docutils literal notranslate"><span class="pre">conn:timeout()</span></code> are now deprecated.
+Use <code class="docutils literal notranslate"><span class="pre">netbox.connect(host,</span> <span class="pre">port,</span> <span class="pre">{</span> <span class="pre">call_16</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">})</span></code> for
+1.6.x-compatible behavior.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2195">2195</a>.</p>
+</li>
+<li><p class="first">systemd configuration changed to support <code class="docutils literal notranslate"><span class="pre">Type=Notify</span></code> / <code class="docutils literal notranslate"><span class="pre">sd_notify()</span></code>.
+Now <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">tarantool&#64;INSTANCE</span></code> will wait until Tarantool
+has started and recovered from xlogs. The recovery status is reported to
+<code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">status</span> <span class="pre">tarantool&#64;INSTANCE</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1923">1923</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">log</span></code> module now doesn’t prefix all messages with the full path to
+tarantool binary when used without <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1876">1876</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">require('log').logger_pid()</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">require('log').pid()</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2917">2917</a>.</p>
+</li>
+<li><p class="first">Removed Lua 5.0 compatible defines and functions
+(Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2396">2396</a>):</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">luaL_reg</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">luaL_Reg</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">luaL_getn(L,</span> <span class="pre">i)</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">lua_objlen(L,</span> <span class="pre">i)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">luaL_setn(L,</span> <span class="pre">i,</span> <span class="pre">j)</span></code> removed (was no-op)</li>
+<li><code class="docutils literal notranslate"><span class="pre">lua_ref(L,</span> <span class="pre">lock)</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">luaL_ref(L,</span> <span class="pre">lock)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">lua_getref(L,ref)</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">lua_rawgeti(L,</span> <span class="pre">LUA_REGISTRYINDEX,</span> <span class="pre">(ref))</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">lua_unref(L,</span> <span class="pre">ref)</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">luaL_unref(L,</span> <span class="pre">ref)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">math.mod()</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">math.fmod()</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">string.gfind()</span></code> removed in favor of <code class="docutils literal notranslate"><span class="pre">string.gmatch()</span></code></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">(Vinyl) multi-level compaction.
+The compaction scheduler now groups runs of the same range into levels to
+reduce the write amplification during compaction. This design allows Vinyl
+to support 1:100+ ram:disk use-cases.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1821">1821</a>.</p>
+</li>
+<li><p class="first">(Vinyl) bloom filters for sorted runs.
+Bloom filter is a probabilistic data structure which can be used to test
+whether a requested key is present in a run file without reading the actual
+file from the disk. Bloom filter may have false-positive matches but
+false-negative matches are impossible. This feature reduces the number
+of seeks needed for random lookups and speeds up REPLACE/DELETE with
+enabled secondary keys.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1919">1919</a>.</p>
+</li>
+<li><p class="first">(Vinyl) key-level cache for point lookups and range queries.
+Vinyl storage engine caches selected keys and key ranges instead of
+entire disk pages like in traditional databases. This approach is more
+efficient because the cache is not polluted with raw disk data.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1692">1692</a>.</p>
+</li>
+<li><p class="first">(Vinyl) implemented the common memory level for in-memory indexes.
+Now all in-memory indexes of a space store pointers to the same tuples
+instead of cached secondary key index data. This feature significantly
+reduces the memory footprint in case of secondary keys.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1908">1908</a>.</p>
+</li>
+<li><p class="first">(Vinyl) new implementation of initial state transfer of JOIN command in
+replication protocol. New replication protocol fixes problems with
+consistency and secondary keys. We implemented a special kind of low-cost
+database-wide read-view to avoid dirty reads in JOIN procedure. This trick
+wasn’t not possible in traditional B-Tree based databases.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2001">2001</a>.</p>
+</li>
+<li><p class="first">(Vinyl) index-wide mems/runs.
+Removed ranges from in-memory and and the stop layer of LSM tree on disk.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2209">2209</a>.</p>
+</li>
+<li><p class="first">(Vinyl) coalesce small ranges.
+Before dumping or compacting a range, consider coalescing it with its
+neighbors.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1735">1735</a>.</p>
+</li>
+<li><p class="first">(Vinyl) implemented transnational journal for metadata.
+Now information about all Vinyl files is logged in a special <code class="docutils literal notranslate"><span class="pre">.vylog</span></code> file.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1967">1967</a>.</p>
+</li>
+<li><p class="first">(Vinyl) implemented consistent secondary keys.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2410">2410</a>.</p>
+</li>
+<li><p class="first">(Memtx+Vinyl) implemented low-level Lua API to create consistent backups.
+of Memtx + Vinyl data. The new feature provides <code class="docutils literal notranslate"><span class="pre">box.backup.start()/stop()</span></code>
+functions to create backups of all spaces.
+<a class="reference internal" href="reference/reference_lua/box_backup.html#reference-lua-box-backup-backup-start"><span class="std std-ref">box.backup.start()</span></a> pauses the
+Tarantool garbage collector and returns the list of files to copy. These files then
+can be copied be any third-party tool, like cp, ln, tar, rsync, etc.
+<code class="docutils literal notranslate"><span class="pre">box.backup.stop()</span></code> lets the garbage collector continue.
+Created backups can be restored instantly by copying into a new directory
+and starting a new Tarantool instance. No special preparation, conversion
+or unpacking is needed.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1916">1916</a>.</p>
+</li>
+<li><p class="first">(Vinyl) added statistics for background workers to <code class="docutils literal notranslate"><span class="pre">box.info.vinyl()</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2005">2005</a>.</p>
+</li>
+<li><p class="first">(Memtx+Vinyl) reduced the memory footprint for indexes which keys are
+sequential and start from the first field. This optimization was necessary
+for secondary keys in Vinyl, but we optimized Memtx as well.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2046">2046</a>.</p>
+</li>
+<li><p class="first">LuaJIT was rebased on the latest 2.1.0b3 with out patches
+(Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2396">2396</a>):</p>
+<ul class="simple">
+<li>Added JIT compiler backend for ARM64</li>
+<li>Added JIT compiler backend and interpreter for MIPS64</li>
+<li>Added some more Lua 5.2 and Lua 5.3 extensions</li>
+<li>Fixed several bugs</li>
+<li>Removed Lua 5.0 legacy (see incompatible changes above).</li>
+</ul>
+</li>
+<li><p class="first">Enabled a new smart string hashing algorithm in LuaJIT to avoid significant
+slowdown when a lot of collisions are generated.
+Contributed by Yury Sokolov (&#64;funny-falcon) and Nick Zavaritsky (&#64;mejedi).
+See <a class="reference external" href="https://github.com/tarantool/luajit/pull/2">https://github.com/tarantool/luajit/pull/2</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.snapshot()</span></code> now updates mtime of a snapshot file if there were no
+changes to the database since the last snapshot.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantl/issues/2045">2045</a>.</p>
+</li>
+<li><p class="first">Implemented <code class="docutils literal notranslate"><span class="pre">space:bsize()</span></code> to return the memory size utilized by all
+tuples of the space.
+Contributed by Roman Tokarev (&#64;rtokarev).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2043">2043</a>.</p>
+</li>
+<li><p class="first">Exported new Lua/C functions to public API:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">luaT_pushtuple</span></code>, <code class="docutils literal notranslate"><span class="pre">luaT_istuple</span></code>
+(issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1878">1878</a>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">luaT_error</span></code>, <code class="docutils literal notranslate"><span class="pre">luaT_call</span></code>, <code class="docutils literal notranslate"><span class="pre">luaT_cpcall</span></code>
+(issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2291">2291</a>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">luaT_state</span></code>
+(issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2416">2416</a>)</li>
+</ul>
+</li>
+<li><p class="first">Exported new Box/C functions to public API: <code class="docutils literal notranslate"><span class="pre">box_key_def</span></code>, <code class="docutils literal notranslate"><span class="pre">box_tuple_format</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tuple_compare()</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple_compare_with_key()</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2225">2225</a>.</p>
+</li>
+<li><p class="first">xlogs now can be rotated based on size (<code class="docutils literal notranslate"><span class="pre">wal_max_size</span></code>) as well as
+the number of written rows (<code class="docutils literal notranslate"><span class="pre">rows_per_wal</span></code>).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/173">173</a>.</p>
+</li>
+<li><p class="first">Added <code class="docutils literal notranslate"><span class="pre">string.split()</span></code>, <code class="docutils literal notranslate"><span class="pre">string.startswith()</span></code>, <code class="docutils literal notranslate"><span class="pre">string.endswith()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">string.ljust()</span></code>, <code class="docutils literal notranslate"><span class="pre">string.rjust()</span></code>, <code class="docutils literal notranslate"><span class="pre">string.center()</span></code> API.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2211">2211</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2214">2214</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2415">2415</a>.</p>
+</li>
+<li><p class="first">Added <code class="docutils literal notranslate"><span class="pre">table.copy()</span></code> and <code class="docutils literal notranslate"><span class="pre">table.deepcopy()</span></code> functions.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2412">2212</a>.</p>
+</li>
+<li><p class="first">Added <code class="docutils literal notranslate"><span class="pre">pwd</span></code> module to work with UNIX users and groups.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2213">2213</a>.</p>
+</li>
+<li><p class="first">Removed noisy “client unix/: connected” messages from logs. Use
+<code class="docutils literal notranslate"><span class="pre">box.session.on_connect()</span></code>/<code class="docutils literal notranslate"><span class="pre">on_disconnect()</span></code> triggers instead.
+Issue <a class="reference external" href="https://github.com/tarantool/t`arantool/issues/1938">1938</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">box.session.on_connect()</span></code>/<code class="docutils literal notranslate"><span class="pre">on_disconnect()</span></code>/<code class="docutils literal notranslate"><span class="pre">on_auth()</span></code> triggers
+now also fired for admin console connections.</p>
+</li>
+<li><p class="first">tarantoolctl: <code class="docutils literal notranslate"><span class="pre">eval</span></code>, <code class="docutils literal notranslate"><span class="pre">enter</span></code>, <code class="docutils literal notranslate"><span class="pre">connect</span></code> commands now support UNIX pipes.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/672">672</a>.</p>
+</li>
+<li><p class="first">tarantoolctl: improved error messages and added a new man page.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1488">1488</a>.</p>
+</li>
+<li><p class="first">tarantoolctl: added filter by <code class="docutils literal notranslate"><span class="pre">replica_id</span></code> to <code class="docutils literal notranslate"><span class="pre">cat</span></code> and <code class="docutils literal notranslate"><span class="pre">play</span></code> commands.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2301">2301</a>.</p>
+</li>
+<li><p class="first">tarantoolctl: <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">stop</span></code> and <code class="docutils literal notranslate"><span class="pre">restart</span></code> commands now redirect to
+<code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start/stop/restart</span></code> when systemd is enabled.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2254">2254</a>.</p>
+</li>
+<li><p class="first">net.box: added <code class="docutils literal notranslate"><span class="pre">buffer</span> <span class="pre">=</span> <span class="pre">&lt;buffer&gt;</span></code> per-request option to store raw
+MessagePack responses into a C buffer.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2195">2195</a>.</p>
+</li>
+<li><p class="first">net.box: added <code class="docutils literal notranslate"><span class="pre">connect_timeout</span></code> option.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2054">2054</a>.</p>
+</li>
+<li><p class="first">net.box: added <code class="docutils literal notranslate"><span class="pre">on_schema_reload()</span></code> hook.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2021">2021</a>.</p>
+</li>
+<li><p class="first">net.box: exposed <code class="docutils literal notranslate"><span class="pre">conn.schema_version</span></code> and <code class="docutils literal notranslate"><span class="pre">space.connection</span></code> to API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2412">2412</a>.</p>
+</li>
+<li><p class="first">log: <code class="docutils literal notranslate"><span class="pre">debug()</span></code>/<code class="docutils literal notranslate"><span class="pre">info()</span></code>/<code class="docutils literal notranslate"><span class="pre">warn()</span></code>/<code class="docutils literal notranslate"><span class="pre">error()</span></code> now doesn’t fail on
+formatting errors.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/889">889</a>.</p>
+</li>
+<li><p class="first">crypto: added HMAC support.
+Contributed by Andrey Kulikov (&#64;amdei).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/725">725</a>.</p>
+</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-173"><strong>Release 1.7.3</strong></p>
+<p>Release type: beta. Release date: 2016-12-24. Release tag: Tag: 1.7.3-0-gf0c92aa.</p>
+<p>Announcement: <a class="reference external" href="https://github.com/tarantool/tarantool/releases/tag/1.7.3">https://github.com/tarantool/tarantool/releases/tag/1.7.3</a></p>
+<p>This is the second beta release in the 1.7 series.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Broken <code class="docutils literal notranslate"><span class="pre">coredump()</span></code> Lua function was removed.
+Use <code class="docutils literal notranslate"><span class="pre">gdb</span> <span class="pre">-batch</span> <span class="pre">-ex</span> <span class="pre">&quot;generate-core-file&quot;</span> <span class="pre">-p</span> <span class="pre">$PID</span></code> instead.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1886">1886</a>.</li>
+<li>Vinyl disk layout was changed since 1.7.2 to add ZStandard compression and improve
+the performance of secondary keys.
+Use the replication mechanism to upgrade from 1.7.2 beta.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1656">1656</a>.</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Substantial progress on stabilizing the Vinyl storage engine:<ul>
+<li>Fix most known crashes and bugs with bad results.</li>
+<li>Switch to use XLOG/SNAP format for all data files.</li>
+<li>Enable ZStandard compression for all data files.</li>
+<li>Squash UPSERT operations on the fly and merge hot keys using a
+background fiber.</li>
+<li>Significantly improve the performance of index:pairs() and index:count().</li>
+<li>Remove unnecessary conflicts from transactions.</li>
+<li>In-memory level was mostly replaced by memtx data structures.</li>
+<li>Specialized allocators are used in most places.</li>
+</ul>
+</li>
+<li>We’re still actively working on Vinyl and plan to add multi-level
+compaction and improve the performance of secondary keys in 1.7.4.
+This implies a data format change.</li>
+<li>Support for DML requests for space:on_replace() triggers.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/587">587</a>.</li>
+<li>UPSERT can be used with the empty list of operations.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1854">1854</a>.</li>
+<li>Lua functions to manipulate environment variables.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1718">1718</a>.</li>
+<li>Lua library to read Tarantool snapshots and xlogs.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1782">1782</a>.</li>
+<li>New <code class="docutils literal notranslate"><span class="pre">play</span></code> and <code class="docutils literal notranslate"><span class="pre">cat</span></code> commands in <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1861">1861</a>.</li>
+<li>Improve support for the large number of active network clients.
+Issue#5#1892.</li>
+<li>Support for <code class="docutils literal notranslate"><span class="pre">space:pairs(key,</span> <span class="pre">iterator-type)</span></code> syntax.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1875">1875</a>.</li>
+<li>Automatic cluster bootstrap now also works without authorization.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1589">1589</a>.</li>
+<li>Replication retries to connect to master indefinitely.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1511">1511</a>.</li>
+<li>Temporary spaces now work with <code class="docutils literal notranslate"><span class="pre">box.cfg</span> <span class="pre">{</span> <span class="pre">read_only</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">}</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1378">1378</a>.</li>
+<li>The maximum length of space names increased to 64 bytes (was 32).
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/2008">2008</a>.</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-172"><strong>Release 1.7.2</strong></p>
+<p>Release type: beta. Release date: 2016-09-29. Release tag: Tag: <cite>1.7.2-1-g92ed6c4</cite>.</p>
+<p>Announcement: <a class="reference external" href="https://groups.google.com/forum/#!topic/tarantool-ru/qUYUesEhRQg">https://groups.google.com/forum/#!topic/tarantool-ru/qUYUesEhRQg</a></p>
+<p>This is a release in the 1.7 series.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A new binary protocol command for CALL, which no more restricts a function
+to returning an array of tuples and allows returning an arbitrary MsgPack/JSON
+result, including scalars, nil and void (nothing).
+The old CALL is left intact for backward compatibility. It will be removed
+in the next major release. All programming language drivers will be gradually
+changed to use the new CALL.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1296">1296</a>.</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Vinyl storage engine finally reached the beta stage.
+This release fixes more than 90 bugs in Vinyl, in particular, removing
+unpredictable latency spikes, all known crashes and bad/lost result bugs.<ul>
+<li>new cooperative multitasking based architecture to eliminate latency spikes,</li>
+<li>support for non-sequential multi-part keys,</li>
+<li>support for secondary keys,</li>
+<li>support for <code class="docutils literal notranslate"><span class="pre">auto_increment()</span></code>,</li>
+<li>number, integer, scalar field types in indexes,</li>
+<li>INSERT, REPLACE and UPDATE return new tuple, like in memtx.</li>
+</ul>
+</li>
+<li>We’re still actively working on Vinyl and plan to add <code class="docutils literal notranslate"><span class="pre">zstd</span></code> compression
+and a new memory allocator for Vinyl in-memory index in 1.7.3.
+This implies a data format change which we plan to implement before 1.7
+becomes generally available.</li>
+<li>Tab-based autocompletion in the interactive console,
+<code class="docutils literal notranslate"><span class="pre">require('console').connect()</span></code>, <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">enter</span></code> and
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">connect</span></code> commands.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/86">86</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/1790">1790</a>.
+Use the TAB key to auto complete the names of Lua variables, functions
+and meta-methods.</li>
+<li>A new implementation of <code class="docutils literal notranslate"><span class="pre">net.box</span></code> improving performance and solving problems
+when the Lua garbage collector handles dead connections.
+Issues <a class="reference external" href="https://github.com/tarantool/tarantool/issues/799">799</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/800">800</a>,
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/1138">1138</a> and
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/1750">1750</a>.</li>
+<li>memtx snapshots and xlog files are now compressed on the fly using the fast
+<a class="reference external" href="https://github.com/facebook/zstd">ZStandard</a> compression algorithm.
+Compression options are configured automatically to get an optimal trade-off
+between CPU utilization and disk throughput.</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber.cond()</span></code> - a new synchronization mechanism for cooperative multitasking.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1731">1731</a>.</li>
+<li>Tarantool can now be installed using universal Snappy packages
+(<a class="reference external" href="http://snapcraft.io/">http://snapcraft.io/</a>) with <code class="docutils literal notranslate"><span class="pre">snap</span> <span class="pre">install</span> <span class="pre">tarantool</span> <span class="pre">--channel=beta</span></code>.</li>
+</ul>
+</div></blockquote>
+<p>New rocks and packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/tarantool-curl">curl</a> - non-blocking bindings for libcurl</li>
+<li><a class="reference external" href="https://github.com/tarantool/prometheus">prometheus</a> - Prometheus metric collector for Tarantool</li>
+<li><a class="reference external" href="https://github.com/tarantool/gis">gis</a> - a full-featured geospatial extension for Tarantool</li>
+<li><a class="reference external" href="https://github.com/tarantool/mqtt">mqtt</a> - an MQTT protocol client for Tarantool</li>
+<li><a class="reference external" href="https://github.com/tarantool/luaossl">luaossl</a> - the most comprehensive OpenSSL module in the Lua universe</li>
+</ul>
+</div></blockquote>
+<p>Deprecated, removed features and minor incompatibilities:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">num</span></code> and <code class="docutils literal notranslate"><span class="pre">str</span></code> fields type names are deprecated, use
+<code class="docutils literal notranslate"><span class="pre">unsigned</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code> instead.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1534">1534</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">space:inc()</span></code> and <code class="docutils literal notranslate"><span class="pre">space:dec()</span></code> were removed (deprecated in 1.6.x)
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1289">1289</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">fiber:cancel()</span></code> is now asynchronous and doesn’t wait for the fiber to end.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1732">1732</a>.</p>
+</li>
+<li><p class="first">Implicit error-prone <code class="docutils literal notranslate"><span class="pre">tostring()</span></code> was removed from <code class="docutils literal notranslate"><span class="pre">digest</span></code> API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1591">1591</a>.</p>
+</li>
+<li><p class="first">Support for SHA-0 (<code class="docutils literal notranslate"><span class="pre">digest.sha()</span></code>) was removed due to OpenSSL upgrade.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">net.box</span></code> now uses one-based indexes for <code class="docutils literal notranslate"><span class="pre">space.name.index[x].parts</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1729">1729</a>.</p>
+</li>
+<li><p class="first">Tarantool binary now dynamically links with <code class="docutils literal notranslate"><span class="pre">libssl.so</span></code> during compile time
+instead of loading it at the run time.</p>
+</li>
+<li><p class="first">Debian and Ubuntu packages switched to use native <code class="docutils literal notranslate"><span class="pre">systemd</span></code> configuration
+alongside with old-fashioned <code class="docutils literal notranslate"><span class="pre">sysvinit</span></code> scripts.</p>
+<p><code class="docutils literal notranslate"><span class="pre">systemd</span></code> provides its own facilities for multi-instance management.
+To upgrade, perform the following steps:</p>
+<ol class="arabic simple">
+<li>Install new 1.7.2 packages.</li>
+<li>Ensure that <code class="docutils literal notranslate"><span class="pre">INSTANCENAME.lua</span></code> file is present in <code class="docutils literal notranslate"><span class="pre">/etc/tarantool/instace.enabled</span></code>.</li>
+<li>Stop INSTANCENAME using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">stop</span> <span class="pre">INSTANCENAME</span></code>.</li>
+<li>Start INSTANCENAME using <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">tarantool&#64;INSTANCENAME</span></code>.</li>
+<li>Enable INSTANCENAME during system boot using <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">trantool&#64;INTANCENAME</span></code>.</li>
+<li>Say <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">disable</span> <span class="pre">tarantool;</span> <span class="pre">update-rc.d</span> <span class="pre">tarantool</span> <span class="pre">remove</span></code> to disable
+sysvinit-compatible wrappers.</li>
+</ol>
+<p>Refer to issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1291">1291</a>
+comment and <a class="reference internal" href="book/admin/index.html#admin"><span class="std std-ref">the administration chapter</span></a> for additional information.</p>
+</li>
+<li><p class="first">Debian and Ubuntu packages start a ready-to-use <code class="docutils literal notranslate"><span class="pre">example.lua</span></code> instance on
+a clean installation of the package.
+The default instance grants universe permissions for <code class="docutils literal notranslate"><span class="pre">guest</span></code> user and listens
+on “locahost:3313”.</p>
+</li>
+<li><p class="first">Fedora 22 packages were deprecated (EOL).</p>
+</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-171"><strong>Release 1.7.1</strong></p>
+<p>Release type: alpha. Release date: 2016-07-11.</p>
+<p>Announcement: <a class="reference external" href="https://groups.google.com/forum/#!topic/tarantool/KGYj3VKJKb8">https://groups.google.com/forum/#!topic/tarantool/KGYj3VKJKb8</a></p>
+<p>This is the first alpha in the 1.7 series.
+The main feature of this release is a new storage engine, called “vinyl”.
+Vinyl is a write optimized storage engine, allowing the amount
+of data stored exceed the amount of available RAM 10-100x times.
+Vinyl is a continuation of the Sophia engine from 1.6, and
+effectively a fork and a distant relative of Dmitry Simonenko’s
+Sophia. Sophia is superseded and replaced by Vinyl.
+Internally it is organized as a log structured merge tree.
+However, it takes a serious effort to improve on the traditional
+deficiencies of log structured storage, such as poor read performance
+and unpredictable write latency. A single index
+is range partitioned among many LSM data structures, each having its
+own in-memory buffers of adjustable size. Range partitioning allows
+merges of LSM levels to be more granular, as well as to prioritize
+hot ranges over cold ones in access to resources, such as RAM and
+I/O. The merge scheduler is designed to minimize write latency
+while ensuring read performance stays within acceptable limits.
+Vinyl today only supports a primary key index. The index
+can consist of up to 256 parts, like in MemTX, up from 8 in
+Sophia. Partial key reads are supported.
+Support of non-sequential multi part keys, as well as secondary keys
+is on the short term todo.
+Our intent is to remove all limitations currently present in
+Vinyl, making it a first class citizen in Tarantool.</p>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The disk-based storage engine, which was called <code class="docutils literal notranslate"><span class="pre">sophia</span></code> or <code class="docutils literal notranslate"><span class="pre">phia</span></code>
+in earlier versions, is superseded by the <code class="docutils literal notranslate"><span class="pre">vinyl</span></code> storage engine.</li>
+<li>There are new types for indexed fields.</li>
+<li>The LuaJIT version is updated.</li>
+<li>Automatic replica set bootstrap (for easier configuration of a new replica set)
+is supported.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">space_object:inc()</span></code> function is removed.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">space_object:dec()</span></code> function is removed.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">space_object:bsize()</span></code> function is added.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">box.coredump()</span></code> function is removed, for an alternative see
+<a class="reference internal" href="book/admin/daemon_supervision.html#admin-core-dumps"><span class="std std-ref">Core dumps</span></a>.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">hot_standby</span></code> configuration option is added.</li>
+<li>Configuration parameters revised or renamed:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_arena</span></code> (in gigabytes) to <code class="docutils literal notranslate"><span class="pre">memtx_memory</span></code> (in bytes),</li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_minimal</span></code> to <code class="docutils literal notranslate"><span class="pre">memtx_min_tuple_size</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">slab_alloc_maximal</span></code> to <code class="docutils literal notranslate"><span class="pre">memtx_max_tuple_size</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">replication_source</span></code> to <code class="docutils literal notranslate"><span class="pre">replication</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">snap_dir</span></code> to <code class="docutils literal notranslate"><span class="pre">memtx_dir</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">logger</span></code> to <code class="docutils literal notranslate"><span class="pre">log</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">logger_nonblock</span></code> to <code class="docutils literal notranslate"><span class="pre">log_nonblock</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">snapshot_count</span></code> to <code class="docutils literal notranslate"><span class="pre">checkpoint_count</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">snapshot_period</span></code> to <code class="docutils literal notranslate"><span class="pre">checkpoint_interval</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">panic_on_wal_error</span></code> and <code class="docutils literal notranslate"><span class="pre">panic_on_snap_error</span></code> united under <code class="docutils literal notranslate"><span class="pre">force_recovery</span></code>.</li>
+</ul>
+</li>
+<li>Until Tarantool 1.8, you can use <a class="reference internal" href="reference/configuration/index.html#cfg-deprecated"><span class="std std-ref">deprecated parameters</span></a>
+for both initial and runtime configuration, but Tarantool will display a warning.
+Also, you can specify both deprecated and up-to-date parameters, provided
+that their values are harmonized. If not, Tarantool will display an error.</li>
+<li>Automatic replication cluster bootstrap; it’s now much
+easier to configure a new replication cluster.</li>
+<li>New indexable data types: INTEGER and SCALAR.</li>
+<li>Code refactoring and performance improvements.</li>
+<li>Updated LuaJIT to 2.1-beta116.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-1-6">
+<span id="whats-new-16"></span><h2>Version 1.6<a class="headerlink" href="#version-1-6" title="Permalink to this headline">¶</a></h2>
+<p id="whats-new-169"><strong>Release 1.6.9</strong></p>
+<p>Release type: maintenance. Release date: 2016-09-27. Release tag: 1.6.9-4-gcc9ddd7.</p>
+<p>Since February 15, 2017, due to Tarantool issue#2040
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2040">Remove sophia engine from 1.6</a>
+there no longer is a storage engine named <cite>sophia</cite>.
+It will be superseded in version 1.7 by the <cite>vinyl</cite> storage engine.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Support for SHA-0 (<code class="docutils literal notranslate"><span class="pre">digest.sha()</span></code>) was removed due to OpenSSL upgrade.</li>
+<li>Tarantool binary now dynamically links with libssl.so during compile time
+instead of loading it at the run time.</li>
+<li>Fedora 22 packages were deprecated (EOL).</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Tab-based autocompletion in the interactive console.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/86">86</a></li>
+<li>LUA_PATH and LUA_CPATH environment variables taken into account, like in PUC-RIO Lua.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1428">1428</a></li>
+<li>Search for <code class="docutils literal notranslate"><span class="pre">.dylib</span></code> as well as for <code class="docutils literal notranslate"><span class="pre">.so</span></code> libraries in OS X.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/810">810</a>.</li>
+<li>A new <code class="docutils literal notranslate"><span class="pre">box.cfg</span> <span class="pre">{</span> <span class="pre">read_only</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">}</span></code> option to emulate master-slave behavior.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/246">246</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">if_not_exists</span> <span class="pre">=</span> <span class="pre">true</span></code> option added to box.schema.user.grant.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1683">1683</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">clock_realtime()</span></code>/<code class="docutils literal notranslate"><span class="pre">monotonic()</span></code> functions added to the public C API.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1455">1455</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">space:count(key,</span> <span class="pre">opts)</span></code> introduced as an alias for
+<code class="docutils literal notranslate"><span class="pre">space.index.primary:count(key,</span> <span class="pre">opts)</span></code>.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/13918">1391</a></li>
+<li>Upgrade script for 1.6.4 -&gt; 1.6.8 -&gt; 1.6.9.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1281">1281</a></li>
+<li>Support for OpenSSL 1.1.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1722">1722</a></li>
+</ul>
+</div></blockquote>
+<p>New rocks and packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/tarantool/tarantool-curl">curl</a> - non-blocking bindings for libcurl</li>
+<li><a class="reference external" href="https://github.com/tarantool/prometheus">prometheus</a> - Prometheus metric collector for Tarantool</li>
+<li><a class="reference external" href="https://github.com/tarantool/gis">gis</a> - full-featured geospatial extension for Tarantool.</li>
+<li><a class="reference external" href="https://github.com/tarantool/mqtt">mqtt</a> - MQTT protocol client for Tarantool</li>
+<li><a class="reference external" href="https://github.com/tarantool/luaossl">luaossl</a> - the most comprehensive OpenSSL module in the Lua universe</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-168"><strong>Release 1.6.8</strong></p>
+<p>Release type: maintenance. Release date: 2016-02-25. Release tag: 1.6.8-525-ga571ac0.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">RPM packages for CentOS 7 / RHEL 7 and Fedora 22+ now use native systemd
+configuration without legacy sysvinit shell scripts. Systemd provides its own
+facilities for multi-instance management. To upgrade, perform the
+following steps:</p>
+<ol class="arabic simple">
+<li>Ensure that <code class="docutils literal notranslate"><span class="pre">INSTANCENAME.lua</span></code> file is present in <code class="docutils literal notranslate"><span class="pre">/etc/tarantool/instace.available</span></code>.</li>
+<li>Stop INSTANCENAME using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">stop</span> <span class="pre">INSTANCENAME</span></code>.</li>
+<li>Start INSTANCENAME using <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">tarantool&#64;INSTANCENAME</span></code>.</li>
+<li>Enable INSTANCENAME during system boot using <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">trantool&#64;INTANCENAME</span></code>.</li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/tarantool/instance.enabled</span></code> directory is now deprecated for systemd-enabled platforms.</p>
+<p>See <a class="reference internal" href="book/admin/index.html#admin"><span class="std std-ref">the administration chapter</span></a> for additional information.</p>
+</li>
+<li><p class="first">Sophia was upgraded to v2.1 to fix upsert, memory corruption and other bugs.
+Sophia v2.1 doesn’t support old v1.1 data format. Please use Tarantool
+replication to upgrade.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1222">1222</a></p>
+</li>
+<li><p class="first">Ubuntu Vivid, Fedora 20, Fedora 21 were deprecated due to EOL.</p>
+</li>
+<li><p class="first">i686 packages were deprecated. Please use our RPM and DEB specs to build
+these on your own infrastructure.</p>
+</li>
+<li><p class="first">Please update your <code class="docutils literal notranslate"><span class="pre">yum.repos.d</span></code> and/or apt <code class="docutils literal notranslate"><span class="pre">sources.list.d</span></code> according to
+instructions at <a class="reference external" href="http://tarantool.org/download.html">http://tarantool.org/download.html</a></p>
+</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Tarantool 1.6.8 fully supports ARMv7 and ARMv8 (aarch64) processors.
+Now it is possible to use Tarantool on a wide range of consumer devices,
+starting from popular Raspberry PI 2 to coin-size embedded boards and
+no-name mini-micro-nano-PCs.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1153">1153</a>.
+(Also qemu works well, but we don’t have real hardware to check.)</p>
+</li>
+<li><p class="first">Tuple comparator functions were optimized, providing up to 30% performance
+boost when an index key consists of 2, 3 or more parts.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/969">969</a>.</p>
+</li>
+<li><p class="first">Tuple allocator changes give another 15% performance improvement.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1298">1298</a></p>
+</li>
+<li><p class="first">Replication relay performance was improved by reducing the amount of data
+directory re-scans.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1150">11150</a></p>
+</li>
+<li><p class="first">A random delay was introduced into snapshot daemon, reducing the chance
+that multiple instances take a snapshot at the same time.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/732">732</a>.</p>
+</li>
+<li><p class="first">Sophia storage engine was upgraded to v2.1:</p>
+<ul class="simple">
+<li>serializable Snapshot Isolation (SSI),</li>
+<li>RAM storage mode,</li>
+<li>anti-cache storage mode,</li>
+<li>persistent caching storage mode,</li>
+<li>implemented AMQ Filter,</li>
+<li>LRU mode,</li>
+<li>separate compression for hot and cold data,</li>
+<li>snapshot implementation for Faster Recovery,</li>
+<li>upsert reorganizations and fixes,</li>
+<li>new performance metrics.</li>
+</ul>
+<p>Please note “Incompatible changes” above.</p>
+</li>
+<li><p class="first">Allow to remove servers with non-zero LSN from <code class="docutils literal notranslate"><span class="pre">_cluster</span></code> space.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1219">1219</a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">net.box</span></code> now automatically reloads space and index definitions.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1183">1183</a>.</p>
+</li>
+<li><p class="first">The maximal number of indexes in space was increased to 128.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1311">1311</a>.</p>
+</li>
+<li><p class="first">New native <code class="docutils literal notranslate"><span class="pre">systemd</span></code> configuration with support of instance management
+and daemon supervision (CentOS 7 and Fedora 22+ only).
+Please note “Incompatible changes” above.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1264">1264</a>.</p>
+</li>
+<li><p class="first">Tarantool package was accepted to the official Fedora repositories
+(<a class="reference external" href="https://apps.fedoraproject.org/packages/tarantool">https://apps.fedoraproject.org/packages/tarantool</a>).</p>
+</li>
+<li><p class="first">Tarantool brew formula (OS X) was accepted to the official
+Homebrew repository (<a class="reference external" href="http://brewformulas.org/tarantool">http://brewformulas.org/tarantool</a>).</p>
+</li>
+<li><p class="first">Clang compiler support was added on FreeBSD.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/786">786</a>.</p>
+</li>
+<li><p class="first">Support for musl libc, used by Alpine Linux and Docker images, was added.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1249">1249</a>.</p>
+</li>
+<li><p class="first">Added support for GCC 6.0.</p>
+</li>
+<li><p class="first">Ubuntu Wily, Xenial and Fedora 22, 23 and 24 are now supported
+distributions for which we build official packages.</p>
+</li>
+<li><p class="first">box.info.cluster.uuid can be used to retrieve cluster UUID.
+Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/1117">1117</a>.</p>
+</li>
+<li><p class="first">Numerous improvements in the documentation, added documentation
+for <code class="docutils literal notranslate"><span class="pre">syslog</span></code>, <code class="docutils literal notranslate"><span class="pre">clock</span></code>, <code class="docutils literal notranslate"><span class="pre">fiber.storage</span></code> packages, updated
+the built-in tutorial.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>New rocks and packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Tarantool switched to a new Docker-based cloud build infrastructure
+The new buildbot significantly decreases commit-to-package time.
+The official repositories at <a class="reference external" href="http://tarantool.org">http://tarantool.org</a> now
+contain the latest version of the server, rocks and connectors.
+See <a class="reference external" href="http://github.com/tarantool/build">http://github.com/tarantool/build</a></li>
+<li>The repositories at <a class="reference external" href="http://tarantool.org/download.html">http://tarantool.org/download.html</a> were moved to
+<a class="reference external" href="http://packagecloud.io">http://packagecloud.io</a> cloud hosting (backed by Amazon AWS).
+Thanks to packagecloud.io for their support of open source!</li>
+<li><code class="docutils literal notranslate"><span class="pre">memcached</span></code> - memcached text and binary protocol implementation for Tarantool.
+Turns Tarantool into a persistent memcached with master-master replication.
+See <a class="reference external" href="https://github.com/tarantool/memcached">https://github.com/tarantool/memcached</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">migrate</span></code> - a Tarantool rock for migration from Tarantool 1.5 to 1.6.
+See <a class="reference external" href="https://github.com/bigbes/migrate">https://github.com/bigbes/migrate</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">cqueues</span></code> - a Lua asynchronous networking, threading, and notification
+framework (contributed by &#64;daurnimator).
+PR <a class="reference external" href="https://github.com/tarantool/tarantool/pull/1204">1204</a>.</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-167"><strong>Release 1.6.7</strong></p>
+<p>Release type: maintenance. Release date: 2015-11-17.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The syntax of <code class="docutils literal notranslate"><span class="pre">upsert</span></code> command has been changed
+and an extra <code class="docutils literal notranslate"><span class="pre">key</span></code> argument was removed from it. The primary
+key for look up is now always taken from the tuple, which is the
+second argument of upsert. <code class="docutils literal notranslate"><span class="pre">upsert()</span></code> was added fairly late at
+a release cycle and the design had an obvious bug which we had
+to fix. Sorry for this.</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber.channel.broadcast()</span></code> was removed since it wasn’t used by
+anyone and didn’t work properly.</li>
+<li>tarantoolctl <code class="docutils literal notranslate"><span class="pre">reload</span></code> command renamed to <code class="docutils literal notranslate"><span class="pre">eval</span></code>.</li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">logger</span></code> option now accepts a syntax for syslog output. Use uri-style
+syntax for file, pipe or syslog log destination.</li>
+<li><code class="docutils literal notranslate"><span class="pre">replication_source</span></code> now accepts an array of URIs,
+so each replica can have up to 30 peers.</li>
+<li>RTREE index now accept two types of <code class="docutils literal notranslate"><span class="pre">distance</span></code> functions:
+<code class="docutils literal notranslate"><span class="pre">euclid</span></code> and <code class="docutils literal notranslate"><span class="pre">manhattan</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">fio.abspath()</span></code> - a new function in <code class="docutils literal notranslate"><span class="pre">fio</span></code> rock to convert
+a relative path to absolute.</li>
+<li>The process title now can be set with an on-board <code class="docutils literal notranslate"><span class="pre">title</span></code> rock.</li>
+<li>This release uses LuaJIT 2.1.</li>
+</ul>
+</div></blockquote>
+<p>New rocks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">memcached</span></code> - makes Tarantool understand Memcached binary protocol.
+Text protocol support is in progress and will be added to the rock
+itself, without changes to the server core.</li>
+</ul>
+</div></blockquote>
+<p id="whats-new-166"><strong>Release 1.6.6</strong></p>
+<p>Release type: maintenance. Release date: 2015-08-28.</p>
+<p>Tarantool 1.6 is no longer getting major new features,
+although it will be maintained.
+The developers are concentrating on Tarantool version 1.9.</p>
+<p>Incompatible changes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A new schema of <code class="docutils literal notranslate"><span class="pre">_index</span></code> system space which accommodates
+multi-dimensional RTREE indexes. Tarantool 1.6.6 works fine
+with an old snapshot and system spaces, but you will not
+be able to start Tarantool 1.6.5 with a data directory
+created by Tarantool 1.6.6, neither will you be able
+to query Tarantool 1.6.6 schema with 1.6.5 net.box.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.info.snapshot_pid</span></code> is renamed to <code class="docutils literal notranslate"><span class="pre">box.info.snapshot_in_progress</span></code></li>
+</ul>
+</div></blockquote>
+<p>Functionality added or changed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Threaded architecture for network. Network I/O has finally
+been moved to a separate thread, increasing single instance
+performance by up to 50%.</li>
+<li>Threaded architecture for checkpointing. Tarantool no longer
+forks to create a snapshot, but uses a separate thread,
+accessing data via a consistent read view.
+This eliminates all known latency spikes caused by
+snapshotting.</li>
+<li>Stored procedures in C/C++. Stored procedures in C/C++
+provide speed (3-4 times, compared to a Lua version in
+our measurements), as well as unlimited extensibility
+power. Since C/C++ procedures run in the same memory
+space as the database, they are also an easy tool
+to corrupt database memory.
+See <a class="reference internal" href="dev_guide/reference_capi/index.html#index-c-api-reference"><span class="std std-ref">The C API description</span></a>.</li>
+<li>Multidimensional RTREE index. RTREE index type
+now support a large (up to 32) number of dimensions.
+RTREE data structure has been optimized to actually use
+<a class="reference external" href="https://en.wikipedia.org/wiki/R*_tree">R*-TREE</a>.
+We’re working on further improvements of the index,
+in particular, configurable distance function.
+See <a class="reference external" href="https://github.com/tarantool/tarantool/wiki/R-tree-index-quick-start-and-usage">https://github.com/tarantool/tarantool/wiki/R-tree-index-quick-start-and-usage</a></li>
+<li>Sophia 2.1.1, with support of compression and multipart
+primary keys.
+See <a class="reference external" href="https://groups.google.com/forum/#!topic/sophia-database/GfcbEC7ksRg">https://groups.google.com/forum/#!topic/sophia-database/GfcbEC7ksRg</a></li>
+<li>New <code class="docutils literal notranslate"><span class="pre">upsert</span></code> command available in the binary protocol
+and in stored functions. The key advantage of upsert
+is that it’s much faster with write-optimized storage
+(sophia storage engine), but some caveats exists as well.
+See Issue <a class="reference external" href="https://github.com/tarantool/tarantool/issues/905">905</a>
+for details. Even though upsert performance advantage is most
+prominent with sophia engine, it works with all storage engines.</li>
+<li>Better memory diagnostics information for fibers, tuple and
+index arena Try a new command <code class="docutils literal notranslate"><span class="pre">box.slab.stats()</span></code>, for
+detailed information about tuple/index slabs, <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> now
+displays information about memory used by the fiber.</li>
+<li>Update and delete now work using a secondary index, if the
+index is unique.</li>
+<li>Authentication triggers. Set <code class="docutils literal notranslate"><span class="pre">box.session.on_auth</span></code> triggers
+to catch authentication events. Trigger API is improved
+to display all defined triggers, easily remove old triggers.</li>
+<li>Manifold performance improvements of <code class="docutils literal notranslate"><span class="pre">net.box</span></code> built-in package.</li>
+<li>Performance optimizations of BITSET index.</li>
+<li><code class="docutils literal notranslate"><span class="pre">panic_on_wal_error</span></code> is a dynamic configuration option now.</li>
+<li>iproto <code class="docutils literal notranslate"><span class="pre">sync</span></code> field is available in Lua as <code class="docutils literal notranslate"><span class="pre">session.sync()</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.once()</span></code> - a new method to invoke code once in an
+instance and replica set lifetime. Use <code class="docutils literal notranslate"><span class="pre">once()</span></code> to set
+up spaces and uses, as well as do schema upgrade in
+production.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.error.last()</span></code> to return the last error in a session.</li>
+</ul>
+</div></blockquote>
+<p>New rocks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">jit.*</span></code>, <code class="docutils literal notranslate"><span class="pre">jit.dump</span></code>, <code class="docutils literal notranslate"><span class="pre">jit.util</span></code>, <code class="docutils literal notranslate"><span class="pre">jit.vmdef</span></code> modules of LuaJIT 2.0
+are now available as built-ins.
+See <a class="reference external" href="http://luajit.org/ext_jit.html">http://luajit.org/ext_jit.html</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">strict</span></code> built-in package, banning use of undeclared variables in
+Lua. Strict mode is on when Tarantool is compiled with debug.
+Turn on/off with <code class="docutils literal notranslate"><span class="pre">require('strict').on()</span></code>/<code class="docutils literal notranslate"><span class="pre">require('strict').off()</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pg</span></code> and <code class="docutils literal notranslate"><span class="pre">mysql</span></code> rocks, available at <a class="reference external" href="http://rocks.tarantool.org">http://rocks.tarantool.org</a> -
+working with MySQL and PostgreSQL from Tarantool.</li>
+<li><code class="docutils literal notranslate"><span class="pre">gperftools</span></code> rock, availble at <a class="reference external" href="http://rocks.tarantool.org">http://rocks.tarantool.org</a> -
+getting perfromance data using Google’s gperf from Tarantool.</li>
+<li><code class="docutils literal notranslate"><span class="pre">csv</span></code> built-in rock, to parse and load CSV (comma-separated
+values) data.</li>
+</ul>
+</div></blockquote>
+<p>New supported platforms:</p>
+<ul class="simple">
+<li>Fedora 22, Ubuntu Vivid</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

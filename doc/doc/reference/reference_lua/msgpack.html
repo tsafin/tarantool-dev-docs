@@ -1,0 +1,802 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module msgpack &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>msgpack</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/msgpack.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-msgpack">
+<span id="msgpack-module"></span><h1>Module <cite>msgpack</cite><a class="headerlink" href="#module-msgpack" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">msgpack</span></code> module decodes
+<a class="reference internal" href="#msgpack-definitions"><span class="std std-ref">raw MsgPack strings</span></a> by converting them to Lua objects,
+and encodes Lua objects by converting them to raw MsgPack strings.
+Tarantool makes heavy internal use of MsgPack because tuples in Tarantool
+are <a class="reference internal" href="../../book/box/data_model.html#index-box-lua-vs-msgpack"><span class="std std-ref">stored</span></a> as MsgPack arrays.</p>
+<p id="msgpack-definitions">Definitions: MsgPack is short for <a class="reference external" href="https://msgpack.org/index.html">MessagePack</a>.
+A “raw MsgPack string” is a byte array formatted according to the
+<a class="reference external" href="https://github.com/msgpack/msgpack/blob/master/spec.md">MsgPack specification</a>
+including type bytes and sizes.
+The type bytes and sizes can be made displayable with <a class="reference internal" href="string.html#string-hex"><span class="std std-ref">string.hex()</span></a>,
+or the raw MsgPack strings can be converted to Lua objects with <code class="docutils literal notranslate"><span class="pre">msgpack</span></code> methods.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">msgpack</span></code> functions and members.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="63%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-encode-lua-value"><span class="std std-ref">msgpack.encode(lua_value)</span></a></td>
+<td>Convert a Lua object to a
+raw MsgPack string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#msgpack-encode-lua-value-ibuf"><span class="std std-ref">msgpack.encode(lua_value,ibuf)</span></a></td>
+<td>Convert a Lua object to a
+raw MsgPack string in an ibuf</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-decode-string"><span class="std std-ref">msgpack.decode(msgpack_string)</span></a></td>
+<td>Convert a raw MsgPack string to
+a Lua object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#msgpack-decode-c-style-string-pointer"><span class="std std-ref">msgpack.decode(C_style_string_pointer)</span></a></td>
+<td>Convert a raw MsgPack string in
+an ibuf to a Lua object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-decode-unchecked-string"><span class="std std-ref">msgpack.decode_unchecked(mspack_string)</span></a></td>
+<td>Convert a raw MsgPack string to
+a Lua object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#msgpack-decode-unchecked-c-style-string-pointer"><span class="std std-ref">msgpack.decode_unchecked(C_style_string_pointer)</span></a></td>
+<td>Convert a raw MsgPack string to
+a Lua object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-decode-array-header"><span class="std std-ref">msgpack.decode_array_header</span></a></td>
+<td>Skip array header in a raw
+MsgPack string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#msgpack-decode-map-header"><span class="std std-ref">msgpack.decode_map_header</span></a></td>
+<td>Skip map header in a raw
+MsgPack string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-serialize"><span class="std std-ref">__serialize parameter</span></a></td>
+<td>Output structure specification</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#msgpack-cfg"><span class="std std-ref">msgpack.cfg</span></a></td>
+<td>Change configuration</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#msgpack-null"><span class="std std-ref">msgpack.NULL</span></a></td>
+<td>Analog of Lua’s “nil”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-msgpack"></span><span class="target" id="msgpack-encode-lua-value"></span><dl class="function">
+<dt id="msgpack.encode">
+<code class="descclassname">msgpack.</code><code class="descname">encode</code><span class="sig-paren">(</span><em>lua_value</em><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Lua object to a raw MsgPack string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lua_value</strong> – either a scalar value or a Lua table value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the original contents formatted as a raw MsgPack string;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">raw MsgPack string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="msgpack-encode-lua-value-ibuf"></span><dl class="function">
+<dt>
+<code class="descclassname">msgpack.</code><code class="descname">encode</code><span class="sig-paren">(</span><em>lua_value</em>, <em>ibuf</em><span class="sig-paren">)</span></dt>
+<dd><p>Convert a Lua object to a raw MsgPack string in an ibuf,
+which is a buffer such as <a class="reference internal" href="buffer.html#buffer-ibuf"><span class="std std-ref">buffer.ibuf()</span></a> creates.
+As with <a class="reference internal" href="#msgpack-encode-lua-value"><span class="std std-ref">encode(lua_value)</span></a>,
+the result is a raw MsgPack string,
+but it goes to the <code class="docutils literal notranslate"><span class="pre">ibuf</span></code> output instead of being returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lua_value</strong> (<em>lua-object</em>) – either a scalar value or a Lua table value.</li>
+<li><strong>ibuf</strong> (<em>buffer</em>) – (output parameter) where the result raw MsgPack string goes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">number of bytes in the output</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">raw MsgPack string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example using <a class="reference internal" href="buffer.html#buffer-ibuf"><span class="std std-ref">buffer.ibuf()</span></a>
+and <a class="reference external" href="https://luajit.org/ext_ffi_api.html">ffi.string()</a>
+and <a class="reference internal" href="string.html#string-hex"><span class="std std-ref">string.hex()</span></a>:
+The result will be ‘91a161’ because 91 is the MessagePack encoding of “fixarray size 1”,
+a1 is the MessagePack encoding of “fixstr size 1”,
+and 61 is the UTF-8 encoding of ‘a’:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ibuf = require(&#39;buffer&#39;).ibuf()
+msgpack_string_size = require(&#39;msgpack&#39;).encode({&#39;a&#39;}, ibuf)
+msgpack_string = require(&#39;ffi&#39;).string(ibuf.rpos, msgpack_string_size)
+string.hex(msgpack_string)
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-string"></span><dl class="function">
+<dt id="msgpack.decode">
+<code class="descclassname">msgpack.</code><code class="descname">decode</code><span class="sig-paren">(</span><em>msgpack_string</em><span class="optional">[</span>, <em>start_position</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a raw MsgPack string to a Lua object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msgpack_string</strong> (<em>string</em>) – a raw MsgPack string.</li>
+<li><strong>start_position</strong> (<em>integer</em>) – where to start, minimum = 1,
+maximum = string length, default = 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>(if <code class="docutils literal notranslate"><span class="pre">msgpack_string</span></code> is a valid raw MsgPack string) the original contents
+of <code class="docutils literal notranslate"><span class="pre">msgpack_string</span></code>, formatted as a Lua object, usually a Lua table,
+(otherwise) a scalar value, such as a string or a number;</li>
+<li>”next_start_position”. If <code class="docutils literal notranslate"><span class="pre">decode</span></code> stops after parsing as far as
+byte N in <code class="docutils literal notranslate"><span class="pre">msgpack_string</span></code>, then “next_start_position” will equal N + 1,
+and <code class="docutils literal notranslate"><span class="pre">decode(msgpack_string,</span> <span class="pre">next_start_position)</span></code>
+will continue parsing from where the previous <code class="docutils literal notranslate"><span class="pre">decode</span></code> stopped, plus 1.
+Normally <code class="docutils literal notranslate"><span class="pre">decode</span></code> parses all of <code class="docutils literal notranslate"><span class="pre">msgpack_string</span></code>, so
+“next_start_position” will equal <code class="docutils literal notranslate"><span class="pre">string.len(msgpack_string)</span></code> + 1.</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Lua object and number</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example: The result will be [‘a’] and 4:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>msgpack_string = require(&#39;msgpack&#39;).encode({&#39;a&#39;})
+require(&#39;msgpack&#39;).decode(msgpack_string, 1)
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-c-style-string-pointer"></span><dl class="function">
+<dt>
+<code class="descclassname">msgpack.</code><code class="descname">decode</code><span class="sig-paren">(</span><em>C_style_string_pointer</em>, <em>size</em><span class="sig-paren">)</span></dt>
+<dd><p>Convert a raw MsgPack string, whose address is supplied as a C-style string pointer
+such as the <code class="docutils literal notranslate"><span class="pre">rpos</span></code> pointer which is inside an ibuf such as
+<a class="reference internal" href="buffer.html#buffer-ibuf"><span class="std std-ref">buffer.ibuf()</span></a> creates, to a Lua object.
+A C-style string pointer may be described as <code class="docutils literal notranslate"><span class="pre">cdata&lt;char</span> <span class="pre">*&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">cdata&lt;const</span> <span class="pre">char</span> <span class="pre">*&gt;</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>C_style_string_pointer</strong> (<em>buffer</em>) – a pointer to a raw MsgPack string.</li>
+<li><strong>size</strong> (<em>integer</em>) – number of bytes in the raw MsgPack string</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>(if C_style_string_pointer points to a valid raw MsgPack string) the original contents
+of <code class="docutils literal notranslate"><span class="pre">msgpack_string</span></code>, formatted as a Lua object, usually a Lua table,
+(otherwise) a scalar value, such as a string or a number;</li>
+<li>returned_pointer = a C-style pointer to the byte after
+what was passed, so that C_style_string_pointer + size = returned_pointer</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">table and C-style pointer to after what was passed</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example using <a class="reference internal" href="buffer.html#buffer-ibuf"><span class="std std-ref">buffer.ibuf</span></a>
+and pointer arithmetic:
+The result will be [‘a’] and 3 and true:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ibuf = require(&#39;buffer&#39;).ibuf()
+msgpack_string_size = require(&#39;msgpack&#39;).encode({&#39;a&#39;}, ibuf)
+a, b = require(&#39;msgpack&#39;).decode(ibuf.rpos, msgpack_string_size)
+a, b - ibuf.rpos, msgpack_string_size == b - ibuf.rpos
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-unchecked-string"></span><dl class="function">
+<dt id="msgpack.decode_unchecked">
+<code class="descclassname">msgpack.</code><code class="descname">decode_unchecked</code><span class="sig-paren">(</span><em>msgpack_string</em><span class="optional">[</span>, <em>start_position</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.decode_unchecked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input and output are the same as for
+<a class="reference internal" href="#msgpack-decode-string"><span class="std std-ref">decode(string)</span></a>.</p>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-unchecked-c-style-string-pointer"></span><dl class="function">
+<dt>
+<code class="descclassname">msgpack.</code><code class="descname">decode_unchecked</code><span class="sig-paren">(</span><em>C_style_string_pointer</em><span class="sig-paren">)</span></dt>
+<dd><p>Input and output are the same as for
+<a class="reference internal" href="#msgpack-decode-c-style-string-pointer"><span class="std std-ref">decode(C_style_string_pointer)</span></a>,
+except that <code class="docutils literal notranslate"><span class="pre">size</span></code> is not needed.
+Some checking is skipped, and <code class="docutils literal notranslate"><span class="pre">decode_unchecked(C_style_string_pointer)</span></code> can operate with
+string pointers to buffers which <code class="docutils literal notranslate"><span class="pre">decode(C_style_string_pointer)</span></code> cannot handle.
+For an example see the <a class="reference internal" href="buffer.html#buffer-module"><span class="std std-ref">buffer</span></a> module.</p>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-array-header"></span><dl class="function">
+<dt id="msgpack.decode_array_header">
+<code class="descclassname">msgpack.</code><code class="descname">decode_array_header</code><span class="sig-paren">(</span><em>byte-array</em>, <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.decode_array_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the mp_decode_array function in the <a class="reference external" href="http://rtsisyk.github.io/msgpuck/">MsgPuck</a> library
+and return the array size and a pointer to the first array component.
+A subsequent call to <code class="docutils literal notranslate"><span class="pre">msgpack_decode</span></code> can decode the component instead of the whole array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte-array</strong> – a pointer to a raw MsgPack string.</li>
+<li><strong>size</strong> – a number greater than or equal to the string’s length</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>the size of the array;</li>
+<li>a pointer to after the array header.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-- Example of decode_array_header
+-- Suppose we have the raw data &#39;\x93\x01\x02\x03&#39;.
+-- \x93 is MsgPack encoding for a header of a three-item array.
+-- We want to skip it and decode the next three items.
+msgpack=require(&#39;msgpack&#39;); ffi=require(&#39;ffi&#39;)
+x,y=msgpack.decode_array_header(ffi.cast(&#39;char*&#39;,&#39;\x93\x01\x02\x03&#39;),4)
+a=msgpack.decode(y,1);b=msgpack.decode(y+1,1);c=msgpack.decode(y+2,1);
+a,b,c
+-- The result will be: 1,2,3.
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="msgpack-decode-map-header"></span><dl class="function">
+<dt id="msgpack.decode_map_header">
+<code class="descclassname">msgpack.</code><code class="descname">decode_map_header</code><span class="sig-paren">(</span><em>byte-array</em>, <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.decode_map_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the mp_decode_map function in the <a class="reference external" href="http://rtsisyk.github.io/msgpuck/">MsgPuck</a> library
+and return the map size and a pointer to the first map component.
+A subsequent call to <code class="docutils literal notranslate"><span class="pre">msgpack_decode</span></code> can decode the component instead of the whole map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte-array</strong> – a pointer to a raw MsgPack string.</li>
+<li><strong>size</strong> – a number greater than or equal to the raw MsgPack string’s length</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>the size of the map;</li>
+<li>a pointer to after the map header.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-- Example of decode_map_header
+-- Suppose we have the raw data &#39;\x81\xa2\x41\x41\xc3&#39;.
+-- \x81 is MsgPack encoding for a header of a one-item map.
+-- We want to skip it and decode the next map item.
+msgpack=require(&#39;msgpack&#39;); ffi=require(&#39;ffi&#39;)
+x,y=msgpack.decode_map_header(ffi.cast(&#39;char*&#39;,&#39;\x81\xa2\x41\x41\xc3&#39;),5)
+a=msgpack.decode(y,3);b=msgpack.decode(y+3,1)
+x,a,b
+-- The result will be: 1,&quot;AA&quot;, true.
+</pre></div>
+</div>
+</dd></dl>
+
+<p id="msgpack-serialize"><strong>__serialize parameter:</strong></p>
+<p>The MsgPack output structure can be specified with <code class="docutils literal notranslate"><span class="pre">__serialize</span></code>:</p>
+<ul class="simple">
+<li>‘seq’, ‘sequence’, ‘array’ - table encoded as an array</li>
+<li>‘map’, ‘mappping’ - table encoded as a map</li>
+<li>function - the meta-method called to unpack serializable representation
+of table, cdata or userdata objects</li>
+</ul>
+<p>Serializing ‘A’ and ‘B’ with different <code class="docutils literal notranslate"><span class="pre">__serialize</span></code> values brings different
+results. To show this, here is a routine which encodes <code class="docutils literal notranslate"><span class="pre">{'A','B'}</span></code> both as an
+array and as a map, then displays each result in hexadecimal.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">hexdump</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">bytes</span> <span class="kr">do</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">..</span> <span class="nb">string.format</span><span class="p">(</span><span class="s2">&quot;%x&quot;</span><span class="p">,</span> <span class="nb">string.byte</span><span class="p">(</span><span class="n">bytes</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="o">..</span> <span class="s1">&#39; &#39;</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">result</span>
+<span class="kr">end</span>
+
+<span class="n">msgpack</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;msgpack&#39;</span><span class="p">)</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">msgpack</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">setmetatable</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">},</span> <span class="p">{</span>
+                             <span class="n">__serialize</span> <span class="o">=</span> <span class="s2">&quot;seq&quot;</span>
+                          <span class="p">}))</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">msgpack</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">setmetatable</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">},</span> <span class="p">{</span>
+                             <span class="n">__serialize</span> <span class="o">=</span> <span class="s2">&quot;map&quot;</span>
+                          <span class="p">}))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;array encoding: &#39;</span><span class="p">,</span> <span class="n">hexdump</span><span class="p">(</span><span class="n">m1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;map encoding: &#39;</span><span class="p">,</span> <span class="n">hexdump</span><span class="p">(</span><span class="n">m2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Result:</strong></p>
+<pre class="highlight literal-block">
+<strong>array</strong> encoding: 92 a1 41 a1 42
+<strong>map</strong> encoding:   82 01 a1 41 02 a1 42
+</pre>
+<p>The MsgPack <a class="reference external" href="http://github.com/msgpack/msgpack/blob/master/spec.md">Specification page</a>
+explains that the first encoding means:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixarray</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">fixstr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">fixstr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span>
+</pre></div>
+</div>
+<p>and the second encoding means:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixmap</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">fixstr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">fixstr</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span>
+</pre></div>
+</div>
+<p>Here are examples for all the common types,
+with the Lua-table representation on the left,
+with the MsgPack format name and encoding on the right.</p>
+<div class="table docutils container" id="msgpack-common-types-and-msgpack-encodings">
+<p><strong>Common Types and MsgPack Encodings</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>{}</td>
+<td>‘fixmap’ if metatable is ‘map’ = 80
+otherwise ‘fixarray’ = 90</td>
+</tr>
+<tr class="row-even"><td>‘a’</td>
+<td>‘fixstr’ = a1 61</td>
+</tr>
+<tr class="row-odd"><td>false</td>
+<td>‘false’ = c2</td>
+</tr>
+<tr class="row-even"><td>true</td>
+<td>‘true’ = c3</td>
+</tr>
+<tr class="row-odd"><td>127</td>
+<td>‘positive fixint’ = 7f</td>
+</tr>
+<tr class="row-even"><td>65535</td>
+<td>‘uint 16’ = cd ff ff</td>
+</tr>
+<tr class="row-odd"><td>4294967295</td>
+<td>‘uint 32’ = ce ff ff ff ff</td>
+</tr>
+<tr class="row-even"><td>nil</td>
+<td>‘nil’ = c0</td>
+</tr>
+<tr class="row-odd"><td>msgpack.NULL</td>
+<td>same as nil</td>
+</tr>
+<tr class="row-even"><td>[0] = 5</td>
+<td>‘fixmap(1)’ + ‘positive fixint’ (for the key)
++ ‘positive fixint’ (for the value) = 81 00 05</td>
+</tr>
+<tr class="row-odd"><td>[0] = nil</td>
+<td>‘fixmap(0)’ = 80 – nil is not stored
+when it is a missing map value</td>
+</tr>
+<tr class="row-even"><td>1.5</td>
+<td>‘float 64’ = cb 3f f8 00 00 00 00 00 00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="msgpack-cfg"></span><dl class="function">
+<dt id="msgpack.cfg">
+<code class="descclassname">msgpack.</code><code class="descname">cfg</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="headerlink" href="#msgpack.cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some MsgPack configuration settings can be changed.</p>
+<p>The values are all either integers or boolean <code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 center-align-column-2 left-align-column-3 docutils">
+<colgroup>
+<col width="37%" />
+<col width="10%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Default</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_max_depth</span></code></td>
+<td>128</td>
+<td>Max recursion depth for encoding</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_deep_as_nil</span></code></td>
+<td>false</td>
+<td>A flag saying whether to crop tables
+with nesting level deeper than
+<code class="docutils literal notranslate"><span class="pre">cfg.encode_max_depth</span></code>.
+Not-encoded fields are replaced with
+one null. If not set, too high
+nesting is considered an error.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_invalid_numbers</span></code></td>
+<td>true</td>
+<td>A flag saying whether to enable encoding of
+NaN and Inf numbers</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_load_metatables</span></code></td>
+<td>true</td>
+<td>A flag saying whether the serializer will
+follow <a class="reference internal" href="json.html#json-serialize"><span class="std std-ref">__serialize</span></a>
+metatable field</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_use_tostring</span></code></td>
+<td>false</td>
+<td>A flag saying whether to use <code class="docutils literal notranslate"><span class="pre">tostring()</span></code>
+for unknown types</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_invalid_as_nil</span></code></td>
+<td>false</td>
+<td>A flag saying whether to use NULL for
+non-recognized types</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_convert</span></code></td>
+<td>true</td>
+<td>A flag saying whether to handle excessively
+sparse arrays as maps.
+See detailed description
+<a class="reference internal" href="#msgpack-cfg-sparse"><span class="std std-ref">below</span></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_ratio</span></code></td>
+<td>2</td>
+<td>1/<code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code> is the permissible
+percentage of missing values in a sparse
+array</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.encode_sparse_safe</span></code></td>
+<td>10</td>
+<td>A limit ensuring that small Lua arrays
+are always encoded as sparse arrays
+(instead of generating an error or encoding
+as a map)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg.decode_invalid_numbers</span></code></td>
+<td>true</td>
+<td>A flag saying whether to enable decoding of
+NaN and Inf numbers</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg.decode_save_metatables</span></code></td>
+<td>true</td>
+<td>A flag saying whether to set metatables for
+all arrays and maps</td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+<p id="msgpack-cfg-sparse"><strong>Sparse arrays features:</strong></p>
+<p>During encoding, the MsgPack encoder tries to classify tables into one of four kinds:</p>
+<ul class="simple">
+<li>map - at least one table index is not unsigned integer</li>
+<li>regular array - all array indexes are available</li>
+<li>sparse array - at least one array index is missing</li>
+<li>excessively sparse array - the number of values missing exceeds the configured ratio</li>
+</ul>
+<p>An array is excessively sparse when <strong>all</strong> the following conditions are met:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code> &gt; 0</li>
+<li><code class="docutils literal notranslate"><span class="pre">max(table)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">encode_sparse_safe</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">max(table)</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">count(table)</span></code> * <code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span></code></li>
+</ul>
+<p>MsgPack encoder will never consider an array to be excessively sparse
+when <code class="docutils literal notranslate"><span class="pre">encode_sparse_ratio</span> <span class="pre">=</span> <span class="pre">0</span></code>. The <code class="docutils literal notranslate"><span class="pre">encode_sparse_safe</span></code> limit ensures
+that small Lua arrays are always encoded as sparse arrays.
+By default, attempting to encode an excessively sparse array will
+generate an error. If <code class="docutils literal notranslate"><span class="pre">encode_sparse_convert</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>,
+excessively sparse arrays will be handled as maps.</p>
+<p><strong>msgpack.cfg() example 1:</strong></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">msgpack.cfg.encode_invalid_numbers</span> <span class="pre">=</span> <span class="pre">true</span></code> (the default),
+then NaN and Inf are legal values. If that is not desirable, then
+ensure that <code class="docutils literal notranslate"><span class="pre">msgpack.encode()</span></code> will not accept them, by saying
+<code class="docutils literal notranslate"><span class="pre">msgpack.cfg{encode_invalid_numbers</span> <span class="pre">=</span> <span class="pre">false}</span></code>, thus:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; msgpack = require(&#39;msgpack&#39;); msgpack.cfg{encode_invalid_numbers = true}
+---
+...
+tarantool&gt; msgpack.decode(msgpack.encode{1, 0 / 0, 1 / 0, false})
+---
+- [1, -nan, inf, false]
+- 22
+...
+tarantool&gt; msgpack.cfg{encode_invalid_numbers = false}
+---
+...
+tarantool&gt; msgpack.decode(msgpack.encode{1, 0 / 0, 1 / 0, false})
+---
+- error: ... number must not be NaN or Inf&#39;
+...
+</pre></div>
+</div>
+<p><strong>msgpack.cfg example 2:</strong></p>
+<p>To avoid generating errors on attempts to encode unknown data types as
+userdata/cdata, you can use this code:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; httpc = require(&#39;http.client&#39;).new()
+---
+...
+
+tarantool&gt; msgpack.encode(httpc.curl)
+---
+- error: unsupported Lua type &#39;userdata&#39;
+...
+
+tarantool&gt; msgpack.encode(httpc.curl, {encode_use_tostring=true})
+---
+- &#39;&quot;userdata: 0x010a4ef2a0&quot;&#39;
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To achieve the same effect for only one call to <code class="docutils literal notranslate"><span class="pre">msgpack.encode()</span></code>
+(i.e. without changing the configuration permanently), you can use
+<code class="docutils literal notranslate"><span class="pre">msgpack.encode({1,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">2},</span> <span class="pre">{encode_invalid_numbers</span> <span class="pre">=</span> <span class="pre">true})</span></code>.</p>
+</div>
+<p>Similar configuration settings exist for <a class="reference internal" href="json.html#json-module-cfg"><span class="std std-ref">JSON</span></a>
+and <a class="reference internal" href="yaml.html#yaml-cfg"><span class="std std-ref">YAML</span></a>.</p>
+<span class="target" id="msgpack-null"></span><dl class="data">
+<dt id="msgpack.NULL">
+<code class="descclassname">msgpack.</code><code class="descname">NULL</code><a class="headerlink" href="#msgpack.NULL" title="Permalink to this definition">¶</a></dt>
+<dd><p>A value comparable to Lua “nil” which may be useful as a placeholder in a
+tuple.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; msgpack = require(&#39;msgpack&#39;)
+---
+...
+tarantool&gt; y = msgpack.encode({&#39;a&#39;,1,&#39;b&#39;,2})
+---
+...
+tarantool&gt; z = msgpack.decode(y)
+---
+...
+tarantool&gt; z[1], z[2], z[3], z[4]
+---
+- a
+- 1
+- b
+- 2
+...
+tarantool&gt; box.space.tester:insert{20, msgpack.NULL, 20}
+---
+- [20, null, 20]
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

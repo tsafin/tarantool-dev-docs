@@ -1,0 +1,945 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Connectors &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Connectors</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/connectors/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="connectors">
+<span id="index-box-connectors"></span><h1>Connectors<a class="headerlink" href="#connectors" title="Permalink to this headline">¶</a></h1>
+<p>This chapter documents APIs for various programming languages.</p>
+<div class="section" id="protocol">
+<h2>Protocol<a class="headerlink" href="#protocol" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool’s binary protocol was designed with a focus on asynchronous I/O and
+easy integration with proxies. Each client request starts with a variable-length
+binary header, containing request id, request type, instance id, log sequence
+number, and so on.</p>
+<p>The mandatory length, present in request header simplifies client or proxy I/O.
+A response to a request is sent to the client as soon as it is ready. It always
+carries in its header the same type and id as in the request. The id makes it
+possible to match a request to a response, even if the latter arrived out of
+order.</p>
+<p>Unless implementing a client driver, you needn’t concern yourself with the
+complications of the binary protocol. Language-specific drivers provide a
+friendly way to store domain language data structures in Tarantool. A complete
+description of the binary protocol is maintained in annotated Backus-Naur form
+in the source tree: please see the page about
+<a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">Tarantool’s binary protocol</span></a>.</p>
+</div>
+<div class="section" id="packet-example">
+<h2>Packet example<a class="headerlink" href="#packet-example" title="Permalink to this headline">¶</a></h2>
+<p>The Tarantool API exists so that a client program can send a request packet to
+a server instance, and receive a response. Here is an example of a what the client
+would send for <code class="docutils literal notranslate"><span class="pre">box.space[513]:insert{'A',</span> <span class="pre">'BB'}</span></code>. The BNF description of
+the components is on the page about
+<a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">Tarantool’s binary protocol</span></a>.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 right-align-column-2 right-align-column-3 right-align-column-4 docutils">
+<colgroup>
+<col width="48%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Component</th>
+<th class="head">Byte #0</th>
+<th class="head">Byte #1</th>
+<th class="head">Byte #2</th>
+<th class="head">Byte #3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>code for insert</td>
+<td>02</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>rest of header</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="row-even"><td>2-digit number: space id</td>
+<td>cd</td>
+<td>02</td>
+<td>01</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>code for tuple</td>
+<td>21</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>1-digit number: field count = 2</td>
+<td>92</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>1-character string: field[1]</td>
+<td>a1</td>
+<td>41</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>2-character string: field[2]</td>
+<td>a2</td>
+<td>42</td>
+<td>42</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Now, you could send that packet to the Tarantool instance, and interpret the
+response (the page about
+<a class="reference internal" href="../../dev_guide/internals_index.html#box-protocol-iproto-protocol"><span class="std std-ref">Tarantool’s binary protocol</span></a> has a
+description of the packet format for responses as well as requests). But it
+would be easier, and less error-prone, if you could invoke a routine that
+formats the packet according to typed parameters. Something like
+<code class="docutils literal notranslate"><span class="pre">response</span> <span class="pre">=</span> <span class="pre">tarantool_routine(&quot;insert&quot;,</span> <span class="pre">513,</span> <span class="pre">&quot;A&quot;,</span> <span class="pre">&quot;B&quot;);</span></code>. And that is why APIs
+exist for drivers for Perl, Python, PHP, and so on.</p>
+</div>
+<div class="section" id="setting-up-the-server-for-connector-examples">
+<span id="index-connector-setting"></span><h2>Setting up the server for connector examples<a class="headerlink" href="#setting-up-the-server-for-connector-examples" title="Permalink to this headline">¶</a></h2>
+<p>This chapter has examples that show how to connect to a Tarantool instance via
+the Perl, PHP, Python, node.js, and C connectors. The examples contain hard code that
+will work if and only if the following conditions are met:</p>
+<ul class="simple">
+<li>the Tarantool instance (tarantool) is running on localhost (127.0.0.1) and is listening on
+port 3301 (<code class="docutils literal notranslate"><span class="pre">box.cfg.listen</span> <span class="pre">=</span> <span class="pre">'3301'</span></code>),</li>
+<li>space <code class="docutils literal notranslate"><span class="pre">examples</span></code> has id = 999 (<code class="docutils literal notranslate"><span class="pre">box.space.examples.id</span> <span class="pre">=</span> <span class="pre">999</span></code>) and has
+a primary-key index for a numeric field
+(<code class="docutils literal notranslate"><span class="pre">box.space[999].index[0].parts[1].type</span> <span class="pre">=</span> <span class="pre">&quot;unsigned&quot;</span></code>),</li>
+<li>user ‘guest’ has privileges for reading and writing.</li>
+</ul>
+<p>It is easy to meet all the conditions by starting the instance and executing this
+script:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">listen</span><span class="o">=</span><span class="mi">3301</span><span class="p">}</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;examples&#39;</span><span class="p">,{</span><span class="n">id</span><span class="o">=</span><span class="mi">999</span><span class="p">})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">examples</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}})</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span><span class="s1">&#39;read,write&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;examples&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span><span class="s1">&#39;read&#39;</span><span class="p">,</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="s1">&#39;_space&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="java">
+<h2>Java<a class="headerlink" href="#java" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="http://github.com/tarantool/tarantool-java/">http://github.com/tarantool/tarantool-java/</a>.</p>
+</div>
+<div class="section" id="go">
+<h2>Go<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h2>
+<p>Please see <a class="reference external" href="https://github.com/mialinx/go-tarantool">https://github.com/mialinx/go-tarantool</a>.</p>
+</div>
+<div class="section" id="r">
+<h2>R<a class="headerlink" href="#r" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/thekvs/tarantoolr">https://github.com/thekvs/tarantoolr</a>.</p>
+</div>
+<div class="section" id="erlang">
+<h2>Erlang<a class="headerlink" href="#erlang" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/stofel/taran">Erlang tarantool driver</a>.</p>
+</div>
+<div class="section" id="perl">
+<h2>Perl<a class="headerlink" href="#perl" title="Permalink to this headline">¶</a></h2>
+<p>The most commonly used Perl driver is
+<a class="reference external" href="https://github.com/tarantool/tarantool-perl">tarantool-perl</a>. It is not
+supplied as part of the Tarantool repository; it must be installed separately.
+The most common way to install it is by cloning from GitHub.</p>
+<p>To avoid minor warnings that may appear the first time <code class="docutils literal notranslate"><span class="pre">tarantool-perl</span></code> is
+installed, start with installing some other modules that <code class="docutils literal notranslate"><span class="pre">tarantool-perl</span></code> uses,
+with <a class="reference external" href="https://en.wikipedia.org/wiki/Cpan">CPAN, the Comprehensive Perl Archive Network</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo cpan install AnyEvent
+<span class="gp">$</span> sudo cpan install Devel::GlobalDestruction
+</pre></div>
+</div>
+<p>Then, to install <code class="docutils literal notranslate"><span class="pre">tarantool-perl</span></code> itself, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/tarantool/tarantool-perl.git tarantool-perl
+<span class="gp">$</span> <span class="nb">cd</span> tarantool-perl
+<span class="gp">$</span> git submodule init
+<span class="gp">$</span> git submodule update --recursive
+<span class="gp">$</span> perl Makefile.PL
+<span class="gp">$</span> make
+<span class="gp">$</span> sudo make install
+</pre></div>
+</div>
+<p>Here is a complete Perl program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'BB']</span></code> into <code class="docutils literal notranslate"><span class="pre">space[999]</span></code>
+via the Perl API. Before trying to run, check that the server instance is listening at
+<code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>.
+To run, paste the code into a file named <code class="file docutils literal notranslate"><span class="pre">example.pl</span></code> and say
+<code class="samp docutils literal notranslate"><span class="pre">perl</span> <span class="pre">example.pl</span></code>. The program will connect using an application-specific
+definition of the space. The program will open a socket connection with the
+Tarantool instance at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>, then send an <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">space_object:INSERT</span></a> request, then — if
+all is well — end without displaying any messages. If Tarantool is not running
+on <code class="docutils literal notranslate"><span class="pre">localhost</span></code> with <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listen</span></a> port = 3301, the program will print “Connection
+refused”.</p>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/perl</span>
+<span class="k">use</span> <span class="nn">DR::Tarantool</span> <span class="s">&#39;:constant&#39;</span><span class="p">,</span> <span class="s">&#39;tarantool&#39;</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">DR::Tarantool</span> <span class="s">&#39;:all&#39;</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">DR::Tarantool::MsgPack::SyncClient</span><span class="p">;</span>
+
+<span class="k">my</span> <span class="nv">$tnt</span> <span class="o">=</span> <span class="nn">DR::Tarantool::MsgPack::SyncClient</span><span class="o">-&gt;</span><span class="nb">connect</span><span class="p">(</span>
+  <span class="n">host</span>    <span class="o">=&gt;</span> <span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span>                      <span class="c1"># look for tarantool on localhost</span>
+  <span class="n">port</span>    <span class="o">=&gt;</span> <span class="mi">3301</span><span class="p">,</span>                             <span class="c1"># on port 3301</span>
+  <span class="n">user</span>    <span class="o">=&gt;</span> <span class="s">&#39;guest&#39;</span><span class="p">,</span>                          <span class="c1"># username. for &#39;guest&#39; we do not also say &#39;password=&gt;...&#39;</span>
+
+  <span class="n">spaces</span>  <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="mi">999</span> <span class="o">=&gt;</span> <span class="p">{</span>                                   <span class="c1"># definition of space[999] ...</span>
+      <span class="n">name</span> <span class="o">=&gt;</span> <span class="s">&#39;examples&#39;</span><span class="p">,</span>                      <span class="c1">#   space[999] name = &#39;examples&#39;</span>
+      <span class="n">default_type</span> <span class="o">=&gt;</span> <span class="s">&#39;STR&#39;</span><span class="p">,</span>                   <span class="c1">#   space[999] field type is &#39;STR&#39; if undefined</span>
+      <span class="n">fields</span> <span class="o">=&gt;</span> <span class="p">[</span> <span class="p">{</span>                            <span class="c1">#   definition of space[999].fields ...</span>
+          <span class="n">name</span> <span class="o">=&gt;</span> <span class="s">&#39;field1&#39;</span><span class="p">,</span> <span class="n">type</span> <span class="o">=&gt;</span> <span class="s">&#39;NUM&#39;</span> <span class="p">}</span> <span class="p">],</span> <span class="c1">#     space[999].field[1] name=&#39;field1&#39;,type=&#39;NUM&#39;</span>
+      <span class="n">indexes</span> <span class="o">=&gt;</span> <span class="p">{</span>                             <span class="c1">#   definition of space[999] indexes ...</span>
+        <span class="mi">0</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="n">name</span> <span class="o">=&gt;</span> <span class="s">&#39;primary&#39;</span><span class="p">,</span> <span class="n">fields</span> <span class="o">=&gt;</span> <span class="p">[</span> <span class="s">&#39;field1&#39;</span> <span class="p">]</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span> <span class="p">);</span>
+
+<span class="nv">$tnt</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;examples&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span> <span class="mi">99999</span><span class="p">,</span> <span class="s">&#39;BB&#39;</span> <span class="p">]);</span>
+</pre></div>
+</div>
+<p>The example program uses field type names ‘STR’ and ‘NUM’
+instead of <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-create-index"><span class="std std-ref">‘string’ and ‘unsigned’</span></a>, due to a temporary Perl limitation.</p>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see the
+<a class="reference external" href="https://github.com/tarantool/tarantool-perl">tarantool-perl repository</a>.</p>
+</div>
+<div class="section" id="php">
+<h2>PHP<a class="headerlink" href="#php" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/tarantool/tarantool-php">tarantool-php</a> is the official
+PHP connector for Tarantool.
+It is not supplied as part of the Tarantool repository and must be installed
+separately (see <a class="reference external" href="https://github.com/tarantool/tarantool-php/#installing-and-building">installation instructions</a>
+in the connector’s <code class="docutils literal notranslate"><span class="pre">README</span></code> file).</p>
+<p>Here is a complete PHP program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'BB']</span></code> into a space named
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> via the PHP API.</p>
+<p>Before trying to run, check that the server instance is
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listening</span></a> at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as <a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>.</p>
+<p>To run, paste the code into a file named <code class="file docutils literal notranslate"><span class="pre">example.php</span></code> and say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> php -d <span class="nv">extension</span><span class="o">=</span>~/tarantool-php/modules/tarantool.so example.php
+</pre></div>
+</div>
+<p>The program will open a socket connection with the Tarantool instance at
+<code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>, then send an <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a> request,
+then – if all is well – print “Insert succeeded”.</p>
+<p>If the tuple already exists, the program will print
+“Duplicate key exists in unique index ‘primary’ in space ‘examples’”.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+<span class="nv">$tarantool</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tarantool</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">);</span>
+
+<span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$tarantool</span><span class="o">-&gt;</span><span class="na">insert</span><span class="p">(</span><span class="s1">&#39;examples&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">99999</span><span class="p">,</span> <span class="s1">&#39;BB&#39;</span><span class="p">]);</span>
+    <span class="k">echo</span> <span class="s2">&quot;Insert succeeded</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">(),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see
+<a class="reference external" href="https://github.com/tarantool/tarantool-php">tarantool/tarantool-php</a>
+project at GitHub.</p>
+<p>Besides, there is another community-driven
+<a class="reference external" href="https://github.com/tarantool-php">GitHub project</a> which includes an
+<a class="reference external" href="https://github.com/tarantool-php/client">alternative connector</a> written in
+pure PHP, an <a class="reference external" href="https://github.com/tarantool-php/mapper">object mapper</a>,
+a <a class="reference external" href="https://github.com/tarantool-php/queue">queue</a> and other packages.</p>
+</div>
+<div class="section" id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://github.com/tarantool/tarantool-python">tarantool-python</a>
+is the official Python connector for Tarantool. It is not supplied as part
+of the Tarantool repository and must be installed separately (see below for details).</p>
+<p>Here is a complete Python program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'Value','Value']</span></code> into
+space <code class="docutils literal notranslate"><span class="pre">examples</span></code> via the high-level Python API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">tarantool</span> <span class="kn">import</span> <span class="n">Connection</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">(</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">3301</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;examples&quot;</span><span class="p">,(</span><span class="mi">99999</span><span class="p">,</span><span class="s1">&#39;Value&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">))</span>
+<span class="nb">print</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>To prepare, paste the code into a file named <code class="file docutils literal notranslate"><span class="pre">example.py</span></code> and install
+the <code class="docutils literal notranslate"><span class="pre">tarantool-python</span></code> connector with either <code class="samp docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tarantool&gt;0.4</span></code>
+to install in <code class="file docutils literal notranslate"><span class="pre">/usr</span></code> (requires <strong>root</strong> privilege) or
+<code class="samp docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tarantool&gt;0.4</span> <span class="pre">--user</span></code> to install in <code class="file docutils literal notranslate"><span class="pre">~</span></code> i.e. user’s
+default directory.</p>
+<p>Before trying to run, check that the server instance is <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listening</span></a> at
+<code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>.
+To run the program, say <code class="samp docutils literal notranslate"><span class="pre">python</span> <span class="pre">example.py</span></code>. The program will connect
+to the Tarantool server, will send the <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a> request, and will not throw any exception if
+all went well. If the tuple already exists, the program will throw
+<code class="docutils literal notranslate"><span class="pre">tarantool.error.DatabaseError:</span> <span class="pre">(3,</span> <span class="pre">&quot;Duplicate</span> <span class="pre">key</span> <span class="pre">exists</span> <span class="pre">in</span> <span class="pre">unique</span> <span class="pre">index</span> <span class="pre">'primary'</span> <span class="pre">in</span> <span class="pre">space</span> <span class="pre">'examples'&quot;)</span></code>.</p>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see
+<a class="reference external" href="http://github.com/tarantool/tarantool-python">tarantool-python</a> project at GitHub.
+For an example of using Python API with
+<a class="reference external" href="https://github.com/tarantool/queue">queue managers for Tarantool</a>, see
+<a class="reference external" href="https://github.com/tarantool/queue-python">queue-python</a> project at GitHub.</p>
+<p>Also there are several community-driven Python connectors:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/igorcoding/asynctnt">asynctnt</a> with asyncio support</li>
+<li><a class="reference external" href="https://github.com/shveenkov/aiotarantool">aiotarantool</a> also with asyncio support</li>
+<li><a class="reference external" href="https://github.com/shveenkov/gtarantool">gtarantool</a> with gevent support <strong>no active maintenance</strong></li>
+</ul>
+</div>
+<div class="section" id="node-js">
+<h2>Node.js<a class="headerlink" href="#node-js" title="Permalink to this headline">¶</a></h2>
+<p>The most commonly used node.js driver is the <a class="reference external" href="https://github.com/KlonD90/node-tarantool-driver">Node Tarantool driver</a>. It is not supplied as part
+of the Tarantool repository; it must be installed separately. The most common
+way to install it is with <a class="reference external" href="https://www.sitepoint.com/beginners-guide-node-package-manager/">npm</a>. For
+example, on Ubuntu, the installation could look like this after npm has been
+installed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> npm install tarantool-driver --global
+</pre></div>
+</div>
+<p>Here is a complete node.js program that inserts <code class="docutils literal notranslate"><span class="pre">[99999,'BB']</span></code> into
+<code class="docutils literal notranslate"><span class="pre">space[999]</span></code> via the node.js API. Before trying to run, check that the server instance
+is <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-listen"><span class="std std-ref">listening</span></a> at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>. To run, paste the code into
+a file named <code class="file docutils literal notranslate"><span class="pre">example.rs</span></code> and say <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">example.rs</span></code>. The program will
+connect using an application-specific definition of the space. The program will
+open a socket connection with the Tarantool instance at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>, then
+send an <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a> request, then — if all is well — end after saying “Insert
+succeeded”. If Tarantool is not running on <code class="docutils literal notranslate"><span class="pre">localhost</span></code> with listen port =
+3301, the program will print “Connect failed”. If <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">the ‘guest’ user</span></a> does not have
+authorization to connect, the program will print “Auth failed”. If the insert
+request fails for any reason, for example because the tuple already exists,
+the program will print “Insert failed”.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">TarantoolConnection</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tarantool-driver&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">conn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TarantoolConnection</span><span class="p">({</span><span class="nx">port</span><span class="o">:</span> <span class="mf">3301</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">insertTuple</span> <span class="o">=</span> <span class="p">[</span><span class="mf">99999</span><span class="p">,</span> <span class="s2">&quot;BB&quot;</span><span class="p">];</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nx">connect</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">auth</span><span class="p">(</span><span class="s2">&quot;guest&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">conn</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="mf">999</span><span class="p">,</span> <span class="nx">insertTuple</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Insert succeeded&quot;</span><span class="p">);</span>
+            <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Insert failed&quot;</span><span class="p">);</span>  <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Auth failed&quot;</span><span class="p">);</span>    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Connect failed&quot;</span><span class="p">);</span> <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span> <span class="p">});</span>
+</pre></div>
+</div>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see  <a class="reference external" href="https://github.com/KlonD90/node-tarantool-driver">The node.js driver
+repository</a>.</p>
+</div>
+<div class="section" id="c">
+<h2>C#<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
+<p>The most commonly used C# driver is
+<a class="reference external" href="https://github.com/progaudi/progaudi.tarantool">progaudi.tarantool</a>,
+previously named <code class="docutils literal notranslate"><span class="pre">tarantool-csharp</span></code>. It is not supplied as part of the
+Tarantool repository; it must be installed separately. The makers recommend
+<a class="reference external" href="https://www.nuget.org/packages/progaudi.tarantool">cross-platform installation using Nuget</a>.</p>
+<p>To be consistent with the other instructions in this chapter, here is a way to
+install the driver directly on Ubuntu 16.04.</p>
+<ol class="arabic simple">
+<li>Install .net core from Microsoft. Follow
+<a class="reference external" href="https://www.microsoft.com/net/core#ubuntu">.net core installation instructions</a>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Mono will not work, nor will .Net from xbuild. Only .net core supported on
+Linux and Mac.</li>
+<li>Read the Microsoft End User License Agreement first, because it is not an
+ordinary open-source agreement and there will be a message during
+installation saying “This software may collect information about you and
+your use of the software, and send that to Microsoft.”
+Still you can
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry#behavior">set environment variables</a>
+to opt out from telemetry.</li>
+</ul>
+</div>
+<ol class="arabic" start="2">
+<li><p class="first">Create a new console project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ~
+<span class="gp">$</span> mkdir progaudi.tarantool.test
+<span class="gp">$</span> <span class="nb">cd</span> progaudi.tarantool.test
+<span class="gp">$</span> dotnet new console
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add <code class="docutils literal notranslate"><span class="pre">progaudi.tarantool</span></code> reference.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dotnet add package progaudi.tarantool
+</pre></div>
+</div>
+</li>
+<li><p class="first">Change code in <code class="docutils literal notranslate"><span class="pre">Program.cs</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cat &lt;&lt;EOT &gt; Program.cs
+<span class="go">using System;</span>
+<span class="go">using System.Threading.Tasks;</span>
+<span class="go">using ProGaudi.Tarantool.Client;</span>
+
+<span class="go">public class HelloWorld</span>
+<span class="go">{</span>
+<span class="go">  static public void Main ()</span>
+<span class="go">  {</span>
+<span class="go">    Test().GetAwaiter().GetResult();</span>
+<span class="go">  }</span>
+<span class="go">  static async Task Test()</span>
+<span class="go">  {</span>
+<span class="go">    var box = await Box.Connect(&quot;127.0.0.1:3301&quot;);</span>
+<span class="go">    var schema = box.GetSchema();</span>
+<span class="go">    var space = await schema.GetSpace(&quot;examples&quot;);</span>
+<span class="go">    await space.Insert((99999, &quot;BB&quot;));</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="go">EOT</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build and run your application.</p>
+<p>Before trying to run, check that the server is listening at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>
+and that the space <code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> dotnet restore
+<span class="gp">$</span> dotnet run
+</pre></div>
+</div>
+<p>The program will:</p>
+<ul class="simple">
+<li>connect using an application-specific definition of the space,</li>
+<li>open a socket connection with the Tarantool server at <cite>localhost:3301</cite>,</li>
+<li>send an INSERT request, and — if all is well — end without saying anything.</li>
+</ul>
+<p>If Tarantool is not running on localhost with listen port = 3301, or if user
+‘guest’ does not have authorization to connect, or if the INSERT request
+fails for any reason, the program will print an error message, among other
+things (stacktrace, etc).</p>
+</li>
+</ol>
+<p>The example program only shows one request and does not show all that’s
+necessary for good practice. For that, please see the
+<a class="reference external" href="https://github.com/progaudi/progaudi.tarantool">progaudi.tarantool driver repository</a>.</p>
+</div>
+<div class="section" id="id2">
+<h2>C<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Here follow two examples of using Tarantool’s high-level C API.</p>
+<div class="section" id="example-1">
+<h3>Example 1<a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h3>
+<p>Here is a complete C program that inserts <code class="code docutils literal notranslate"><span class="pre">[99999,'B']</span></code> into
+space <code class="code docutils literal notranslate"><span class="pre">examples</span></code> via the high-level C API.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tarantool.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_net.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_opt.h&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tnt</span> <span class="o">=</span> <span class="n">tnt_net</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>          <span class="cm">/* See note = SETUP */</span>
+   <span class="n">tnt_set</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">TNT_OPT_URI</span><span class="p">,</span> <span class="s">&quot;localhost:3301&quot;</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">tnt_connect</span><span class="p">(</span><span class="n">tnt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>                      <span class="cm">/* See note = CONNECT */</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection refused</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+       <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tuple</span> <span class="o">=</span> <span class="n">tnt_object</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>     <span class="cm">/* See note = MAKE REQUEST */</span>
+   <span class="n">tnt_object_format</span><span class="p">(</span><span class="n">tuple</span><span class="p">,</span> <span class="s">&quot;[%d%s]&quot;</span><span class="p">,</span> <span class="mi">99999</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">);</span>
+   <span class="n">tnt_insert</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="mi">999</span><span class="p">,</span> <span class="n">tuple</span><span class="p">);</span>                     <span class="cm">/* See note = SEND REQUEST */</span>
+   <span class="n">tnt_flush</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+   <span class="k">struct</span> <span class="nc">tnt_reply</span> <span class="n">reply</span><span class="p">;</span>  <span class="n">tnt_reply_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span> <span class="cm">/* See note = GET REPLY */</span>
+   <span class="n">tnt</span><span class="o">-&gt;</span><span class="n">read_reply</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">reply</span><span class="p">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Insert failed %lu.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reply</span><span class="p">.</span><span class="n">code</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="n">tnt_close</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>                                  <span class="cm">/* See below = TEARDOWN */</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tuple</span><span class="p">);</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Paste the code into a file named <code class="file docutils literal notranslate"><span class="pre">example.c</span></code> and install <code class="docutils literal notranslate"><span class="pre">tarantool-c</span></code>.
+One way to install <code class="docutils literal notranslate"><span class="pre">tarantool-c</span></code> (using Ubuntu) is:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone git://github.com/tarantool/tarantool-c.git ~/tarantool-c
+<span class="gp">$</span> <span class="nb">cd</span> ~/tarantool-c
+<span class="gp">$</span> git submodule init
+<span class="gp">$</span> git submodule update
+<span class="gp">$</span> cmake .
+<span class="gp">$</span> make
+<span class="gp">$</span> make install
+</pre></div>
+</div>
+<p>To compile and link the program, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># sometimes this is necessary:</span>
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/lib
+<span class="gp">$</span> gcc -o example example.c -ltarantool
+</pre></div>
+</div>
+<p>Before trying to run,
+check that a server instance is listening at <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code> and that the space
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> exists, as
+<a class="reference internal" href="#index-connector-setting"><span class="std std-ref">described earlier</span></a>.
+To run the program, say <code class="samp docutils literal notranslate"><span class="pre">./example</span></code>. The program will connect
+to the Tarantool instance, and will send the request.
+If Tarantool is not running on localhost with listen address = 3301, the program
+will print “Connection refused”.
+If the insert fails, the program will print “Insert failed” and an error number
+(see all error codes in the source file
+<a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.10/src/box/errcode.h">/src/box/errcode.h</a>).</p>
+<p>Here are notes corresponding to comments in the example program.</p>
+<p><strong>SETUP:</strong> The setup begins by creating a stream.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tnt</span> <span class="o">=</span> <span class="n">tnt_net</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="n">tnt_set</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">TNT_OPT_URI</span><span class="p">,</span> <span class="s">&quot;localhost:3301&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this program, the stream will be named <code class="docutils literal notranslate"><span class="pre">tnt</span></code>.
+Before connecting on the <code class="docutils literal notranslate"><span class="pre">tnt</span></code> stream, some options may have to be set.
+The most important option is TNT_OPT_URI.
+In this program, the <a class="reference internal" href="../../reference/configuration/index.html#index-uri"><span class="std std-ref">URI</span></a> is <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>, since that is where the
+Tarantool instance is supposed to be listening.</p>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>struct tnt_stream *tnt_net(struct tnt_stream *s)
+int tnt_set(struct tnt_stream *s, int option, variant option-value)
+</pre></div>
+</div>
+<p><strong>CONNECT:</strong> Now that the stream named <code class="docutils literal notranslate"><span class="pre">tnt</span></code> exists and is associated with a
+URI, this example program can connect to a server instance.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">tnt_connect</span><span class="p">(</span><span class="n">tnt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+   <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection refused</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int tnt_connect(struct tnt_stream *s)
+</pre></div>
+</div>
+<p>The connection might fail for a variety of reasons, such as:
+the server is not running, or the URI contains an invalid <a class="reference internal" href="../box/authentication_index.html#authentication-passwords"><span class="std std-ref">password</span></a>.
+If the connection fails, the return value will be -1.</p>
+<p><strong>MAKE REQUEST:</strong> Most requests require passing a structured value, such as
+the contents of a tuple.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tuple</span> <span class="o">=</span> <span class="n">tnt_object</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="n">tnt_object_format</span><span class="p">(</span><span class="n">tuple</span><span class="p">,</span> <span class="s">&quot;[%d%s]&quot;</span><span class="p">,</span> <span class="mi">99999</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this program, the request will
+be an <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">INSERT</span></a>, and the tuple contents will be an integer
+and a string. This is a simple serial set of values, that
+is, there are no sub-structures or arrays. Therefore it
+is easy in this case to format what will be passed using
+the same sort of arguments that one would use with a C
+<code class="docutils literal notranslate"><span class="pre">printf()</span></code> function: <code class="docutils literal notranslate"><span class="pre">%d</span></code> for the integer, <code class="docutils literal notranslate"><span class="pre">%s</span></code> for the string,
+then the integer value, then a pointer to the string value.</p>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ssize_t tnt_object_format(struct tnt_stream *s, const char *fmt, ...)
+</pre></div>
+</div>
+<p><strong>SEND REQUEST:</strong> The database-manipulation requests are analogous to the
+requests in the box library.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">tnt_insert</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="mi">999</span><span class="p">,</span> <span class="n">tuple</span><span class="p">);</span>
+<span class="n">tnt_flush</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this program, the choice is to do an INSERT request, so
+the program passes the <code class="docutils literal notranslate"><span class="pre">tnt_stream</span></code> that was used for connection
+(<code class="docutils literal notranslate"><span class="pre">tnt</span></code>) and the <code class="docutils literal notranslate"><span class="pre">tnt_stream</span></code> that was set up with
+<code class="xref c c-func docutils literal notranslate"><span class="pre">tarantoolc:tnt_object_format()</span></code> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code>).</p>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ssize_t tnt_insert(struct tnt_stream *s, uint32_t space, struct tnt_stream *tuple)
+ssize_t tnt_replace(struct tnt_stream *s, uint32_t space, struct tnt_stream *tuple)
+ssize_t tnt_select(struct tnt_stream *s, uint32_t space, uint32_t index,
+                   uint32_t limit, uint32_t offset, uint8_t iterator,
+                   struct tnt_stream *key)
+ssize_t tnt_update(struct tnt_stream *s, uint32_t space, uint32_t index,
+                   struct tnt_stream *key, struct tnt_stream *ops)
+</pre></div>
+</div>
+<p><strong>GET REPLY:</strong> For most requests, the client will receive a reply containing some
+indication whether the result was successful, and a set of tuples.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">tnt_reply</span> <span class="n">reply</span><span class="p">;</span>  <span class="n">tnt_reply_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+<span class="n">tnt</span><span class="o">-&gt;</span><span class="n">read_reply</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">reply</span><span class="p">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+   <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Insert failed %lu.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reply</span><span class="p">.</span><span class="n">code</span><span class="p">);</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>This program checks for success but does not decode the rest of the reply.</p>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>struct tnt_reply *tnt_reply_init(struct tnt_reply *r)
+tnt-&gt;read_reply(struct tnt_stream *s, struct tnt_reply *r)
+void tnt_reply_free(struct tnt_reply *r)
+</pre></div>
+</div>
+<p><strong>TEARDOWN:</strong> When a session ends, the connection that was made with
+<code class="xref c c-func docutils literal notranslate"><span class="pre">tarantoolc:tnt_connect()</span></code> should be closed, and the objects that were
+made in the setup should be destroyed.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">tnt_close</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+<span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tuple</span><span class="p">);</span>
+<span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Function description:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>void tnt_close(struct tnt_stream *s)
+void tnt_stream_free(struct tnt_stream *s)
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-2">
+<h3>Example 2<a class="headerlink" href="#example-2" title="Permalink to this headline">¶</a></h3>
+<p>Here is a complete C program that selects, using index key <code class="docutils literal notranslate"><span class="pre">[99999]</span></code>, from
+space <code class="docutils literal notranslate"><span class="pre">examples</span></code> via the high-level C API.
+To display the results, the program uses functions in the
+<a class="reference external" href="https://github.com/tarantool/msgpuck">MsgPuck</a> library which allow decoding of
+<a class="reference external" href="https://en.wikipedia.org/wiki/MessagePack">MessagePack</a>  arrays.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tarantool.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_net.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_opt.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define MP_SOURCE 1</span>
+<span class="cp">#include</span> <span class="cpf">&lt;msgpuck.h&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tnt</span> <span class="o">=</span> <span class="n">tnt_net</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">tnt_set</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">TNT_OPT_URI</span><span class="p">,</span> <span class="s">&quot;localhost:3301&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tnt_connect</span><span class="p">(</span><span class="n">tnt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection refused</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tuple</span> <span class="o">=</span> <span class="n">tnt_object</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">tnt_object_format</span><span class="p">(</span><span class="n">tuple</span><span class="p">,</span> <span class="s">&quot;[%d]&quot;</span><span class="p">,</span> <span class="mi">99999</span><span class="p">);</span> <span class="cm">/* tuple = search key */</span>
+    <span class="n">tnt_select</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="mi">999</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tuple</span><span class="p">);</span>
+    <span class="n">tnt_flush</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+    <span class="k">struct</span> <span class="nc">tnt_reply</span> <span class="n">reply</span><span class="p">;</span> <span class="n">tnt_reply_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+    <span class="n">tnt</span><span class="o">-&gt;</span><span class="n">read_reply</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">reply</span><span class="p">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Select failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="n">field_type</span><span class="p">;</span>
+    <span class="n">field_type</span> <span class="o">=</span> <span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">field_type</span> <span class="o">!=</span> <span class="n">MP_ARRAY</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;no tuple array</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">long</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">row_count</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">tuple_count</span> <span class="o">=</span> <span class="n">mp_decode_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;tuple count=%u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">tuple_count</span><span class="p">);</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tuple_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">field_type</span> <span class="o">=</span> <span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">field_type</span> <span class="o">!=</span> <span class="n">MP_ARRAY</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;no field array</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">uint32_t</span> <span class="n">field_count</span> <span class="o">=</span> <span class="n">mp_decode_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  field count=%u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">field_count</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">field_count</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">field_type</span> <span class="o">=</span> <span class="n">mp_typeof</span><span class="p">(</span><span class="o">*</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">field_type</span> <span class="o">==</span> <span class="n">MP_UINT</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">uint64_t</span> <span class="n">num_value</span> <span class="o">=</span> <span class="n">mp_decode_uint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    value=%lu.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">num_value</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">field_type</span> <span class="o">==</span> <span class="n">MP_STR</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str_value</span><span class="p">;</span>
+                <span class="kt">uint32_t</span> <span class="n">str_value_length</span><span class="p">;</span>
+                <span class="n">str_value</span> <span class="o">=</span> <span class="n">mp_decode_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">str_value_length</span><span class="p">);</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    value=%.*s.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">str_value_length</span><span class="p">,</span> <span class="n">str_value</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;wrong field type</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">tnt_close</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+    <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tuple</span><span class="p">);</span>
+    <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Similarly to the first example, paste the code into a file named
+<code class="file docutils literal notranslate"><span class="pre">example2.c</span></code>.</p>
+<p>To compile and link the program, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gcc -o example2 example2.c -ltarantool
+</pre></div>
+</div>
+<p>To run the program, say <code class="samp docutils literal notranslate"><span class="pre">./example2</span></code>.</p>
+<p>The two example programs only show a few requests and do not show all that’s
+necessary for good practice. See more in the
+<a class="reference external" href="http://github.com/tarantool/tarantool-c">tarantool-c documentation at GitHub</a>.</p>
+</div>
+</div>
+<div class="section" id="interpreting-function-return-values">
+<h2>Interpreting function return values<a class="headerlink" href="#interpreting-function-return-values" title="Permalink to this headline">¶</a></h2>
+<p>For all connectors, calling a function via Tarantool causes a return in the
+MsgPack format. If the function is called using the connector’s API, some
+conversions may occur. All scalar values are returned as tuples (with a MsgPack
+type-identifier followed by a value); all non-scalar values are returned as a
+group of tuples (with a MsgPack array-identifier followed by the scalar values).
+If the function is called via the binary protocol command layer – “eval” –
+rather than via the connector’s API, no conversions occur.</p>
+<p>In the following example, a Lua function will be created. Since it will be
+accessed externally by a <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">‘guest’ user</span></a>, a
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">grant</span></a> of an execute privilege will
+be necessary. The function returns an empty array, a scalar string, two booleans,
+and a short integer. The values are the ones described in the table
+<a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-common-types-and-msgpack-encodings"><span class="std std-ref">Common Types and MsgPack Encodings</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{listen=3301}
+2016-03-03 18:45:52.802 [27381] main/101/interactive I&gt; ready to accept requests
+---
+...
+tarantool&gt; function f() return {},&#39;a&#39;,false,true,127; end
+---
+...
+tarantool&gt; box.schema.func.create(&#39;f&#39;)
+---
+...
+tarantool&gt; box.schema.user.grant(&#39;guest&#39;,&#39;execute&#39;,&#39;function&#39;,&#39;f&#39;)
+---
+...
+</pre></div>
+</div>
+<p>Here is a C program which calls the function. Although C is being used for the
+example, the result would be precisely the same if the calling program was
+written in Perl, PHP, Python, Go, or Java.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tarantool.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_net.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_opt.h&gt;</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tnt</span> <span class="o">=</span> <span class="n">tnt_net</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>              <span class="cm">/* SETUP */</span>
+  <span class="n">tnt_set</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">TNT_OPT_URI</span><span class="p">,</span> <span class="s">&quot;localhost:3301&quot;</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">tnt_connect</span><span class="p">(</span><span class="n">tnt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>                         <span class="cm">/* CONNECT */</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection refused</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+       <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">arg</span><span class="p">;</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">tnt_object</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>     <span class="cm">/* MAKE REQUEST */</span>
+   <span class="n">tnt_object_add_array</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+   <span class="k">struct</span> <span class="nc">tnt_request</span> <span class="o">*</span><span class="n">req1</span> <span class="o">=</span> <span class="n">tnt_request_call</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>  <span class="cm">/* CALL function f() */</span>
+   <span class="n">tnt_request_set_funcz</span><span class="p">(</span><span class="n">req1</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">);</span>
+   <span class="kt">uint64_t</span> <span class="n">sync1</span> <span class="o">=</span> <span class="n">tnt_request_compile</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">req1</span><span class="p">);</span>
+   <span class="n">tnt_flush</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>                                     <span class="cm">/* SEND REQUEST */</span>
+   <span class="k">struct</span> <span class="nc">tnt_reply</span> <span class="n">reply</span><span class="p">;</span>  <span class="n">tnt_reply_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>    <span class="cm">/* GET REPLY */</span>
+   <span class="n">tnt</span><span class="o">-&gt;</span><span class="n">read_reply</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">reply</span><span class="p">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Call failed %lu.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reply</span><span class="p">.</span><span class="n">code</span><span class="p">);</span>
+     <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">;</span> <span class="cm">/* PRINT REPLY */</span>
+   <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">reply</span><span class="p">.</span><span class="n">data_end</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%x &quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>
+     <span class="o">++</span><span class="n">p</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+   <span class="n">tnt_close</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>                                     <span class="cm">/* TEARDOWN */</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When this program is executed, it will print:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">dd 0 0 0 5 90 91 a1 61 91 c2 91 c3 91 7f</span>
+</pre></div>
+</div>
+<p>The first five bytes – <code class="docutils literal notranslate"><span class="pre">dd</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">5</span></code> – are the MsgPack encoding for
+“32-bit array header with value 5” (see
+<a class="reference external" href="http://github.com/msgpack/msgpack/blob/master/spec.md">MsgPack specification</a>).
+The rest are as described in the
+table <a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-common-types-and-msgpack-encodings"><span class="std std-ref">Common Types and MsgPack Encodings</span></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

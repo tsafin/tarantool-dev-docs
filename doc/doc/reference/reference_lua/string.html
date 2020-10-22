@@ -1,0 +1,569 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module string &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>string</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/string.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-string">
+<span id="string-module"></span><h1>Module <cite>string</cite><a class="headerlink" href="#module-string" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-string">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#module-string" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="code docutils literal notranslate"><span class="pre">string</span></code> module has everything in the
+<a class="reference external" href="https://www.lua.org/pil/20.html">standard Lua string library</a>, and some
+Tarantool extensions.</p>
+<p>In this section we only discuss the additional functions
+that the Tarantool developers have added.</p>
+<p>Below is a list of all additional <code class="docutils literal notranslate"><span class="pre">string</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#string-ljust"><span class="std std-ref">string.ljust()</span></a></td>
+<td>Left-justify a string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#string-rjust"><span class="std std-ref">string.rjust()</span></a></td>
+<td>Right-justify a string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#string-hex"><span class="std std-ref">string.hex()</span></a></td>
+<td>Get the hexadecimal value of a
+string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#string-startswith"><span class="std std-ref">string.startswith()</span></a></td>
+<td>Check if a string starts with
+a given substring</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#string-endswith"><span class="std std-ref">string.endswith()</span></a></td>
+<td>Check if a string ends with a
+given substring</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#string-lstrip"><span class="std std-ref">string.lstrip()</span></a></td>
+<td>Remove spaces on the left of a
+string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#string-rstrip"><span class="std std-ref">string.rstrip()</span></a></td>
+<td>Remove spaces on the right of a
+string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#string-split"><span class="std std-ref">string.split()</span></a></td>
+<td>Split a string into a table of
+strings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#string-strip"><span class="std std-ref">string.strip()</span></a></td>
+<td>Remove spaces on the left and
+right of a string</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="string-ljust"></span><dl class="function">
+<dt id="string.ljust">
+<code class="descclassname">string.</code><code class="descname">ljust</code><span class="sig-paren">(</span><em>input-string</em>, <em>width</em><span class="optional">[</span>, <em>pad-character</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#string.ljust" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string left-justified in a string of length <code class="docutils literal notranslate"><span class="pre">width</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input-string</strong> (<em>string</em>) – the string to left-justify</li>
+<li><strong>width</strong> (<em>integer</em>) – the width of the string after left-justifying</li>
+<li><strong>pad-character</strong> (<em>string</em>) – a single character, default = 1 space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">left-justified string (unchanged if width &lt;= string length)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.ljust(&#39; A&#39;, 5)
+---
+- &#39; A   &#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-rjust"></span><dl class="function">
+<dt id="string.rjust">
+<code class="descclassname">string.</code><code class="descname">rjust</code><span class="sig-paren">(</span><em>input-string</em>, <em>width</em><span class="optional">[</span>, <em>pad-character</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#string.rjust" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string right-justified in a string of length <code class="docutils literal notranslate"><span class="pre">width</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input-string</strong> (<em>string</em>) – the string to right-justify</li>
+<li><strong>width</strong> (<em>integer</em>) – the width of the string after right-justifying</li>
+<li><strong>pad-character</strong> (<em>string</em>) – a single character, default = 1 space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">right-justified string (unchanged if width &lt;= string length)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.rjust(&#39;&#39;, 5, &#39;X&#39;)
+---
+- &#39;XXXXX&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-hex"></span><dl class="function">
+<dt id="string.hex">
+<code class="descclassname">string.</code><code class="descname">hex</code><span class="sig-paren">(</span><em>input-string</em><span class="sig-paren">)</span><a class="headerlink" href="#string.hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hexadecimal value of the input string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input-string</strong> (<em>string</em>) – the string to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">hexadecimal, 2 hex-digit characters for each input character</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.hex(&#39;ABC &#39;)
+---
+- &#39;41424320&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-startswith"></span><dl class="function">
+<dt id="string.startswith">
+<code class="descclassname">string.</code><code class="descname">startswith</code><span class="sig-paren">(</span><em>input-string</em>, <em>start-string</em><span class="optional">[</span>, <em>start-pos</em><span class="optional">[</span>, <em>end-pos</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#string.startswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if <code class="docutils literal notranslate"><span class="pre">input-string</span></code> starts with <code class="docutils literal notranslate"><span class="pre">start-string</span></code>, otherwise return
+False.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input-string</strong> (<em>string</em>) – the string where <code class="docutils literal notranslate"><span class="pre">start-string</span></code> should be looked for</li>
+<li><strong>start-string</strong> (<em>string</em>) – the string to look for</li>
+<li><strong>start-pos</strong> (<em>integer</em>) – position: where to start looking within <code class="docutils literal notranslate"><span class="pre">input-string</span></code></li>
+<li><strong>end-pos</strong> (<em>integer</em>) – position: where to end looking within <code class="docutils literal notranslate"><span class="pre">input-string</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">true or false</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">start-pos</span></code> and <code class="docutils literal notranslate"><span class="pre">end-pos</span></code> may be negative, meaning the position should
+be calculated from the end of the string.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.startswith(&#39; A&#39;, &#39;A&#39;, 2, 5)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-endswith"></span><dl class="function">
+<dt id="string.endswith">
+<code class="descclassname">string.</code><code class="descname">endswith</code><span class="sig-paren">(</span><em>input-string</em>, <em>end-string</em><span class="optional">[</span>, <em>start-pos</em><span class="optional">[</span>, <em>end-pos</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#string.endswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if <code class="docutils literal notranslate"><span class="pre">input-string</span></code> ends with <code class="docutils literal notranslate"><span class="pre">end-string</span></code>, otherwise return
+False.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input-string</strong> (<em>string</em>) – the string where <code class="docutils literal notranslate"><span class="pre">end-string</span></code> should be looked for</li>
+<li><strong>end-string</strong> (<em>string</em>) – the string to look for</li>
+<li><strong>start-pos</strong> (<em>integer</em>) – position: where to start looking within <code class="docutils literal notranslate"><span class="pre">input-string</span></code></li>
+<li><strong>end-pos</strong> (<em>integer</em>) – position: where to end looking within <code class="docutils literal notranslate"><span class="pre">input-string</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">true or false</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">start-pos</span></code> and <code class="docutils literal notranslate"><span class="pre">end-pos</span></code> may be negative, meaning the position should
+be calculated from the end of the string.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.endswith(&#39;Baa&#39;, &#39;aa&#39;)
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-lstrip"></span><dl class="function">
+<dt id="string.lstrip">
+<code class="descclassname">string.</code><code class="descname">lstrip</code><span class="sig-paren">(</span><em>input-string</em><span class="sig-paren">)</span><a class="headerlink" href="#string.lstrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the input string, but without spaces on the left.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input-string</strong> (<em>string</em>) – the string to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">result after stripping spaces from input string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.lstrip(&#39; ABC &#39;)
+---
+- &#39;ABC &#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-rstrip"></span><dl class="function">
+<dt id="string.rstrip">
+<code class="descclassname">string.</code><code class="descname">rstrip</code><span class="sig-paren">(</span><em>input-string</em><span class="sig-paren">)</span><a class="headerlink" href="#string.rstrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the input string, but without spaces on the right.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input-string</strong> (<em>string</em>) – the string to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">result after stripping spaces from input string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.rstrip(&#39; ABC &#39;)
+---
+- &#39; ABC&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-split"></span><dl class="function">
+<dt id="string.split">
+<code class="descclassname">string.</code><code class="descname">split</code><span class="sig-paren">(</span><em>input-string</em><span class="optional">[</span>, <em>split-string</em><span class="optional">[</span>, <em>max</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#string.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split <code class="docutils literal notranslate"><span class="pre">input-string</span></code> into one or more output strings
+in a table. The places to split are the places where
+<code class="docutils literal notranslate"><span class="pre">split-string</span></code> occurs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input-string</strong> (<em>string</em>) – the string to split</li>
+<li><strong>split-string</strong> (<em>integer</em>) – the string to find within <code class="docutils literal notranslate"><span class="pre">input-string</span></code>.
+Default = space.</li>
+<li><strong>max</strong> (<em>integer</em>) – maximum number of delimiters to process counting
+from the beginning of the input string. Result will
+contain max + 1 parts maximum.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">table of strings that were split from <code class="docutils literal notranslate"><span class="pre">input-string</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">table</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.split(&quot;A:B:C:D:F&quot;, &quot;:&quot;, 2)
+---
+- - A
+  - B
+  - C:D:F
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="string-strip"></span><dl class="function">
+<dt id="string.strip">
+<code class="descclassname">string.</code><code class="descname">strip</code><span class="sig-paren">(</span><em>input-string</em><span class="sig-paren">)</span><a class="headerlink" href="#string.strip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the input string, but without spaces on the left or the right.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input-string</strong> (<em>string</em>) – the string to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">result after stripping spaces from input string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; string = require(&#39;string&#39;)
+---
+...
+tarantool&gt; string.strip(&#39; ABC &#39;)
+---
+- ABC
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

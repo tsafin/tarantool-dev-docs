@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module box &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module clock" href="clock.html" />
+    <link rel="prev" title="C API reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>box</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/box.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box">
+<h1>Module <cite>box</cite><a class="headerlink" href="#module-box" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.box_function_ctx_t">
+<code class="descname">box_function_ctx_t</code><a class="headerlink" href="#c.box_function_ctx_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opaque structure passed to a C stored procedure</p>
+</dd></dl>
+
+<span class="target" id="box-box-return-tuple"></span><dl class="function">
+<dt id="c.box_return_tuple">
+int <code class="descname">box_return_tuple</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_function_ctx_t" title="box_function_ctx_t">box_function_ctx_t</a><em>&nbsp;*ctx</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;*tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_return_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple from a C stored procedure.</p>
+<p>The returned tuple is automatically reference-counted by Tarantool.
+An example program that uses <code class="docutils literal notranslate"><span class="pre">box_return_tuple()</span></code> is
+<a class="reference internal" href="../../tutorials/c_tutorial.html#f-c-tutorial-write"><span class="std std-ref">write.c</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<em>box_funtion_ctx_t*</em>) – an opaque structure passed to the C stored
+procedure by Tarantool</li>
+<li><strong>tuple</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t*</em></a>) – a tuple to return</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (perhaps, out of memory; check
+<a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="box-box-space-id-by-name"></span><dl class="function">
+<dt id="c.box_space_id_by_name">
+uint32_t <code class="descname">box_space_id_by_name</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_space_id_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find space id by name.</p>
+<p>This function performs a SELECT request on the <code class="docutils literal notranslate"><span class="pre">_vspace</span></code> system space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>char* name</strong> (<em>const</em>) – space name</li>
+<li><strong>len</strong> (<em>uint32_t</em>) – length of <code class="docutils literal notranslate"><span class="pre">name</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="xref c c-macro docutils literal notranslate"><span class="pre">BOX_ID_NIL</span></code> on error or if not found (check
+<a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">space_id otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c.box_index_id_by_name" title="box_index_id_by_name"><code class="xref c c-type docutils literal notranslate"><span class="pre">box_index_id_by_name</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_id_by_name">
+uint32_t <code class="descname">box_index_id_by_name</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, const char<em>&nbsp;*name</em>, uint32_t<em>&nbsp;len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_id_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find index id by name.</p>
+<p>This function performs a SELECT request on the <code class="docutils literal notranslate"><span class="pre">_vindex</span></code> system space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>char*  name</strong> (<em>const</em>) – index name</li>
+<li><strong>len</strong> (<em>uint32_t</em>) – length of <code class="docutils literal notranslate"><span class="pre">name</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="xref c c-macro docutils literal notranslate"><span class="pre">BOX_ID_NIL</span></code> on error or if not found (check
+<a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">space_id otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="#c.box_space_id_by_name" title="box_space_id_by_name"><code class="xref c c-type docutils literal notranslate"><span class="pre">box_space_id_by_name</span></code></a></p>
+</dd></dl>
+
+<span class="target" id="box-box-insert"></span><dl class="function">
+<dt id="c.box_insert">
+int <code class="descname">box_insert</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, const char<em>&nbsp;*tuple</em>, const char<em>&nbsp;*tuple_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an INSERT/REPLACE request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>char*     tuple</strong> (<em>const</em>) – encoded tuple in MsgPack Array format ([ field1, field2, …])</li>
+<li><strong>char* tuple_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">tuple</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. Resulting tuple. Can be set to
+NULL to discard result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-insert"><span class="std std-ref">space_object.insert()</span></a></p>
+</dd></dl>
+
+<span class="target" id="box-box-replace"></span><dl class="function">
+<dt id="c.box_replace">
+int <code class="descname">box_replace</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, const char<em>&nbsp;*tuple</em>, const char<em>&nbsp;*tuple_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a REPLACE request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>char*     tuple</strong> (<em>const</em>) – encoded tuple in MsgPack Array format ([ field1, field2, …])</li>
+<li><strong>char* tuple_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">tuple</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. Resulting tuple. Can be set to
+NULL to discard result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-replace"><span class="std std-ref">space_object.replace()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_delete">
+int <code class="descname">box_delete</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a DELETE request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*      key</strong> (<em>const</em>) – encoded key in MsgPack Array format ([ field1, field2, …])</li>
+<li><strong>char*  key_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. An old tuple. Can be
+set to NULL to discard result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-delete"><span class="std std-ref">space_object.delete()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_update">
+int <code class="descname">box_update</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em>, const char<em>&nbsp;*ops</em>, const char<em>&nbsp;*ops_end</em>, int<em>&nbsp;index_base</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an UPDATE request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*      key</strong> (<em>const</em>) – encoded key in MsgPack Array format ([ field1, field2, …])</li>
+<li><strong>char*  key_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+<li><strong>char*      ops</strong> (<em>const</em>) – encoded operations in MsgPack Array format, e.g.
+<code class="docutils literal notranslate"><span class="pre">[[</span> <span class="pre">'=',</span> <span class="pre">field_id,</span>&#160; <span class="pre">value</span> <span class="pre">],</span> <span class="pre">['!',</span> <span class="pre">2,</span> <span class="pre">'xxx']]</span></code></li>
+<li><strong>char*  ops_end</strong> (<em>const</em>) – end of an <code class="docutils literal notranslate"><span class="pre">ops</span></code> section</li>
+<li><strong>index_base</strong> (<em>int</em>) – 0 if field_ids are zero-based as in C,
+1 if field ids are 1-based as in Lua</li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. An old tuple. Can be
+set to NULL to discard result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-update"><span class="std std-ref">space_object.update()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_upsert">
+int <code class="descname">box_upsert</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*tuple</em>, const char<em>&nbsp;*tuple_end</em>, const char<em>&nbsp;*ops</em>, const char<em>&nbsp;*ops_end</em>, int<em>&nbsp;index_base</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_upsert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an UPSERT request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*     tuple</strong> (<em>const</em>) – encoded tuple in MsgPack Array format ([ field1, field2, …])</li>
+<li><strong>char* tuple_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">tuple</span></code></li>
+<li><strong>char*       ops</strong> (<em>const</em>) – encoded operations in MsgPack Array format, e.g.
+<code class="docutils literal notranslate"><span class="pre">[[</span> <span class="pre">'=',</span> <span class="pre">field_id,</span>&#160; <span class="pre">value</span> <span class="pre">],</span> <span class="pre">['!',</span> <span class="pre">2,</span> <span class="pre">'xxx']]</span></code></li>
+<li><strong>char*   ops_end</strong> (<em>const</em>) – end of a <code class="docutils literal notranslate"><span class="pre">ops</span></code></li>
+<li><strong>index_base</strong> (<em>int</em>) – 0 if field_ids are zero-based as in C,
+1 if field ids are 1-based as in Lua</li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. An old tuple. Can be
+set to NULL to discard result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check :<a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-upsert"><span class="std std-ref">space_object.upsert()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_truncate">
+int <code class="descname">box_truncate</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Truncate a space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="clock.html" class="btn btn-neutral float-right" title="Module clock" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="C API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

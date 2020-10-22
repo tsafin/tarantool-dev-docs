@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>About Tarantool Cartridge &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>About Tarantool Cartridge</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/cartridge/cartridge_overview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="about-tarantool-cartridge">
+<span id="cartridge-overview"></span><h1>About Tarantool Cartridge<a class="headerlink" href="#about-tarantool-cartridge" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool Cartridge is the recommended alternative to the
+<a class="reference internal" href="../app_server/creating_app.html#app-server-creating-app"><span class="std std-ref">old-school practices</span></a> of application development
+for Tarantool.</p>
+<p id="cluster-app">As a software development kit (SDK), Tarantool Cartridge provides you with
+utilities and <a class="reference internal" href="cartridge_dev.html#cartridge-templates"><span class="std std-ref">templates</span></a> to help:</p>
+<ul class="simple">
+<li>easily set up a development environment for your applications;</li>
+<li>plug the necessary Lua modules.</li>
+</ul>
+<p>The resulting package can be installed and started on one or multiple servers
+as one or multiple instantiated services – independent or organized into a
+<strong>cluster</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>A Tarantool cluster is a collection of Tarantool instances acting in concert.
+While a single Tarantool instance can leverage the performance of a single server
+and is vulnerable to failure, the cluster spans multiple servers, utilizes their
+cumulative CPU power, and is fault-tolerant.</p>
+<p class="last">To fully utilize the capabilities of a Tarantool cluster, you need to
+develop applications keeping in mind they are to run in a cluster environment.</p>
+</div>
+<p>Further on, Tarantool Cartridge provides your cluster-aware applications with
+the following benefits:</p>
+<ul class="simple">
+<li>horizontal scalability and load balancing via built-in automatic sharding;</li>
+<li>asynchronous replication;</li>
+<li>automatic failover;</li>
+<li>centralized cluster control via GUI or API;</li>
+<li>automatic configuration synchronization;</li>
+<li>instance functionality segregation.</li>
+</ul>
+<p>A Tarantool Cartridge cluster can segregate functionality between instances via
+built-in and custom (user-defined) <a class="reference internal" href="cartridge_dev.html#cartridge-roles"><span class="std std-ref">cluster roles</span></a>.
+You can toggle instances on and off on the fly during cluster operation.
+This allows you to put different types of workloads
+(e.g., compute- and transaction-intensive ones) on different physical servers
+with dedicated hardware.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

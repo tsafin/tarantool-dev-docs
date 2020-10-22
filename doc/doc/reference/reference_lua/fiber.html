@@ -1,0 +1,1581 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module fiber &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>fiber</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/fiber.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fiber">
+<span id="fiber-module"></span><h1>Module <cite>fiber</cite><a class="headerlink" href="#module-fiber" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>With the <code class="docutils literal notranslate"><span class="pre">fiber</span></code> module, you can:</p>
+<ul class="simple">
+<li>create, run and manage <a class="reference internal" href="#fiber-fibers"><span class="std std-ref">fibers</span></a>,</li>
+<li>send and receive messages between different processes (i.e. different
+connections, sessions, or fibers) via <a class="reference internal" href="#fiber-ipc-channel"><span class="std std-ref">channels</span></a>, and</li>
+<li>use a <a class="reference internal" href="#fiber-ipc-cond-var"><span class="std std-ref">synchronization mechanism</span></a> for fibers,
+similar to “condition variables” and similar to operating-system functions
+such as <code class="docutils literal notranslate"><span class="pre">pthread_cond_wait()</span></code> plus <code class="docutils literal notranslate"><span class="pre">pthread_cond_signal()</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">fiber</span></code> functions and members.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create()</span></a></td>
+<td>Create and start a fiber</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-new"><span class="std std-ref">fiber.new()</span></a></td>
+<td>Create but do not start a fiber</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self()</span></a></td>
+<td>Get a fiber object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find()</span></a></td>
+<td>Get a fiber object by ID</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-sleep"><span class="std std-ref">fiber.sleep()</span></a></td>
+<td>Make a fiber go to sleep</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-yield"><span class="std std-ref">fiber.yield()</span></a></td>
+<td>Yield control</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-status"><span class="std std-ref">fiber.status()</span></a></td>
+<td>Get the current fiber’s status</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-info"><span class="std std-ref">fiber.info()</span></a></td>
+<td>Get information about all
+fibers</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-kill"><span class="std std-ref">fiber.kill()</span></a></td>
+<td>Cancel a fiber</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">fiber.testcancel()</span></a></td>
+<td>Check if the current fiber has
+been cancelled</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-object-id"><span class="std std-ref">fiber_object:id()</span></a></td>
+<td>Get a fiber’s ID</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-object-name-get"><span class="std std-ref">fiber_object:name()</span></a></td>
+<td>Get a fiber’s name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-object-name-set"><span class="std std-ref">fiber_object:name(name)</span></a></td>
+<td>Set a fiber’s name</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-object-status"><span class="std std-ref">fiber_object:status()</span></a></td>
+<td>Get a fiber’s status</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-object-cancel"><span class="std std-ref">fiber_object:cancel()</span></a></td>
+<td>Cancel a fiber</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-object-storage"><span class="std std-ref">fiber_object.storage</span></a></td>
+<td>Local storage within the fiber</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-object-set-joinable"><span class="std std-ref">fiber_object:set_joinable()</span></a></td>
+<td>Make it possible for a new
+fiber to join</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-object-join"><span class="std std-ref">fiber_object:join()</span></a></td>
+<td>Wait for a fiber’s state to
+become ‘dead’</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-time"><span class="std std-ref">fiber.time()</span></a></td>
+<td>Get the system time in seconds</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-time64"><span class="std std-ref">fiber.time64()</span></a></td>
+<td>Get the system time in
+microseconds</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-clock"><span class="std std-ref">fiber.clock()</span></a></td>
+<td>Get the monotonic time in
+seconds</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#fiber-clock64"><span class="std std-ref">fiber.clock64()</span></a></td>
+<td>Get the monotonic time in
+microseconds</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-channel"><span class="std std-ref">fiber.channel()</span></a></td>
+<td>Create a communication channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#channel-object-put"><span class="std std-ref">channel_object:put()</span></a></td>
+<td>Send a message via a channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#channel-object-close"><span class="std std-ref">channel_object:close()</span></a></td>
+<td>Close a channel</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#channel-object-get"><span class="std std-ref">channel_object:get()</span></a></td>
+<td>Fetch a message from a channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#channel-object-is-empty"><span class="std std-ref">channel_object:is_empty()</span></a></td>
+<td>Check if a channel is empty</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#channel-object-count"><span class="std std-ref">channel_object:count()</span></a></td>
+<td>Count messages in a channel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#channel-object-is-full"><span class="std std-ref">channel_object:is_full()</span></a></td>
+<td>Check if a channel is full</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#channel-object-has-readers"><span class="std std-ref">channel_object:has_readers()</span></a></td>
+<td>Check if an empty channel has
+any readers waiting</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#channel-object-has-writers"><span class="std std-ref">channel_object:has_writers()</span></a></td>
+<td>Check if a full channel has any
+writers waiting</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#channel-object-is-closed"><span class="std std-ref">channel_object:is_closed()</span></a></td>
+<td>Check if a channel is closed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#fiber-cond"><span class="std std-ref">fiber.cond()</span></a></td>
+<td>Create a condition variable</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#cond-object-wait"><span class="std std-ref">cond_object:wait()</span></a></td>
+<td>Make a fiber go to sleep until
+woken by another fiber</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#cond-object-signal"><span class="std std-ref">cond_object:signal()</span></a></td>
+<td>Wake up a single fiber</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#cond-object-broadcast"><span class="std std-ref">cond_object:broadcast()</span></a></td>
+<td>Wake up all fibers</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="fibers">
+<span id="fiber-fibers"></span><h2>Fibers<a class="headerlink" href="#fibers" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>fiber</strong> is a set of instructions which are executed with cooperative
+multitasking. Fibers managed by the fiber module are associated with
+a user-supplied function called the <em>fiber function</em>.</p>
+<p>A fiber has three possible states: <strong>running</strong>, <strong>suspended</strong> or <strong>dead</strong>.
+When a fiber is created with <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create()</span></a>, it is running.
+When a fiber is created with <a class="reference internal" href="#fiber-new"><span class="std std-ref">fiber.new()</span></a> or yields control
+with <a class="reference internal" href="#fiber-sleep"><span class="std std-ref">fiber.sleep()</span></a>, it is suspended.
+When a fiber ends (because the fiber function ends), it is dead.</p>
+<p>All fibers are part of the fiber registry. This registry can be searched
+with <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find()</span></a> - via fiber id (fid), which is a numeric
+identifier.</p>
+<p>A runaway fiber can be stopped with <a class="reference internal" href="#fiber-object-cancel"><span class="std std-ref">fiber_object.cancel</span></a>.
+However, <a class="reference internal" href="#fiber-object-cancel"><span class="std std-ref">fiber_object.cancel</span></a> is advisory — it works
+only if the runaway fiber calls <a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">fiber.testcancel()</span></a>
+occasionally. Most <code class="docutils literal notranslate"><span class="pre">box.*</span></code> functions, such as
+<a class="reference internal" href="box_space_index.html#box-space-delete"><span class="std std-ref">box.space…delete()</span></a> or
+<a class="reference internal" href="box_space_index.html#box-space-update"><span class="std std-ref">box.space…update()</span></a>, do call
+<a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">fiber.testcancel()</span></a> but
+<a class="reference internal" href="box_space_index.html#box-space-select"><span class="std std-ref">box.space…select{}</span></a> does not. In practice, a runaway
+fiber can only become unresponsive if it does many computations and does not
+check whether it has been cancelled.</p>
+<p>The other potential problem comes from fibers which never get scheduled, because
+they are not subscribed to any events, or because no relevant events occur. Such
+morphing fibers can be killed with <a class="reference internal" href="#fiber-kill"><span class="std std-ref">fiber.kill()</span></a> at any time,
+since <a class="reference internal" href="#fiber-kill"><span class="std std-ref">fiber.kill()</span></a> sends an asynchronous wakeup event to the
+fiber, and <a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">fiber.testcancel()</span></a> is checked whenever such
+a wakeup event occurs.</p>
+<p>Like all Lua objects, dead fibers are garbage collected. The Lua garbage collector
+frees pool allocator memory owned by the fiber, resets all fiber data, and
+returns the fiber (now called a fiber carcass) to the fiber pool. The carcass
+can be reused when another fiber is created.</p>
+<p>A fiber has all the features of a Lua <a class="reference external" href="http://www.lua.org/pil/contents.html#9">coroutine</a> and all the programming
+concepts that apply for Lua coroutines will apply for fibers as well. However,
+Tarantool has made some enhancements for fibers and has used fibers internally.
+So, although use of coroutines is possible and supported, use of fibers is
+recommended.</p>
+<span class="target" id="module-fiber"></span><span class="target" id="fiber-create"></span><dl class="function">
+<dt id="fiber.create">
+<code class="descclassname">fiber.</code><code class="descname">create</code><span class="sig-paren">(</span><em>function</em><span class="optional">[</span>, <em>function-arguments</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and start a fiber. The fiber is created and begins to run immediately.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> – the function to be associated with the fiber</li>
+<li><strong>function-arguments</strong> – what will be passed to function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">created fiber object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">userdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+---
+...
+tarantool&gt; function function_name()
+         &gt;   print(&quot;I&#39;m a fiber&quot;)
+         &gt; end
+---
+...
+tarantool&gt; fiber_object = fiber.create(function_name); print(&quot;Fiber started&quot;)
+I&#39;m a fiber
+Fiber started
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-new"></span><dl class="function">
+<dt id="fiber.new">
+<code class="descclassname">fiber.</code><code class="descname">new</code><span class="sig-paren">(</span><em>function</em><span class="optional">[</span>, <em>function-arguments</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create but do not start a fiber: the fiber is created but does not
+begin to run immediately – it starts after the fiber creator
+(that is, the job that is calling <code class="docutils literal notranslate"><span class="pre">fiber.new()</span></code>) yields,
+under <a class="reference internal" href="../../book/box/atomic.html#atomic-atomic-execution"><span class="std std-ref">transaction control</span></a>.
+The initial fiber state is ‘suspended’.
+Thus <code class="docutils literal notranslate"><span class="pre">fiber.new()</span></code> differs slightly from
+<a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create()</span></a>.</p>
+<p>Ordinarily <code class="docutils literal notranslate"><span class="pre">fiber.new()</span></code> is used in conjunction with
+<a class="reference internal" href="#fiber-object-set-joinable"><span class="std std-ref">fiber_object:set_joinable()</span></a>
+and
+<a class="reference internal" href="#fiber-object-join"><span class="std std-ref">fiber_object:join()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> – the function to be associated with the fiber</li>
+<li><strong>function-arguments</strong> – what will be passed to function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first">created fiber object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body"><p class="first last">userdata</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+---
+...
+tarantool&gt; function function_name()
+         &gt;   print(&quot;I&#39;m a fiber&quot;)
+         &gt; end
+---
+...
+tarantool&gt; fiber_object = fiber.new(function_name); print(&quot;Fiber not started yet&quot;)
+Fiber not started yet
+---
+...
+tarantool&gt; I&#39;m a fiber
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-self"></span><dl class="function">
+<dt id="fiber.self">
+<code class="descclassname">fiber.</code><code class="descname">self</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.self" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">fiber object for the currently scheduled fiber.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">userdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.self()
+---
+- status: running
+  name: interactive
+  id: 101
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-find"></span><dl class="function">
+<dt id="fiber.find">
+<code class="descclassname">fiber.</code><code class="descname">find</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#fiber.find" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> – numeric identifier of the fiber.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">fiber object for the specified fiber.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">userdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.find(101)
+---
+- status: running
+  name: interactive
+  id: 101
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-sleep"></span><dl class="function">
+<dt id="fiber.sleep">
+<code class="descclassname">fiber.</code><code class="descname">sleep</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#fiber.sleep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield control to the scheduler and sleep for the specified number
+of seconds. Only the current fiber can be made to sleep.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> – number of seconds to sleep.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exception:</th><td class="field-body">see the <a class="reference internal" href="#fiber-fail"><span class="std std-ref">Example of yield failure</span></a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.sleep(1.5)
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-yield"></span><dl class="function">
+<dt id="fiber.yield">
+<code class="descclassname">fiber.</code><code class="descname">yield</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.yield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield control to the scheduler. Equivalent to <a class="reference internal" href="#fiber-sleep"><span class="std std-ref">fiber.sleep(0)</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Exception:</th><td class="field-body">see the <a class="reference internal" href="#fiber-fail"><span class="std std-ref">Example of yield failure</span></a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.yield()
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-status"></span><dl class="function">
+<dt id="fiber.status">
+<code class="descclassname">fiber.</code><code class="descname">status</code><span class="sig-paren">(</span><span class="optional">[</span><em>fiber_object</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status of the current fiber.
+Or, if optional fiber_object is passed, return the status of the
+specified fiber.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">the status of <code class="docutils literal notranslate"><span class="pre">fiber</span></code>. One of: “dead”, “suspended”, or “running”.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.status()
+---
+- running
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-info"></span><dl class="function">
+<dt id="fiber.info">
+<code class="descclassname">fiber.</code><code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about all fibers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">number of context switches, backtrace, id, total memory, used
+memory, name for each fiber.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.info()
+---
+- 101:
+    csw: 7
+    backtrace: []
+    fid: 101
+    memory:
+      total: 65776
+      used: 0
+    name: interactive
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-kill"></span><dl class="function">
+<dt id="fiber.kill">
+<code class="descclassname">fiber.</code><code class="descname">kill</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#fiber.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate a fiber by its numeric id and cancel it. In other words,
+<a class="reference internal" href="#fiber-kill"><span class="std std-ref">fiber.kill()</span></a> combines <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find()</span></a> and
+<a class="reference internal" href="#fiber-object-cancel"><span class="std std-ref">fiber_object:cancel()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> – the id of the fiber to be cancelled.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exception:</th><td class="field-body">the specified fiber does not exist or cancel is not permitted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.kill(fiber.id()) -- kill self, may make program end
+---
+- error: fiber is cancelled
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-testcancel"></span><dl class="function">
+<dt id="fiber.testcancel">
+<code class="descclassname">fiber.</code><code class="descname">testcancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.testcancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the current fiber has been cancelled
+and throw an exception if this is the case.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Even if you catch the exception, the fiber will remain cancelled.
+Most types of calls will check <code class="docutils literal notranslate"><span class="pre">fiber.testcancel()</span></code>.
+However, some functions (<code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code> etc.) will return no error.
+We recommend application developers to implement occasional checks with
+<a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">fiber.testcancel()</span></a> and to end fiber’s execution
+as soon as possible in case it has been cancelled.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.testcancel()
+---
+- error: fiber is cancelled
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="fiber.fiber_object">
+<em class="property">class </em><code class="descclassname">fiber.</code><code class="descname">fiber_object</code><a class="headerlink" href="#fiber.fiber_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="fiber-object-id"></span><dl class="method">
+<dt id="fiber.fiber_object.id">
+<code class="descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fiber_object</strong> – generally this is an object referenced in the return
+from <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a>
+or <a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self</span></a>
+or <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find</span></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">id of the fiber.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">fiber.self():id()</span></code> can also be expressed as <code class="docutils literal notranslate"><span class="pre">fiber.id()</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber_object = fiber.self()
+---
+...
+tarantool&gt; fiber_object:id()
+---
+- 101
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-name-get"></span><dl class="method">
+<dt id="fiber.fiber_object.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fiber_object</strong> – generally this is an object referenced in the return
+from <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a>
+or <a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self</span></a>
+or <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find</span></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">name of the fiber.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">fiber.self():name()</span></code> can also be expressed as <code class="docutils literal notranslate"><span class="pre">fiber.name()</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.self():name()
+---
+- interactive
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-name-set"></span><dl class="method">
+<dt>
+<code class="descname">name</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>options</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Change the fiber name. By default a Tarantool server’s
+interactive-mode fiber is named ‘interactive’ and new
+fibers created due to <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a> are named ‘lua’.
+Giving fibers distinct names makes it easier to
+distinguish them when using <a class="reference internal" href="#fiber-info"><span class="std std-ref">fiber.info</span></a>.
+Max length is 32.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fiber_object</strong> – generally this is an object referenced in the return
+from <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a>
+or <a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self</span></a>
+or <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find</span></a></li>
+<li><strong>name</strong> (<em>string</em>) – the new name of the fiber.</li>
+<li><strong>options</strong> – <ul>
+<li><code class="docutils literal notranslate"><span class="pre">truncate=true</span></code> – truncates the name to the max length if it is
+too long. If this option is false (the default),
+<code class="docutils literal notranslate"><span class="pre">fiber.name(new_name)</span></code> fails with an exception if a new name is
+too long.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">nil</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.self():name(&#39;non-interactive&#39;)
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-status"></span><dl class="method">
+<dt id="fiber.fiber_object.status">
+<code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status of the specified fiber.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fiber_object</strong> – generally this is an object referenced in the return
+from <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a>
+or <a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self</span></a>
+or <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find</span></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">the status of fiber. One of: “dead”, “suspended”, or “running”.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">fiber.self():status(</span></code> can also be expressed as <code class="docutils literal notranslate"><span class="pre">fiber.status()</span></code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.self():status()
+---
+- running
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-cancel"></span><dl class="method">
+<dt id="fiber.fiber_object.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel a fiber. Running and suspended fibers can be cancelled.
+After a fiber has been cancelled, attempts to operate on it will
+cause errors, for example <a class="reference internal" href="#fiber-object-name-get"><span class="std std-ref">fiber_object:name()</span></a>
+will cause <code class="docutils literal notranslate"><span class="pre">error:</span> <span class="pre">the</span> <span class="pre">fiber</span> <span class="pre">is</span> <span class="pre">dead</span></code>. But a dead fiber can still
+report its id and status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fiber_object</strong> – generally this is an object referenced in the return
+from <a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create</span></a>
+or <a class="reference internal" href="#fiber-self"><span class="std std-ref">fiber.self</span></a>
+or <a class="reference internal" href="#fiber-find"><span class="std std-ref">fiber.find</span></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+<p>Possible errors: cancel is not permitted for the specified fiber object.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.self():cancel() -- kill self, may make program end
+---
+...
+tarantool&gt; fiber.self():cancel()
+---
+- error: fiber is cancelled
+...
+tarantool&gt; fiber.self:id()
+---
+- 163
+...
+tarantool&gt; fiber.self:status()
+---
+- dead
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-storage"></span><dl class="data">
+<dt id="fiber.fiber_object.storage">
+<code class="descname">storage</code><a class="headerlink" href="#fiber.fiber_object.storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local storage within the fiber. It is a Lua table created when it is
+first accessed. The storage can contain any number of named values,
+subject to memory limitations. Naming may be done with
+<code class="samp docutils literal notranslate"><em><span class="pre">fiber_object</span></em><span class="pre">.storage.</span><em><span class="pre">name</span></em></code> or
+<code class="samp docutils literal notranslate"><em><span class="pre">fiber_object</span></em><span class="pre">.storage['</span><em><span class="pre">name</span></em><span class="pre">'].</span></code> or with a number
+<code class="samp docutils literal notranslate"><em><span class="pre">fiber_object</span></em><span class="pre">.storage[</span><em><span class="pre">number</span></em><span class="pre">]</span></code>.
+Values may be either numbers or strings.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fiber.storage</span></code> is destroyed when the fiber is finished, regardless
+of how is it finished – via <code class="samp docutils literal notranslate"><em><span class="pre">fiber_object</span></em><span class="pre">:cancel()</span></code>,
+or the fiber’s function did ‘return’. Moreover, the storage is cleaned
+up even for pooled fibers used to serve IProto requests. Pooled fibers
+never really die, but nonetheless their storage is cleaned up after each
+request. That makes possible to use <code class="docutils literal notranslate"><span class="pre">fiber.storage</span></code> as a full featured
+request-local storage.</p>
+<p>This storage may be created for a fiber, no matter how the fiber
+itself was created – from C or from Lua. For example, a fiber can
+be created in C using <code class="docutils literal notranslate"><span class="pre">fiber_new()</span></code>, then it can insert into a
+space, which has Lua <code class="docutils literal notranslate"><span class="pre">on_replace</span></code> triggers, and one of the triggers
+can create <code class="docutils literal notranslate"><span class="pre">fiber.storage</span></code>. That storage will be deleted when the
+fiber is stopped.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+---
+...
+tarantool&gt; function f () fiber.sleep(1000); end
+---
+...
+tarantool&gt; fiber_function = fiber.create(f)
+---
+...
+tarantool&gt; fiber_function.storage.str1 = &#39;string&#39;
+---
+...
+tarantool&gt; fiber_function.storage[&#39;str1&#39;]
+---
+- string
+...
+tarantool&gt; fiber_function:cancel()
+---
+...
+tarantool&gt; fiber_function.storage[&#39;str1&#39;]
+---
+- error: &#39;[string &quot;return fiber_function.storage[&#39;&#39;str1&#39;&#39;]&quot;]:1: the fiber is dead&#39;
+...
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="box_session.html#box-session-storage"><span class="std std-ref">box.session.storage</span></a>.</p>
+</dd></dl>
+
+<span class="target" id="fiber-object-set-joinable"></span><dl class="method">
+<dt id="fiber.fiber_object.set_joinable">
+<code class="descname">set_joinable</code><span class="sig-paren">(</span><em>true_or_false</em><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.set_joinable" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">fiber_object:set_joinable(true)</span></code> makes a fiber joinable;
+<code class="docutils literal notranslate"><span class="pre">fiber_object:set_joinable(false)</span></code> makes a fiber not joinable;
+the default is false.</p>
+<p>A joinable fiber can be waited for, with
+<a class="reference internal" href="#fiber-object-join"><span class="std std-ref">fiber_object:join()</span></a>.</p>
+<p>Best practice is to call <code class="docutils literal notranslate"><span class="pre">fiber_object:set_joinable()</span></code> before the
+fiber function begins to execute, because otherwise the fiber could
+become ‘dead’ before <code class="docutils literal notranslate"><span class="pre">fiber_object:set_joinable()</span></code> takes effect.
+The usual sequence could be:</p>
+<ol class="arabic">
+<li><p class="first">Call <code class="docutils literal notranslate"><span class="pre">fiber.new()</span></code> instead of <code class="docutils literal notranslate"><span class="pre">fiber.create()</span></code> to create a new
+fiber_object.</p>
+<p>Do not yield at this point, because that will cause the fiber
+function to begin.</p>
+</li>
+<li><p class="first">Call <code class="docutils literal notranslate"><span class="pre">fiber_object:set_joinable(true)</span></code> to make the new
+fiber_object joinable.</p>
+<p>Now it is safe to yield.</p>
+</li>
+<li><p class="first">Call <code class="docutils literal notranslate"><span class="pre">fiber_object:join()</span></code>.</p>
+<p>Usually <code class="docutils literal notranslate"><span class="pre">fiber_object:join()</span></code> should be called, otherwise the
+fiber’s status may become ‘suspended’ when the fiber function ends,
+instead of ‘dead’.</p>
+</li>
+</ol>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>true_or_false</strong> – the boolean value that changes the <code class="docutils literal notranslate"><span class="pre">set_joinable</span></code>
+flag</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>The result of the following sequence of requests is:</p>
+<ul class="simple">
+<li>the global variable <code class="docutils literal notranslate"><span class="pre">d</span></code> will be 6 (which proves that the function
+was not executed until after <code class="docutils literal notranslate"><span class="pre">d</span></code> was set to 1, when
+<code class="docutils literal notranslate"><span class="pre">fiber.sleep(1)</span></code> caused a yield);</li>
+<li><code class="docutils literal notranslate"><span class="pre">fiber.status(fi2)</span></code> will be ‘suspended’ (which proves that after
+the function was executed the fiber status did not change to ‘dead’).</li>
+</ul>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span><span class="o">=</span><span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="n">d</span><span class="o">=</span><span class="mi">0</span>
+<span class="kr">function</span> <span class="nf">fu2</span><span class="p">()</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="o">+</span><span class="mi">5</span> <span class="kr">end</span>
+<span class="n">fi2</span><span class="o">=</span><span class="n">fiber</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">fu2</span><span class="p">)</span> <span class="n">fi2</span><span class="p">:</span><span class="n">set_joinable</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span> <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">status</span><span class="p">(</span><span class="n">fi2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-object-join"></span><dl class="method">
+<dt id="fiber.fiber_object.join">
+<code class="descname">join</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.fiber_object.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Join” a joinable fiber.
+That is, let the fiber’s function run and wait
+until the fiber’s status is ‘dead’ (normally a status
+becomes ‘dead’ when the function execution finishes).
+Joining will cause a yield, therefore, if the fiber is
+currently in a suspended state, execution of its fiber
+function will resume.</p>
+<p>This kind of waiting is more convenient than going into
+a loop and periodically checking the status; however,
+it works only if the fiber was created with
+<a class="reference internal" href="#fiber-new"><span class="std std-ref">fiber.new()</span></a>
+and was made joinable with
+<a class="reference internal" href="#fiber-object-set-joinable"><span class="std std-ref">fiber_object:set_joinable()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">two values. The first value is boolean.
+If the first value is true, then the join succeeded
+because the fiber’s function ended normally and the
+second result has the return value from the fiber’s function.
+If the first value is false, then the join succeeded
+because the fiber’s function ended abnormally and the
+second result has the details about the error, which
+one can unpack in the same way that one unpacks
+<a class="reference internal" href="errcodes.html#error-handling"><span class="std std-ref">a pcall result</span></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">boolean +result type, or boolean + struct error</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>The result of the following sequence of requests is:</p>
+<ul class="simple">
+<li>the first <code class="docutils literal notranslate"><span class="pre">fiber.status()</span></code> call returns ‘suspended’,</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">join()</span></code> call returns true,</li>
+<li>the elapsed time is usually 5 seconds, and</li>
+<li>the second <code class="docutils literal notranslate"><span class="pre">fiber.status()</span></code> call returns ‘dead’.</li>
+</ul>
+<p>This proves that the <code class="docutils literal notranslate"><span class="pre">join()</span></code> does not return until
+the function – which sleeps 5 seconds – is ‘dead’.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span><span class="o">=</span><span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nf">fu2</span><span class="p">()</span> <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="kr">end</span>
+<span class="n">fi2</span><span class="o">=</span><span class="n">fiber</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">fu2</span><span class="p">)</span> <span class="n">fi2</span><span class="p">:</span><span class="n">set_joinable</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="nb">os.time</span><span class="p">()</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">status</span><span class="p">(</span><span class="n">fi2</span><span class="p">)</span>
+<span class="n">fi2</span><span class="p">:</span><span class="n">join</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;elapsed = &#39;</span> <span class="o">..</span> <span class="nb">os.time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">status</span><span class="p">(</span><span class="n">fi2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="fiber-time"></span><dl class="function">
+<dt id="fiber.time">
+<code class="descclassname">fiber.</code><code class="descname">time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.time" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">current system time (in seconds since the epoch) as a Lua
+number. The time is taken from the event loop clock,
+which makes this call very cheap, but still useful for
+constructing artificial tuple keys.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.time(), fiber.time()
+---
+- 1448466279.2415
+- 1448466279.2415
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-time64"></span><dl class="function">
+<dt id="fiber.time64">
+<code class="descclassname">fiber.</code><code class="descname">time64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.time64" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">current system time (in microseconds since the epoch)
+as a 64-bit integer. The time is taken from the event
+loop clock.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">cdata</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.time(), fiber.time64()
+---
+- 1448466351.2708
+- 1448466351270762
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-clock"></span><dl class="function">
+<dt id="fiber.clock">
+<code class="descclassname">fiber.</code><code class="descname">clock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.clock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the monotonic time in seconds. It is better to use <code class="docutils literal notranslate"><span class="pre">fiber.clock()</span></code> for
+calculating timeouts instead of <a class="reference internal" href="#fiber-time"><span class="std std-ref">fiber.time()</span></a> because
+<code class="docutils literal notranslate"><span class="pre">fiber.time()</span></code> reports real time so it is affected by system time changes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">a floating-point number of seconds, representing elapsed wall-clock
+time since some time in the past that is guaranteed not to change
+during the life of the process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; start = fiber.clock()
+---
+...
+tarantool&gt; print(start)
+248700.58805
+---
+...
+tarantool&gt; print(fiber.time(), fiber.time()-start)
+1600785979.8291 1600537279.241
+---
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="fiber-clock64"></span><dl class="function">
+<dt id="fiber.clock64">
+<code class="descclassname">fiber.</code><code class="descname">clock64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.clock64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <a class="reference internal" href="#fiber-clock"><span class="std std-ref">fiber.clock()</span></a> but in microseconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body">a number of seconds as 64-bit integer, representing
+elapsed wall-clock time since some time in the past that is
+guaranteed not to change during the life of the process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtype:</th><td class="field-body">cdata</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>Make the function which will be associated with the fiber. This function
+contains an infinite loop. Each iteration
+of the loop adds 1 to a global variable named gvar, then goes to sleep for
+2 seconds. The sleep causes an implicit <a class="reference internal" href="#fiber-yield"><span class="std std-ref">fiber.yield()</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+tarantool&gt; function function_x()
+         &gt;   gvar = 0
+         &gt;   while true do
+         &gt;     gvar = gvar + 1
+         &gt;     fiber.sleep(2)
+         &gt;   end
+         &gt; end
+---
+...
+</pre></div>
+</div>
+<p>Make a fiber, associate function_x with the fiber, and start function_x.
+It will immediately “detach” so it will be running independently of the caller.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; gvar = 0
+
+tarantool&gt; fiber_of_x = fiber.create(function_x)
+---
+...
+</pre></div>
+</div>
+<p>Get the id of the fiber (fid), to be used in later displays.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fid = fiber_of_x:id()
+---
+...
+</pre></div>
+</div>
+<p>Pause for a while, while the detached function runs. Then … Display the fiber
+id, the fiber status, and gvar (gvar will have gone up a bit depending how long
+the pause lasted). The status is suspended because the fiber spends almost all
+its time sleeping or yielding.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; print(&#39;#&#39;, fid, &#39;. &#39;, fiber_of_x:status(), &#39;. gvar=&#39;, gvar)
+# 102 .  suspended . gvar= 399
+---
+...
+</pre></div>
+</div>
+<p>Pause for a while, while the detached function runs. Then … Cancel the fiber.
+Then, once again … Display the fiber id, the fiber status, and gvar (gvar
+will have gone up a bit more depending how long the pause lasted). This time
+the status is dead because the cancel worked.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber_of_x:cancel()
+---
+...
+tarantool&gt; print(&#39;#&#39;, fid, &#39;. &#39;, fiber_of_x:status(), &#39;. gvar=&#39;, gvar)
+# 102 .  dead . gvar= 421
+---
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-of-yield-failure">
+<span id="fiber-fail"></span><h3>Example of yield failure<a class="headerlink" href="#example-of-yield-failure" title="Permalink to this headline">¶</a></h3>
+<p>Warning: <a class="reference internal" href="#fiber-yield"><span class="std std-ref">yield()</span></a> and any function which implicitly yields
+(such as <a class="reference internal" href="#fiber-sleep"><span class="std std-ref">sleep()</span></a>) can fail (raise an exception).</p>
+<p>For example, this function has a loop which repeats until <a class="reference internal" href="#fiber-object-cancel"><span class="std std-ref">cancel()</span></a> happens.
+The last thing that it will print is ‘before yield’, which demonstrates
+that <code class="docutils literal notranslate"><span class="pre">yield()</span></code> failed, the loop did not continue until <a class="reference internal" href="#fiber-testcancel"><span class="std std-ref">testcancel()</span></a> failed.</p>
+<div class="highlight-Lua notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nf">function_name</span><span class="p">()</span>
+  <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before testcancel&#39;</span><span class="p">)</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">testcancel</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before yield&#39;</span><span class="p">)</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">yield</span><span class="p">()</span>
+  <span class="kr">end</span>
+<span class="kr">end</span>
+<span class="n">fiber_object</span> <span class="o">=</span> <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">function_name</span><span class="p">)</span>
+<span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">.1</span><span class="p">)</span>
+<span class="n">fiber_object</span><span class="p">:</span><span class="n">cancel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="channels">
+<span id="fiber-ipc-channel"></span><h2>Channels<a class="headerlink" href="#channels" title="Permalink to this headline">¶</a></h2>
+<p>Call <code class="docutils literal notranslate"><span class="pre">fiber.channel()</span></code> to allocate space and get a channel object, which will
+be called channel for examples in this section.</p>
+<p>Call the other routines, via channel, to send messages, receive messages, or
+check channel status.</p>
+<p>Message exchange is synchronous. The Lua garbage collector will mark or free the
+channel when no one is
+using it, as with any other Lua object. Use object-oriented syntax, for example
+<code class="docutils literal notranslate"><span class="pre">channel:put(message)</span></code> rather than <code class="docutils literal notranslate"><span class="pre">fiber.channel.put(message)</span></code>.</p>
+<span class="target" id="fiber-channel"></span><dl class="function">
+<dt id="fiber.channel">
+<code class="descclassname">fiber.</code><code class="descname">channel</code><span class="sig-paren">(</span><span class="optional">[</span><em>capacity</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new communication channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>capacity</strong> (<em>int</em>) – the maximum number of slots (spaces for
+<code class="docutils literal notranslate"><span class="pre">channel:put</span></code> messages) that can be in use at once.
+The default is 0.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new channel.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">userdata, possibly including the string “channel …”.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="fiber.channel_object">
+<em class="property">class </em><code class="descclassname">fiber.</code><code class="descname">channel_object</code><a class="headerlink" href="#fiber.channel_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="channel-object-put"></span><dl class="method">
+<dt id="fiber.channel_object.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>message</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message using a channel. If the channel is full,
+<code class="docutils literal notranslate"><span class="pre">channel:put()</span></code> waits until there is a free slot in the channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>message</strong> (<em>lua-value</em>) – what will be sent, usually a string or number or table</li>
+<li><strong>timeout</strong> (<em>number</em>) – maximum number of seconds to wait for a slot to become free</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">If timeout is specified, and there is no free slot in the
+channel for the duration of the timeout, then the return value
+is <code class="docutils literal notranslate"><span class="pre">false</span></code>. If the channel is closed, then the return value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.
+Otherwise, the return value is <code class="docutils literal notranslate"><span class="pre">true</span></code>, indicating success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-close"></span><dl class="method">
+<dt id="fiber.channel_object.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the channel. All waiters in the channel will stop waiting. All
+following <code class="docutils literal notranslate"><span class="pre">channel:get()</span></code> operations will return <code class="docutils literal notranslate"><span class="pre">nil</span></code>, and all
+following <code class="docutils literal notranslate"><span class="pre">channel:put()</span></code> operations will return <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="channel-object-get"></span><dl class="method">
+<dt id="fiber.channel_object.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch and remove a message from a channel. If the channel is empty,
+<code class="docutils literal notranslate"><span class="pre">channel:get()</span></code> waits for a message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<em>number</em>) – maximum number of seconds to wait for a message</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If timeout is specified, and there is no message in the
+channel for the duration of the timeout, then the return
+value is <code class="docutils literal notranslate"><span class="pre">nil</span></code>. If the channel is closed, then the
+return value is <code class="docutils literal notranslate"><span class="pre">nil</span></code>. Otherwise, the return value is
+the message placed on the channel by <code class="docutils literal notranslate"><span class="pre">channel:put()</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">usually string or number or table, as determined by <code class="docutils literal notranslate"><span class="pre">channel:put</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-is-empty"></span><dl class="method">
+<dt id="fiber.channel_object.is_empty">
+<code class="descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the channel is empty (has no messages).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the channel is empty. Otherwise <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-count"></span><dl class="method">
+<dt id="fiber.channel_object.count">
+<code class="descname">count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find out how many messages are in the channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of messages.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-is-full"></span><dl class="method">
+<dt id="fiber.channel_object.is_full">
+<code class="descname">is_full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.is_full" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the channel is full.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the channel is full (the number of messages
+in the channel equals the number of slots so there is no room for a new
+message). Otherwise <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-has-readers"></span><dl class="method">
+<dt id="fiber.channel_object.has_readers">
+<code class="descname">has_readers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.has_readers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether readers are waiting for a message because they
+have issued <code class="docutils literal notranslate"><span class="pre">channel:get()</span></code> and the channel is empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if readers are waiting. Otherwise <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-has-writers"></span><dl class="method">
+<dt id="fiber.channel_object.has_writers">
+<code class="descname">has_writers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.has_writers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether writers are waiting
+because they have issued <code class="docutils literal notranslate"><span class="pre">channel:put()</span></code> and the channel is full.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if writers are waiting. Otherwise <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="channel-object-is-closed"></span><dl class="method">
+<dt id="fiber.channel_object.is_closed">
+<code class="descname">is_closed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.channel_object.is_closed" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the channel is already closed. Otherwise
+<code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>This example should give a rough idea of what some functions for fibers should
+look like. It’s assumed that the functions would be referenced in
+<a class="reference internal" href="#fiber-create"><span class="std std-ref">fiber.create()</span></a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">fiber</span><span class="p">.</span><span class="n">channel</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nf">consumer_fiber</span><span class="p">()</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">task</span> <span class="o">=</span> <span class="n">channel</span><span class="p">:</span><span class="n">get</span><span class="p">()</span>
+        <span class="p">...</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">consumer2_fiber</span><span class="p">()</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="c1">-- 10 seconds</span>
+        <span class="kd">local</span> <span class="n">task</span> <span class="o">=</span> <span class="n">channel</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="n">task</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="p">...</span>
+        <span class="kr">else</span>
+            <span class="c1">-- timeout</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">producer_fiber</span><span class="p">()</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">...:</span><span class="nb">select</span><span class="p">{...}</span>
+        <span class="p">...</span>
+        <span class="kr">if</span> <span class="n">channel</span><span class="p">:</span><span class="n">is_empty</span><span class="p">()</span> <span class="kr">then</span>
+            <span class="c1">-- channel is empty</span>
+        <span class="kr">end</span>
+
+        <span class="kr">if</span> <span class="n">channel</span><span class="p">:</span><span class="n">is_full</span><span class="p">()</span> <span class="kr">then</span>
+            <span class="c1">-- channel is full</span>
+        <span class="kr">end</span>
+
+        <span class="p">...</span>
+        <span class="kr">if</span> <span class="n">channel</span><span class="p">:</span><span class="n">has_readers</span><span class="p">()</span> <span class="kr">then</span>
+            <span class="c1">-- there are some fibers</span>
+            <span class="c1">-- that are waiting for data</span>
+        <span class="kr">end</span>
+        <span class="p">...</span>
+
+        <span class="kr">if</span> <span class="n">channel</span><span class="p">:</span><span class="n">has_writers</span><span class="p">()</span> <span class="kr">then</span>
+            <span class="c1">-- there are some fibers</span>
+            <span class="c1">-- that are waiting for readers</span>
+        <span class="kr">end</span>
+        <span class="n">channel</span><span class="p">:</span><span class="n">put</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">producer2_fiber</span><span class="p">()</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">...</span><span class="nb">select</span><span class="p">{...}</span>
+        <span class="c1">-- 10 seconds</span>
+        <span class="kr">if</span> <span class="n">channel</span><span class="p">:</span><span class="n">put</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="kr">then</span>
+            <span class="p">...</span>
+        <span class="kr">else</span>
+            <span class="c1">-- timeout</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="condition-variables">
+<span id="fiber-ipc-cond-var"></span><h2>Condition variables<a class="headerlink" href="#condition-variables" title="Permalink to this headline">¶</a></h2>
+<p>Call <code class="docutils literal notranslate"><span class="pre">fiber.cond()</span></code> to create a named condition variable, which will be called
+‘cond’ for examples in this section.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">cond:wait()</span></code> to make a fiber wait for a signal via a condition variable.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">cond:signal()</span></code> to send a signal to wake up a single fiber that has
+executed <code class="docutils literal notranslate"><span class="pre">cond:wait()</span></code>.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">cond:broadcast()</span></code> to send a signal to all fibers that have executed
+<code class="docutils literal notranslate"><span class="pre">cond:wait()</span></code>.</p>
+<span class="target" id="fiber-cond"></span><dl class="function">
+<dt id="fiber.cond">
+<code class="descclassname">fiber.</code><code class="descname">cond</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.cond" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new condition variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">new condition variable.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Lua object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="fiber.cond_object">
+<em class="property">class </em><code class="descclassname">fiber.</code><code class="descname">cond_object</code><a class="headerlink" href="#fiber.cond_object" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="cond-object-wait"></span><dl class="method">
+<dt id="fiber.cond_object.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.cond_object.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the current fiber go to sleep, waiting until another fiber
+invokes the <code class="docutils literal notranslate"><span class="pre">signal()</span></code> or <code class="docutils literal notranslate"><span class="pre">broadcast()</span></code> method on the cond object.
+The sleep causes an implicit <a class="reference internal" href="#fiber-yield"><span class="std std-ref">fiber.yield()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> – number of seconds to wait, default = forever.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If timeout is provided, and a signal doesn’t happen for the
+duration of the timeout, <code class="docutils literal notranslate"><span class="pre">wait()</span></code> returns false. If a signal
+or broadcast happens, <code class="docutils literal notranslate"><span class="pre">wait()</span></code> returns true.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="cond-object-signal"></span><dl class="method">
+<dt id="fiber.cond_object.signal">
+<code class="descname">signal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.cond_object.signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wake up a single fiber that has executed <code class="docutils literal notranslate"><span class="pre">wait()</span></code> for the same
+variable. Does not yield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="cond-object-broadcast"></span><dl class="method">
+<dt id="fiber.cond_object.broadcast">
+<code class="descname">broadcast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fiber.cond_object.broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wake up all fibers that have executed <code class="docutils literal notranslate"><span class="pre">wait()</span></code> for the same variable.
+Does not yield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="id2">
+<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Assume that a tarantool instance is running and listening for connections on
+localhost port 3301. Assume that guest users have privileges to connect. We will
+use the tarantoolctl utility to start two clients.</p>
+<p>On terminal #1, say</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ tarantoolctl connect &#39;3301&#39;
+tarantool&gt; fiber = require(&#39;fiber&#39;)
+tarantool&gt; cond = fiber.cond()
+tarantool&gt; cond:wait()
+</pre></div>
+</div>
+<p>The job will hang because <code class="docutils literal notranslate"><span class="pre">cond:wait()</span></code> – without an optional timeout
+argument – will go to sleep until the condition variable changes.</p>
+<p>On terminal #2, say</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>$ tarantoolctl connect &#39;3301&#39;
+tarantool&gt; cond:signal()
+</pre></div>
+</div>
+<p>Now look again at terminal #1. It will show that the waiting stopped, and the
+<code class="docutils literal notranslate"><span class="pre">cond:wait()</span></code> function returned <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>This example depended on the use of a global conditional variable with the
+arbitrary name <code class="docutils literal notranslate"><span class="pre">cond</span></code>. In real life, programmers would make sure to use
+different conditional variable names for different applications.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

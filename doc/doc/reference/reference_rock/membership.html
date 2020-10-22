@@ -1,0 +1,709 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module membership &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>membership</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_rock/membership.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-membership">
+<span id="membership"></span><h1>Module <cite>membership</cite><a class="headerlink" href="#module-membership" title="Permalink to this headline">¶</a></h1>
+<p>This module is a <code class="docutils literal notranslate"><span class="pre">membership</span></code> library for Tarantool based on a gossip protocol.</p>
+<p>This library builds a mesh from multiple Tarantool instances. The mesh monitors
+itself, helps members discover everyone else in the group and get notified about
+their status changes with low latency. It is built upon the ideas from Consul or,
+more precisely, the SWIM algorithm.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">membership</span></code> module works over UDP protocol and can operate even before
+the <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> initialization.</p>
+<div class="section" id="member-data-structure">
+<span id="membership-datastruct"></span><h2>Member data structure<a class="headerlink" href="#member-data-structure" title="Permalink to this headline">¶</a></h2>
+<p>A member is represented by the table with the following fields:</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">uri</span></code> (string) is a Uniform Resource Identifier.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">status</span></code> (string) is a string that takes one of the values below.</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">alive</span></code>: a member that replies to ping-messages is <code class="docutils literal notranslate"><span class="pre">alive</span></code> and well.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">suspect</span></code>: if any member in the group cannot get a reply from any other
+member, the first member asks three other <code class="docutils literal notranslate"><span class="pre">alive</span></code> members to send a
+ping-message to the member in question. If there is no response, the latter
+becomes a <code class="docutils literal notranslate"><span class="pre">suspect</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">dead</span></code>: a <code class="docutils literal notranslate"><span class="pre">suspect</span></code> becomes <code class="docutils literal notranslate"><span class="pre">dead</span></code> after a timeout.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">left</span></code>: a member gets the <code class="docutils literal notranslate"><span class="pre">left</span></code> status after executing the
+<a class="reference internal" href="#membership-leave"><span class="std std-ref">leave()</span></a> function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The gossip protocol guarantees that every member in the group
+becomes aware of any status change in two communication cycles.</p>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">incarnation</span></code> (number) is a value incremented every time the instance is
+becomes a <code class="docutils literal notranslate"><span class="pre">suspect</span></code>, <code class="docutils literal notranslate"><span class="pre">dead</span></code>, or updates its payload.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">payload</span></code> (table) is auxiliary data that can be used by various modules.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code> (number) is a value of <code class="docutils literal notranslate"><span class="pre">fiber.time64()</span></code> which:</p>
+<ul class="simple">
+<li>corresponds to the last update of <code class="docutils literal notranslate"><span class="pre">status</span></code> or <code class="docutils literal notranslate"><span class="pre">incarnation</span></code>;</li>
+<li>is always local;</li>
+<li>does not depend on other members’ clock setting.</li>
+</ul>
+</li>
+</ul>
+<p>Below is an example of the table:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; membership.myself()
+---
+uri: localhost:33001
+status: alive
+incarnation: 1
+payload:
+    uuid: 2d00c500-2570-4019-bfcc-ab25e5096b73
+timestamp: 1522427330993752
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-reference">
+<span id="membership-api"></span><h2>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of <code class="docutils literal notranslate"><span class="pre">membership</span></code>’s common, encryption, subscription
+functions, and options.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td colspan="2">Common functions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-init"><span class="std std-ref">init(advertise_host, port)</span></a></td>
+<td>Initialize the <code class="docutils literal notranslate"><span class="pre">membership</span></code>
+module.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-myself"><span class="std std-ref">myself()</span></a></td>
+<td>Get the member data structure
+of the current instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-get-member"><span class="std std-ref">get_member(uri)</span></a></td>
+<td>Get the member data structure
+for a given URI.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-members"><span class="std std-ref">members()</span></a></td>
+<td>Obtain a table with all members
+known to the current instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-pairs"><span class="std std-ref">pairs()</span></a></td>
+<td>Shorthand for
+<code class="docutils literal notranslate"><span class="pre">pairs(membership.members())</span></code>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-add-member"><span class="std std-ref">add_member(uri)</span></a></td>
+<td>Add a member to the group.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-probe-uri"><span class="std std-ref">probe_uri(uri)</span></a></td>
+<td>Check if the member is in the
+group.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-broadcast"><span class="std std-ref">broadcast()</span></a></td>
+<td>Discover members in LAN by
+sending a UDP broadcast message.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-set-payload"><span class="std std-ref">set_payload(key, value)</span></a></td>
+<td>Update <code class="docutils literal notranslate"><span class="pre">myself().payload</span></code> and
+disseminate it.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-leave"><span class="std std-ref">leave()</span></a></td>
+<td>Gracefully leave the group.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-is-encrypted"><span class="std std-ref">is_encrypted()</span></a></td>
+<td>Check if encryption is enabled.</td>
+</tr>
+<tr class="row-even"><td colspan="2">Encryption functions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-set-enc-key"><span class="std std-ref">set_encryption_key(key)</span></a></td>
+<td>Set the key for low-level
+message encryption.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-get-enc-key"><span class="std std-ref">get_encryption_key()</span></a></td>
+<td>Retrieve the encryption key
+in use.</td>
+</tr>
+<tr class="row-odd"><td colspan="2">Subscription functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-subscribe"><span class="std std-ref">subscribe()</span></a></td>
+<td>Subscribe for the members table
+updates.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-unsubscribe"><span class="std std-ref">unsubscribe()</span></a></td>
+<td>Remove the subscription.</td>
+</tr>
+<tr class="row-even"><td colspan="2">Options</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-protocol-period-seconds"><span class="std std-ref">PROTOCOL_PERIOD_SECONDS</span></a></td>
+<td>Direct ping period.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-ack-timeout-seconds"><span class="std std-ref">ACK_TIMEOUT_SECONDS</span></a></td>
+<td>ACK message wait time.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#member-anti-entropy-period-seconds"><span class="std std-ref">ANTI_ENTROPY_PERIOD_SECONDS</span></a></td>
+<td>Anti-entropy synchronization
+period.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#membership-suspect-timeout-seconds"><span class="std std-ref">SUSPECT_TIMEOUT_SECONDS</span></a></td>
+<td>Timeout to mark a <code class="docutils literal notranslate"><span class="pre">suspect</span></code>
+<code class="docutils literal notranslate"><span class="pre">dead</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#membership-num-fail-detect-subgr"><span class="std std-ref">NUM_FAILURE_DETECTION_SUBGROUPS</span></a></td>
+<td>Number of members to ping a
+<code class="docutils literal notranslate"><span class="pre">suspect</span></code> indirectly.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Common functions:</p>
+<span class="target" id="membership-init"></span><dl class="function">
+<dt id="membership.init">
+<code class="descclassname">membership.</code><code class="descname">init</code><span class="sig-paren">(</span><em>advertise_host</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the <code class="docutils literal notranslate"><span class="pre">membership</span></code> module. This binds a UDP socket to <code class="docutils literal notranslate"><span class="pre">0.0.0.0:&lt;port&gt;</span></code>,
+sets the <code class="docutils literal notranslate"><span class="pre">advertise_uri</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&lt;advertise_host&gt;:&lt;port&gt;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">incarnation</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">init()</span></code> function can be called several times, the old socket will be
+closed and a new one opened.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">advertise_uri</span></code> changes during the next <code class="docutils literal notranslate"><span class="pre">init()</span></code>, the old URI is
+considered <code class="docutils literal notranslate"><span class="pre">DEAD</span></code>. In order to leave the group gracefully, use the
+<a class="reference internal" href="#membership-leave"><span class="std std-ref">leave()</span></a> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>advertise_host</strong> (<em>string</em>) – a hostname or IP address to advertise to other members</li>
+<li><strong>port</strong> (<em>number</em>) – a UDP port to bind</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">boolean</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">socket bind error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-myself"></span><dl class="function">
+<dt id="membership.myself">
+<code class="descclassname">membership.</code><code class="descname">myself</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.myself" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#membership-datastruct"><span class="std std-ref">member data structure</span></a>
+of the current instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-get-member"></span><dl class="function">
+<dt id="membership.get_member">
+<code class="descclassname">membership.</code><code class="descname">get_member</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.get_member" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>string</em>) – the given member’s <code class="docutils literal notranslate"><span class="pre">advertise_uri</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#membership-datastruct"><span class="std std-ref">member data structure</span></a> of the
+instance with the given URI.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-members"></span><dl class="function">
+<dt id="membership.members">
+<code class="descclassname">membership.</code><code class="descname">members</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.members" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain all members known to the current instance.</p>
+<p>Editing this table has no effect.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a table with URIs as keys and corresponding
+<a class="reference internal" href="#membership-datastruct"><span class="std std-ref">member data structures</span></a>
+as values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-pairs"></span><dl class="function">
+<dt id="membership.pairs">
+<code class="descclassname">membership.</code><code class="descname">pairs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A shorthand for <code class="docutils literal notranslate"><span class="pre">pairs(membership.members())</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Lua iterator</td>
+</tr>
+</tbody>
+</table>
+<p>It can be used in the following way:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">for</span> <span class="n">uri</span><span class="p">,</span> <span class="n">member</span> <span class="kr">in</span> <span class="n">memberhip</span><span class="p">.</span><span class="n">pairs</span><span class="p">()</span>
+  <span class="c1">-- do something</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="membership-add-member"></span><dl class="function">
+<dt id="membership.add_member">
+<code class="descclassname">membership.</code><code class="descname">add_member</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.add_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a member with the given URI to the group and propagate this event to other
+members. Adding a member to a single instance is enough as everybody else
+in the group will receive the update with time. It does not matter who adds
+whom.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>string</em>) – the <code class="docutils literal notranslate"><span class="pre">advertise_uri</span></code> of the member to add</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">nil</span></code> in case of an error</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">parse error if the URI cannot be parsed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-probe-uri"></span><dl class="function">
+<dt id="membership.probe_uri">
+<code class="descclassname">membership.</code><code class="descname">probe_uri</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.probe_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to a member to make sure it is in the group. If the member is <code class="docutils literal notranslate"><span class="pre">alive</span></code>
+but not in the group, it is added. If it already is in the group, nothing happens.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>string</em>) – the <code class="docutils literal notranslate"><span class="pre">advertise_uri</span></code> of the member to ping</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if the member responds within 0.2 seconds, otherwise <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">response</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">sent</span></code> if the hostname could not be resolved</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-broadcast"></span><dl class="function">
+<dt id="membership.broadcast">
+<code class="descclassname">membership.</code><code class="descname">broadcast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discover members in local network by sending a UDP broadcast message to all
+networks discovered by a <code class="docutils literal notranslate"><span class="pre">getifaddrs()</span></code> C call.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if broadcast was sent, <code class="docutils literal notranslate"><span class="pre">false</span></code> if <code class="docutils literal notranslate"><span class="pre">getaddrinfo()</span></code> fails.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-set-payload"></span><dl class="function">
+<dt id="membership.set_payload">
+<code class="descclassname">membership.</code><code class="descname">set_payload</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.set_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update <code class="docutils literal notranslate"><span class="pre">myself().payload</span></code> and disseminate it along with the member status.</p>
+<p>Increments <code class="docutils literal notranslate"><span class="pre">incarnation</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<em>string</em>) – a key to set in payload table</li>
+<li><strong>value</strong> – auxiliary data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-leave"></span><dl class="function">
+<dt id="membership.leave">
+<code class="descclassname">membership.</code><code class="descname">leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.leave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gracefully leave the <code class="docutils literal notranslate"><span class="pre">membership</span></code> group. The node will be marked with
+the <code class="docutils literal notranslate"><span class="pre">left</span></code> status and no other members will ever try to reconnect it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-is-encrypted"></span><dl class="function">
+<dt id="membership.is_encrypted">
+<code class="descclassname">membership.</code><code class="descname">is_encrypted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.is_encrypted" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">true</span></code> if encryption is enabled, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Encryption functions:</p>
+<span class="target" id="membership-set-enc-key"></span><dl class="function">
+<dt id="membership.set_encryption_key">
+<code class="descclassname">membership.</code><code class="descname">set_encryption_key</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.set_encryption_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the key used for low-level message encryption.
+The key is either trimmed or padded automatically to be exactly 32 bytes.
+If the <code class="docutils literal notranslate"><span class="pre">key</span></code> value is <code class="docutils literal notranslate"><span class="pre">nil</span></code>, the encryption is disabled.</p>
+<p>The encryption is handled by the <code class="docutils literal notranslate"><span class="pre">crypto.cipher.aes256.cbc</span></code> Tarantool
+module.</p>
+<p>For proper communication, all members must be configured to use the
+same encryption key. Otherwise, members report either <code class="docutils literal notranslate"><span class="pre">dead</span></code> or
+<code class="docutils literal notranslate"><span class="pre">non-decryptable</span></code> in their status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<em>string</em>) – encryption key</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">nil</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-get-enc-key"></span><dl class="function">
+<dt id="membership.get_encryption_key">
+<code class="descclassname">membership.</code><code class="descname">get_encryption_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.get_encryption_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the encryption key that is currently in use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">encryption key or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the encryption is disabled.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Subscription functions:</p>
+<span class="target" id="membership-subscribe"></span><dl class="function">
+<dt id="membership.subscribe">
+<code class="descclassname">membership.</code><code class="descname">subscribe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#membership.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscribe for updates in the members table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a <code class="docutils literal notranslate"><span class="pre">fiber.cond</span></code> object broadcasted whenever the members table changes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="membership-unsubscribe"></span><dl class="function">
+<dt id="membership.unsubscribe">
+<code class="descclassname">membership.</code><code class="descname">unsubscribe</code><span class="sig-paren">(</span><em>cond</em><span class="sig-paren">)</span><a class="headerlink" href="#membership.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove subscription on <code class="docutils literal notranslate"><span class="pre">cond</span></code> obtained by the <a class="reference internal" href="#membership-subscribe"><span class="std std-ref">subscribe() function</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cond</span></code>’s validity is not checked.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cond</strong> – the <code class="docutils literal notranslate"><span class="pre">fiber.cond</span></code> object obtained from <a class="reference internal" href="#membership-subscribe"><span class="std std-ref">subscribe()</span></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">nil</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Below is a list of <code class="docutils literal notranslate"><span class="pre">membership</span></code> options. They can be set as follows:</p>
+<div class="highlight-Lua notranslate"><div class="highlight"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;membership.options&#39;</span><span class="p">)</span>
+<span class="n">options</span><span class="p">.</span><span class="o">&lt;</span><span class="n">option</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<span class="target" id="membership-protocol-period-seconds"></span><dl class="option">
+<dt id="cmdoption-arg-options-protocol-period-seconds">
+<code class="descname">options.PROTOCOL_PERIOD_SECONDS</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-arg-options-protocol-period-seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Period of sending direct pings. Denoted as <code class="docutils literal notranslate"><span class="pre">T'</span></code> in the SWIM protocol.</p>
+</dd></dl>
+
+<span class="target" id="membership-ack-timeout-seconds"></span><dl class="option">
+<dt id="cmdoption-arg-options-ack-timeout-seconds">
+<code class="descname">options.ACK_TIMEOUT_SECONDS</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-arg-options-ack-timeout-seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time to wait for ACK message after a ping. If a member is late to reply,
+the indirect ping algorithm is invoked.</p>
+</dd></dl>
+
+<span class="target" id="member-anti-entropy-period-seconds"></span><dl class="option">
+<dt id="cmdoption-arg-options-anti-entropy-period-seconds">
+<code class="descname">options.ANTI_ENTROPY_PERIOD_SECONDS</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-arg-options-anti-entropy-period-seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Period to perform the anti-entropy synchronization algorithm of the SWIM
+protocol.</p>
+</dd></dl>
+
+<span class="target" id="membership-suspect-timeout-seconds"></span><dl class="option">
+<dt id="cmdoption-arg-options-suspect-timeout-seconds">
+<code class="descname">options.SUSPECT_TIMEOUT_SECONDS</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-arg-options-suspect-timeout-seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeout to mark <code class="docutils literal notranslate"><span class="pre">suspect</span></code> members as <code class="docutils literal notranslate"><span class="pre">dead</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="membership-num-fail-detect-subgr"></span><dl class="option">
+<dt id="cmdoption-arg-options-num-failure-detection-subgroups">
+<code class="descname">options.NUM_FAILURE_DETECTION_SUBGROUPS</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-arg-options-num-failure-detection-subgroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of members to try pinging a <code class="docutils literal notranslate"><span class="pre">suspect</span></code> indirectly. Denoted as <code class="docutils literal notranslate"><span class="pre">k</span></code>
+in the SWIM protocol.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

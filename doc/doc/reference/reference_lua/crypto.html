@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module crypto &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>crypto</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/crypto.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-crypto.cipher">
+<span id="module-crypto"></span><span id="crypto"></span><h1>Module <cite>crypto</cite><a class="headerlink" href="#module-crypto.cipher" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>“Crypto” is short for “Cryptography”, which generally refers to the production
+of a digest value from a function (usually a <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic hash function</a>),
+applied against a string. Tarantool’s <code class="docutils literal notranslate"><span class="pre">crypto</span></code> module supports ten types of
+cryptographic hash functions (<a class="reference external" href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Data_Encryption_Standard">DES</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard">DSS</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Md4">MD4</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Md5">MD5</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/MDC-2">MDC2</a>, <a class="reference external" href="http://homes.esat.kuleuven.be/~bosselae/ripemd160.html">RIPEMD</a>,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Sha-1">SHA-1</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Sha-2">SHA-2</a>). Some of the crypto functionality is also present in the
+<a class="reference internal" href="digest.html#digest"><span class="std std-ref">Module digest</span></a> module.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">crypto</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="64%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#crypto-cipher"><span class="std std-ref">crypto.cipher.{algorithm}.{cipher_mode}.encrypt()</span></a></td>
+<td>Encrypt a string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#crypto-cipher"><span class="std std-ref">crypto.cipher.{algorithm}.{cipher_mode}.decrypt()</span></a></td>
+<td>Decrypt a string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#crypto-digest"><span class="std std-ref">crypto.digest.{algorithm}()</span></a></td>
+<td>Get a digest</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#crypto-hmac"><span class="std std-ref">crypto.hmac.{algorithm}()</span></a></td>
+<td>Get a hash key</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-crypto.digest"></span><span class="target" id="module-crypto.hmac"></span></div>
+<div class="section" id="incremental-methods-in-the-crypto-module">
+<h2>Incremental methods in the crypto module<a class="headerlink" href="#incremental-methods-in-the-crypto-module" title="Permalink to this headline">¶</a></h2>
+<p>Suppose that a digest is done for a string ‘A’, then a new part ‘B’ is appended
+to the string, then a new digest is required. The new digest could be recomputed
+for the whole string ‘AB’, but it is faster to take what was computed before for
+‘A’ and apply changes based on the new part ‘B’. This is called multi-step or
+“incremental” digesting, which Tarantool supports for all crypto functions.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">crypto</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">)</span>
+
+<span class="c1">-- print aes-192 digest of &#39;AB&#39;, with one step, then incrementally</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;key/key/key/key/key/key/&#39;</span>
+<span class="n">iv</span> <span class="o">=</span>  <span class="s1">&#39;iviviviviviviviv&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">crypto</span><span class="p">.</span><span class="n">cipher</span><span class="p">.</span><span class="n">aes192</span><span class="p">.</span><span class="n">cbc</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">iv</span><span class="p">))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">crypto</span><span class="p">.</span><span class="n">cipher</span><span class="p">.</span><span class="n">aes192</span><span class="p">.</span><span class="n">cbc</span><span class="p">.</span><span class="n">encrypt</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">c</span><span class="p">:</span><span class="n">init</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">result</span><span class="p">())</span>
+<span class="n">c</span><span class="p">:</span><span class="n">free</span><span class="p">()</span>
+
+<span class="c1">-- print sha-256 digest of &#39;AB&#39;, with one step, then incrementally</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha256</span><span class="p">.</span><span class="n">new</span><span class="p">()</span>
+<span class="n">c</span><span class="p">:</span><span class="n">init</span><span class="p">()</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">result</span><span class="p">())</span>
+<span class="n">c</span><span class="p">:</span><span class="n">free</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-the-same-results-from-digest-and-crypto-modules">
+<h2>Getting the same results from digest and crypto modules<a class="headerlink" href="#getting-the-same-results-from-digest-and-crypto-modules" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are equivalent. For example, the <code class="docutils literal notranslate"><span class="pre">digest</span></code> function and
+the <code class="docutils literal notranslate"><span class="pre">crypto</span></code> function will both produce the same result.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">crypto</span><span class="p">.</span><span class="n">cipher</span><span class="p">.</span><span class="n">aes256</span><span class="p">.</span><span class="n">cbc</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">b32</span><span class="p">,</span><span class="n">b16</span><span class="p">)</span><span class="o">==</span><span class="n">digest</span><span class="p">.</span><span class="n">aes256cbc</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">b32</span><span class="p">,</span><span class="n">b16</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">md4</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">md4</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">md5</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">md5</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha1</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">sha1</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha224</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">sha224</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha384</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">sha384</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">crypto</span><span class="p">.</span><span class="n">digest</span><span class="p">.</span><span class="n">sha512</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">digest</span><span class="p">.</span><span class="n">sha512</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

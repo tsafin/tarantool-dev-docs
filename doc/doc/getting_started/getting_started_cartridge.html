@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Creating your first Tarantool Cartridge application &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Creating your first Tarantool Cartridge application</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/getting_started/getting_started_cartridge.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="creating-your-first-tarantool-cartridge-application">
+<span id="getting-started-cartridge"></span><h1>Creating your first Tarantool Cartridge application<a class="headerlink" href="#creating-your-first-tarantool-cartridge-application" title="Permalink to this headline">¶</a></h1>
+<p>Here we’ll walk you through developing a simple cluster application.</p>
+<p>First,
+<a class="reference external" href="https://github.com/tarantool/cartridge-cli#installation">set up the development environment</a>.</p>
+<p>Next, create an application named <code class="docutils literal notranslate"><span class="pre">myapp</span></code>. Say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cartridge create --name myapp
+</pre></div>
+</div>
+<p>This will create a Tarantool Cartridge application in the <code class="docutils literal notranslate"><span class="pre">./myapp</span></code> directory,
+with a handful of
+<span class="xref std std-ref">template files and directories</span>
+inside.</p>
+<p>Go inside and make a dry run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ./myapp
+<span class="gp">$</span> cartridge build
+<span class="gp">$</span> cartridge start
+</pre></div>
+</div>
+<p>This will build the application locally, start 5 instances of Tarantool, and
+run the application as it is, with no business logic yet.</p>
+<p>Why 5 instances? See the <code class="docutils literal notranslate"><span class="pre">instances.yml</span></code> file in your application directory.
+It contains the <a class="reference internal" href="../book/cartridge/cartridge_admin.html#cartridge-deployment"><span class="std std-ref">configuration</span></a> of all instances
+that you can use in the cluster. By default, it defines configuration for 5
+Tarantool instances.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">myapp.router</span><span class="p">:</span>
+  <span class="nt">workdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./tmp/db_dev/3301</span>
+  <span class="nt">advertise_uri</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:3301</span>
+  <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8081</span>
+
+<span class="nt">myapp.s1-master</span><span class="p">:</span>
+  <span class="nt">workdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./tmp/db_dev/3302</span>
+  <span class="nt">advertise_uri</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:3302</span>
+  <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8082</span>
+
+<span class="nt">myapp.s1-replica</span><span class="p">:</span>
+  <span class="nt">workdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./tmp/db_dev/3303</span>
+  <span class="nt">advertise_uri</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:3303</span>
+  <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8083</span>
+
+<span class="nt">myapp.s2-master</span><span class="p">:</span>
+  <span class="nt">workdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./tmp/db_dev/3304</span>
+  <span class="nt">advertise_uri</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:3304</span>
+  <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8084</span>
+
+<span class="nt">myapp.s2-replica</span><span class="p">:</span>
+  <span class="nt">workdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./tmp/db_dev/3305</span>
+  <span class="nt">advertise_uri</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:3305</span>
+  <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8085</span>
+</pre></div>
+</div>
+<p>You can already see these instances in the cluster management web interface at
+<a class="reference external" href="http://localhost:8081">http://localhost:8081</a> (here 8081 is the HTTP port of the first instance
+specified in <code class="docutils literal notranslate"><span class="pre">instances.yml</span></code>).</p>
+<a class="reference internal image-reference" href="../../../_images/cluster_dry_run-border-5px.png"><img alt="../../../_images/cluster_dry_run-border-5px.png" class="align-center" src="../../../_images/cluster_dry_run-border-5px.png" style="width: 744.4000000000001px; height: 629.2px;" /></a>
+<p>Okay, press <code class="docutils literal notranslate"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">C</span></code> to stop the cluster for a while.</p>
+<p>Now it’s time to add some business logic to your application.
+This will be an evergreen “Hello world!”” – just to keep things simple.</p>
+<p>Rename the template file <code class="docutils literal notranslate"><span class="pre">app/roles/custom.lua</span></code> to <code class="docutils literal notranslate"><span class="pre">hello-world.lua</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> mv app/roles/custom.lua app/roles/hello-world.lua
+</pre></div>
+</div>
+<p>This will be your <em>role</em>. In Tarantool Cartridge, a role is a Lua module that
+implements some instance-specific functions and/or logic.
+Further on we’ll show how to add code to a role, build it, enable and test.</p>
+<p>There is already some code in the role’s <code class="docutils literal notranslate"><span class="pre">init()</span></code> function.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span> <span class="kd">local</span> <span class="kr">function</span> <span class="nf">init</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="c1">-- luacheck: no unused args</span>
+     <span class="c1">-- if opts.is_master then</span>
+     <span class="c1">-- end</span>
+
+<span class="hll">     <span class="kd">local</span> <span class="n">httpd</span> <span class="o">=</span> <span class="n">cartridge</span><span class="p">.</span><span class="n">service_get</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span>
+</span><span class="hll">     <span class="n">httpd</span><span class="p">:</span><span class="n">route</span><span class="p">({</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/hello&#39;</span><span class="p">},</span> <span class="kr">function</span><span class="p">()</span>
+</span><span class="hll">         <span class="kr">return</span> <span class="p">{</span><span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;Hello world!&#39;</span><span class="p">}</span>
+</span>     <span class="kr">end</span><span class="p">)</span>
+
+     <span class="kr">return</span> <span class="kc">true</span>
+ <span class="kr">end</span>
+</pre></div>
+</div>
+<p>This exports an HTTP endpoint <code class="docutils literal notranslate"><span class="pre">/hello</span></code>. For example, <a class="reference external" href="http://localhost:8081/hello">http://localhost:8081/hello</a>
+if you address the first instance from the <code class="docutils literal notranslate"><span class="pre">instances.yml</span></code> file.
+If you open it in a browser after enabling the role (we’ll do it here a bit later),
+you’ll see “Hello world!” on the page.</p>
+<p>Let’s add some more code there.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span> <span class="kd">local</span> <span class="kr">function</span> <span class="nf">init</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="c1">-- luacheck: no unused args</span>
+     <span class="c1">-- if opts.is_master then</span>
+     <span class="c1">-- end</span>
+
+     <span class="kd">local</span> <span class="n">httpd</span> <span class="o">=</span> <span class="n">cartridge</span><span class="p">.</span><span class="n">service_get</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span>
+     <span class="n">httpd</span><span class="p">:</span><span class="n">route</span><span class="p">({</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/hello&#39;</span><span class="p">},</span> <span class="kr">function</span><span class="p">()</span>
+         <span class="kr">return</span> <span class="p">{</span><span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;Hello world!&#39;</span><span class="p">}</span>
+     <span class="kr">end</span><span class="p">)</span>
+<span class="hll">
+</span><span class="hll">     <span class="kd">local</span> <span class="n">log</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+</span>     <span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Hello world!&#39;</span><span class="p">)</span>
+
+     <span class="kr">return</span> <span class="kc">true</span>
+ <span class="kr">end</span>
+</pre></div>
+</div>
+<p>This writes “Hello, world!” to the console when the role gets enabled,
+so you’ll have a chance to spot this. No rocket science.</p>
+<p>Next, amend <code class="docutils literal notranslate"><span class="pre">role_name</span></code> in the “return” section of the <code class="docutils literal notranslate"><span class="pre">hello-world.lua</span></code> file.
+This text will be displayed as a label for your role in the cluster management
+web interface.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span> <span class="kr">return</span> <span class="p">{</span>
+<span class="hll">     <span class="n">role_name</span> <span class="o">=</span> <span class="s1">&#39;Hello world!&#39;</span><span class="p">,</span>
+</span>     <span class="n">init</span> <span class="o">=</span> <span class="n">init</span><span class="p">,</span>
+     <span class="n">stop</span> <span class="o">=</span> <span class="n">stop</span><span class="p">,</span>
+     <span class="n">validate_config</span> <span class="o">=</span> <span class="n">validate_config</span><span class="p">,</span>
+     <span class="n">apply_config</span> <span class="o">=</span> <span class="n">apply_config</span><span class="p">,</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>The final thing to do before you can run the application is to add your role to
+the list of available cluster roles in the <code class="docutils literal notranslate"><span class="pre">init.lua</span></code> file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span> <span class="kd">local</span> <span class="n">ok</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">cartridge</span><span class="p">.</span><span class="n">cfg</span><span class="p">({</span>
+     <span class="n">workdir</span> <span class="o">=</span> <span class="s1">&#39;tmp/db&#39;</span><span class="p">,</span>
+     <span class="n">roles</span> <span class="o">=</span> <span class="p">{</span>
+         <span class="s1">&#39;cartridge.roles.vshard-storage&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;cartridge.roles.vshard-router&#39;</span><span class="p">,</span>
+<span class="hll">         <span class="s1">&#39;app.roles.hello-world&#39;</span>
+</span>     <span class="p">},</span>
+     <span class="n">cluster_cookie</span> <span class="o">=</span> <span class="s1">&#39;myapp-cluster-cookie&#39;</span><span class="p">,</span>
+ <span class="p">})</span>
+</pre></div>
+</div>
+<p>Now the cluster will be aware of your role.</p>
+<p>Why <code class="docutils literal notranslate"><span class="pre">app.roles.hello-world</span></code>? By default, the role name here should match the
+path from the application root (<code class="docutils literal notranslate"><span class="pre">./myapp</span></code>) to the role file
+(<code class="docutils literal notranslate"><span class="pre">app/roles/hello-world.lua</span></code>).</p>
+<p>Fine! Your role is ready. Re-build the application and re-start the cluster now:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cartridge build
+<span class="gp">$</span> cartridge start
+</pre></div>
+</div>
+<p>Now all instances are up, but idle, waiting for you to enable roles for them.</p>
+<p>Instances (replicas) in a Tarantool Cartridge cluster are organized into
+<em>replica sets</em>. Roles are enabled per replica set, so all instances in a
+replica set have the same roles enabled.</p>
+<p>Let’s create a replica set containing just one instance and enable your role:</p>
+<ol class="arabic">
+<li><p class="first">Open the cluster management web interface at <a class="reference external" href="http://localhost:8081">http://localhost:8081</a>.</p>
+</li>
+<li><p class="first">Click <strong>Configure</strong>.</p>
+</li>
+<li><p class="first">Check the role <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">world!</span></code> to enable it. Notice that the role name here
+matches the label text that you specified in the <code class="docutils literal notranslate"><span class="pre">role_name</span></code> parameter in
+the <code class="docutils literal notranslate"><span class="pre">hello-world.lua</span></code> file.</p>
+</li>
+<li><p class="first">(Optionally) Specify the replica set name, for example
+“hello-world-replica-set”.</p>
+<a class="reference internal image-reference" href="../../../_images/cluster_create_replica_set-border-5px.png"><img alt="../../../_images/cluster_create_replica_set-border-5px.png" class="align-center" src="../../../_images/cluster_create_replica_set-border-5px.png" style="width: 715.6px; height: 554.0px;" /></a>
+</li>
+<li><p class="first">Click <strong>Create replica set</strong> and see the newly-created replica set
+in the web interface.</p>
+</li>
+</ol>
+<a class="reference internal image-reference" href="../../../_images/cluster_new_replica_set-border-5px.png"><img alt="../../../_images/cluster_new_replica_set-border-5px.png" class="align-center" src="../../../_images/cluster_new_replica_set-border-5px.png" style="width: 690.0px; height: 282.0px;" /></a>
+<p>Your custom role got enabled. Find the “Hello world!” message in console,
+like this:</p>
+<a class="reference internal image-reference" href="../../../_images/cluster_hello_world_console-border-5px.png"><img alt="../../../_images/cluster_hello_world_console-border-5px.png" class="align-center" src="../../../_images/cluster_hello_world_console-border-5px.png" style="width: 852.0px; height: 154.4px;" /></a>
+<p>Finally, open the HTTP endpoint of this instance at
+<a class="reference external" href="http://localhost:8081/hello">http://localhost:8081/hello</a> and see the reply to your GET request.</p>
+<a class="reference internal image-reference" href="../../../_images/cluster_hello_http-border-5px.png"><img alt="../../../_images/cluster_hello_http-border-5px.png" class="align-center" src="../../../_images/cluster_hello_http-border-5px.png" style="width: 402.40000000000003px; height: 138.0px;" /></a>
+<p>Everything is up and running! What’s next?</p>
+<ul class="simple">
+<li>Follow <a class="reference internal" href="../book/cartridge/cartridge_admin.html#cartridge-deployment"><span class="std std-ref">this guide</span></a> to set up the rest of the
+cluster and try some cool cluster management features.</li>
+<li>Get inspired with <a class="reference external" href="https://github.com/tarantool/examples/">these examples</a>
+and implement more sophisticated business logic for your role.</li>
+<li><span class="xref std std-ref">Pack</span> your application for easy distribution.
+Choose what you like: a DEB or RPM package, a TGZ archive, or a Docker image.</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

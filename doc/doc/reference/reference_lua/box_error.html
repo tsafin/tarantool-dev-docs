@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.error &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.error</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_error.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-box.error">
+<span id="submodule-box-error"></span><h1>Submodule <cite>box.error</cite><a class="headerlink" href="#module-box.error" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.error</span></code> function is for raising an error. The difference between this
+function and Lua’s built-in <a class="reference external" href="https://www.lua.org/pil/8.3.html">error</a> function
+is that when the error reaches the client, its error code is preserved.
+In contrast, a Lua error would always be presented to the client as
+<code class="docutils literal notranslate"><span class="pre">ER_PROC_LUA</span></code>.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">box.error</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#box-error-error"><span class="std std-ref">box.error()</span></a></td>
+<td>Throw an error</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-error-last"><span class="std std-ref">box.error.last()</span></a></td>
+<td>Get a description of the
+last error</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#box-error-clear"><span class="std std-ref">box.error.clear()</span></a></td>
+<td>Clear the record of errors</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#box-error-new"><span class="std std-ref">box.error.new()</span></a></td>
+<td>Create an error but do not
+throw</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">box.error</span></code> throws an object that has the cdata type and contain the following
+fields:</p>
+<ul class="simple">
+<li>“type” (string) error’s C++ class,</li>
+<li>“code” (number) error’s number,</li>
+<li>“message” (string) error’s message,</li>
+<li>“file” (string) Tarantool source file,</li>
+<li>“line” (number) line number in the Tarantool source file,</li>
+<li>“errno” (number) C standard error number; this field is added only if the error
+is a system error (for example, due to a failure in a socket or file i/o).</li>
+</ul>
+<dl class="function">
+<dt>
+<code class="descname">box.error{reason = string [, code = number]}</code></dt>
+<dd><p>When called with a Lua-table argument, the code and reason have any
+user-desired values. The result will be those values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reason</strong> (<em>string</em>) – description of an error, defined by user</li>
+<li><strong>code</strong> (<em>integer</em>) – numeric code for this error, defined by user</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="box.error.box.error">
+<code class="descclassname">box.</code><code class="descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.error.box.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>When called without arguments, <code class="docutils literal notranslate"><span class="pre">box.error()</span></code> re-throws whatever the last
+error was.</p>
+</dd></dl>
+
+<span class="target" id="box-error-error"></span><dl class="function">
+<dt>
+<code class="descclassname">box.</code><code class="descname">error</code><span class="sig-paren">(</span><em>code</em>, <em>errtext</em><span class="optional">[</span>, <em>errtext ...</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p>Emulate a request error, with text based on one of the pre-defined Tarantool
+errors defined in the file <a class="reference external" href="https://github.com/tarantool/tarantool/blob/1.10/src/box/errcode.h">errcode.h</a> in
+the source tree. Lua constants which correspond to those Tarantool errors are
+defined as members of <code class="docutils literal notranslate"><span class="pre">box.error</span></code>, for example <code class="docutils literal notranslate"><span class="pre">box.error.NO_SUCH_USER</span> <span class="pre">==</span> <span class="pre">45</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>code</strong> (<em>number</em>) – number of a pre-defined error</li>
+<li><strong>errtext</strong><strong>(</strong><strong>s</strong><strong>)</strong> (<em>string</em>) – part of the message which will accompany the error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<p>the <code class="docutils literal notranslate"><span class="pre">NO_SUCH_USER</span></code> message is “<code class="docutils literal notranslate"><span class="pre">User</span> <span class="pre">'%s'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">found</span></code>” – it includes
+one “<code class="docutils literal notranslate"><span class="pre">%s</span></code>” component which will be replaced with errtext. Thus a call to
+<code class="docutils literal notranslate"><span class="pre">box.error(box.error.NO_SUCH_USER,</span> <span class="pre">'joe')</span></code> or <code class="docutils literal notranslate"><span class="pre">box.error(45,</span> <span class="pre">'joe')</span></code>
+will result in an error with the accompanying message
+“<code class="docutils literal notranslate"><span class="pre">User</span> <span class="pre">'joe'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">found</span></code>”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Except:</th><td class="field-body">whatever is specified in errcode-number.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.error{code = 555, reason = &#39;Arbitrary message&#39;}
+---
+- error: Arbitrary message
+...
+tarantool&gt; box.error()
+---
+- error: Arbitrary message
+...
+tarantool&gt; box.error(box.error.FUNCTION_ACCESS_DENIED, &#39;A&#39;, &#39;B&#39;, &#39;C&#39;)
+---
+- error: A access denied for user &#39;B&#39; to function &#39;C&#39;
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-error-last"></span><dl class="function">
+<dt id="box.error.box.error.last">
+<code class="descclassname">box.error.</code><code class="descname">last</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.error.box.error.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the last error object.</p>
+<p><strong>Example</strong></p>
+<p>You can reach the last error object’s fields like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.space.create(&#39;&#39;)
+---
+- error: Invalid identifier &#39;&#39; (expected printable symbols only or it is too long)
+...
+tarantool&gt; box.error.last()
+---
+- Invalid identifier &#39;&#39; (expected printable symbols only or it is too long)
+...
+tarantool&gt; box.error.last().code
+---
+- 70
+...
+tarantool&gt; box.error.last().type
+---
+- ClientError
+...
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the last error object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">cdata</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="box-error-clear"></span><dl class="function">
+<dt id="box.error.box.error.clear">
+<code class="descclassname">box.error.</code><code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#box.error.box.error.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the record of errors, so functions like <code class="docutils literal notranslate"><span class="pre">box.error()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">box.error.last()</span></code> will have no effect.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.space.create(&#39;&#39;)
+---
+- error: Invalid identifier &#39;&#39; (expected printable symbols only or it is too long)
+...
+tarantool&gt; box.error.last()
+---
+- Invalid identifier &#39;&#39; (expected printable symbols only or it is too long)
+...
+tarantool&gt; box.error.clear()
+---
+...
+tarantool&gt; box.error.last()
+---
+- null
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="box-error-new"></span><dl class="function">
+<dt id="box.error.box.error.new">
+<code class="descclassname">box.error.</code><code class="descname">new</code><span class="sig-paren">(</span><em>code</em>, <em>errtext</em><span class="optional">[</span>, <em>errtext ...</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#box.error.box.error.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an error object, but do not throw.
+This is useful when error information should be saved for later retrieval.
+The parameters are the same as for <a class="reference internal" href="#box-error-error"><span class="std std-ref">box.error()</span></a>,
+see the description there.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>code</strong> (<em>number</em>) – number of a pre-defined error</li>
+<li><strong>errtext</strong><strong>(</strong><strong>s</strong><strong>)</strong> (<em>string</em>) – part of the message which will accompany the error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; e = box.error.new{code = 555, reason = &#39;Arbitrary message&#39;}
+---
+...
+tarantool&gt; e:unpack()
+---
+- type: ClientError
+  code: 555
+  message: Arbitrary message
+  trace:
+  - file: &#39;[string &quot;e = box.error.new{code = 555, reason = &#39;&#39;Arbit...&quot;]&#39;
+    line: 1
+...
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

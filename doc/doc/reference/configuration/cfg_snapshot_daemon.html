@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>&lt;no title&gt; &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/configuration/cfg_snapshot_daemon.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <ul class="simple">
+<li><a class="reference internal" href="index.html#cfg-checkpoint-daemon-checkpoint-count"><span class="std std-ref">checkpoint_count</span></a></li>
+<li><a class="reference internal" href="index.html#cfg-checkpoint-daemon-checkpoint-interval"><span class="std std-ref">checkpoint_interval</span></a></li>
+</ul>
+<p>The checkpoint daemon is a fiber which is constantly running. At intervals,
+it may make new <a class="reference internal" href="../../book/box/data_model.html#index-box-persistence"><span class="std std-ref">snapshot (.snap) files</span></a> and then
+may delete old snapshot files.</p>
+<p>The <a class="reference internal" href="index.html#cfg-checkpoint-daemon-checkpoint-interval"><span class="std std-ref">checkpoint_interval</span></a> and
+<a class="reference internal" href="index.html#cfg-checkpoint-daemon-checkpoint-count"><span class="std std-ref">checkpoint_count</span></a> configuration
+settings determine how long the intervals are, and how many snapshots should
+exist before deletions occur.</p>
+<p id="cfg-checkpoint-daemon-garbage-collector"><strong>Tarantool garbage collector</strong></p>
+<p>The checkpoint daemon may activate the Tarantool garbage collector
+which deletes old files. This garbage collector is distinct from the
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#2.10">Lua garbage collector</a>
+which is for Lua objects, and distinct from a
+Tarantool garbage collector which specializes in
+<a class="reference internal" href="../reference_rock/vshard/vshard_admin.html#vshard-gc"><span class="std std-ref">handling shard buckets</span></a>.</p>
+<p>If the checkpoint daemon deletes an old snapshot file, then the
+Tarantool garbage collector will also delete
+any <a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write-ahead log (.xlog)</span></a> files which are older than
+the snapshot file and which contain information that is present in the snapshot
+file. It will also delete obsolete vinyl <code class="docutils literal notranslate"><span class="pre">.run</span></code> files.</p>
+<p>The checkpoint daemon and the Tarantool garbage collector will not delete a file if:</p>
+<ul class="simple">
+<li>a <strong>backup</strong> is ongoing and the file has not been backed up
+(see <a class="reference internal" href="../../book/admin/backups.html#admin-backups-hot-backup-vinyl-memtx"><span class="std std-ref">“Hot backup”</span></a>), or</li>
+<li><strong>replication</strong> is ongoing and the file has not been relayed to a replica
+(see <a class="reference internal" href="../../book/replication/repl_architecture.html#replication-architecture"><span class="std std-ref">“Replication architecture”</span></a>),</li>
+<li>a replica is connecting, or</li>
+<li>a replica has fallen behind.
+The progress of each replica is tracked; if a replica’s position is far
+from being up to date, then the server stops to give it a chance to
+catch up.
+If an administrator concludes that a replica is permanently down, then the
+correct procedure is to restart the server, or (preferably)
+<a class="reference internal" href="../../book/replication/repl_remove_instances.html#replication-remove-instances"><span class="std std-ref">remove the replica from the cluster</span></a>.</li>
+</ul>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module table &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>table</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/table.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-table">
+<span id="module-table"></span><span id="table-module"></span><h1>Module <cite>table</cite><a class="headerlink" href="#module-table" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="code docutils literal notranslate"><span class="pre">table</span></code> module has everything in the
+<a class="reference external" href="https://www.lua.org/pil/19.html">standard Lua table library</a>,
+and some Tarantool extensions.</p>
+<p>You can see this by saying “table”: you will see this list of functions:
+<code class="docutils literal notranslate"><span class="pre">clear</span></code> (LuaJIT extension = erase all elements),
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.concat">concat</a> (concatenate),
+<code class="docutils literal notranslate"><span class="pre">copy</span></code> (make a copy of an array),
+<code class="docutils literal notranslate"><span class="pre">deepcopy</span></code> (see description below),
+<code class="docutils literal notranslate"><span class="pre">foreach</span></code>,
+<code class="docutils literal notranslate"><span class="pre">foreachi</span></code>,
+<a class="reference external" href="https://www.lua.org/pil/19.1.html">getn</a> (get the number of elements in an array),
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.insert">insert</a> (insert an element into an array),
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.maxn">maxn</a> (get largest index)
+<a class="reference external" href="https://www.lua.org/manual/5.3/manual.html#pdf-table.move">move</a> (move elements between tables),
+<code class="docutils literal notranslate"><span class="pre">new</span></code> (LuaJIT extension = return a new table with pre-allocated elements),
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.remove">remove</a> (remove an element from an array),
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.sort">sort</a> (sort the elements of an array).</p>
+<p>In this section we only discuss the additional function
+that the Tarantool developers have added: <code class="docutils literal notranslate"><span class="pre">deepcopy</span></code>.</p>
+<span class="target" id="table-deepcopy"></span><dl class="function">
+<dt id="table.deepcopy">
+<code class="descclassname">table.</code><code class="descname">deepcopy</code><span class="sig-paren">(</span><em>input-table</em><span class="sig-paren">)</span><a class="headerlink" href="#table.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a “deep” copy of the table – a copy which follows
+nested structures to any depth and does not depend on pointers,
+it copies the contents.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input-table</strong> – (table) the table to copy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body">the copy of the table</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; input_table = {1,{&#39;a&#39;,&#39;b&#39;}}
+---
+...
+
+tarantool&gt; output_table = table.deepcopy(input_table)
+---
+...
+
+tarantool&gt; output_table
+---
+- - 1
+  - - a
+    - b
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="table-sort"></span><dl class="function">
+<dt id="table.sort">
+<code class="descclassname">table.</code><code class="descname">sort</code><span class="sig-paren">(</span><em>input-table</em><span class="optional">[</span>, <em>comparison-function</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#table.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put the input-table contents in sorted order.</p>
+<p>The <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-table.sort">basic Lua table.sort</a>
+has a default comparison-function: <code class="code docutils literal notranslate"><span class="pre">function</span> <span class="pre">(a,</span> <span class="pre">b)</span> <span class="pre">return</span> <span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">b</span> <span class="pre">end</span></code>.</p>
+<p>That is efficient and standard. However, sometimes Tarantool users
+will want an equivalent to <code class="docutils literal notranslate"><span class="pre">table.sort</span></code> which has any of these features:</p>
+<p>(1) If the table contains nils, except nils at the end, the results must still be correct.
+That is not the case with the default tarantool_sort, and it cannot
+be fixed by making a comparison that checks whether a and b are nil.
+(Before trying certain Internet suggestions, test with
+{1, nil, 2, -1, 44, 1e308, nil, 2, nil, nil, 0}.</p>
+<p>(2) If strings are to be sorted in a language-aware way, there must be a
+parameter for collation.</p>
+<p>(3) If the table has a mix of types, then they must be sorted as
+booleans, then numbers, then strings, then byte arrays.</p>
+<p>Since all those features are available in Tarantool spaces,
+the solution for Tarantool is simple: make a temporary Tarantool
+space, put the table contents into it, retrieve the tuples from it
+in order, and overwrite the table.</p>
+<p>Here then is <code class="docutils literal notranslate"><span class="pre">tarantool_sort()</span></code> which does the same thing as
+<code class="docutils literal notranslate"><span class="pre">table.sort</span></code> but has those extra features. It is not fast and
+it requires a database privilege, so it should only be used if the
+extra features are necessary.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>  function tarantool_sort(input_table, collation)
+      local c = collation or &#39;binary&#39;
+      local tmp_name = &#39;Temporary_for_tarantool_sort&#39;
+      pcall(function() box.space[tmp_name]:drop() end)
+      box.schema.space.create(tmp_name, {temporary = true})
+      box.space[tmp_name]:create_index(&#39;I&#39;)
+      box.space[tmp_name]:create_index(&#39;I2&#39;,
+                                       {unique = false,
+                                        type=&#39;tree&#39;,
+                                        parts={{2, &#39;scalar&#39;,
+                                                collation = c,
+                                                is_nullable = true}}})
+      for i = 1, table.maxn(input_table) do
+          box.space[tmp_name]:insert{i, input_table[i]}
+      end
+      local t = box.space[tmp_name].index.I2:select()
+      for i = 1, table.maxn(input_table) do
+          input_table[i] = t[i][2]
+      end
+      box.space[tmp_name]:drop()
+    end
+
+For example, suppose table t = {1, &#39;A&#39;, -88.3, nil, true, &#39;b&#39;, &#39;B&#39;, nil, &#39;À&#39;}.
+After tarantool_sort(t, &#39;unicode_ci&#39;) t contains {nil, nil, true, -88.3, 1, &#39;A&#39;, &#39;À&#39;, &#39;b&#39;, &#39;B&#39;}.
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utility tarantoolctl &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Utility <cite>tarantoolctl</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/reference/tarantoolctl.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="utility-tarantoolctl">
+<span id="tarantoolctl"></span><h1>Utility <cite>tarantoolctl</cite><a class="headerlink" href="#utility-tarantoolctl" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> is a utility for administering Tarantool
+<a class="reference internal" href="#tarantoolctl-instance-management"><span class="std std-ref">instances</span></a>,
+<a class="reference internal" href="#tarantoolctl-checkpoint-management"><span class="std std-ref">checkpoint files</span></a> and
+<a class="reference internal" href="#tarantoolctl-module-management"><span class="std std-ref">modules</span></a>.
+It is shipped and installed as part of Tarantool distribution.</p>
+<p>See also <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> usage examples in <a class="reference internal" href="../book/admin/index.html#admin"><span class="std std-ref">Server administration</span></a>
+section.</p>
+<div class="section" id="command-format">
+<span id="tarantoolctl-command-format"></span><h2>Command format<a class="headerlink" href="#command-format" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">COMMAND</span> <span class="pre">NAME</span> <span class="pre">[URI]</span> <span class="pre">[FILE]</span> <span class="pre">[OPTIONS..]</span></code></p>
+<p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> is one of the following: <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">stop</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>,
+<code class="docutils literal notranslate"><span class="pre">restart</span></code>, <code class="docutils literal notranslate"><span class="pre">logrotate</span></code>, <code class="docutils literal notranslate"><span class="pre">check</span></code>, <code class="docutils literal notranslate"><span class="pre">enter</span></code>, <code class="docutils literal notranslate"><span class="pre">eval</span></code>, <code class="docutils literal notranslate"><span class="pre">connect</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cat</span></code>, <code class="docutils literal notranslate"><span class="pre">play</span></code>, <code class="docutils literal notranslate"><span class="pre">rocks</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the name of an <a class="reference internal" href="../book/admin/instance_config.html#admin-instance-file"><span class="std std-ref">instance file</span></a> or a
+<a class="reference internal" href="../book/app_server/creating_app.html#app-server-modules"><span class="std std-ref">module</span></a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">FILE</span></code> is the path to some file (.lua, .xlog or .snap).</li>
+<li><code class="docutils literal notranslate"><span class="pre">URI</span></code> is the URI of some Tarantool instance.</li>
+<li><code class="docutils literal notranslate"><span class="pre">OPTIONS</span></code> are options taken by some <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> commands.</li>
+</ul>
+</div>
+<div class="section" id="commands-for-managing-tarantool-instances">
+<span id="tarantoolctl-instance-management"></span><h2>Commands for managing Tarantool instances<a class="headerlink" href="#commands-for-managing-tarantool-instances" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">start</span> <span class="pre">NAME</span></code></dt>
+<dd><p class="first">Start a Tarantool instance.</p>
+<p>Additionally, this command sets the TARANTOOLCTL environment variable to
+‘true’, to mark that the instance was started by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> works for instances without <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> called or
+with delayed <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> call.</p>
+<p class="last">For example, this can be used to manage instances which receive configuration
+from an external server. For such instances, <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">start</span></code> goes to
+background when <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> is called, so it will wait until options
+for <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> are received. However this is not the case for daemon
+management systems like <code class="docutils literal notranslate"><span class="pre">systemd</span></code>, as they handle backgrounding on
+their side.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">stop</span> <span class="pre">NAME</span></code></dt>
+<dd>Stop a Tarantool instance.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">status</span> <span class="pre">NAME</span></code></dt>
+<dd><p class="first">Show an instance’s status (started/stopped).
+If pid file exists and an alive control socket exists, the return code
+is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Otherwise, the return code is not <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<p class="last">Reports typical problems to stderr (e.g. pid file exists and control
+socket doesn’t).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">restart</span> <span class="pre">NAME</span></code></dt>
+<dd><p class="first">Stop and start a Tarantool instance.</p>
+<p class="last">Additionally, this command sets the TARANTOOL_RESTARTED environment
+variable to ‘true’, to mark that the instance was restarted by
+<code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">logrotate</span> <span class="pre">NAME</span></code></dt>
+<dd>Rotate logs of a started Tarantool instance.
+Works only if logging-into-file is enabled in the instance file.
+Pipe/syslog make no effect.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">check</span> <span class="pre">NAME</span></code></dt>
+<dd>Check an instance file for syntax errors.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">enter</span> <span class="pre">NAME</span></code></dt>
+<dd>Enter an instance’s interactive Lua console.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">eval</span> <span class="pre">NAME</span> <span class="pre">FILE</span></code></dt>
+<dd>Evaluate a local Lua file on a running Tarantool instance.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">connect</span> <span class="pre">URI</span></code></dt>
+<dd>Connect to a Tarantool instance on an admin-console port.
+Supports both TCP/Unix sockets.</dd>
+</dl>
+</div>
+<div class="section" id="commands-for-managing-checkpoint-files">
+<span id="tarantoolctl-checkpoint-management"></span><h2>Commands for managing checkpoint files<a class="headerlink" href="#commands-for-managing-checkpoint-files" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">cat</span> <span class="pre">FILE..</span> <span class="pre">[--space=space_no</span> <span class="pre">..]</span> <span class="pre">[--show-system]</span> <span class="pre">[--from=from_lsn]</span> <span class="pre">[--to=to_lsn]</span> <span class="pre">[--replica=replica_id</span> <span class="pre">..]</span></code></dt>
+<dd>Print into stdout the contents of .snap/.xlog files.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">play</span> <span class="pre">URI</span> <span class="pre">FILE..</span> <span class="pre">[--space=space_no</span> <span class="pre">..]</span> <span class="pre">[--show-system]</span> <span class="pre">[--from=from_lsn]</span> <span class="pre">[--to=to_lsn]</span> <span class="pre">[--replica=replica_id</span> <span class="pre">..]</span></code></dt>
+<dd>Play the contents of .snap/.xlog files to another Tarantool instance.</dd>
+</dl>
+<p>Supported options:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">--space=space_no</span></code> to filter the output by space number.
+May be passed more than once.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--show-system</span></code> to show the contents of system spaces.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--from=from_lsn</span></code> to show operations starting from the given lsn.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--to=to_lsn</span></code> to show operations ending with the given lsn.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--replica=replica_id</span></code> to filter the output by replica id.
+May be passed more than once.</li>
+</ul>
+</div>
+<div class="section" id="commands-for-managing-tarantool-modules">
+<span id="tarantoolctl-module-management"></span><h2>Commands for managing Tarantool modules<a class="headerlink" href="#commands-for-managing-tarantool-modules" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">install</span> <span class="pre">NAME</span></code></dt>
+<dd>Install a module in the current directory.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">remove</span> <span class="pre">NAME</span></code></dt>
+<dd>Remove a module.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">show</span> <span class="pre">NAME</span></code></dt>
+<dd>Show information about an installed module.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">search</span> <span class="pre">NAME</span></code></dt>
+<dd>Search the repository for modules.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">list</span></code></dt>
+<dd>List all installed modules.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">pack</span> <span class="pre">{&lt;rockspec&gt;</span> <span class="pre">|</span> <span class="pre">&lt;name&gt;</span> <span class="pre">[&lt;version&gt;]}</span></code></dt>
+<dd><p class="first">Create a rock by packing sources or binaries.</p>
+<p>As an argument, you can specify:</p>
+<ul class="last simple">
+<li>a <code class="docutils literal notranslate"><span class="pre">.rockspec</span></code> file to create a source rock containing the module’s
+sources, or</li>
+<li>the name of an installed module (and its version if there are more
+than one) to create a binary rock containing the compiled module.</li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">rocks</span> <span class="pre">unpack</span> <span class="pre">{&lt;rock_file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;rockspec&gt;</span> <span class="pre">|</span> <span class="pre">&lt;name&gt;</span> <span class="pre">[version]}</span></code></dt>
+<dd><p class="first">Unpack the contents of a rock into a new directory under the current one.</p>
+<p>As an argument, you can specify:</p>
+<ul class="last simple">
+<li>source or binary rock files,</li>
+<li><code class="docutils literal notranslate"><span class="pre">.rockspec</span></code> files, or</li>
+<li>names of rocks or <code class="docutils literal notranslate"><span class="pre">.rockspec</span></code> files in remote repositories
+(and the rock version if there are more than one).</li>
+</ul>
+</dd>
+</dl>
+<p>Supported options:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">--server=server_name</span></code> check this server first, then the usual list.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--only-server=server_name</span></code> check this server only, ignore the usual list.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

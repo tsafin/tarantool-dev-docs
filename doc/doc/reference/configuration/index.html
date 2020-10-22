@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration reference &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Configuration reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/configuration/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration-reference">
+<span id="index-book-cfg"></span><h1>Configuration reference<a class="headerlink" href="#configuration-reference" title="Permalink to this headline">¶</a></h1>
+<p>This reference covers all options and parameters which can be set for Tarantool
+on the command line or in an <a class="reference internal" href="#index-init-label"><span class="std std-ref">initialization file</span></a>.</p>
+<p>Tarantool is started by entering either of the following command:</p>
+<pre class="highlight literal-block">
+$ <strong>tarantool</strong>
+
+$ <strong>tarantool</strong> <em>options</em>
+
+$ <strong>tarantool</strong> <em>lua-initialization-file</em> <strong>[</strong> <em>arguments</em> <strong>]</strong>
+</pre>
+<div class="section" id="command-options">
+<h2>Command options<a class="headerlink" href="#command-options" title="Permalink to this headline">¶</a></h2>
+<dl class="option">
+<dt id="cmdoption-h">
+<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print an annotated list of all available options and exit.</p>
+</dd></dl>
+
+<span class="target" id="index-tarantool-version"></span><dl class="option">
+<dt id="cmdoption-v">
+<code class="descname">-V</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print product name and version, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ./tarantool --version
+<span class="go">Tarantool 1.7.0-1216-g73f7154</span>
+<span class="go">Target: Linux-x86_64-Debug</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>In this example:</p>
+<p>“Tarantool” is the name of the reusable asynchronous networking
+programming framework.</p>
+<p>The 3-number version follows the standard <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;-&lt;minor&gt;-&lt;patch&gt;</span></code>
+scheme, in which <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;</span></code> number is changed only rarely, <code class="docutils literal notranslate"><span class="pre">&lt;minor&gt;</span></code> is
+incremented for each new milestone and indicates possible incompatible
+changes, and <code class="docutils literal notranslate"><span class="pre">&lt;patch&gt;</span></code> stands for the number of bug fix releases made after
+the start of the milestone. For non-released versions only, there may be a
+commit number and commit SHA1 to indicate how much this particular build has
+diverged from the last release.</p>
+<p>“Target” is the platform tarantool was built on. Some platform-specific details
+may follow this line.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Tarantool uses
+<a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-describe.html">git describe</a>
+to produce its version id, and this id can be used at any time to check
+out the corresponding source from our
+<a class="reference external" href="http://github.com/tarantool/tarantool.git">git repository</a>.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="uri">
+<span id="index-uri"></span><h2>URI<a class="headerlink" href="#uri" title="Permalink to this headline">¶</a></h2>
+<p>Some configuration parameters and some functions depend on a URI, or
+“Universal Resource Identifier”. The URI string format is similar to the
+<a class="reference external" href="http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax">generic syntax for a URI schema</a>.
+So it may contain (in order) a user name
+for login, a password, a host name or host IP address, and a port number. Only
+the port number is always mandatory. The password is mandatory if the user
+name is specified, unless the user name is ‘guest’. So, formally, the URI
+syntax is <code class="docutils literal notranslate"><span class="pre">[host:]port</span></code> or <code class="docutils literal notranslate"><span class="pre">[username:password&#64;]host:port</span></code>.
+If host is omitted, then ‘0.0.0.0’ or ‘[::]’ is assumed,
+meaning respectively any IPv4 address or any IPv6 address,
+on the local machine.
+If username:password is omitted, then ‘guest’ is assumed. Some examples:</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URI fragment</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>port</td>
+<td>3301</td>
+</tr>
+<tr class="row-odd"><td>host:port</td>
+<td>127.0.0.1:3301</td>
+</tr>
+<tr class="row-even"><td>username:password&#64;host:port</td>
+<td>notguest:sesame&#64;mail.ru:3301</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In certain circumstances a Unix domain socket may be used
+where a URI is expected, for example “unix/:/tmp/unix_domain_socket.sock” or
+simply “/tmp/unix_domain_socket.sock”.</p>
+<p>A method for parsing URIs is illustrated in <a class="reference internal" href="../reference_lua/uri.html#uri-parse"><span class="std std-ref">Module uri</span></a>.</p>
+</div>
+<div class="section" id="initialization-file">
+<span id="index-init-label"></span><h2>Initialization file<a class="headerlink" href="#initialization-file" title="Permalink to this headline">¶</a></h2>
+<p>If the command to start Tarantool includes <a href="#id1"><span class="problematic" id="id2">:codeitalic:`lua-initialization-file`</span></a>, then
+Tarantool begins by invoking the Lua program in the file, which by convention
+may have the name “<code class="docutils literal notranslate"><span class="pre">script.lua</span></code>”. The Lua program may get further arguments
+from the command line or may use operating-system functions, such as <code class="docutils literal notranslate"><span class="pre">getenv()</span></code>.
+The Lua program almost always begins by invoking <code class="docutils literal notranslate"><span class="pre">box.cfg()</span></code>, if the database
+server will be used or if ports need to be opened. For example, suppose
+<code class="docutils literal notranslate"><span class="pre">script.lua</span></code> contains the lines</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span>
+    <span class="n">listen</span>              <span class="o">=</span> <span class="nb">os.getenv</span><span class="p">(</span><span class="s2">&quot;LISTEN_URI&quot;</span><span class="p">),</span>
+    <span class="n">memtx_memory</span>        <span class="o">=</span> <span class="mi">100000</span><span class="p">,</span>
+    <span class="n">pid_file</span>            <span class="o">=</span> <span class="s2">&quot;tarantool.pid&quot;</span><span class="p">,</span>
+    <span class="n">rows_per_wal</span>        <span class="o">=</span> <span class="mi">50</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Starting &#39;</span><span class="p">,</span> <span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>and suppose the environment variable LISTEN_URI contains 3301,
+and suppose the command line is <code class="docutils literal notranslate"><span class="pre">~/tarantool/src/tarantool</span> <span class="pre">script.lua</span> <span class="pre">ARG</span></code>.
+Then the screen might look like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">LISTEN_URI</span><span class="o">=</span><span class="m">3301</span>
+<span class="gp">$</span> ~/tarantool/src/tarantool script.lua ARG
+<span class="go">... main/101/script.lua C&gt; version 1.7.0-1216-g73f7154</span>
+<span class="go">... main/101/script.lua C&gt; log level 5</span>
+<span class="go">... main/101/script.lua I&gt; mapping 107374184 bytes for a shared arena...</span>
+<span class="go">... main/101/script.lua I&gt; recovery start</span>
+<span class="go">... main/101/script.lua I&gt; recovering from &#39;./00000000000000000000.snap&#39;</span>
+<span class="go">... main/101/script.lua I&gt; primary: bound to 0.0.0.0:3301</span>
+<span class="go">... main/102/leave_local_hot_standby I&gt; ready to accept requests</span>
+<span class="go">Starting  ARG</span>
+<span class="go">... main C&gt; entering the event loop</span>
+</pre></div>
+</div>
+<p>If you wish to start an interactive session on the same terminal after
+initialization is complete, you can use <a class="reference internal" href="../reference_lua/console.html#console-start"><span class="std std-ref">console.start()</span></a>.</p>
+</div>
+<div class="section" id="configuration-parameters">
+<span id="box-cfg-params"></span><span id="index-checkpoint-daemon"></span><span id="index-wal-mode"></span><span id="index-wal-dir"></span><span id="index-snap-dir"></span><span id="index-replication-source"></span><span id="index-slab-alloc-arena"></span><span id="index-replication-port"></span><span id="index-local-hot-standby"></span><h2>Configuration parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Configuration parameters have the form:</p>
+<p><a href="#id3"><span class="problematic" id="id4">:extsamp:`{**{box.cfg}**}{[{*{key = value}*} [, {*{key = value ...}*}]]}`</span></a></p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> may contain many configuration parameters and since some of the
+parameters (such as directory addresses) are semi-permanent, it’s best to keep
+<code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> in a Lua file. Typically this Lua file is the initialization file
+which is specified on the tarantool command line.</p>
+<p>Most configuration parameters are for allocating resources, opening ports, and
+specifying database behavior. All parameters are optional. A few parameters are
+dynamic, that is, they can be changed at runtime by calling <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>
+a second time.</p>
+<p>To see all the non-null parameters, say <code class="docutils literal notranslate"><span class="pre">box.cfg</span></code> (no parentheses). To see a
+particular parameter, for example the listen address, say <code class="docutils literal notranslate"><span class="pre">box.cfg.listen</span></code>.</p>
+<p>The following sections describe all parameters for basic operation, for storage,
+for binary logging and snapshots, for replication, for networking,
+for logging, and for feedback.</p>
+<div class="section" id="basic-parameters">
+<h3>Basic parameters<a class="headerlink" href="#basic-parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-basic-background"><span class="std std-ref">background</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-custom-proc-title"><span class="std std-ref">custom_proc_title</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-listen"><span class="std std-ref">listen</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-memtx-dir"><span class="std std-ref">memtx_dir</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-pid-file"><span class="std std-ref">pid_file</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-read-only"><span class="std std-ref">read_only</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-vinyl-dir"><span class="std std-ref">vinyl_dir</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-vinyl-timeout"><span class="std std-ref">vinyl_timeout</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-username"><span class="std std-ref">username</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-wal-dir"><span class="std std-ref">wal_dir</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-work-dir"><span class="std std-ref">work_dir</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-worker-pool-threads"><span class="std std-ref">worker_pool_threads</span></a></li>
+</ul>
+</div>
+<div class="section" id="configuring-the-storage">
+<h3>Configuring the storage<a class="headerlink" href="#configuring-the-storage" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-storage-memtx-memory"><span class="std std-ref">memtx_memory</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-memtx-max-tuple-size"><span class="std std-ref">memtx_max_tuple_size</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-memtx-min-tuple-size"><span class="std std-ref">memtx_min_tuple_size</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-bloom-fpr"><span class="std std-ref">vinyl_bloom_fpr</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-cache"><span class="std std-ref">vinyl_cache</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-max-tuple-size"><span class="std std-ref">vinyl_max_tuple_size</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-memory"><span class="std std-ref">vinyl_memory</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-page-size"><span class="std std-ref">vinyl_page_size</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-range-size"><span class="std std-ref">vinyl_range_size</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-run-count-per-level"><span class="std std-ref">vinyl_run_count_per_level</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-run-size-ratio"><span class="std std-ref">vinyl_run_size_ratio</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-read-threads"><span class="std std-ref">vinyl_read_threads</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-vinyl-write-threads"><span class="std std-ref">vinyl_write_threads</span></a></li>
+</ul>
+</div>
+<div class="section" id="checkpoint-daemon">
+<span id="book-cfg-checkpoint-daemon"></span><h3>Checkpoint daemon<a class="headerlink" href="#checkpoint-daemon" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-checkpoint-daemon-checkpoint-count"><span class="std std-ref">checkpoint_count</span></a></li>
+<li><a class="reference internal" href="#cfg-checkpoint-daemon-checkpoint-interval"><span class="std std-ref">checkpoint_interval</span></a></li>
+</ul>
+<p>The checkpoint daemon is a fiber which is constantly running. At intervals,
+it may make new <a class="reference internal" href="../../book/box/data_model.html#index-box-persistence"><span class="std std-ref">snapshot (.snap) files</span></a> and then
+may delete old snapshot files.</p>
+<p>The <a class="reference internal" href="#cfg-checkpoint-daemon-checkpoint-interval"><span class="std std-ref">checkpoint_interval</span></a> and
+<a class="reference internal" href="#cfg-checkpoint-daemon-checkpoint-count"><span class="std std-ref">checkpoint_count</span></a> configuration
+settings determine how long the intervals are, and how many snapshots should
+exist before deletions occur.</p>
+<p id="cfg-checkpoint-daemon-garbage-collector"><strong>Tarantool garbage collector</strong></p>
+<p>The checkpoint daemon may activate the Tarantool garbage collector
+which deletes old files. This garbage collector is distinct from the
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#2.10">Lua garbage collector</a>
+which is for Lua objects, and distinct from a
+Tarantool garbage collector which specializes in
+<a class="reference internal" href="../reference_rock/vshard/vshard_admin.html#vshard-gc"><span class="std std-ref">handling shard buckets</span></a>.</p>
+<p>If the checkpoint daemon deletes an old snapshot file, then the
+Tarantool garbage collector will also delete
+any <a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">write-ahead log (.xlog)</span></a> files which are older than
+the snapshot file and which contain information that is present in the snapshot
+file. It will also delete obsolete vinyl <code class="docutils literal notranslate"><span class="pre">.run</span></code> files.</p>
+<p>The checkpoint daemon and the Tarantool garbage collector will not delete a file if:</p>
+<ul class="simple">
+<li>a <strong>backup</strong> is ongoing and the file has not been backed up
+(see <a class="reference internal" href="../../book/admin/backups.html#admin-backups-hot-backup-vinyl-memtx"><span class="std std-ref">“Hot backup”</span></a>), or</li>
+<li><strong>replication</strong> is ongoing and the file has not been relayed to a replica
+(see <a class="reference internal" href="../../book/replication/repl_architecture.html#replication-architecture"><span class="std std-ref">“Replication architecture”</span></a>),</li>
+<li>a replica is connecting, or</li>
+<li>a replica has fallen behind.
+The progress of each replica is tracked; if a replica’s position is far
+from being up to date, then the server stops to give it a chance to
+catch up.
+If an administrator concludes that a replica is permanently down, then the
+correct procedure is to restart the server, or (preferably)
+<a class="reference internal" href="../../book/replication/repl_remove_instances.html#replication-remove-instances"><span class="std std-ref">remove the replica from the cluster</span></a>.</li>
+</ul>
+</div>
+<div class="section" id="binary-logging-and-snapshots">
+<h3>Binary logging and snapshots<a class="headerlink" href="#binary-logging-and-snapshots" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-force-recovery"><span class="std std-ref">force_recovery</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-rows-per-wal"><span class="std std-ref">rows_per_wal</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-wal-max-size"><span class="std std-ref">wal_max_size</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-snap-io-rate-limit"><span class="std std-ref">snap_io_rate_limit</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-wal-mode"><span class="std std-ref">wal_mode</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-wal-dir-rescan-delay"><span class="std std-ref">wal_dir_rescan_delay</span></a></li>
+</ul>
+</div>
+<div class="section" id="hot-standby">
+<span id="index-hot-standby"></span><h3>Hot standby<a class="headerlink" href="#hot-standby" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="replication">
+<h3>Replication<a class="headerlink" href="#replication" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-replication-replication"><span class="std std-ref">replication</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-connect-timeout"><span class="std std-ref">replication_connect_timeout</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-connect-quorum"><span class="std std-ref">replication_connect_quorum</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-skip-conflict"><span class="std std-ref">replication_skip_conflict</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-sync-lag"><span class="std std-ref">replication_sync_lag</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-sync-timeout"><span class="std std-ref">replication_sync_timeout</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-timeout"><span class="std std-ref">replication_timeout</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replicaset-uuid"><span class="std std-ref">replicaset_uuid</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-instance-uuid"><span class="std std-ref">instance_uuid</span></a></li>
+</ul>
+</div>
+<div class="section" id="networking">
+<h3>Networking<a class="headerlink" href="#networking" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-networking-io-collect-interval"><span class="std std-ref">io_collect_interval</span></a>,</li>
+<li><a class="reference internal" href="#cfg-networking-net-msg-max"><span class="std std-ref">net_msg_max</span></a></li>
+<li><a class="reference internal" href="#cfg-networking-readahead"><span class="std std-ref">readahead</span></a>,</li>
+</ul>
+</div>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<ul class="simple" id="cfg-logging">
+<li><a class="reference internal" href="#cfg-logging-log-level"><span class="std std-ref">log_level</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-log"><span class="std std-ref">log</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-log-nonblock"><span class="std std-ref">log_nonblock</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-too-long-threshold"><span class="std std-ref">too_long_threshold</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-log-format"><span class="std std-ref">log_format</span></a></li>
+</ul>
+<div class="section" id="logging-example">
+<span id="cfg-logging-logging-example"></span><h4>Logging example<a class="headerlink" href="#logging-example" title="Permalink to this headline">¶</a></h4>
+<p>This will illustrate how “rotation” works, that is, what happens when the server
+instance is writing to a log and signals are used when archiving it.</p>
+<p>Start with two terminal shells, Terminal #1 and Terminal #2.</p>
+<p>On Terminal #1: start an interactive Tarantool session, then say the logging
+will go to <cite>Log_file</cite>, then put a message “Log Line #1” in the log file:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="p">.</span><span class="n">cfg</span><span class="p">{</span><span class="n">log</span><span class="o">=</span><span class="s1">&#39;Log_file&#39;</span><span class="p">}</span>
+<span class="n">log</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">mv</span></code> so the log file is now named <cite>Log_file.bak</cite>.
+The result of this is: the next log message will go to <cite>Log_file.bak</cite>.</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Log_file</span> <span class="n">Log_file</span><span class="o">.</span><span class="n">bak</span>
+</pre></div>
+</div>
+<p>On Terminal #1: put a message “Log Line #2” in the log file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">ps</span></code> to find the process ID of the Tarantool instance.</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ps</span> <span class="o">-</span><span class="n">A</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">tarantool</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">kill</span> <span class="pre">-HUP</span></code> to send a SIGHUP signal to the Tarantool instance.
+The result of this is: Tarantool will open <cite>Log_file</cite> again, and
+the next log message will go to <cite>Log_file</cite>.
+(The same effect could be accomplished by executing log.rotate() on the instance.)</p>
+<pre class="highlight literal-block">
+kill -HUP <em>process_id</em>
+</pre>
+<p>On Terminal #1: put a message “Log Line #3” in the log file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Log Line #3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On Terminal #2: use <code class="docutils literal notranslate"><span class="pre">less</span></code> to examine files. <cite>Log_file.bak</cite> will have these lines,
+except that the date and time will depend on when the example is done:</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">06.373</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#1`</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mf">25.973</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#2`</span>
+</pre></div>
+</div>
+<p>and <cite>Log_file</cite> will have</p>
+<div class="highlight highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span> <span class="n">file</span> <span class="n">has</span> <span class="n">been</span> <span class="n">reopened</span>
+<span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">30</span> <span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">32.629</span> <span class="p">[</span><span class="mi">27469</span><span class="p">]</span> <span class="n">main</span><span class="o">/</span><span class="mi">101</span><span class="o">/</span><span class="n">interactive</span> <span class="n">I</span><span class="o">&gt;</span> <span class="n">Log</span> <span class="n">Line</span> <span class="c1">#3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="feedback">
+<h3>Feedback<a class="headerlink" href="#feedback" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-logging-feedback-enabled"><span class="std std-ref">feedback_enabled</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-feedback-host"><span class="std std-ref">feedback_host</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-feedback-interval"><span class="std std-ref">feedback_interval</span></a></li>
+</ul>
+<p>By default a Tarantool daemon sends a small packet
+once per hour, to <a class="reference external" href="https://feedback.tarantool.io">https://feedback.tarantool.io</a>.
+The packet contains three values from <a class="reference internal" href="../reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info</span></a>:
+<code class="docutils literal notranslate"><span class="pre">box.info.version</span></code>, <code class="docutils literal notranslate"><span class="pre">box.info.uuid</span></code>, and <code class="docutils literal notranslate"><span class="pre">box.info.cluster_uuid</span></code>.
+By changing the feedback configuration parameters, users can
+adjust or turn off this feature.</p>
+</div>
+<div class="section" id="deprecated-parameters">
+<h3>Deprecated parameters<a class="headerlink" href="#deprecated-parameters" title="Permalink to this headline">¶</a></h3>
+<p id="cfg-deprecated">These parameters are deprecated since Tarantool version 1.7.4:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#cfg-basic-coredump-deprecated"><span class="std std-ref">coredump</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-logger-deprecated"><span class="std std-ref">logger</span></a></li>
+<li><a class="reference internal" href="#cfg-logging-logger-nonblock-deprecated"><span class="std std-ref">logger_nonblock</span></a></li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-panic-on-snap-error-deprecated"><span class="std std-ref">panic_on_snap_error</span></a>,</li>
+<li><a class="reference internal" href="#cfg-binary-logging-snapshots-panic-on-wal-error-deprecated"><span class="std std-ref">panic_on_wal_error</span></a></li>
+<li><a class="reference internal" href="#cfg-replication-replication-source-deprecated"><span class="std std-ref">replication_source</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-slab-alloc-arena-deprecated"><span class="std std-ref">slab_alloc_arena</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-slab-alloc-factor-deprecated"><span class="std std-ref">slab_alloc_factor</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-slab-alloc-maximal-deprecated"><span class="std std-ref">slab_alloc_maximal</span></a></li>
+<li><a class="reference internal" href="#cfg-storage-slab-alloc-minimal-deprecated"><span class="std std-ref">slab_alloc_minimal</span></a></li>
+<li><a class="reference internal" href="#cfg-basic-snap-dir-deprecated"><span class="std std-ref">snap_dir</span></a></li>
+<li><a class="reference internal" href="#cfg-checkpoint-daemon-snapshot-count-deprecated"><span class="std std-ref">snapshot_count</span></a></li>
+<li><a class="reference internal" href="#cfg-checkpoint-daemon-snapshot-period-deprecated"><span class="std std-ref">snapshot_period</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

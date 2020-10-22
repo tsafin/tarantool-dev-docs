@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module tap &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <cite>tap</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/tap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-tap">
+<h1>Module <cite>tap</cite><a class="headerlink" href="#module-tap" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">tap</span></code> module streamlines the testing of other modules. It allows writing
+of tests in the <a class="reference external" href="https://en.wikipedia.org/wiki/Test_Anything_Protocol">TAP protocol</a>. The results from the tests can be parsed by
+standard TAP-analyzers so they can be passed to utilities such as <a class="reference external" href="https://metacpan.org/pod/distribution/Test-Harness/bin/prove">prove</a>. Thus
+one can run tests and then use the results for statistics, decision-making, and
+so on.</p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of all <code class="docutils literal notranslate"><span class="pre">tap</span></code> functions.</p>
+<div class="table docutils container">
+<table border="1" class="left-align-column-1 left-align-column-2 docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#tap-test"><span class="std std-ref">tap.test()</span></a></td>
+<td>Initialize</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-test"><span class="std std-ref">taptest:test()</span></a></td>
+<td>Create a subtest and print the
+results</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-plan"><span class="std std-ref">taptest:plan()</span></a></td>
+<td>Indicate how many tests to
+perform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-check"><span class="std std-ref">taptest:check()</span></a></td>
+<td>Check the number of tests
+performed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-diag"><span class="std std-ref">taptest:diag()</span></a></td>
+<td>Display a diagnostic message</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-ok"><span class="std std-ref">taptest:ok()</span></a></td>
+<td>Evaluate the condition and
+display the message</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-fail"><span class="std std-ref">taptest:fail()</span></a></td>
+<td>Evaluate the condition and
+display the message</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-skip"><span class="std std-ref">taptest:skip()</span></a></td>
+<td>Evaluate the condition and
+display the message</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-is"><span class="std std-ref">taptest:is()</span></a></td>
+<td>Check if the two arguments are
+equal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-isnt"><span class="std std-ref">taptest:isnt()</span></a></td>
+<td>Check if the two arguments are
+different</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-is-deeply"><span class="std std-ref">taptest:is_deeply()</span></a></td>
+<td>Recursively check if the two
+arguments are equal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-like"><span class="std std-ref">taptest:like()</span></a></td>
+<td>Check if the argument matches a
+pattern</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#taptest-unlike"><span class="std std-ref">taptest:unlike()</span></a></td>
+<td>Check if the argument does not
+match a pattern</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:isnil()</span></a> <a href="#id1"><span class="problematic" id="id2">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:isstring()</span></a> <a href="#id3"><span class="problematic" id="id4">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:isnumber()</span></a> <a href="#id5"><span class="problematic" id="id6">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:istable()</span></a> <a href="#id7"><span class="problematic" id="id8">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:isboolean()</span></a> <a href="#id9"><span class="problematic" id="id10">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:isudata()</span></a> <a href="#id11"><span class="problematic" id="id12">|br|</span></a>
+<a class="reference internal" href="#taptest-istype"><span class="std std-ref">taptest:iscdata()</span></a></td>
+<td>Check if a value has a
+particular type</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-tap"></span><span class="target" id="tap-test"></span><dl class="function">
+<dt id="tap.test">
+<code class="descclassname">tap.</code><code class="descname">test</code><span class="sig-paren">(</span><em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<p>The result of <code class="docutils literal notranslate"><span class="pre">tap.test</span></code> is an object, which will be called taptest
+in the rest of this discussion, which is necessary for <code class="docutils literal notranslate"><span class="pre">taptest:plan()</span></code>
+and all the other methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test-name</strong> (<em>string</em>) – an arbitrary name to give for the test outputs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">taptest</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">table</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">tap</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">)</span>
+<span class="n">taptest</span> <span class="o">=</span> <span class="n">tap</span><span class="p">.</span><span class="n">test</span><span class="p">(</span><span class="s1">&#39;test-name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="tap.taptest">
+<em class="property">class </em><code class="descclassname">tap.</code><code class="descname">taptest</code><a class="headerlink" href="#tap.taptest" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="taptest-test"></span><dl class="method">
+<dt id="tap.taptest.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>test-name</em>, <em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a subtest (if no <code class="docutils literal notranslate"><span class="pre">func</span></code> argument specified), or
+(if all arguments are specified)
+create a subtest, run the test function and print the result.</p>
+<p>See the <a class="reference internal" href="#tap-example"><span class="std std-ref">example</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>string</em>) – an arbitrary name to give for the test outputs.</li>
+<li><strong>fun</strong> (<em>function</em>) – the test logic to run.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">taptest</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">userdata or string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-plan"></span><dl class="method">
+<dt id="tap.taptest.plan">
+<code class="descname">plan</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.plan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate how many tests will be performed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>count</strong> (<em>number</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-check"></span><dl class="method">
+<dt id="tap.taptest.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the number of tests performed.</p>
+<p>The result will be a display saying <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">bad</span> <span class="pre">plan:</span> <span class="pre">...</span></code> if the number
+of completed tests is not equal to the number of tests specified by
+<code class="docutils literal notranslate"><span class="pre">taptest:plan(...)</span></code>. (This is a purely Tarantool feature: “bad plan”
+messages are out of the TAP13 standard.)</p>
+<p>This check should only be done after all planned tests are complete,
+so ordinarily <code class="docutils literal notranslate"><span class="pre">taptest:check()</span></code> will only appear at the end of a script.
+However, as a Tarantool extension, <code class="docutils literal notranslate"><span class="pre">taptest:check()</span></code> may appear at the
+end of any subtest. Therefore there are three ways to cause the check:</p>
+<ul class="simple">
+<li>by calling <code class="docutils literal notranslate"><span class="pre">taptest:check()</span></code> at the end of a script,</li>
+<li>by calling a function which ends with a call to <code class="docutils literal notranslate"><span class="pre">taptest:check()</span></code>,</li>
+<li>or by calling taptest:test(‘…’, subtest-function-name) where
+subtest-function-name does not need to end with <code class="docutils literal notranslate"><span class="pre">taptest:check()</span></code>
+because it can be called after the subtest is complete.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true or false.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-diag"></span><dl class="method">
+<dt id="tap.taptest.diag">
+<code class="descname">diag</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a diagnostic message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>string</em>) – the message to be displayed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-ok"></span><dl class="method">
+<dt id="tap.taptest.ok">
+<code class="descname">ok</code><span class="sig-paren">(</span><em>condition</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a basic function which is used by other functions. Depending
+on the value of <code class="docutils literal notranslate"><span class="pre">condition</span></code>, print ‘ok’ or ‘not ok’ along with
+debugging information. Displays the message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>condition</strong> (<em>boolean</em>) – an expression which is true or false</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; taptest:ok(true, &#39;x&#39;)
+ok - x
+---
+- true
+...
+tarantool&gt; tap = require(&#39;tap&#39;)
+---
+...
+tarantool&gt; taptest = tap.test(&#39;test-name&#39;)
+TAP version 13
+---
+...
+tarantool&gt; taptest:ok(1 + 1 == 2, &#39;X&#39;)
+ok - X
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="taptest-fail"></span><dl class="method">
+<dt id="tap.taptest.fail">
+<code class="descname">fail</code><span class="sig-paren">(</span><em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.fail" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">taptest:fail('x')</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">taptest:ok(false,</span> <span class="pre">'x')</span></code>.
+Displays the message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test-name</strong> (<em>string</em>) – name of the test</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true or false.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-skip"></span><dl class="method">
+<dt id="tap.taptest.skip">
+<code class="descname">skip</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.skip" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">taptest:skip('x')</span></code> is equivalent to
+<code class="docutils literal notranslate"><span class="pre">taptest:ok(true,</span> <span class="pre">'x'</span> <span class="pre">..</span> <span class="pre">'#</span> <span class="pre">skip')</span></code>.
+Displays the message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test-name</strong> (<em>string</em>) – name of the test</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nil</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; taptest:skip(&#39;message&#39;)
+ok - message # skip
+---
+- true
+...
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="taptest-is"></span><dl class="method">
+<dt id="tap.taptest.is">
+<code class="descname">is</code><span class="sig-paren">(</span><em>got</em>, <em>expected</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.is" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the first argument equals the second argument.
+Displays extensive message if the result is false.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>got</strong> (<em>number</em>) – actual result</li>
+<li><strong>expected</strong> (<em>number</em>) – expected result</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-isnt"></span><dl class="method">
+<dt id="tap.taptest.isnt">
+<code class="descname">isnt</code><span class="sig-paren">(</span><em>got</em>, <em>expected</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the negation of <a class="reference internal" href="#taptest-is"><span class="std std-ref">taptest:is()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>got</strong> (<em>number</em>) – actual result</li>
+<li><strong>expected</strong> (<em>number</em>) – expected result</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-is-deeply"></span><dl class="method">
+<dt id="tap.taptest.is_deeply">
+<code class="descname">is_deeply</code><span class="sig-paren">(</span><em>got</em>, <em>expected</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.is_deeply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursive version of <code class="docutils literal notranslate"><span class="pre">taptest:is(...)</span></code>, which can be be used to
+compare tables as well as scalar values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">boolean</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>got</strong> (<em>lua-value</em>) – actual result</li>
+<li><strong>expected</strong> (<em>lua-value</em>) – expected result</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-like"></span><dl class="method">
+<dt id="tap.taptest.like">
+<code class="descname">like</code><span class="sig-paren">(</span><em>got</em>, <em>expected</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify a string against a
+<a class="reference external" href="http://lua-users.org/wiki/PatternsTutorial">pattern</a>.
+Ok if match is found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">boolean</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>got</strong> (<em>lua-value</em>) – actual result</li>
+<li><strong>expected</strong> (<em>lua-value</em>) – pattern</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">test</span><span class="p">:</span><span class="n">like</span><span class="p">(</span><span class="n">tarantool</span><span class="p">.</span><span class="n">version</span><span class="p">,</span> <span class="s1">&#39;^[1-9]&#39;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="taptest-unlike"></span><dl class="method">
+<dt id="tap.taptest.unlike">
+<code class="descname">unlike</code><span class="sig-paren">(</span><em>got</em>, <em>expected</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.unlike" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the negation of <a class="reference internal" href="#taptest-like"><span class="std std-ref">taptest:like()</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>got</strong> (<em>number</em>) – actual result</li>
+<li><strong>expected</strong> (<em>number</em>) – pattern</li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="taptest-istype"></span><dl class="method">
+<dt id="tap.taptest.isnil">
+<code class="descname">isnil</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isnil" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.isstring">
+<code class="descname">isstring</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isstring" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.isnumber">
+<code class="descname">isnumber</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isnumber" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.istable">
+<code class="descname">istable</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.istable" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.isboolean">
+<code class="descname">isboolean</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isboolean" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.isudata">
+<code class="descname">isudata</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.isudata" title="Permalink to this definition">¶</a></dt>
+<dt id="tap.taptest.iscdata">
+<code class="descname">iscdata</code><span class="sig-paren">(</span><em>value</em>, <em>test-name</em><span class="sig-paren">)</span><a class="headerlink" href="#tap.taptest.iscdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether a value has a particular type. Displays a long message if
+the value is not of the specified type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>lua-value</em>) – </li>
+<li><strong>test-name</strong> (<em>string</em>) – name of the test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true or false.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<span id="tap-example"></span><h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>To run this example: put the script in a file named ./tap.lua, then make
+tap.lua executable by saying <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">./tap.lua</span></code>, then execute using
+Tarantool as a script processor by saying ./tap.lua.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/tarantool</span>
+<span class="kd">local</span> <span class="n">tap</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">tap</span><span class="p">.</span><span class="n">test</span><span class="p">(</span><span class="s2">&quot;my test name&quot;</span><span class="p">)</span>
+<span class="n">test</span><span class="p">:</span><span class="n">plan</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">test</span><span class="p">:</span><span class="n">ok</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;2 * 2 is 4&quot;</span><span class="p">)</span>
+<span class="n">test</span><span class="p">:</span><span class="n">test</span><span class="p">(</span><span class="s2">&quot;some subtests for test2&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">plan</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">is</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;2 + 2 is 4&quot;</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">:</span><span class="n">isnt</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;2 + 3 is not 4&quot;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+<span class="n">test</span><span class="p">:</span><span class="n">check</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output from the above script will look approximately like this:</p>
+<div class="highlight-tap notranslate"><div class="highlight"><pre><span></span><span class="nn">TAP version 13</span>
+<span class="kd">1..2</span><span class="c"></span>
+<span class="kr">ok</span> - 2 * 2 is 4
+    # Some subtests for test2
+    1..2
+    ok - 2 + 2 is 4,
+    ok - 2 + 3 is not 4
+    # Some subtests for test2: end
+<span class="kr">ok</span> - some subtests for test2
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Interpreting function return values &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Interpreting function return values</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/connectors/__results.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="interpreting-function-return-values">
+<h1>Interpreting function return values<a class="headerlink" href="#interpreting-function-return-values" title="Permalink to this headline">¶</a></h1>
+<p>For all connectors, calling a function via Tarantool causes a return in the
+MsgPack format. If the function is called using the connector’s API, some
+conversions may occur. All scalar values are returned as tuples (with a MsgPack
+type-identifier followed by a value); all non-scalar values are returned as a
+group of tuples (with a MsgPack array-identifier followed by the scalar values).
+If the function is called via the binary protocol command layer – “eval” –
+rather than via the connector’s API, no conversions occur.</p>
+<p>In the following example, a Lua function will be created. Since it will be
+accessed externally by a <a class="reference internal" href="../../reference/reference_lua/box_space_index.html#box-space-user"><span class="std std-ref">‘guest’ user</span></a>, a
+<a class="reference internal" href="../../reference/reference_lua/box_schema.html#box-schema-user-grant"><span class="std std-ref">grant</span></a> of an execute privilege will
+be necessary. The function returns an empty array, a scalar string, two booleans,
+and a short integer. The values are the ones described in the table
+<a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-common-types-and-msgpack-encodings"><span class="std std-ref">Common Types and MsgPack Encodings</span></a>.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.cfg{listen=3301}
+2016-03-03 18:45:52.802 [27381] main/101/interactive I&gt; ready to accept requests
+---
+...
+tarantool&gt; function f() return {},&#39;a&#39;,false,true,127; end
+---
+...
+tarantool&gt; box.schema.func.create(&#39;f&#39;)
+---
+...
+tarantool&gt; box.schema.user.grant(&#39;guest&#39;,&#39;execute&#39;,&#39;function&#39;,&#39;f&#39;)
+---
+...
+</pre></div>
+</div>
+<p>Here is a C program which calls the function. Although C is being used for the
+example, the result would be precisely the same if the calling program was
+written in Perl, PHP, Python, Go, or Java.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tarantool.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_net.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;tarantool/tnt_opt.h&gt;</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">tnt</span> <span class="o">=</span> <span class="n">tnt_net</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>              <span class="cm">/* SETUP */</span>
+  <span class="n">tnt_set</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">TNT_OPT_URI</span><span class="p">,</span> <span class="s">&quot;localhost:3301&quot;</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">tnt_connect</span><span class="p">(</span><span class="n">tnt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>                         <span class="cm">/* CONNECT */</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection refused</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+       <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="k">struct</span> <span class="nc">tnt_stream</span> <span class="o">*</span><span class="n">arg</span><span class="p">;</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">tnt_object</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>     <span class="cm">/* MAKE REQUEST */</span>
+   <span class="n">tnt_object_add_array</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+   <span class="k">struct</span> <span class="nc">tnt_request</span> <span class="o">*</span><span class="n">req1</span> <span class="o">=</span> <span class="n">tnt_request_call</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>  <span class="cm">/* CALL function f() */</span>
+   <span class="n">tnt_request_set_funcz</span><span class="p">(</span><span class="n">req1</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">);</span>
+   <span class="kt">uint64_t</span> <span class="n">sync1</span> <span class="o">=</span> <span class="n">tnt_request_compile</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="n">req1</span><span class="p">);</span>
+   <span class="n">tnt_flush</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>                                     <span class="cm">/* SEND REQUEST */</span>
+   <span class="k">struct</span> <span class="nc">tnt_reply</span> <span class="n">reply</span><span class="p">;</span>  <span class="n">tnt_reply_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>    <span class="cm">/* GET REPLY */</span>
+   <span class="n">tnt</span><span class="o">-&gt;</span><span class="n">read_reply</span><span class="p">(</span><span class="n">tnt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">reply</span><span class="p">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Call failed %lu.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reply</span><span class="p">.</span><span class="n">code</span><span class="p">);</span>
+     <span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">reply</span><span class="p">.</span><span class="n">data</span><span class="p">;</span> <span class="cm">/* PRINT REPLY */</span>
+   <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">reply</span><span class="p">.</span><span class="n">data_end</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%x &quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>
+     <span class="o">++</span><span class="n">p</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+   <span class="n">tnt_close</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>                                     <span class="cm">/* TEARDOWN */</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+   <span class="n">tnt_stream_free</span><span class="p">(</span><span class="n">tnt</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When this program is executed, it will print:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">dd 0 0 0 5 90 91 a1 61 91 c2 91 c3 91 7f</span>
+</pre></div>
+</div>
+<p>The first five bytes – <code class="docutils literal notranslate"><span class="pre">dd</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">5</span></code> – are the MsgPack encoding for
+“32-bit array header with value 5” (see
+<a class="reference external" href="http://github.com/msgpack/msgpack/blob/master/spec.md">MsgPack specification</a>).
+The rest are as described in the
+table <a class="reference internal" href="../../reference/reference_lua/msgpack.html#msgpack-common-types-and-msgpack-encodings"><span class="std std-ref">Common Types and MsgPack Encodings</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

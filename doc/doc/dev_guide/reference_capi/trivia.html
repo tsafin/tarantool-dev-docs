@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module trivia/config &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module tuple" href="tuple.html" />
+    <link rel="prev" title="Module schema" href="schema.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>trivia/config</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/trivia.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-trivia-config">
+<h1>Module <cite>trivia/config</cite><a class="headerlink" href="#module-trivia-config" title="Permalink to this headline">¶</a></h1>
+<dl class="macro">
+<dt id="c.API_EXPORT">
+<code class="descname">API_EXPORT</code><a class="headerlink" href="#c.API_EXPORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extern modifier for all public functions.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.PACKAGE_VERSION_MAJOR">
+<code class="descname">PACKAGE_VERSION_MAJOR</code><a class="headerlink" href="#c.PACKAGE_VERSION_MAJOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Package major version - 1 for 1.9.2.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.PACKAGE_VERSION_MINOR">
+<code class="descname">PACKAGE_VERSION_MINOR</code><a class="headerlink" href="#c.PACKAGE_VERSION_MINOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Package minor version - 9 for 1.9.2.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.PACKAGE_VERSION_PATCH">
+<code class="descname">PACKAGE_VERSION_PATCH</code><a class="headerlink" href="#c.PACKAGE_VERSION_PATCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Package patch version - 2 for 1.9.2.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.PACKAGE_VERSION">
+<code class="descname">PACKAGE_VERSION</code><a class="headerlink" href="#c.PACKAGE_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string with major-minor-patch-commit-id identifier of the release, e.g.
+1.9.2-0-g113ade24e.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.SYSCONF_DIR">
+<code class="descname">SYSCONF_DIR</code><a class="headerlink" href="#c.SYSCONF_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>System configuration dir (e.g <code class="docutils literal notranslate"><span class="pre">/etc</span></code>)</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.INSTALL_PREFIX">
+<code class="descname">INSTALL_PREFIX</code><a class="headerlink" href="#c.INSTALL_PREFIX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install prefix (e.g. <code class="docutils literal notranslate"><span class="pre">/usr</span></code>)</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.BUILD_TYPE">
+<code class="descname">BUILD_TYPE</code><a class="headerlink" href="#c.BUILD_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build type, e.g. Debug or Release</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.BUILD_INFO">
+<code class="descname">BUILD_INFO</code><a class="headerlink" href="#c.BUILD_INFO" title="Permalink to this definition">¶</a></dt>
+<dd><p>CMake build type signature, e.g. <code class="docutils literal notranslate"><span class="pre">Linux-x86_64-Debug</span></code></p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.BUILD_OPTIONS">
+<code class="descname">BUILD_OPTIONS</code><a class="headerlink" href="#c.BUILD_OPTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command line used to run CMake.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.COMPILER_INFO">
+<code class="descname">COMPILER_INFO</code><a class="headerlink" href="#c.COMPILER_INFO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pathes to C and CXX compilers.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.TARANTOOL_C_FLAGS">
+<code class="descname">TARANTOOL_C_FLAGS</code><a class="headerlink" href="#c.TARANTOOL_C_FLAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>C compile flags used to build Tarantool.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.TARANTOOL_CXX_FLAGS">
+<code class="descname">TARANTOOL_CXX_FLAGS</code><a class="headerlink" href="#c.TARANTOOL_CXX_FLAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>CXX compile flags used to build Tarantool.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.MODULE_LIBDIR">
+<code class="descname">MODULE_LIBDIR</code><a class="headerlink" href="#c.MODULE_LIBDIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A path to install <code class="docutils literal notranslate"><span class="pre">*.lua</span></code> module files.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.MODULE_LUADIR">
+<code class="descname">MODULE_LUADIR</code><a class="headerlink" href="#c.MODULE_LUADIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A path to install <code class="docutils literal notranslate"><span class="pre">*.so</span></code>/<code class="docutils literal notranslate"><span class="pre">*.dylib</span></code> module files.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.MODULE_INCLUDEDIR">
+<code class="descname">MODULE_INCLUDEDIR</code><a class="headerlink" href="#c.MODULE_INCLUDEDIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A path to Lua includes (the same directory where this file is contained)</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.MODULE_LUAPATH">
+<code class="descname">MODULE_LUAPATH</code><a class="headerlink" href="#c.MODULE_LUAPATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>A constant added to <code class="docutils literal notranslate"><span class="pre">package.path</span></code> in Lua to find <code class="docutils literal notranslate"><span class="pre">*.lua</span></code> module files.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.MODULE_LIBPATH">
+<code class="descname">MODULE_LIBPATH</code><a class="headerlink" href="#c.MODULE_LIBPATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>A constant added to <code class="docutils literal notranslate"><span class="pre">package.cpath</span></code> in Lua to find <code class="docutils literal notranslate"><span class="pre">*.so</span></code> module files.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tuple.html" class="btn btn-neutral float-right" title="Module tuple" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="schema.html" class="btn btn-neutral float-left" title="Module schema" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

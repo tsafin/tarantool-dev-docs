@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using a Docker image &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Using a Docker image</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/doc/doc/getting_started/using_docker.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-a-docker-image">
+<span id="getting-started-using-docker"></span><h1>Using a Docker image<a class="headerlink" href="#using-a-docker-image" title="Permalink to this headline">¶</a></h1>
+<p>For trial and test purposes, we recommend using
+<a class="reference external" href="https://github.com/tarantool/docker">official Tarantool images for Docker</a>.
+An official image contains a particular Tarantool version and all popular
+external modules for Tarantool.
+Everything is already installed and configured in Linux.
+These images are the easiest way to install and use Tarantool.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you’re new to Docker, we recommend going over
+<a class="reference external" href="https://docs.docker.com/engine/getstarted/step_one/">this tutorial</a>
+before proceeding with this chapter.</p>
+</div>
+<div class="section" id="launching-a-container">
+<span id="getting-started-launching-a-container"></span><h2>Launching a container<a class="headerlink" href="#launching-a-container" title="Permalink to this headline">¶</a></h2>
+<p>If you don’t have Docker installed, please follow the official
+<a class="reference external" href="https://docs.docker.com/engine/getstarted/step_one/#/step-1-get-docker">installation guide</a>
+for your OS.</p>
+<p>To start a fully functional Tarantool instance, run a container with minimal
+options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker run <span class="se">\</span>
+  --name mytarantool <span class="se">\</span>
+  -d -p <span class="m">3301</span>:3301 <span class="se">\</span>
+  -v /data/dir/on/host:/var/lib/tarantool <span class="se">\</span>
+  tarantool/tarantool:1
+</pre></div>
+</div>
+<p>This command runs a new container named <code class="docutils literal notranslate"><span class="pre">mytarantool</span></code>.
+Docker starts it from an official image named <code class="docutils literal notranslate"><span class="pre">tarantool/tarantool:1</span></code>,
+with Tarantool version <code class="docutils literal notranslate"><span class="pre">1.10</span></code> and all external modules already installed.</p>
+<p>Tarantool will be accepting incoming connections on <code class="docutils literal notranslate"><span class="pre">localhost:3301</span></code>.
+You may start using it as a key-value storage right away.</p>
+<p>Tarantool <a class="reference internal" href="../book/box/data_model.html#index-box-persistence"><span class="std std-ref">persists data</span></a> inside the container.
+To make your test data available after you stop the container,
+this command also mounts the host’s directory <code class="docutils literal notranslate"><span class="pre">/data/dir/on/host</span></code>
+(you need to specify here an absolute path to an existing local directory)
+in the container’s directory <code class="docutils literal notranslate"><span class="pre">/var/lib/tarantool</span></code>
+(by convention, Tarantool in a container uses this directory to persist data).
+So, all changes made in the mounted directory on the container’s side
+are applied to the host’s disk.</p>
+<p>Tarantool’s database module in the container is already
+<a class="reference internal" href="../reference/reference_lua/box_introspection.html#box-introspection-box-cfg"><span class="std std-ref">configured</span></a> and started.
+You needn’t do it manually, unless you use Tarantool as an
+<a class="reference internal" href="../book/app_server/index.html#app-server"><span class="std std-ref">application server</span></a> and run it with an application.</p>
+</div>
+<div class="section" id="attaching-to-tarantool">
+<span id="getting-started-docker-attaching"></span><h2>Attaching to Tarantool<a class="headerlink" href="#attaching-to-tarantool" title="Permalink to this headline">¶</a></h2>
+<p>To attach to Tarantool that runs inside the container, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker <span class="nb">exec</span> -i -t mytarantool console
+</pre></div>
+</div>
+<p>This command:</p>
+<ul class="simple">
+<li>Instructs Tarantool to open an interactive console port for incoming connections.</li>
+<li>Attaches to the Tarantool server inside the container under <code class="docutils literal notranslate"><span class="pre">admin</span></code> user via
+a standard Unix socket.</li>
+</ul>
+<p>Tarantool displays a prompt:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt;
+</pre></div>
+</div>
+<p>Now you can enter requests on the command line.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On production machines, Tarantool’s interactive mode is for system
+administration only. But we use it for most examples in this manual,
+because the interactive mode is convenient for learning.</p>
+</div>
+</div>
+<div class="section" id="creating-a-database">
+<h2>Creating a database<a class="headerlink" href="#creating-a-database" title="Permalink to this headline">¶</a></h2>
+<p>While you’re attached to the console, let’s create a simple test database.</p>
+<p>First, create the first <a class="reference internal" href="../book/box/data_model.html#index-box-space"><span class="std std-ref">space</span></a> (named <code class="docutils literal notranslate"><span class="pre">tester</span></code>):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s = box.schema.space.create(&#39;tester&#39;)
+</pre></div>
+</div>
+<p>Format the created space by specifying field names and types:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s:format({
+              &gt; {name = &#39;id&#39;, type = &#39;unsigned&#39;},
+              &gt; {name = &#39;band_name&#39;, type = &#39;string&#39;},
+              &gt; {name = &#39;year&#39;, type = &#39;unsigned&#39;}
+              &gt; })
+</pre></div>
+</div>
+<p>Create the first <a class="reference internal" href="../book/box/indexes.html#index-box-index"><span class="std std-ref">index</span></a> (named <code class="docutils literal notranslate"><span class="pre">primary</span></code>):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s:create_index(&#39;primary&#39;, {
+              &gt; type = &#39;hash&#39;,
+              &gt; parts = {&#39;id&#39;}
+              &gt; })
+</pre></div>
+</div>
+<p>This is a primary index based on the <code class="docutils literal notranslate"><span class="pre">id</span></code> field of each tuple.</p>
+<p>Insert three <a class="reference internal" href="../book/box/data_model.html#index-box-tuple"><span class="std std-ref">tuples</span></a> (our name for records)
+into the space:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s:insert{1, &#39;Roxette&#39;, 1986}
+tarantool.sock&gt; s:insert{2, &#39;Scorpions&#39;, 2015}
+tarantool.sock&gt; s:insert{3, &#39;Ace of Base&#39;, 1993}
+</pre></div>
+</div>
+<p>To select a tuple using the <code class="docutils literal notranslate"><span class="pre">primary</span></code> index, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s:select{3}
+</pre></div>
+</div>
+<p>The terminal screen now looks like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s = box.schema.space.create(&#39;tester&#39;)
+---
+...
+tarantool.sock&gt; s:format({
+              &gt; {name = &#39;id&#39;, type = &#39;unsigned&#39;},
+              &gt; {name = &#39;band_name&#39;, type = &#39;string&#39;},
+              &gt; {name = &#39;year&#39;, type = &#39;unsigned&#39;}
+              &gt; })
+---
+...
+tarantool.sock&gt; s:create_index(&#39;primary&#39;, {
+              &gt; type = &#39;hash&#39;,
+              &gt; parts = {&#39;id&#39;}
+              &gt; })
+---
+- unique: true
+  parts:
+  - type: unsigned
+    is_nullable: false
+    fieldno: 1
+  id: 0
+  space_id: 512
+  name: primary
+  type: HASH
+...
+tarantool.sock&gt; s:insert{1, &#39;Roxette&#39;, 1986}
+---
+- [1, &#39;Roxette&#39;, 1986]
+...
+tarantool.sock&gt; s:insert{2, &#39;Scorpions&#39;, 2015}
+---
+- [2, &#39;Scorpions&#39;, 2015]
+...
+tarantool.sock&gt; s:insert{3, &#39;Ace of Base&#39;, 1993}
+---
+- [3, &#39;Ace of Base&#39;, 1993]
+...
+tarantool.sock&gt; s:select{3}
+---
+- - [3, &#39;Ace of Base&#39;, 1993]
+...
+</pre></div>
+</div>
+<p>To add a secondary index based on the <code class="docutils literal notranslate"><span class="pre">band_name</span></code> field, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s:create_index(&#39;secondary&#39;, {
+              &gt; type = &#39;hash&#39;,
+              &gt; parts = {&#39;band_name&#39;}
+              &gt; })
+</pre></div>
+</div>
+<p>To select tuples using the <code class="docutils literal notranslate"><span class="pre">secondary</span></code> index, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool.sock&gt; s.index.secondary:select{&#39;Scorpions&#39;}
+---
+- - [2, &#39;Scorpions&#39;, 2015]
+...
+</pre></div>
+</div>
+<p>To drop an index, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; s.index.secondary:drop()
+---
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="stopping-a-container">
+<h2>Stopping a container<a class="headerlink" href="#stopping-a-container" title="Permalink to this headline">¶</a></h2>
+<p>When the testing is over, stop the container politely:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker stop mytarantool
+</pre></div>
+</div>
+<p>This was a temporary container, and its disk/memory data were flushed when you
+stopped it. But since you mounted a data directory from the host in the container,
+Tarantool’s data files were persisted to the host’s disk. Now if you start a new
+container and mount that data directory in it, Tarantool will recover all data
+from disk and continue working with the persisted data.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

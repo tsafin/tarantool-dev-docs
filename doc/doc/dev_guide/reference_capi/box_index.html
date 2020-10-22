@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module index &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module latch" href="latch.html" />
+    <link rel="prev" title="Module fiber" href="fiber.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>index</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/box_index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-index">
+<h1>Module <cite>index</cite><a class="headerlink" href="#module-index" title="Permalink to this headline">¶</a></h1>
+<dl class="type">
+<dt id="c.box_iterator_t">
+<code class="descname">box_iterator_t</code><a class="headerlink" href="#c.box_iterator_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>A space iterator</p>
+</dd></dl>
+
+<span class="target" id="c-api-box-index-iterator-type"></span><dl class="enum">
+<dt id="_CPPv413iterator_type">
+<span id="_CPPv313iterator_type"></span><span id="_CPPv213iterator_type"></span><em class="property">enum </em><code class="descname">iterator_type</code><a class="headerlink" href="#_CPPv413iterator_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Controls how to iterate over tuples in an index. Different index types
+support different iterator types. For example, one can start iteration
+from a particular value (request key) and then retrieve all tuples where
+keys are greater or equal (= GE) to this key.</p>
+<p>If iterator type is not supported by the selected index type, iterator
+constructor must fail with ER_UNSUPPORTED. To be selectable for primary
+key, an index must support at least ITER_EQ and ITER_GE types.</p>
+<p>NULL value of request key corresponds to the first or last key in the index,
+depending on iteration direction. (first key for GE and GT types, and last
+key for LE and LT). Therefore, to iterate over all tuples in an index, one
+can use ITER_GE or ITER_LE iteration types with start key equal to NULL.
+For ITER_EQ, the key must not be NULL.</p>
+<dl class="enumerator">
+<dt id="_CPPv47ITER_EQ">
+<span id="_CPPv37ITER_EQ"></span><span id="_CPPv27ITER_EQ"></span><em class="property">enumerator </em><code class="descname">ITER_EQ</code><a class="headerlink" href="#_CPPv47ITER_EQ" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key == x ASC order</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv48ITER_REQ">
+<span id="_CPPv38ITER_REQ"></span><span id="_CPPv28ITER_REQ"></span><em class="property">enumerator </em><code class="descname">ITER_REQ</code><a class="headerlink" href="#_CPPv48ITER_REQ" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key == x DESC order</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv48ITER_ALL">
+<span id="_CPPv38ITER_ALL"></span><span id="_CPPv28ITER_ALL"></span><em class="property">enumerator </em><code class="descname">ITER_ALL</code><a class="headerlink" href="#_CPPv48ITER_ALL" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>all tuples</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47ITER_LT">
+<span id="_CPPv37ITER_LT"></span><span id="_CPPv27ITER_LT"></span><em class="property">enumerator </em><code class="descname">ITER_LT</code><a class="headerlink" href="#_CPPv47ITER_LT" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key &lt; x</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47ITER_LE">
+<span id="_CPPv37ITER_LE"></span><span id="_CPPv27ITER_LE"></span><em class="property">enumerator </em><code class="descname">ITER_LE</code><a class="headerlink" href="#_CPPv47ITER_LE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key &lt;= x</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47ITER_GE">
+<span id="_CPPv37ITER_GE"></span><span id="_CPPv27ITER_GE"></span><em class="property">enumerator </em><code class="descname">ITER_GE</code><a class="headerlink" href="#_CPPv47ITER_GE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key &gt;= x</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv47ITER_GT">
+<span id="_CPPv37ITER_GT"></span><span id="_CPPv27ITER_GT"></span><em class="property">enumerator </em><code class="descname">ITER_GT</code><a class="headerlink" href="#_CPPv47ITER_GT" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key &gt; x</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417ITER_BITS_ALL_SET">
+<span id="_CPPv317ITER_BITS_ALL_SET"></span><span id="_CPPv217ITER_BITS_ALL_SET"></span><em class="property">enumerator </em><code class="descname">ITER_BITS_ALL_SET</code><a class="headerlink" href="#_CPPv417ITER_BITS_ALL_SET" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>all bits from x are set in key</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417ITER_BITS_ANY_SET">
+<span id="_CPPv317ITER_BITS_ANY_SET"></span><span id="_CPPv217ITER_BITS_ANY_SET"></span><em class="property">enumerator </em><code class="descname">ITER_BITS_ANY_SET</code><a class="headerlink" href="#_CPPv417ITER_BITS_ANY_SET" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>at least one x’s bit is set</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ITER_BITS_ALL_NOT_SET">
+<span id="_CPPv321ITER_BITS_ALL_NOT_SET"></span><span id="_CPPv221ITER_BITS_ALL_NOT_SET"></span><em class="property">enumerator </em><code class="descname">ITER_BITS_ALL_NOT_SET</code><a class="headerlink" href="#_CPPv421ITER_BITS_ALL_NOT_SET" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>all bits are not set</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ITER_OVERLAPS">
+<span id="_CPPv313ITER_OVERLAPS"></span><span id="_CPPv213ITER_OVERLAPS"></span><em class="property">enumerator </em><code class="descname">ITER_OVERLAPS</code><a class="headerlink" href="#_CPPv413ITER_OVERLAPS" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>key overlaps x</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ITER_NEIGHBOR">
+<span id="_CPPv313ITER_NEIGHBOR"></span><span id="_CPPv213ITER_NEIGHBOR"></span><em class="property">enumerator </em><code class="descname">ITER_NEIGHBOR</code><a class="headerlink" href="#_CPPv413ITER_NEIGHBOR" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>tuples in distance ascending order from specified point</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="c-api-box-index-box-index-iterator"></span><dl class="function">
+<dt id="c.box_index_iterator">
+<a class="reference internal" href="#c.box_iterator_t" title="box_iterator_t">box_iterator_t</a> *<code class="descname">box_index_iterator</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, int<em>&nbsp;type</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate and initialize iterator for space_id, index_id.</p>
+<p>The returned iterator must be destroyed by
+<a class="reference internal" href="#c-api-box-index-box-iterator-free"><span class="std std-ref">box_iterator_free</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>type</strong> (<em>int</em>) – <a class="reference internal" href="#c-api-box-index-iterator-type"><span class="std std-ref">iterator_type</span></a></li>
+<li><strong>char*     key</strong> (<em>const</em>) – encode key in MsgPack Array format ([part1, part2, …])</li>
+<li><strong>char* key_end</strong> (<em>const</em>) – the end of encoded <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">NULL on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">iterator otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a class="reference internal" href="#c-api-box-index-box-iterator-next"><span class="std std-ref">box_iterator_next</span></a>,
+<a class="reference internal" href="#c-api-box-index-box-iterator-free"><span class="std std-ref">box_iterator_free</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-box-index-box-iterator-next"></span><dl class="function">
+<dt id="c.box_iterator_next">
+int <code class="descname">box_iterator_next</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_iterator_t" title="box_iterator_t">box_iterator_t</a><em>&nbsp;*iterator</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_iterator_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the next item from the <code class="docutils literal notranslate"><span class="pre">iterator</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>iterator</strong> (<a class="reference internal" href="#c.box_iterator_t" title="box_iterator_t"><em>box_iterator_t*</em></a>) – an iterator returned by
+<a class="reference internal" href="#c-api-box-index-box-index-iterator"><span class="std std-ref">box_index_iterator</span></a></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. result a tuple or NULL if
+there is no more data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success. The end of data is not an error.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-box-index-box-iterator-free"></span><dl class="function">
+<dt id="c.box_iterator_free">
+void <code class="descname">box_iterator_free</code><span class="sig-paren">(</span><a class="reference internal" href="#c.box_iterator_t" title="box_iterator_t">box_iterator_t</a><em>&nbsp;*iterator</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_iterator_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy and deallocate iterator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>iterator</strong> (<a class="reference internal" href="#c.box_iterator_t" title="box_iterator_t"><em>box_iterator_t*</em></a>) – an iterator returned by
+<a class="reference internal" href="#c-api-box-index-box-index-iterator"><span class="std std-ref">box_index_iterator</span></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.iterator_direction">
+int <code class="descname">iterator_direction</code><span class="sig-paren">(</span>enum iterator_type<em>&nbsp;type</em><span class="sig-paren">)</span><a class="headerlink" href="#c.iterator_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine a direction of the given iterator type:
+-1 for REQ, LT, LE, and +1 for all others.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_len">
+ssize_t <code class="descname">box_index_len</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of element in the index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">&gt;= 0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_bsize">
+ssize_t <code class="descname">box_index_bsize</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_bsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of bytes used in memory by the index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">&gt;= 0 otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_random">
+int <code class="descname">box_index_random</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, uint32_t<em>&nbsp;rnd</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random tuple from the index (useful for statistical analysis).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>rnd</strong> (<em>uint32_t</em>) – random seed</li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. result a tuple or NULL if
+there is no tuples in space</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-random"><span class="std std-ref">index_object.random</span></a></p>
+</dd></dl>
+
+<span class="target" id="c-api-box-index-box-index-get"></span><dl class="function">
+<dt id="c.box_index_get">
+int <code class="descname">box_index_get</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a tuple from index by the key.</p>
+<p>Please note that this function works much more faster than
+<a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-select"><span class="std std-ref">index_object.select</span></a> or
+<a class="reference internal" href="#c-api-box-index-box-index-iterator"><span class="std std-ref">box_index_iterator</span></a> +
+<a class="reference internal" href="#c-api-box-index-box-iterator-next"><span class="std std-ref">box_iterator_next</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*      key</strong> (<em>const</em>) – encode key in MsgPack Array format ([part1, part2, …])</li>
+<li><strong>char*  key_end</strong> (<em>const</em>) – the end of encoded <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. result a tuple or NULL if
+there is no tuples in space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <code class="docutils literal notranslate"><span class="pre">index_object.get()</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_min">
+int <code class="descname">box_index_min</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a first (minimal) tuple matched the provided key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*      key</strong> (<em>const</em>) – encode key in MsgPack Array format ([part1, part2, …])</li>
+<li><strong>char*  key_end</strong> (<em>const</em>) – the end of encoded <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. result a tuple or NULL if
+there is no tuples in space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-min"><span class="std std-ref">index_object.min()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_max">
+int <code class="descname">box_index_max</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em>, <a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t">box_tuple_t</a><em>&nbsp;**result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a last (maximal) tuple matched the provided key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>char*      key</strong> (<em>const</em>) – encode key in MsgPack Array format ([part1, part2, …])</li>
+<li><strong>char*  key_end</strong> (<em>const</em>) – the end of encoded <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+<li><strong>result</strong> (<a class="reference internal" href="tuple.html#c.box_tuple_t" title="box_tuple_t"><em>box_tuple_t**</em></a>) – output argument. result a tuple or NULL if
+there is no tuples in space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-max"><span class="std std-ref">index_object.max()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_count">
+ssize_t <code class="descname">box_index_count</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em>, int<em>&nbsp;type</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*key_end</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count the number of tuple matched the provided key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+<li><strong>type</strong> (<em>int</em>) – <a class="reference internal" href="#c-api-box-index-iterator-type"><span class="std std-ref">iterator_type</span></a></li>
+<li><strong>char*     key</strong> (<em>const</em>) – encode key in MsgPack Array format ([part1, part2, …])</li>
+<li><strong>char* key_end</strong> (<em>const</em>) – the end of encoded <code class="docutils literal notranslate"><span class="pre">key</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">-1 on error (check <a class="reference internal" href="error.html#c-api-error-box-error-last"><span class="std std-ref">box_error_last()</span></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: <a class="reference internal" href="../../reference/reference_lua/box_index.html#box-index-count"><span class="std std-ref">index_object.count()</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_index_key_def">
+const <a class="reference internal" href="tuple.html#c.box_key_def_t" title="box_key_def_t">box_key_def_t</a> *<code class="descname">box_index_key_def</code><span class="sig-paren">(</span>uint32_t<em>&nbsp;space_id</em>, uint32_t<em>&nbsp;index_id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_index_key_def" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="tuple.html#capi-tuple-key-def"><span class="std std-ref">key definition</span></a> for an index</p>
+<p>Returned object is valid until the next yield.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>space_id</strong> (<em>uint32_t</em>) – space identifier</li>
+<li><strong>index_id</strong> (<em>uint32_t</em>) – index identifier</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">key definition on success</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NULL on error</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>See also: <a class="reference internal" href="tuple.html#capi-tuple-box-tuple-compare"><span class="std std-ref">box_tuple_compare()</span></a>,</dt>
+<dd><a class="reference internal" href="tuple.html#capi-tuple-box-tuple-format-new"><span class="std std-ref">box_tuple_format_new()</span></a></dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="latch.html" class="btn btn-neutral float-right" title="Module latch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="fiber.html" class="btn btn-neutral float-left" title="Module fiber" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Upgrades &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Upgrades</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/upgrades.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="upgrades">
+<span id="admin-upgrades"></span><h1>Upgrades<a class="headerlink" href="#upgrades" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="upgrading-a-tarantool-database">
+<span id="admin-upgrades-db"></span><h2>Upgrading a Tarantool database<a class="headerlink" href="#upgrading-a-tarantool-database" title="Permalink to this headline">¶</a></h2>
+<p>If you created a database with an older Tarantool version and have now installed
+a newer version, make the request <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code>. This updates
+Tarantool system spaces to match the currently installed version of Tarantool.</p>
+<p>For example, here is what happens when you run <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code> with a
+database created with Tarantool version 1.6.4 to version 1.7.2 (only a small
+part of the output is shown):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.schema.upgrade()
+alter index primary on _space set options to {&quot;unique&quot;:true}, parts to [[0,&quot;unsigned&quot;]]
+alter space _schema set options to {}
+create view _vindex...
+grant read access to &#39;public&#39; role for _vindex view
+set schema version to 1.7.0
+---
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="upgrading-a-tarantool-instance">
+<span id="admin-upgrades-instance"></span><h2>Upgrading a Tarantool instance<a class="headerlink" href="#upgrading-a-tarantool-instance" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool is backward compatible between two adjacent versions. For example, you
+should have no or little trouble when upgrading from Tarantool 1.6 to 1.7, or
+from Tarantool 1.7 to 1.8. Meanwhile Tarantool 1.8 may have incompatible changes
+when migrating from Tarantool 1.6. to 1.8 directly.</p>
+<div class="section" id="how-to-upgrade-from-tarantool-1-6-to-1-7-1-10">
+<h3>How to upgrade from Tarantool 1.6 to 1.7 / 1.10<a class="headerlink" href="#how-to-upgrade-from-tarantool-1-6-to-1-7-1-10" title="Permalink to this headline">¶</a></h3>
+<p>This procedure is for upgrading a standalone Tarantool instance in production
+from 1.6.x to 1.7.x (or to 1.10.x).
+Notice that this will <strong>always imply a downtime</strong>.
+To upgrade <strong>without downtime</strong>, you need several Tarantool servers running in a
+replication cluster (see <a class="reference internal" href="#admin-upgrades-replication-cluster"><span class="std std-ref">below</span></a>).</p>
+<p>Tarantool 1.7 has an incompatible <a class="reference internal" href="../../dev_guide/internals_index.html#internals-snapshot"><span class="std std-ref">.snap</span></a> and
+<a class="reference internal" href="../../dev_guide/internals_index.html#internals-wal"><span class="std std-ref">.xlog</span></a> file format: 1.6 files are
+supported during upgrade, but you won’t be able to return to 1.6 after running
+under 1.7 for a while. It also renames a few configuration parameters, but old
+parameters are supported. The full list of breaking changes is available in
+<a class="reference external" href="https://github.com/tarantool/tarantool/releases">release notes for Tarantool 1.7 / 1.9 / 1.10</a>.</p>
+<p>To upgrade from Tarantool 1.6 to 1.7 (or to 1.10.x):</p>
+<ol class="arabic simple">
+<li>Check with application developers whether application files need to be
+updated due to incompatible changes (see
+<a class="reference external" href="https://github.com/tarantool/tarantool/releases">1.7 / 1.9 / 1.10 release notes</a>).
+If yes, back up the old application files.</li>
+<li>Stop the Tarantool server.</li>
+<li>Make a copy of all data (see an appropriate hot backup procedure in
+<a class="reference internal" href="backups.html#admin-backups"><span class="std std-ref">Backups</span></a>) and the package from which the current (old)
+version was installed (for rollback purposes).</li>
+<li>Update the Tarantool server. See installation instructions at Tarantool
+<a class="reference external" href="http://tarantool.org/download.html">download page</a>.</li>
+<li>Update the Tarantool database. Put the request <code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code>
+inside a <a class="reference internal" href="../../reference/reference_lua/box_once.html#box-once"><span class="std std-ref">box.once()</span></a> function in your Tarantool
+<a class="reference internal" href="../../reference/configuration/index.html#index-init-label"><span class="std std-ref">initialization file</span></a>.
+On startup, this will create new system spaces, update data type names (e.g.
+num -&gt; unsigned, str -&gt; string) and options in Tarantool system spaces.</li>
+<li>Update application files, if needed.</li>
+<li>Launch the updated Tarantool server using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> or <code class="docutils literal notranslate"><span class="pre">systemctl</span></code>.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="upgrading-tarantool-in-a-replication-cluster">
+<span id="admin-upgrades-replication-cluster"></span><h2>Upgrading Tarantool in a replication cluster<a class="headerlink" href="#upgrading-tarantool-in-a-replication-cluster" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool 1.7 (as well as Tarantool 1.9 and 1.10)
+can work as a <a class="reference internal" href="../replication/repl_architecture.html#replication-architecture"><span class="std std-ref">replica</span></a> for Tarantool 1.6 and vice versa. Replicas
+perform capability negotiation on handshake, and new 1.7 replication features
+are not used with 1.6 replicas. This allows upgrading clustered configurations.</p>
+<p>This procedure allows for a rolling upgrade <strong>without downtime</strong> and works for
+any cluster configuration: master-master or master-replica.</p>
+<ol class="arabic">
+<li><p class="first">Upgrade Tarantool at all replicas (or at any master in a master-master
+cluster). See details in
+<a class="reference internal" href="#admin-upgrades-instance"><span class="std std-ref">Upgrading a Tarantool instance</span></a>.</p>
+</li>
+<li><p class="first">Verify installation on the replicas:</p>
+<ol class="loweralpha simple">
+<li>Start Tarantool.</li>
+<li>Attach to the master and start working as before.</li>
+</ol>
+<p>The master runs the old Tarantool version, which is always compatible with
+the next major version.</p>
+</li>
+<li><p class="first">Upgrade the master. The procedure is similar to upgrading a replica.</p>
+</li>
+<li><p class="first">Verify master installation:</p>
+<ol class="loweralpha simple">
+<li>Start Tarantool with replica configuration to catch up.</li>
+<li>Switch to master mode.</li>
+</ol>
+</li>
+<li><p class="first">Upgrade the database on any master node in the cluster. Make the request
+<code class="docutils literal notranslate"><span class="pre">box.schema.upgrade()</span></code>. This updates Tarantool system spaces to match the
+currently installed version of Tarantool. Changes are propagated to other
+nodes via the regular replication mechanism.</p>
+</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

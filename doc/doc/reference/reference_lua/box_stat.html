@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Submodule box.stat &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Submodule <cite>box.stat</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_stat.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="submodule-box-stat">
+<span id="box-introspection-box-stat"></span><h1>Submodule <cite>box.stat</cite><a class="headerlink" href="#submodule-box-stat" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">box.stat</span></code> submodule provides access to request and network statistics.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">box.stat()</span></code> to show the average number of requests per second,
+and the total number of requests since startup, broken down by request type.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">box.stat.net()</span></code> to see network activity: the number of bytes sent
+and received, the number of connections, and the number of active requests
+(current, average, and total).</p>
+<p id="box-introspection-box-stat-vinyl">Use <code class="docutils literal notranslate"><span class="pre">box.stat.vinyl()</span></code> to see vinyl-storage-engine activity, for example
+<code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx</span></code> has the number of commits and rollbacks.
+See details at <a class="reference internal" href="#box-introspection-box-stat-vinyl-details"><span class="std std-ref">the end of this section</span></a>.</p>
+<p id="box-introspection-box-stat-reset">Use <code class="docutils literal notranslate"><span class="pre">box.stat.reset()</span></code> to reset the statistics of <code class="docutils literal notranslate"><span class="pre">box.stat()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">box.stat.net()</span></code>, <code class="docutils literal notranslate"><span class="pre">box.stat.vinyl()</span></code> and
+<a class="reference internal" href="box_space_index.html#box-space-space-index"><span class="std std-ref">box.space.index</span></a>.</p>
+<p>In the tables that <code class="docutils literal notranslate"><span class="pre">box.stat()</span></code> returns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">total</span></code> stands for “total number of requests processed per second since
+the server started”,</li>
+<li><code class="docutils literal notranslate"><span class="pre">rps</span></code> stands for “average number of requests per second in the last 5 seconds”.</li>
+</ul>
+<p>“ERROR” is the count of requests that resulted in an error.</p>
+<p>In the tables that <code class="docutils literal notranslate"><span class="pre">box.stat.net()</span></code> returns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">SENT.rps</span></code> and <code class="docutils literal notranslate"><span class="pre">RECEIVED.rps</span></code> – average number of bytes sent/received per
+second in the last 5 seconds</li>
+<li><code class="docutils literal notranslate"><span class="pre">SENT.total</span></code> and <code class="docutils literal notranslate"><span class="pre">RECEIVED.total</span></code> – total number of bytes sent/received
+since the server started</li>
+<li><code class="docutils literal notranslate"><span class="pre">CONNECTIONS.rps</span></code> – number of connections opened per second in the last 5 seconds</li>
+<li><code class="docutils literal notranslate"><span class="pre">CONNECTIONS.total</span></code> – total number of connections opened since the server started</li>
+<li><code class="docutils literal notranslate"><span class="pre">REQUESTS.current</span></code> – number of requests in progress, which can be
+limited by <a class="reference internal" href="../configuration/index.html#cfg-networking-net-msg-max"><span class="std std-ref">box.cfg.net_msg_max</span></a></li>
+<li><code class="docutils literal notranslate"><span class="pre">REQUESTS.rps</span></code> – number of requests processed per second in the last 5 seconds</li>
+<li><code class="docutils literal notranslate"><span class="pre">REQUESTS.total</span></code> – total number of requests processed since startup</li>
+</ul>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.stat() -- return 10 tables
+---
+- DELETE:
+    total: 1873949
+    rps: 123
+  SELECT:
+    total: 1237723
+    rps: 4099
+  INSERT:
+    total: 0
+    rps: 0
+  EVAL:
+    total: 0
+    rps: 0
+  CALL:
+    total: 0
+    rps: 0
+  REPLACE:
+    total: 1239123
+    rps: 7849
+  UPSERT:
+    total: 0
+    rps: 0
+  AUTH:
+    total: 0
+    rps: 0
+  ERROR:
+    total: 0
+    rps: 0
+  UPDATE:
+    total: 0
+    rps: 0
+...
+tarantool&gt; box.stat().DELETE -- total + requests per second from one table
+---
+- total: 0
+  rps: 0
+...
+tarantool&gt; box.stat.net() -- 4 tables
+---
+- SENT:
+    total: 0
+    rps: 0
+  CONNECTIONS:
+    current: 0
+    rps: 0
+    total: 0
+  REQUESTS:
+    current: 0
+    rps: 0
+    total: 0
+  RECEIVED:
+    total: 0
+    rps: 0
+...
+tarantool&gt; box.stat.vinyl().tx.commit -- one item of the vinyl table
+---
+- 1047632
+...
+</pre></div>
+</div>
+<p id="box-introspection-box-stat-vinyl-details">Here are details about the <code class="docutils literal notranslate"><span class="pre">box.stat.vinyl()</span></code> items.</p>
+<p id="box-introspection-box-stat-vinyl-regulator"><strong>Details about box.stat.vinyl().regulator:</strong>
+The vinyl regulator decides when to take or delay actions for
+disk IO, grouping activity in batches so that it is
+consistent and efficient. The regulator is invoked by
+the vinyl scheduler, once per second, and updates
+related variables whenever it is invoked.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().regulator.dump_bandwidth</span></code> is
+the estimated average rate at which dumps are done.
+Initially this will appear as 10485760 (10 megabytes per second).
+Only significant dumps (larger than one megabyte) are used for estimating.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().regulator.dump_watermark</span></code>
+is the point when dumping must occur.
+The value is slightly smaller than the amount of memory
+that is allocated for vinyl trees, which is the
+<a class="reference internal" href="../configuration/index.html#cfg-storage-vinyl-memory"><span class="std std-ref">vinyl_memory</span></a> parameter.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().regulator.write_rate</span></code>
+is the actual average rate at which recent writes to disk are done.
+Averaging is done over a 5-second time window, so if there has
+been no activity for 5 seconds then <code class="docutils literal notranslate"><span class="pre">regulator.write_rate</span> <span class="pre">=</span> <span class="pre">0</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">write_rate</span></code> may be slowed when a dump is in progress
+or when the user has set
+<a class="reference internal" href="../configuration/index.html#cfg-binary-logging-snapshots-snap-io-rate-limit"><span class="std std-ref">snap_io_rate_limit</span></a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().regulator.rate_limit</span></code> is the write rate limit,
+in bytes per second, imposed on transactions by
+the regulator based on the observed dump/compaction performance.</li>
+</ul>
+<p id="box-introspection-box-stat-vinyl-disk"><strong>Details about box.stat.vinyl().disk:</strong>
+Since vinyl is an on-disk storage engine
+(unlike memtx which is an in-memory storage engine),
+it can handle large databases – but if a database is
+larger than the amount of memory that is allocated for vinyl,
+then there will be more disk activity.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().disk.data</span></code> and <code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().disk.index</span></code>
+are the amount of data that has gone into files in a subdirectory
+of <a class="reference internal" href="../configuration/index.html#cfg-basic-vinyl-dir"><span class="std std-ref">vinyl_dir</span></a>,
+with names like <code class="docutils literal notranslate"><span class="pre">{lsn}.run</span></code>
+and <code class="docutils literal notranslate"><span class="pre">{lsn}.index</span></code>. The size of the run will be
+related to the output of <code class="docutils literal notranslate"><span class="pre">scheduler.dump_*</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().disk.data_compacted</span></code>
+Sum size of data stored at the last LSM tree level, in bytes,
+without taking disk compression into account. It can be thought of as the
+size of disk space that the user data would occupy if there were no compression,
+indexing, or space increase caused by the LSM tree design.</li>
+</ul>
+<p id="box-introspection-box-stat-vinyl-memory"><strong>Details about box.stat.vinyl().memory:</strong>
+Although the vinyl storage engine is not “in-memory”, Tarantool does
+need to have memory for write buffers and for caches:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().memory.tuple_cache</span></code>
+is the number of bytes that are being used for tuples (data).</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().memory.tx</span></code>
+is transactional memory. This will usually be 0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().memory.level0</span></code>
+is the “level0” memory area, sometimes abbreviated “L0”, which is the
+area that vinyl can use for in-memory storage of an LSM tree.</li>
+</ul>
+<p>Therefore we can say that “L0 is becoming full” when the
+amount in <code class="docutils literal notranslate"><span class="pre">memory.level0</span></code> is close to the maximum, which is
+<a class="reference internal" href="#box-introspection-box-stat-vinyl-regulator"><span class="std std-ref">regulator.dump_watermark</span></a>.
+We can expect that “L0 = 0” immediately after a dump.
+<code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().memory.page_index</span></code> and  <code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().memory.bloom_filter</span></code>
+have the current amount being used for index-related structures.
+The size is a function of the number and size of keys,
+plus <a class="reference internal" href="../configuration/index.html#cfg-storage-vinyl-page-size"><span class="std std-ref">vinyl_page_size</span></a>,
+plus <a class="reference internal" href="../configuration/index.html#cfg-storage-vinyl-bloom-fpr"><span class="std std-ref">vinyl_bloom_fpr</span></a>.
+This is not a count of bloom filter “hits”
+(the number of reads that could be avoided because the
+bloom filter predicts their presence in a run file) –
+that statistic can be found with
+<a class="reference internal" href="box_index.html#box-index-stat"><span class="std std-ref">index_object:stat()</span></a>.</p>
+<p id="box-introspection-box-stat-vinyl-tx"><strong>Details about box.stat.vinyl().tx:</strong>
+This is about requests that affect transactional activity
+(“tx” is used here as an abbreviation for “transaction”):</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.conflict</span></code>
+counts conflicts that caused a transaction to roll back.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.commit</span></code>
+is the count of commits (successful transaction ends).
+It includes implicit commits, for example any insert causes a commit unless
+it is within a begin-end block.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.rollback</span></code>
+is the count of rollbacks (unsuccessful transaction ends).
+This is not merely a count of explicit
+<a class="reference internal" href="box_txn_management.html#box-rollback"><span class="std std-ref">box.rollback</span></a> requests –
+it includes requests that ended in errors.
+For example, after an attempted insert request that causes
+a “Duplicate key exists in unique index” error, <code class="docutils literal notranslate"><span class="pre">tx.rollback</span></code>
+is incremented.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.statements</span></code>
+will usually be 0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.transactions</span></code>
+is the number of transactions that are currently running.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.gap_locks</span></code>
+is the number of gap locks that are outstanding during execution of a request.
+For a low-level description of Tarantool’s implementation of gap locking, see
+<a class="reference external" href="https://github.com/tarantool/tarantool/issues/2671">Gap locks in Vinyl transaction manager</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().tx.read_views</span></code>
+shows whether a transaction has entered a read-only state
+to avoid conflict temporarily. This will usually be 0.</li>
+</ul>
+<p><strong>Details about box.stat.vinyl().scheduler:</strong>
+This primarily has counters related to tasks that the scheduler has arranged
+for dumping or compaction:
+(most of these items are reset to 0 when the server restarts or when
+<a class="reference internal" href="#box-introspection-box-stat-reset"><span class="std std-ref">box.stat.reset()</span></a> occurs):</p>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().scheduler.compaction_*</span></code>
+is the amount of data from recent changes that has been
+<a class="reference internal" href="box_index.html#box-index-compact"><span class="std std-ref">compacted</span></a>.
+This is divided into <code class="docutils literal notranslate"><span class="pre">scheduler.compaction_input</span></code> (the amount that is being
+compacted), <code class="docutils literal notranslate"><span class="pre">scheduler.compaction_queue</span></code> (the amount that is waiting to be
+compacted),
+<code class="docutils literal notranslate"><span class="pre">scheduler.compaction_time</span></code> (total time spent by all worker threads performing compaction, in seconds),
+and <code class="docutils literal notranslate"><span class="pre">scheduler.compaction_output</span></code> (the amount that has been compacted,
+which is presumably smaller than <code class="docutils literal notranslate"><span class="pre">scheduler.compaction_input</span></code>).</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().scheduler.tasks_*</span></code>
+is about dump/compaction tasks, in three categories,
+<code class="docutils literal notranslate"><span class="pre">scheduler.tasks_inprogress</span></code> (currently running),
+<code class="docutils literal notranslate"><span class="pre">scheduler.tasks_completed</span></code> (successfully completed)
+<code class="docutils literal notranslate"><span class="pre">scheduler.tasks_failed</span></code> (aborted due to errors).</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">box.stat.vinyl().scheduler_dump_*</span></code> has
+the amount of data from recent changes that has been dumped,
+including <code class="docutils literal notranslate"><span class="pre">dump_time</span></code> (total time spent by all worker threads performing dumps, in seconds),
+and <code class="docutils literal notranslate"><span class="pre">dump_count</span></code> (the count of completed dumps),
+<code class="docutils literal notranslate"><span class="pre">dump_input</span></code> and <code class="docutils literal notranslate"><span class="pre">dump_output</span></code>.</p>
+<p>A “dump” is explained in section <a class="reference internal" href="../../book/box/engines/vinyl.html#engines-algorithm-filling-lsm"><span class="std std-ref">Storing data with vinyl</span></a>:</p>
+<blockquote>
+<div><p>Sooner or later the number of elements in an LSM tree exceeds the L0 size and that is
+when L0 gets written to a file on disk (called a ‘run’) and then cleared for storing new elements.
+This operation is called a ‘dump’.</p>
+</div></blockquote>
+<p>Thus it can be predicted that a dump will occur if the
+size of L0
+(which is <a class="reference internal" href="#box-introspection-box-stat-vinyl-memory"><span class="std std-ref">memory.level0</span></a>)
+is approaching the
+maximum
+(which is <a class="reference internal" href="#box-introspection-box-stat-vinyl-regulator"><span class="std std-ref">regulator.dump_watermark</span></a>)
+and a
+dump is not already in progress. In fact Tarantool will
+try to arrange a dump before this hard limit is reached.</p>
+<p>A dump will also occur during a  <a class="reference internal" href="box_snapshot.html#box-snapshot"><span class="std std-ref">snapshot</span></a> operation.</p>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

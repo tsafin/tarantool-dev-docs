@@ -1,0 +1,948 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Cookbook recipes &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Cookbook recipes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/app_server/cookbook.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cookbook-recipes">
+<span id="cookbook"></span><h1>Cookbook recipes<a class="headerlink" href="#cookbook-recipes" title="Permalink to this headline">¶</a></h1>
+<p>Here are contributions of Lua programs for some frequent or tricky situations.</p>
+<p>You can execute any of these programs by copying the code into a <code class="docutils literal notranslate"><span class="pre">.lua</span></code> file,
+and then entering <code class="samp docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./</span><em><span class="pre">program-name</span></em><span class="pre">.lua</span></code>
+and <code class="samp docutils literal notranslate"><span class="pre">./</span><em><span class="pre">program-name</span></em><span class="pre">.lua</span></code> on the terminal.</p>
+<p>The first line is a “hashbang”:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+</pre></div>
+</div>
+<p>This runs  Tarantool Lua application server, which should be on the execution
+path.</p>
+<p>This section contains the following recipes:</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#hello-world-lua" id="id5">hello_world.lua</a></li>
+<li><a class="reference internal" href="#console-start-lua" id="id6">console_start.lua</a></li>
+<li><a class="reference internal" href="#fio-read-lua" id="id7">fio_read.lua</a></li>
+<li><a class="reference internal" href="#fio-write-lua" id="id8">fio_write.lua</a></li>
+<li><a class="reference internal" href="#ffi-printf-lua" id="id9">ffi_printf.lua</a></li>
+<li><a class="reference internal" href="#ffi-gettimeofday-lua" id="id10">ffi_gettimeofday.lua</a></li>
+<li><a class="reference internal" href="#ffi-zlib-lua" id="id11">ffi_zlib.lua</a></li>
+<li><a class="reference internal" href="#ffi-meta-lua" id="id12">ffi_meta.lua</a></li>
+<li><a class="reference internal" href="#print-arrays-lua" id="id13">print_arrays.lua</a></li>
+<li><a class="reference internal" href="#count-array-lua" id="id14">count_array.lua</a></li>
+<li><a class="reference internal" href="#count-array-with-nils-lua" id="id15">count_array_with_nils.lua</a></li>
+<li><a class="reference internal" href="#count-array-with-nulls-lua" id="id16">count_array_with_nulls.lua</a></li>
+<li><a class="reference internal" href="#count-map-lua" id="id17">count_map.lua</a></li>
+<li><a class="reference internal" href="#swap-lua" id="id18">swap.lua</a></li>
+<li><a class="reference internal" href="#class-lua" id="id19">class.lua</a></li>
+<li><a class="reference internal" href="#garbage-lua" id="id20">garbage.lua</a></li>
+<li><a class="reference internal" href="#fiber-producer-and-consumer-lua" id="id21">fiber_producer_and_consumer.lua</a></li>
+<li><a class="reference internal" href="#socket-tcpconnect-lua" id="id22">socket_tcpconnect.lua</a></li>
+<li><a class="reference internal" href="#socket-tcp-echo-lua" id="id23">socket_tcp_echo.lua</a></li>
+<li><a class="reference internal" href="#getaddrinfo-lua" id="id24">getaddrinfo.lua</a></li>
+<li><a class="reference internal" href="#socket-udp-echo-lua" id="id25">socket_udp_echo.lua</a></li>
+<li><a class="reference internal" href="#http-get-lua" id="id26">http_get.lua</a></li>
+<li><a class="reference internal" href="#http-send-lua" id="id27">http_send.lua</a></li>
+<li><a class="reference internal" href="#http-server-lua" id="id28">http_server.lua</a></li>
+<li><a class="reference internal" href="#http-generate-html-lua" id="id29">http_generate_html.lua</a></li>
+<li><a class="reference internal" href="#select-all-go" id="id30">select_all.go</a></li>
+</ul>
+</div>
+<p>Use freely.</p>
+<div class="section" id="hello-world-lua">
+<span id="cookbook-hello-world"></span><h2><a class="toc-backref" href="#id5">hello_world.lua</a><a class="headerlink" href="#hello-world-lua" title="Permalink to this headline">¶</a></h2>
+<p>The standard example of a simple program.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, World!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="console-start-lua">
+<span id="cookbook-console-start"></span><h2><a class="toc-backref" href="#id6">console_start.lua</a><a class="headerlink" href="#console-start-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="../../reference/reference_lua/box_once.html#box-once"><span class="std std-ref">box.once()</span></a> to initialize a database
+(creating spaces) if this is the first time the server has been run.
+Then use <a class="reference internal" href="../../reference/reference_lua/console.html#console-start"><span class="std std-ref">console.start()</span></a> to start interactive mode.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="c1">-- Configure database</span>
+<span class="n">box</span><span class="p">.</span><span class="n">cfg</span> <span class="p">{</span>
+    <span class="n">listen</span> <span class="o">=</span> <span class="mi">3313</span>
+<span class="p">}</span>
+
+<span class="n">box</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">schema</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;tweedledum&#39;</span><span class="p">)</span>
+    <span class="n">box</span><span class="p">.</span><span class="n">space</span><span class="p">.</span><span class="n">tweedledum</span><span class="p">:</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;primary&#39;</span><span class="p">,</span>
+        <span class="p">{</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;TREE&#39;</span><span class="p">,</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unsigned&#39;</span><span class="p">}})</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="nb">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">).</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fio-read-lua">
+<span id="cookbook-fio-read"></span><h2><a class="toc-backref" href="#id7">fio_read.lua</a><a class="headerlink" href="#fio-read-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference internal" href="../../reference/reference_lua/fio.html#fio-module"><span class="std std-ref">fio module</span></a> to open, read, and close a file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">fio</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fio&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">errno</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;errno&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fio</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/tmp/xxxx.txt&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;O_RDONLY&#39;</span> <span class="p">})</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span>
+    <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Failed to open file: &quot;</span><span class="o">..</span><span class="n">errno</span><span class="p">.</span><span class="n">strerror</span><span class="p">())</span>
+<span class="kr">end</span>
+<span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+<span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fio-write-lua">
+<span id="cookbook-fio-write"></span><h2><a class="toc-backref" href="#id8">fio_write.lua</a><a class="headerlink" href="#fio-write-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference internal" href="../../reference/reference_lua/fio.html#fio-module"><span class="std std-ref">fio module</span></a> to open, write, and close a file.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">fio</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fio&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">errno</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;errno&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fio</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/tmp/xxxx.txt&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;O_CREAT&#39;</span><span class="p">,</span> <span class="s1">&#39;O_WRONLY&#39;</span><span class="p">,</span> <span class="s1">&#39;O_APPEND&#39;</span><span class="p">},</span>
+    <span class="nb">tonumber</span><span class="p">(</span><span class="s1">&#39;0666&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span>
+    <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Failed to open file: &quot;</span><span class="o">..</span><span class="n">errno</span><span class="p">.</span><span class="n">strerror</span><span class="p">())</span>
+<span class="kr">end</span>
+<span class="n">f</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Hello</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ffi-printf-lua">
+<span id="cookbook-ffi-printf"></span><h2><a class="toc-backref" href="#id9">ffi_printf.lua</a><a class="headerlink" href="#ffi-printf-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="http://luajit.org/ext_ffi.html">LuaJIT ffi library</a> to call a C built-in function: printf().
+(For help understanding ffi, see the <a class="reference external" href="http://luajit.org/ext_ffi_tutorial.html">FFI tutorial</a>.)</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">ffi</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;ffi&#39;</span><span class="p">)</span>
+<span class="n">ffi</span><span class="p">.</span><span class="n">cdef</span><span class="s">[[</span>
+<span class="s">    int printf(const char *format, ...);</span>
+<span class="s">]]</span>
+
+<span class="n">ffi</span><span class="p">.</span><span class="n">C</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Hello, %s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">os.getenv</span><span class="p">(</span><span class="s2">&quot;USER&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ffi-gettimeofday-lua">
+<span id="cookbook-ffi-gettimeofday"></span><h2><a class="toc-backref" href="#id10">ffi_gettimeofday.lua</a><a class="headerlink" href="#ffi-gettimeofday-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="http://luajit.org/ext_ffi.html">LuaJIT ffi library</a> to call a C function: gettimeofday().
+This delivers time with millisecond precision, unlike the time function in
+Tarantool’s <a class="reference internal" href="../../reference/reference_lua/clock.html#clock-module"><span class="std std-ref">clock module</span></a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">ffi</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;ffi&#39;</span><span class="p">)</span>
+<span class="n">ffi</span><span class="p">.</span><span class="n">cdef</span><span class="s">[[</span>
+<span class="s">    typedef long time_t;</span>
+<span class="s">    typedef struct timeval {</span>
+<span class="s">    time_t tv_sec;</span>
+<span class="s">    time_t tv_usec;</span>
+<span class="s">} timeval;</span>
+<span class="s">    int gettimeofday(struct timeval *t, void *tzp);</span>
+<span class="s">]]</span>
+
+<span class="kd">local</span> <span class="n">timeval_buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;timeval&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">now</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+    <span class="n">ffi</span><span class="p">.</span><span class="n">C</span><span class="p">.</span><span class="n">gettimeofday</span><span class="p">(</span><span class="n">timeval_buf</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">timeval_buf</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="p">(</span><span class="n">timeval_buf</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ffi-zlib-lua">
+<span id="cookbook-ffi-zlib"></span><h2><a class="toc-backref" href="#id11">ffi_zlib.lua</a><a class="headerlink" href="#ffi-zlib-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="http://luajit.org/ext_ffi.html">LuaJIT ffi library</a> to call a C library function.
+(For help understanding ffi, see the <a class="reference external" href="http://luajit.org/ext_ffi_tutorial.html">FFI tutorial</a>.)</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">ffi</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;ffi&quot;</span><span class="p">)</span>
+<span class="n">ffi</span><span class="p">.</span><span class="n">cdef</span><span class="s">[[</span>
+<span class="s">    unsigned long compressBound(unsigned long sourceLen);</span>
+<span class="s">    int compress2(uint8_t *dest, unsigned long *destLen,</span>
+<span class="s">    const uint8_t *source, unsigned long sourceLen, int level);</span>
+<span class="s">    int uncompress(uint8_t *dest, unsigned long *destLen,</span>
+<span class="s">    const uint8_t *source, unsigned long sourceLen);</span>
+<span class="s">]]</span>
+<span class="kd">local</span> <span class="n">zlib</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">ffi</span><span class="p">.</span><span class="n">os</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span> <span class="ow">and</span> <span class="s2">&quot;zlib1&quot;</span> <span class="ow">or</span> <span class="s2">&quot;z&quot;</span><span class="p">)</span>
+
+<span class="c1">-- Lua wrapper for compress2()</span>
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">compress</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">n</span> <span class="o">=</span> <span class="n">zlib</span><span class="p">.</span><span class="n">compressBound</span><span class="p">(</span><span class="o">#</span><span class="n">txt</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;uint8_t[?]&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">buflen</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;unsigned long[1]&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="n">zlib</span><span class="p">.</span><span class="n">compress2</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">buflen</span><span class="p">,</span> <span class="n">txt</span><span class="p">,</span> <span class="o">#</span><span class="n">txt</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="nb">assert</span><span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">ffi</span><span class="p">.</span><span class="n">string</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">buflen</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="kr">end</span>
+
+<span class="c1">-- Lua wrapper for uncompress</span>
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">uncompress</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">buf</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;uint8_t[?]&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">buflen</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;unsigned long[1]&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="n">zlib</span><span class="p">.</span><span class="n">uncompress</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">buflen</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="o">#</span><span class="n">comp</span><span class="p">)</span>
+    <span class="nb">assert</span><span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">ffi</span><span class="p">.</span><span class="n">string</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">buflen</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="kr">end</span>
+
+<span class="c1">-- Simple test code.</span>
+<span class="kd">local</span> <span class="n">txt</span> <span class="o">=</span> <span class="nb">string.rep</span><span class="p">(</span><span class="s2">&quot;abcd&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uncompressed size: &quot;</span><span class="p">,</span> <span class="o">#</span><span class="n">txt</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">c</span> <span class="o">=</span> <span class="n">compress</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compressed size: &quot;</span><span class="p">,</span> <span class="o">#</span><span class="n">c</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">txt2</span> <span class="o">=</span> <span class="n">uncompress</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="o">#</span><span class="n">txt</span><span class="p">)</span>
+<span class="nb">assert</span><span class="p">(</span><span class="n">txt2</span> <span class="o">==</span> <span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ffi-meta-lua">
+<span id="cookbook-ffi-meta"></span><h2><a class="toc-backref" href="#id12">ffi_meta.lua</a><a class="headerlink" href="#ffi-meta-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="http://luajit.org/ext_ffi.html">LuaJIT ffi library</a> to
+access a C object via a metamethod (a method which is defined with
+a metatable).</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">ffi</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;ffi&quot;</span><span class="p">)</span>
+<span class="n">ffi</span><span class="p">.</span><span class="n">cdef</span><span class="s">[[</span>
+<span class="s">typedef struct { double x, y; } point_t;</span>
+<span class="s">]]</span>
+
+<span class="kd">local</span> <span class="n">point</span>
+<span class="kd">local</span> <span class="n">mt</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">__add</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="kr">return</span> <span class="n">point</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="o">+</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="kr">end</span><span class="p">,</span>
+  <span class="n">__len</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="kr">return</span> <span class="nb">math.sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="o">*</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="kr">end</span><span class="p">,</span>
+  <span class="n">__index</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="kr">return</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="o">*</span><span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="kr">end</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">ffi</span><span class="p">.</span><span class="n">metatype</span><span class="p">(</span><span class="s2">&quot;point_t&quot;</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>  <span class="c1">--&gt; 3  4</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">a</span><span class="p">)</span>        <span class="c1">--&gt; 5</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="n">area</span><span class="p">())</span>  <span class="c1">--&gt; 25</span>
+<span class="kd">local</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">point</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">b</span><span class="p">)</span>        <span class="c1">--&gt; 12.5</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="print-arrays-lua">
+<span id="cookbook-print-arrays"></span><h2><a class="toc-backref" href="#id13">print_arrays.lua</a><a class="headerlink" href="#print-arrays-lua" title="Permalink to this headline">¶</a></h2>
+<p>Create Lua tables, and print them.
+Notice that for the ‘array’ table the iterator function
+is ipairs(), while for the ‘map’ table the iterator function
+is pairs(). (<cite>ipairs()</cite> is faster than <cite>pairs()</cite>, but pairs()
+is recommended for map-like tables or mixed tables.)
+The display will look like:
+“1 Apple | 2 Orange | 3 Grapefruit | 4 Banana | k3 v3 | k1 v1 | k2 v2”.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="n">array</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Apple&#39;</span><span class="p">,</span> <span class="s1">&#39;Orange&#39;</span><span class="p">,</span> <span class="s1">&#39;Grapefruit&#39;</span><span class="p">,</span> <span class="s1">&#39;Banana&#39;</span><span class="p">}</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="kr">do</span> <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="kr">end</span>
+
+<span class="n">map</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k1</span> <span class="o">=</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">k2</span> <span class="o">=</span> <span class="s1">&#39;v2&#39;</span><span class="p">,</span> <span class="n">k3</span> <span class="o">=</span> <span class="s1">&#39;v3&#39;</span> <span class="p">}</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">map</span><span class="p">)</span> <span class="kr">do</span> <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="count-array-lua">
+<span id="cookbook-count-array"></span><h2><a class="toc-backref" href="#id14">count_array.lua</a><a class="headerlink" href="#count-array-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the ‘#’ operator to get the number of items in an array-like Lua table.
+This operation has O(log(N)) complexity.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="n">array</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">array</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="count-array-with-nils-lua">
+<span id="cookbook-count-array-with-nils"></span><h2><a class="toc-backref" href="#id15">count_array_with_nils.lua</a><a class="headerlink" href="#count-array-with-nils-lua" title="Permalink to this headline">¶</a></h2>
+<p>Missing elements in arrays, which Lua treats as “nil”s,
+cause the simple “#” operator to deliver improper results.
+The “print(#t)” instruction will print “4”;
+the “print(counter)” instruction will print “3”;
+the “print(max)” instruction will print “10”.
+Other table functions, such as <a class="reference internal" href="../../reference/reference_lua/table.html#table-sort"><span class="std std-ref">table.sort()</span></a>, will
+also misbehave when “nils” are present.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">t</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="kr">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="kr">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">max</span> <span class="kr">then</span> <span class="n">max</span> <span class="o">=</span> <span class="n">k</span> <span class="kr">end</span> <span class="kr">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="count-array-with-nulls-lua">
+<span id="cookbook-count-array-with-nulls"></span><h2><a class="toc-backref" href="#id16">count_array_with_nulls.lua</a><a class="headerlink" href="#count-array-with-nulls-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use explicit <code class="docutils literal notranslate"><span class="pre">NULL</span></code> values to avoid the problems caused by Lua’s
+nil == missing value behavior. Although <code class="code docutils literal notranslate"><span class="pre">json.NULL</span> <span class="pre">==</span> <span class="pre">nil</span></code> is
+<code class="code docutils literal notranslate"><span class="pre">true</span></code>, all the print instructions in this program will print
+the correct value: 10.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">json</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span> <span class="n">t</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span><span class="p">;</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">NULL</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">#</span><span class="n">t</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="kr">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="kr">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">max</span> <span class="kr">then</span> <span class="n">max</span> <span class="o">=</span> <span class="n">k</span> <span class="kr">end</span> <span class="kr">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="count-map-lua">
+<span id="cookbook-count-map"></span><h2><a class="toc-backref" href="#id17">count_map.lua</a><a class="headerlink" href="#count-map-lua" title="Permalink to this headline">¶</a></h2>
+<p>Get the number of elements in a map-like table.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">map</span> <span class="o">=</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">20</span> <span class="p">}</span>
+<span class="kd">local</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">for</span> <span class="n">_</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">map</span><span class="p">)</span> <span class="kr">do</span> <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="kr">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="swap-lua">
+<span id="cookbook-swap"></span><h2><a class="toc-backref" href="#id18">swap.lua</a><a class="headerlink" href="#swap-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use a Lua peculiarity to swap two variables without needing a third variable.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="kd">local</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="class-lua">
+<span id="cookbook-class"></span><h2><a class="toc-backref" href="#id19">class.lua</a><a class="headerlink" href="#class-lua" title="Permalink to this headline">¶</a></h2>
+<p>Create a class, create a metatable for the class, create an instance of the class.
+Another illustration is at <a class="reference external" href="http://lua-users.org/wiki/LuaClassesWithMetatable">http://lua-users.org/wiki/LuaClassesWithMetatable</a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="c1">-- define class objects</span>
+<span class="kd">local</span> <span class="n">myclass_somemethod</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test 1&#39;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">myclass_someothermethod</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test 2&#39;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">myclass_tostring</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="s1">&#39;MyClass &lt;&#39;</span><span class="o">..</span><span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="o">..</span><span class="s1">&#39;&gt;&#39;</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">myclass_mt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">__tostring</span> <span class="o">=</span> <span class="n">myclass_tostring</span><span class="p">;</span>
+    <span class="n">__index</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">somemethod</span> <span class="o">=</span> <span class="n">myclass_somemethod</span><span class="p">;</span>
+        <span class="n">someothermethod</span> <span class="o">=</span> <span class="n">myclass_someothermethod</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">-- create a new object of myclass</span>
+<span class="kd">local</span> <span class="n">object</span> <span class="o">=</span> <span class="nb">setmetatable</span><span class="p">({</span> <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">},</span> <span class="n">myclass_mt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">object</span><span class="p">:</span><span class="n">somemethod</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">object</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="garbage-lua">
+<span id="cookbook-garbage"></span><h2><a class="toc-backref" href="#id20">garbage.lua</a><a class="headerlink" href="#garbage-lua" title="Permalink to this headline">¶</a></h2>
+<p>Activate the <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#2.10">Lua garbage collector</a>
+with the <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-collectgarbage">collectgarbage function</a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="nb">collectgarbage</span><span class="p">(</span><span class="s1">&#39;collect&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fiber-producer-and-consumer-lua">
+<span id="cookbook-fiber-producer-and-consumer"></span><h2><a class="toc-backref" href="#id21">fiber_producer_and_consumer.lua</a><a class="headerlink" href="#fiber-producer-and-consumer-lua" title="Permalink to this headline">¶</a></h2>
+<p>Start one fiber for producer and one fiber for consumer.
+Use <a class="reference internal" href="../../reference/reference_lua/fiber.html#fiber-ipc-channel"><span class="std std-ref">fiber.channel()</span></a> to exchange data and synchronize.
+One can tweak the channel size (<code class="code docutils literal notranslate"><span class="pre">ch_size</span></code> in the program code)
+to control the number of simultaneous tasks waiting for processing.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">consumer_loop</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="c1">-- initialize consumer synchronously or raise an error()</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">-- allow fiber.create() to continue</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ch</span><span class="p">:</span><span class="n">get</span><span class="p">()</span>
+        <span class="kr">if</span> <span class="n">data</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="kr">break</span>
+        <span class="kr">end</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;consumed&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">math.random</span><span class="p">())</span> <span class="c1">-- simulate some work</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">producer_loop</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="c1">-- initialize consumer synchronously or raise an error()</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">-- allow fiber.create() to continue</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="nb">math.random</span><span class="p">()</span>
+        <span class="n">ch</span><span class="p">:</span><span class="n">put</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;produced&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">start</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">consumer_n</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="kd">local</span> <span class="n">producer_n</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="c1">-- Create a channel</span>
+    <span class="kd">local</span> <span class="n">ch_size</span> <span class="o">=</span> <span class="nb">math.max</span><span class="p">(</span><span class="n">consumer_n</span><span class="p">,</span> <span class="n">producer_n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">fiber</span><span class="p">.</span><span class="n">channel</span><span class="p">(</span><span class="n">ch_size</span><span class="p">)</span>
+
+    <span class="c1">-- Start consumers</span>
+    <span class="kr">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">consumer_n</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+        <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">consumer_loop</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="kr">end</span>
+
+    <span class="c1">-- Start producers</span>
+    <span class="kr">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">producer_n</span><span class="p">,</span><span class="mi">1</span> <span class="kr">do</span>
+        <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">producer_loop</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="n">start</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="socket-tcpconnect-lua">
+<span id="cookbook-socket-tcpconnect"></span><h2><a class="toc-backref" href="#id22">socket_tcpconnect.lua</a><a class="headerlink" href="#socket-tcpconnect-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="../../reference/reference_lua/socket.html#socket-tcp-connect"><span class="std std-ref">socket.tcp_connect()</span></a>
+to connect to a remote host via TCP.
+Display the connection details and the result of a GET request.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">s</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">).</span><span class="n">tcp_connect</span><span class="p">(</span><span class="s1">&#39;google.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">peer</span><span class="p">().</span><span class="n">host</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">peer</span><span class="p">().</span><span class="n">family</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">peer</span><span class="p">().</span><span class="nb">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">peer</span><span class="p">().</span><span class="n">protocol</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">peer</span><span class="p">().</span><span class="n">port</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;GET / HTTP/1.0</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="socket-tcp-echo-lua">
+<span id="cookbook-socket-tcp-echo"></span><h2><a class="toc-backref" href="#id23">socket_tcp_echo.lua</a><a class="headerlink" href="#socket-tcp-echo-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="../../reference/reference_lua/socket.html#socket-tcp-connect"><span class="std std-ref">socket.tcp_connect()</span></a>
+to set up a simple TCP server, by creating
+a function that handles requests and echos them,
+and passing the function to
+<a class="reference internal" href="../../reference/reference_lua/socket.html#socket-tcp-server"><span class="std std-ref">socket.tcp_server()</span></a>.
+This program has been used to test with 100,000 clients,
+with each client getting a separate fiber.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">handler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">peer</span><span class="p">)</span>
+    <span class="n">s</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Welcome to test server, &quot;</span> <span class="o">..</span> <span class="n">peer</span><span class="p">.</span><span class="n">host</span> <span class="o">..</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">line</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="n">line</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="kr">break</span> <span class="c1">-- error or eof</span>
+        <span class="kr">end</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pong: &quot;</span><span class="o">..</span><span class="n">line</span><span class="p">)</span> <span class="kr">then</span>
+            <span class="kr">break</span> <span class="c1">-- error or eof</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">server</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">).</span><span class="n">tcp_server</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">3311</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getaddrinfo-lua">
+<span id="cookbook-getaddrinfo"></span><h2><a class="toc-backref" href="#id24">getaddrinfo.lua</a><a class="headerlink" href="#getaddrinfo-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="../../reference/reference_lua/socket.html#socket-getaddrinfo"><span class="std std-ref">socket.getaddrinfo()</span></a> to perform
+non-blocking DNS resolution, getting both the AF_INET6 and AF_INET
+information for ‘google.com’.
+This technique is not always necessary for tcp connections because
+<a class="reference internal" href="../../reference/reference_lua/socket.html#socket-tcp-connect"><span class="std std-ref">socket.tcp_connect()</span></a>
+performs <cite>socket.getaddrinfo</cite> under the hood,
+before trying to connect to the first available address.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">s</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">).</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s1">&#39;google.com&#39;</span><span class="p">,</span> <span class="s1">&#39;http&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;SOCK_STREAM&#39;</span> <span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;host=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">host</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;family=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">family</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;type=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nb">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;protocol=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">protocol</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;port=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">port</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;host=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">host</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;family=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">family</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;type=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nb">type</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;protocol=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">protocol</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;port=&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">port</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="socket-udp-echo-lua">
+<span id="cookbook-socket-udp-echo"></span><h2><a class="toc-backref" href="#id25">socket_udp_echo.lua</a><a class="headerlink" href="#socket-udp-echo-lua" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool does not currently have a <cite>udp_server</cite> function,
+therefore socket_udp_echo.lua is more complicated than
+socket_tcp_echo.lua.
+It can be implemented with sockets and fibers.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">socket</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;socket&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">errno</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;errno&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">fiber</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">udp_server_loop</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+    <span class="n">fiber</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;udp_server&quot;</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="c1">-- try to read a datagram first</span>
+        <span class="kd">local</span> <span class="n">msg</span><span class="p">,</span> <span class="n">peer</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">recvfrom</span><span class="p">()</span>
+        <span class="kr">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="kr">then</span>
+            <span class="c1">-- socket was closed via s:close()</span>
+            <span class="kr">break</span>
+        <span class="kr">elseif</span> <span class="n">msg</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="c1">-- got a new datagram</span>
+            <span class="n">handler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">peer</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="kr">else</span>
+            <span class="kr">if</span> <span class="n">s</span><span class="p">:</span><span class="n">errno</span><span class="p">()</span> <span class="o">==</span> <span class="n">errno</span><span class="p">.</span><span class="n">EAGAIN</span> <span class="ow">or</span> <span class="n">s</span><span class="p">:</span><span class="n">errno</span><span class="p">()</span> <span class="o">==</span> <span class="n">errno</span><span class="p">.</span><span class="n">EINTR</span> <span class="kr">then</span>
+                <span class="c1">-- socket is not ready</span>
+                <span class="n">s</span><span class="p">:</span><span class="n">readable</span><span class="p">()</span> <span class="c1">-- yield, epoll will wake us when new data arrives</span>
+            <span class="kr">else</span>
+                <span class="c1">-- socket error</span>
+                <span class="kd">local</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="nb">error</span><span class="p">()</span>
+                <span class="n">s</span><span class="p">:</span><span class="n">close</span><span class="p">()</span> <span class="c1">-- save resources and don&#39;t wait GC</span>
+                <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Socket error: &quot;</span> <span class="o">..</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="kr">end</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">udp_server</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="s1">&#39;AF_INET&#39;</span><span class="p">,</span> <span class="s1">&#39;SOCK_DGRAM&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">nil</span> <span class="c1">-- check errno:strerror()</span>
+    <span class="kr">end</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span><span class="n">bind</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="kd">local</span> <span class="n">e</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">errno</span><span class="p">()</span> <span class="c1">-- save errno</span>
+        <span class="n">s</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">errno</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="c1">-- restore errno</span>
+        <span class="kr">return</span> <span class="kc">nil</span> <span class="c1">-- check errno:strerror()</span>
+    <span class="kr">end</span>
+
+    <span class="n">fiber</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">udp_server_loop</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span> <span class="c1">-- start a new background fiber</span>
+    <span class="kr">return</span> <span class="n">s</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>A function for a client that connects to this server could
+look something like this …</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="kr">function</span> <span class="nf">handler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">peer</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="c1">-- You don&#39;t have to wait until socket is ready to send UDP</span>
+    <span class="c1">-- s:writable()</span>
+    <span class="n">s</span><span class="p">:</span><span class="n">sendto</span><span class="p">(</span><span class="n">peer</span><span class="p">.</span><span class="n">host</span><span class="p">,</span> <span class="n">peer</span><span class="p">.</span><span class="n">port</span><span class="p">,</span> <span class="s2">&quot;Pong: &quot;</span> <span class="o">..</span> <span class="n">msg</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">server</span> <span class="o">=</span> <span class="n">udp_server</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">3548</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+<span class="kr">if</span> <span class="ow">not</span> <span class="n">server</span> <span class="kr">then</span>
+    <span class="nb">error</span><span class="p">(</span><span class="s1">&#39;Failed to bind: &#39;</span> <span class="o">..</span> <span class="n">errno</span><span class="p">.</span><span class="n">strerror</span><span class="p">())</span>
+<span class="kr">end</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Started&#39;</span><span class="p">)</span>
+
+<span class="nb">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">).</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-get-lua">
+<span id="cookbook-http-get"></span><h2><a class="toc-backref" href="#id26">http_get.lua</a><a class="headerlink" href="#http-get-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference internal" href="../../reference/reference_lua/http.html#http-module"><span class="std std-ref">http module</span></a>
+to get data via HTTP.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">http_client</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;http.client&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">json</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">r</span> <span class="o">=</span> <span class="n">http_client</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://api.openweathermap.org/data/2.5/weather?q=Oakland,us&#39;</span><span class="p">)</span>
+<span class="kr">if</span> <span class="n">r</span><span class="p">.</span><span class="n">status</span> <span class="o">~=</span> <span class="mi">200</span> <span class="kr">then</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to get weather forecast &#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">reason</span><span class="p">)</span>
+    <span class="kr">return</span>
+<span class="kr">end</span>
+<span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">body</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Oakland wind speed: &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">wind</span><span class="p">.</span><span class="n">speed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-send-lua">
+<span id="cookbook-http-send"></span><h2><a class="toc-backref" href="#id27">http_send.lua</a><a class="headerlink" href="#http-send-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference internal" href="../../reference/reference_lua/http.html#http-module"><span class="std std-ref">http module</span></a>
+to send data via HTTP.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="n">http_client</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;http.client&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">json</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">encode</span><span class="p">({</span> <span class="n">Key</span> <span class="o">=</span> <span class="s1">&#39;Value&#39;</span><span class="p">})</span>
+<span class="kd">local</span> <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="n">Token</span> <span class="o">=</span> <span class="s1">&#39;xxxx&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;X-Secret-Value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span> <span class="p">}</span>
+<span class="kd">local</span> <span class="n">r</span> <span class="o">=</span> <span class="n">http_client</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8081&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="p">{</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">})</span>
+<span class="kr">if</span> <span class="n">r</span><span class="p">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span> <span class="kr">then</span>
+    <span class="nb">print</span> <span class="s1">&#39;Success&#39;</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-server-lua">
+<span id="cookbook-http-server"></span><h2><a class="toc-backref" href="#id28">http_server.lua</a><a class="headerlink" href="#http-server-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="https://github.com/tarantool/http/">http</a> <a class="reference external" href="http://rocks.tarantool.org/">rock</a> (which must first be installed)
+to turn Tarantool into a web server.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">handler</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">render</span><span class="p">{</span> <span class="n">json</span> <span class="o">=</span> <span class="p">{</span> <span class="p">[</span><span class="s1">&#39;Your-IP-Is&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">peer</span><span class="p">.</span><span class="n">host</span> <span class="p">}</span> <span class="p">}</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">server</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;http.server&#39;</span><span class="p">).</span><span class="n">new</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span> <span class="c1">-- listen *:8080</span>
+<span class="n">server</span><span class="p">:</span><span class="n">route</span><span class="p">({</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="p">},</span> <span class="n">handler</span><span class="p">)</span>
+<span class="n">server</span><span class="p">:</span><span class="n">start</span><span class="p">()</span>
+<span class="c1">-- connect to localhost:8080 and see json</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-generate-html-lua">
+<span id="cookbook-generate-html"></span><h2><a class="toc-backref" href="#id29">http_generate_html.lua</a><a class="headerlink" href="#http-generate-html-lua" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference external" href="https://github.com/tarantool/http/">http</a> <cite>rock</cite> (which must first be installed)
+to generate HTML pages from templates.
+The <a class="reference external" href="https://github.com/tarantool/http/">http</a> <a class="reference external" href="http://rocks.tarantool.org/">rock</a> has a fairly simple template engine which allows execution
+of regular Lua code inside text blocks (like PHP). Therefore there is no need
+to learn new languages in order to write templates.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/usr/bin/env tarantool</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">handler</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">fruits</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Apple&#39;</span><span class="p">,</span> <span class="s1">&#39;Orange&#39;</span><span class="p">,</span> <span class="s1">&#39;Grapefruit&#39;</span><span class="p">,</span> <span class="s1">&#39;Banana&#39;</span><span class="p">}</span>
+    <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">render</span><span class="p">{</span> <span class="n">fruits</span> <span class="o">=</span> <span class="n">fruits</span> <span class="p">}</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">server</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;http.server&#39;</span><span class="p">).</span><span class="n">new</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span> <span class="c1">-- nil means &#39;*&#39;</span>
+<span class="n">server</span><span class="p">:</span><span class="n">route</span><span class="p">({</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="s1">&#39;index.html.lua&#39;</span> <span class="p">},</span> <span class="n">handler</span><span class="p">)</span>
+<span class="n">server</span><span class="p">:</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>An “HTML” file for this server, including Lua, could look like this
+(it would produce “1 Apple | 2 Orange | 3 Grapefruit | 4 Banana”).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;html&gt;
+&lt;body&gt;
+    &lt;table <span class="nv">border</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>&gt;
+        % <span class="k">for</span> i,v in pairs<span class="o">(</span>fruits<span class="o">)</span> <span class="k">do</span>
+        &lt;tr&gt;
+            &lt;td&gt;&lt;%<span class="o">=</span> i %&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;%<span class="o">=</span> v %&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        % end
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="select-all-go">
+<span id="cookbook-select-all-go"></span><h2><a class="toc-backref" href="#id30">select_all.go</a><a class="headerlink" href="#select-all-go" title="Permalink to this headline">¶</a></h2>
+<p>In Go, there is no one-liner to select all tuples from a Tarantool space.
+Yet you can use a script like this one. Call it on the instance you want to
+connect to.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;fmt&quot;</span>
+	<span class="s">&quot;log&quot;</span>
+
+	<span class="s">&quot;github.com/tarantool/go-tarantool&quot;</span>
+<span class="p">)</span>
+
+<span class="cm">/*</span>
+<span class="cm">box.cfg{listen = 3301}</span>
+<span class="cm">box.schema.user.passwd(&#39;pass&#39;)</span>
+
+<span class="cm">s = box.schema.space.create(&#39;tester&#39;)</span>
+<span class="cm">s:format({</span>
+<span class="cm">    {name = &#39;id&#39;, type = &#39;unsigned&#39;},</span>
+<span class="cm">    {name = &#39;band_name&#39;, type = &#39;string&#39;},</span>
+<span class="cm">    {name = &#39;year&#39;, type = &#39;unsigned&#39;}</span>
+<span class="cm">})</span>
+<span class="cm">s:create_index(&#39;primary&#39;, { type = &#39;hash&#39;, parts = {&#39;id&#39;} })</span>
+<span class="cm">s:create_index(&#39;scanner&#39;, { type = &#39;tree&#39;, parts = {&#39;id&#39;, &#39;band_name&#39;} })</span>
+
+<span class="cm">s:insert{1, &#39;Roxette&#39;, 1986}</span>
+<span class="cm">s:insert{2, &#39;Scorpions&#39;, 2015}</span>
+<span class="cm">s:insert{3, &#39;Ace of Base&#39;, 1993}</span>
+<span class="cm">*/</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span><span class="s">&quot;127.0.0.1:3301&quot;</span><span class="p">,</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">Opts</span><span class="p">{</span>
+		<span class="nx">User</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+		<span class="nx">Pass</span><span class="p">:</span> <span class="s">&quot;pass&quot;</span><span class="p">,</span>
+	<span class="p">})</span>
+
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;Connection refused&quot;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+	<span class="nx">spaceName</span> <span class="o">:=</span> <span class="s">&quot;tester&quot;</span>
+	<span class="nx">indexName</span> <span class="o">:=</span> <span class="s">&quot;scanner&quot;</span>
+	<span class="nx">idFn</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Schema</span><span class="p">.</span><span class="nx">Spaces</span><span class="p">[</span><span class="nx">spaceName</span><span class="p">].</span><span class="nx">Fields</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">].</span><span class="nx">Id</span>
+	<span class="nx">bandNameFn</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Schema</span><span class="p">.</span><span class="nx">Spaces</span><span class="p">[</span><span class="nx">spaceName</span><span class="p">].</span><span class="nx">Fields</span><span class="p">[</span><span class="s">&quot;band_name&quot;</span><span class="p">].</span><span class="nx">Id</span>
+
+	<span class="kd">var</span> <span class="nx">tuplesPerRequest</span> <span class="kt">uint32</span> <span class="p">=</span> <span class="mi">2</span>
+	<span class="nx">cursor</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{}</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Select</span><span class="p">(</span><span class="nx">spaceName</span><span class="p">,</span> <span class="nx">indexName</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">tuplesPerRequest</span><span class="p">,</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">IterGt</span><span class="p">,</span> <span class="nx">cursor</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;Failed to select: %s&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Code</span> <span class="o">!=</span> <span class="nx">tarantool</span><span class="p">.</span><span class="nx">OkCode</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;Select failed: %s&quot;</span><span class="p">,</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Iteration&quot;</span><span class="p">)</span>
+
+		<span class="nx">tuples</span> <span class="o">:=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Tuples</span><span class="p">()</span>
+		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tuple</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">tuples</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;\t%v\n&quot;</span><span class="p">,</span> <span class="nx">tuple</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="nx">lastTuple</span> <span class="o">:=</span> <span class="nx">tuples</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">tuples</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="nx">cursor</span> <span class="p">=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="nx">lastTuple</span><span class="p">[</span><span class="nx">idFn</span><span class="p">],</span> <span class="nx">lastTuple</span><span class="p">[</span><span class="nx">bandNameFn</span><span class="p">]}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

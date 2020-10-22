@@ -1,0 +1,1049 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module error &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module fiber" href="fiber.html" />
+    <link rel="prev" title="Module coio" href="coio.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>error</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/error.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-capi_error">
+<span id="module-error"></span><h1>Module <cite>error</cite><a class="headerlink" href="#module-capi_error" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="capi-box-error-code"></span><dl class="enum">
+<dt id="_CPPv414box_error_code">
+<span id="_CPPv314box_error_code"></span><span id="_CPPv214box_error_code"></span><em class="property">enum </em><code class="descname">box_error_code</code><a class="headerlink" href="#_CPPv414box_error_code" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv410ER_UNKNOWN">
+<span id="_CPPv310ER_UNKNOWN"></span><span id="_CPPv210ER_UNKNOWN"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN</code><a class="headerlink" href="#_CPPv410ER_UNKNOWN" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417ER_ILLEGAL_PARAMS">
+<span id="_CPPv317ER_ILLEGAL_PARAMS"></span><span id="_CPPv217ER_ILLEGAL_PARAMS"></span><em class="property">enumerator </em><code class="descname">ER_ILLEGAL_PARAMS</code><a class="headerlink" href="#_CPPv417ER_ILLEGAL_PARAMS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_MEMORY_ISSUE">
+<span id="_CPPv315ER_MEMORY_ISSUE"></span><span id="_CPPv215ER_MEMORY_ISSUE"></span><em class="property">enumerator </em><code class="descname">ER_MEMORY_ISSUE</code><a class="headerlink" href="#_CPPv415ER_MEMORY_ISSUE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_TUPLE_FOUND">
+<span id="_CPPv314ER_TUPLE_FOUND"></span><span id="_CPPv214ER_TUPLE_FOUND"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_FOUND</code><a class="headerlink" href="#_CPPv414ER_TUPLE_FOUND" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_TUPLE_NOT_FOUND">
+<span id="_CPPv318ER_TUPLE_NOT_FOUND"></span><span id="_CPPv218ER_TUPLE_NOT_FOUND"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_NOT_FOUND</code><a class="headerlink" href="#_CPPv418ER_TUPLE_NOT_FOUND" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_UNSUPPORTED">
+<span id="_CPPv314ER_UNSUPPORTED"></span><span id="_CPPv214ER_UNSUPPORTED"></span><em class="property">enumerator </em><code class="descname">ER_UNSUPPORTED</code><a class="headerlink" href="#_CPPv414ER_UNSUPPORTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_NONMASTER">
+<span id="_CPPv312ER_NONMASTER"></span><span id="_CPPv212ER_NONMASTER"></span><em class="property">enumerator </em><code class="descname">ER_NONMASTER</code><a class="headerlink" href="#_CPPv412ER_NONMASTER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_READONLY">
+<span id="_CPPv311ER_READONLY"></span><span id="_CPPv211ER_READONLY"></span><em class="property">enumerator </em><code class="descname">ER_READONLY</code><a class="headerlink" href="#_CPPv411ER_READONLY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_INJECTION">
+<span id="_CPPv312ER_INJECTION"></span><span id="_CPPv212ER_INJECTION"></span><em class="property">enumerator </em><code class="descname">ER_INJECTION</code><a class="headerlink" href="#_CPPv412ER_INJECTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_CREATE_SPACE">
+<span id="_CPPv315ER_CREATE_SPACE"></span><span id="_CPPv215ER_CREATE_SPACE"></span><em class="property">enumerator </em><code class="descname">ER_CREATE_SPACE</code><a class="headerlink" href="#_CPPv415ER_CREATE_SPACE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_SPACE_EXISTS">
+<span id="_CPPv315ER_SPACE_EXISTS"></span><span id="_CPPv215ER_SPACE_EXISTS"></span><em class="property">enumerator </em><code class="descname">ER_SPACE_EXISTS</code><a class="headerlink" href="#_CPPv415ER_SPACE_EXISTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_DROP_SPACE">
+<span id="_CPPv313ER_DROP_SPACE"></span><span id="_CPPv213ER_DROP_SPACE"></span><em class="property">enumerator </em><code class="descname">ER_DROP_SPACE</code><a class="headerlink" href="#_CPPv413ER_DROP_SPACE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_ALTER_SPACE">
+<span id="_CPPv314ER_ALTER_SPACE"></span><span id="_CPPv214ER_ALTER_SPACE"></span><em class="property">enumerator </em><code class="descname">ER_ALTER_SPACE</code><a class="headerlink" href="#_CPPv414ER_ALTER_SPACE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_INDEX_TYPE">
+<span id="_CPPv313ER_INDEX_TYPE"></span><span id="_CPPv213ER_INDEX_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_INDEX_TYPE</code><a class="headerlink" href="#_CPPv413ER_INDEX_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_MODIFY_INDEX">
+<span id="_CPPv315ER_MODIFY_INDEX"></span><span id="_CPPv215ER_MODIFY_INDEX"></span><em class="property">enumerator </em><code class="descname">ER_MODIFY_INDEX</code><a class="headerlink" href="#_CPPv415ER_MODIFY_INDEX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_LAST_DROP">
+<span id="_CPPv312ER_LAST_DROP"></span><span id="_CPPv212ER_LAST_DROP"></span><em class="property">enumerator </em><code class="descname">ER_LAST_DROP</code><a class="headerlink" href="#_CPPv412ER_LAST_DROP" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_TUPLE_FORMAT_LIMIT">
+<span id="_CPPv321ER_TUPLE_FORMAT_LIMIT"></span><span id="_CPPv221ER_TUPLE_FORMAT_LIMIT"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_FORMAT_LIMIT</code><a class="headerlink" href="#_CPPv421ER_TUPLE_FORMAT_LIMIT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_DROP_PRIMARY_KEY">
+<span id="_CPPv319ER_DROP_PRIMARY_KEY"></span><span id="_CPPv219ER_DROP_PRIMARY_KEY"></span><em class="property">enumerator </em><code class="descname">ER_DROP_PRIMARY_KEY</code><a class="headerlink" href="#_CPPv419ER_DROP_PRIMARY_KEY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_KEY_PART_TYPE">
+<span id="_CPPv316ER_KEY_PART_TYPE"></span><span id="_CPPv216ER_KEY_PART_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_KEY_PART_TYPE</code><a class="headerlink" href="#_CPPv416ER_KEY_PART_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_EXACT_MATCH">
+<span id="_CPPv314ER_EXACT_MATCH"></span><span id="_CPPv214ER_EXACT_MATCH"></span><em class="property">enumerator </em><code class="descname">ER_EXACT_MATCH</code><a class="headerlink" href="#_CPPv414ER_EXACT_MATCH" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_INVALID_MSGPACK">
+<span id="_CPPv318ER_INVALID_MSGPACK"></span><span id="_CPPv218ER_INVALID_MSGPACK"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_MSGPACK</code><a class="headerlink" href="#_CPPv418ER_INVALID_MSGPACK" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_PROC_RET">
+<span id="_CPPv311ER_PROC_RET"></span><span id="_CPPv211ER_PROC_RET"></span><em class="property">enumerator </em><code class="descname">ER_PROC_RET</code><a class="headerlink" href="#_CPPv411ER_PROC_RET" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_TUPLE_NOT_ARRAY">
+<span id="_CPPv318ER_TUPLE_NOT_ARRAY"></span><span id="_CPPv218ER_TUPLE_NOT_ARRAY"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_NOT_ARRAY</code><a class="headerlink" href="#_CPPv418ER_TUPLE_NOT_ARRAY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_FIELD_TYPE">
+<span id="_CPPv313ER_FIELD_TYPE"></span><span id="_CPPv213ER_FIELD_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_FIELD_TYPE</code><a class="headerlink" href="#_CPPv413ER_FIELD_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_FIELD_TYPE_MISMATCH">
+<span id="_CPPv322ER_FIELD_TYPE_MISMATCH"></span><span id="_CPPv222ER_FIELD_TYPE_MISMATCH"></span><em class="property">enumerator </em><code class="descname">ER_FIELD_TYPE_MISMATCH</code><a class="headerlink" href="#_CPPv422ER_FIELD_TYPE_MISMATCH" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv49ER_SPLICE">
+<span id="_CPPv39ER_SPLICE"></span><span id="_CPPv29ER_SPLICE"></span><em class="property">enumerator </em><code class="descname">ER_SPLICE</code><a class="headerlink" href="#_CPPv49ER_SPLICE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_UPDATE_ARG_TYPE">
+<span id="_CPPv318ER_UPDATE_ARG_TYPE"></span><span id="_CPPv218ER_UPDATE_ARG_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_UPDATE_ARG_TYPE</code><a class="headerlink" href="#_CPPv418ER_UPDATE_ARG_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_TUPLE_IS_TOO_LONG">
+<span id="_CPPv320ER_TUPLE_IS_TOO_LONG"></span><span id="_CPPv220ER_TUPLE_IS_TOO_LONG"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_IS_TOO_LONG</code><a class="headerlink" href="#_CPPv420ER_TUPLE_IS_TOO_LONG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_UNKNOWN_UPDATE_OP">
+<span id="_CPPv320ER_UNKNOWN_UPDATE_OP"></span><span id="_CPPv220ER_UNKNOWN_UPDATE_OP"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN_UPDATE_OP</code><a class="headerlink" href="#_CPPv420ER_UNKNOWN_UPDATE_OP" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_UPDATE_FIELD">
+<span id="_CPPv315ER_UPDATE_FIELD"></span><span id="_CPPv215ER_UPDATE_FIELD"></span><em class="property">enumerator </em><code class="descname">ER_UPDATE_FIELD</code><a class="headerlink" href="#_CPPv415ER_UPDATE_FIELD" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_FIBER_STACK">
+<span id="_CPPv314ER_FIBER_STACK"></span><span id="_CPPv214ER_FIBER_STACK"></span><em class="property">enumerator </em><code class="descname">ER_FIBER_STACK</code><a class="headerlink" href="#_CPPv414ER_FIBER_STACK" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417ER_KEY_PART_COUNT">
+<span id="_CPPv317ER_KEY_PART_COUNT"></span><span id="_CPPv217ER_KEY_PART_COUNT"></span><em class="property">enumerator </em><code class="descname">ER_KEY_PART_COUNT</code><a class="headerlink" href="#_CPPv417ER_KEY_PART_COUNT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_PROC_LUA">
+<span id="_CPPv311ER_PROC_LUA"></span><span id="_CPPv211ER_PROC_LUA"></span><em class="property">enumerator </em><code class="descname">ER_PROC_LUA</code><a class="headerlink" href="#_CPPv411ER_PROC_LUA" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_NO_SUCH_PROC">
+<span id="_CPPv315ER_NO_SUCH_PROC"></span><span id="_CPPv215ER_NO_SUCH_PROC"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_PROC</code><a class="headerlink" href="#_CPPv415ER_NO_SUCH_PROC" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_NO_SUCH_TRIGGER">
+<span id="_CPPv318ER_NO_SUCH_TRIGGER"></span><span id="_CPPv218ER_NO_SUCH_TRIGGER"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_TRIGGER</code><a class="headerlink" href="#_CPPv418ER_NO_SUCH_TRIGGER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_NO_SUCH_INDEX">
+<span id="_CPPv316ER_NO_SUCH_INDEX"></span><span id="_CPPv216ER_NO_SUCH_INDEX"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_INDEX</code><a class="headerlink" href="#_CPPv416ER_NO_SUCH_INDEX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_NO_SUCH_SPACE">
+<span id="_CPPv316ER_NO_SUCH_SPACE"></span><span id="_CPPv216ER_NO_SUCH_SPACE"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_SPACE</code><a class="headerlink" href="#_CPPv416ER_NO_SUCH_SPACE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_NO_SUCH_FIELD">
+<span id="_CPPv316ER_NO_SUCH_FIELD"></span><span id="_CPPv216ER_NO_SUCH_FIELD"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_FIELD</code><a class="headerlink" href="#_CPPv416ER_NO_SUCH_FIELD" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_EXACT_FIELD_COUNT">
+<span id="_CPPv320ER_EXACT_FIELD_COUNT"></span><span id="_CPPv220ER_EXACT_FIELD_COUNT"></span><em class="property">enumerator </em><code class="descname">ER_EXACT_FIELD_COUNT</code><a class="headerlink" href="#_CPPv420ER_EXACT_FIELD_COUNT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_INDEX_FIELD_COUNT">
+<span id="_CPPv320ER_INDEX_FIELD_COUNT"></span><span id="_CPPv220ER_INDEX_FIELD_COUNT"></span><em class="property">enumerator </em><code class="descname">ER_INDEX_FIELD_COUNT</code><a class="headerlink" href="#_CPPv420ER_INDEX_FIELD_COUNT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv49ER_WAL_IO">
+<span id="_CPPv39ER_WAL_IO"></span><span id="_CPPv29ER_WAL_IO"></span><em class="property">enumerator </em><code class="descname">ER_WAL_IO</code><a class="headerlink" href="#_CPPv49ER_WAL_IO" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_MORE_THAN_ONE_TUPLE">
+<span id="_CPPv322ER_MORE_THAN_ONE_TUPLE"></span><span id="_CPPv222ER_MORE_THAN_ONE_TUPLE"></span><em class="property">enumerator </em><code class="descname">ER_MORE_THAN_ONE_TUPLE</code><a class="headerlink" href="#_CPPv422ER_MORE_THAN_ONE_TUPLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_ACCESS_DENIED">
+<span id="_CPPv316ER_ACCESS_DENIED"></span><span id="_CPPv216ER_ACCESS_DENIED"></span><em class="property">enumerator </em><code class="descname">ER_ACCESS_DENIED</code><a class="headerlink" href="#_CPPv416ER_ACCESS_DENIED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_CREATE_USER">
+<span id="_CPPv314ER_CREATE_USER"></span><span id="_CPPv214ER_CREATE_USER"></span><em class="property">enumerator </em><code class="descname">ER_CREATE_USER</code><a class="headerlink" href="#_CPPv414ER_CREATE_USER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_DROP_USER">
+<span id="_CPPv312ER_DROP_USER"></span><span id="_CPPv212ER_DROP_USER"></span><em class="property">enumerator </em><code class="descname">ER_DROP_USER</code><a class="headerlink" href="#_CPPv412ER_DROP_USER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_NO_SUCH_USER">
+<span id="_CPPv315ER_NO_SUCH_USER"></span><span id="_CPPv215ER_NO_SUCH_USER"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_USER</code><a class="headerlink" href="#_CPPv415ER_NO_SUCH_USER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_USER_EXISTS">
+<span id="_CPPv314ER_USER_EXISTS"></span><span id="_CPPv214ER_USER_EXISTS"></span><em class="property">enumerator </em><code class="descname">ER_USER_EXISTS</code><a class="headerlink" href="#_CPPv414ER_USER_EXISTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_PASSWORD_MISMATCH">
+<span id="_CPPv320ER_PASSWORD_MISMATCH"></span><span id="_CPPv220ER_PASSWORD_MISMATCH"></span><em class="property">enumerator </em><code class="descname">ER_PASSWORD_MISMATCH</code><a class="headerlink" href="#_CPPv420ER_PASSWORD_MISMATCH" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_UNKNOWN_REQUEST_TYPE">
+<span id="_CPPv323ER_UNKNOWN_REQUEST_TYPE"></span><span id="_CPPv223ER_UNKNOWN_REQUEST_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN_REQUEST_TYPE</code><a class="headerlink" href="#_CPPv423ER_UNKNOWN_REQUEST_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_UNKNOWN_SCHEMA_OBJECT">
+<span id="_CPPv324ER_UNKNOWN_SCHEMA_OBJECT"></span><span id="_CPPv224ER_UNKNOWN_SCHEMA_OBJECT"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN_SCHEMA_OBJECT</code><a class="headerlink" href="#_CPPv424ER_UNKNOWN_SCHEMA_OBJECT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_CREATE_FUNCTION">
+<span id="_CPPv318ER_CREATE_FUNCTION"></span><span id="_CPPv218ER_CREATE_FUNCTION"></span><em class="property">enumerator </em><code class="descname">ER_CREATE_FUNCTION</code><a class="headerlink" href="#_CPPv418ER_CREATE_FUNCTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_NO_SUCH_FUNCTION">
+<span id="_CPPv319ER_NO_SUCH_FUNCTION"></span><span id="_CPPv219ER_NO_SUCH_FUNCTION"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_FUNCTION</code><a class="headerlink" href="#_CPPv419ER_NO_SUCH_FUNCTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_FUNCTION_EXISTS">
+<span id="_CPPv318ER_FUNCTION_EXISTS"></span><span id="_CPPv218ER_FUNCTION_EXISTS"></span><em class="property">enumerator </em><code class="descname">ER_FUNCTION_EXISTS</code><a class="headerlink" href="#_CPPv418ER_FUNCTION_EXISTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv425ER_FUNCTION_ACCESS_DENIED">
+<span id="_CPPv325ER_FUNCTION_ACCESS_DENIED"></span><span id="_CPPv225ER_FUNCTION_ACCESS_DENIED"></span><em class="property">enumerator </em><code class="descname">ER_FUNCTION_ACCESS_DENIED</code><a class="headerlink" href="#_CPPv425ER_FUNCTION_ACCESS_DENIED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_FUNCTION_MAX">
+<span id="_CPPv315ER_FUNCTION_MAX"></span><span id="_CPPv215ER_FUNCTION_MAX"></span><em class="property">enumerator </em><code class="descname">ER_FUNCTION_MAX</code><a class="headerlink" href="#_CPPv415ER_FUNCTION_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_SPACE_ACCESS_DENIED">
+<span id="_CPPv322ER_SPACE_ACCESS_DENIED"></span><span id="_CPPv222ER_SPACE_ACCESS_DENIED"></span><em class="property">enumerator </em><code class="descname">ER_SPACE_ACCESS_DENIED</code><a class="headerlink" href="#_CPPv422ER_SPACE_ACCESS_DENIED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_USER_MAX">
+<span id="_CPPv311ER_USER_MAX"></span><span id="_CPPv211ER_USER_MAX"></span><em class="property">enumerator </em><code class="descname">ER_USER_MAX</code><a class="headerlink" href="#_CPPv411ER_USER_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv417ER_NO_SUCH_ENGINE">
+<span id="_CPPv317ER_NO_SUCH_ENGINE"></span><span id="_CPPv217ER_NO_SUCH_ENGINE"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_ENGINE</code><a class="headerlink" href="#_CPPv417ER_NO_SUCH_ENGINE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_RELOAD_CFG">
+<span id="_CPPv313ER_RELOAD_CFG"></span><span id="_CPPv213ER_RELOAD_CFG"></span><em class="property">enumerator </em><code class="descname">ER_RELOAD_CFG</code><a class="headerlink" href="#_CPPv413ER_RELOAD_CFG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv46ER_CFG">
+<span id="_CPPv36ER_CFG"></span><span id="_CPPv26ER_CFG"></span><em class="property">enumerator </em><code class="descname">ER_CFG</code><a class="headerlink" href="#_CPPv46ER_CFG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_UNUSED60">
+<span id="_CPPv311ER_UNUSED60"></span><span id="_CPPv211ER_UNUSED60"></span><em class="property">enumerator </em><code class="descname">ER_UNUSED60</code><a class="headerlink" href="#_CPPv411ER_UNUSED60" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_UNUSED61">
+<span id="_CPPv311ER_UNUSED61"></span><span id="_CPPv211ER_UNUSED61"></span><em class="property">enumerator </em><code class="descname">ER_UNUSED61</code><a class="headerlink" href="#_CPPv411ER_UNUSED61" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_UNKNOWN_REPLICA">
+<span id="_CPPv318ER_UNKNOWN_REPLICA"></span><span id="_CPPv218ER_UNKNOWN_REPLICA"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN_REPLICA</code><a class="headerlink" href="#_CPPv418ER_UNKNOWN_REPLICA" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv427ER_REPLICASET_UUID_MISMATCH">
+<span id="_CPPv327ER_REPLICASET_UUID_MISMATCH"></span><span id="_CPPv227ER_REPLICASET_UUID_MISMATCH"></span><em class="property">enumerator </em><code class="descname">ER_REPLICASET_UUID_MISMATCH</code><a class="headerlink" href="#_CPPv427ER_REPLICASET_UUID_MISMATCH" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_INVALID_UUID">
+<span id="_CPPv315ER_INVALID_UUID"></span><span id="_CPPv215ER_INVALID_UUID"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_UUID</code><a class="headerlink" href="#_CPPv415ER_INVALID_UUID" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_REPLICASET_UUID_IS_RO">
+<span id="_CPPv324ER_REPLICASET_UUID_IS_RO"></span><span id="_CPPv224ER_REPLICASET_UUID_IS_RO"></span><em class="property">enumerator </em><code class="descname">ER_REPLICASET_UUID_IS_RO</code><a class="headerlink" href="#_CPPv424ER_REPLICASET_UUID_IS_RO" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv425ER_INSTANCE_UUID_MISMATCH">
+<span id="_CPPv325ER_INSTANCE_UUID_MISMATCH"></span><span id="_CPPv225ER_INSTANCE_UUID_MISMATCH"></span><em class="property">enumerator </em><code class="descname">ER_INSTANCE_UUID_MISMATCH</code><a class="headerlink" href="#_CPPv425ER_INSTANCE_UUID_MISMATCH" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv425ER_REPLICA_ID_IS_RESERVED">
+<span id="_CPPv325ER_REPLICA_ID_IS_RESERVED"></span><span id="_CPPv225ER_REPLICA_ID_IS_RESERVED"></span><em class="property">enumerator </em><code class="descname">ER_REPLICA_ID_IS_RESERVED</code><a class="headerlink" href="#_CPPv425ER_REPLICA_ID_IS_RESERVED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_INVALID_ORDER">
+<span id="_CPPv316ER_INVALID_ORDER"></span><span id="_CPPv216ER_INVALID_ORDER"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_ORDER</code><a class="headerlink" href="#_CPPv416ER_INVALID_ORDER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_MISSING_REQUEST_FIELD">
+<span id="_CPPv324ER_MISSING_REQUEST_FIELD"></span><span id="_CPPv224ER_MISSING_REQUEST_FIELD"></span><em class="property">enumerator </em><code class="descname">ER_MISSING_REQUEST_FIELD</code><a class="headerlink" href="#_CPPv424ER_MISSING_REQUEST_FIELD" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_IDENTIFIER">
+<span id="_CPPv313ER_IDENTIFIER"></span><span id="_CPPv213ER_IDENTIFIER"></span><em class="property">enumerator </em><code class="descname">ER_IDENTIFIER</code><a class="headerlink" href="#_CPPv413ER_IDENTIFIER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_DROP_FUNCTION">
+<span id="_CPPv316ER_DROP_FUNCTION"></span><span id="_CPPv216ER_DROP_FUNCTION"></span><em class="property">enumerator </em><code class="descname">ER_DROP_FUNCTION</code><a class="headerlink" href="#_CPPv416ER_DROP_FUNCTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_ITERATOR_TYPE">
+<span id="_CPPv316ER_ITERATOR_TYPE"></span><span id="_CPPv216ER_ITERATOR_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_ITERATOR_TYPE</code><a class="headerlink" href="#_CPPv416ER_ITERATOR_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_REPLICA_MAX">
+<span id="_CPPv314ER_REPLICA_MAX"></span><span id="_CPPv214ER_REPLICA_MAX"></span><em class="property">enumerator </em><code class="descname">ER_REPLICA_MAX</code><a class="headerlink" href="#_CPPv414ER_REPLICA_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_INVALID_XLOG">
+<span id="_CPPv315ER_INVALID_XLOG"></span><span id="_CPPv215ER_INVALID_XLOG"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_XLOG</code><a class="headerlink" href="#_CPPv415ER_INVALID_XLOG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_INVALID_XLOG_NAME">
+<span id="_CPPv320ER_INVALID_XLOG_NAME"></span><span id="_CPPv220ER_INVALID_XLOG_NAME"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_XLOG_NAME</code><a class="headerlink" href="#_CPPv420ER_INVALID_XLOG_NAME" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_INVALID_XLOG_ORDER">
+<span id="_CPPv321ER_INVALID_XLOG_ORDER"></span><span id="_CPPv221ER_INVALID_XLOG_ORDER"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_XLOG_ORDER</code><a class="headerlink" href="#_CPPv421ER_INVALID_XLOG_ORDER" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_NO_CONNECTION">
+<span id="_CPPv316ER_NO_CONNECTION"></span><span id="_CPPv216ER_NO_CONNECTION"></span><em class="property">enumerator </em><code class="descname">ER_NO_CONNECTION</code><a class="headerlink" href="#_CPPv416ER_NO_CONNECTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv410ER_TIMEOUT">
+<span id="_CPPv310ER_TIMEOUT"></span><span id="_CPPv210ER_TIMEOUT"></span><em class="property">enumerator </em><code class="descname">ER_TIMEOUT</code><a class="headerlink" href="#_CPPv410ER_TIMEOUT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_ACTIVE_TRANSACTION">
+<span id="_CPPv321ER_ACTIVE_TRANSACTION"></span><span id="_CPPv221ER_ACTIVE_TRANSACTION"></span><em class="property">enumerator </em><code class="descname">ER_ACTIVE_TRANSACTION</code><a class="headerlink" href="#_CPPv421ER_ACTIVE_TRANSACTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_NO_ACTIVE_TRANSACTION">
+<span id="_CPPv324ER_NO_ACTIVE_TRANSACTION"></span><span id="_CPPv224ER_NO_ACTIVE_TRANSACTION"></span><em class="property">enumerator </em><code class="descname">ER_NO_ACTIVE_TRANSACTION</code><a class="headerlink" href="#_CPPv424ER_NO_ACTIVE_TRANSACTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv427ER_CROSS_ENGINE_TRANSACTION">
+<span id="_CPPv327ER_CROSS_ENGINE_TRANSACTION"></span><span id="_CPPv227ER_CROSS_ENGINE_TRANSACTION"></span><em class="property">enumerator </em><code class="descname">ER_CROSS_ENGINE_TRANSACTION</code><a class="headerlink" href="#_CPPv427ER_CROSS_ENGINE_TRANSACTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_NO_SUCH_ROLE">
+<span id="_CPPv315ER_NO_SUCH_ROLE"></span><span id="_CPPv215ER_NO_SUCH_ROLE"></span><em class="property">enumerator </em><code class="descname">ER_NO_SUCH_ROLE</code><a class="headerlink" href="#_CPPv415ER_NO_SUCH_ROLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_ROLE_EXISTS">
+<span id="_CPPv314ER_ROLE_EXISTS"></span><span id="_CPPv214ER_ROLE_EXISTS"></span><em class="property">enumerator </em><code class="descname">ER_ROLE_EXISTS</code><a class="headerlink" href="#_CPPv414ER_ROLE_EXISTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_CREATE_ROLE">
+<span id="_CPPv314ER_CREATE_ROLE"></span><span id="_CPPv214ER_CREATE_ROLE"></span><em class="property">enumerator </em><code class="descname">ER_CREATE_ROLE</code><a class="headerlink" href="#_CPPv414ER_CREATE_ROLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_INDEX_EXISTS">
+<span id="_CPPv315ER_INDEX_EXISTS"></span><span id="_CPPv215ER_INDEX_EXISTS"></span><em class="property">enumerator </em><code class="descname">ER_INDEX_EXISTS</code><a class="headerlink" href="#_CPPv415ER_INDEX_EXISTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_TUPLE_REF_OVERFLOW">
+<span id="_CPPv321ER_TUPLE_REF_OVERFLOW"></span><span id="_CPPv221ER_TUPLE_REF_OVERFLOW"></span><em class="property">enumerator </em><code class="descname">ER_TUPLE_REF_OVERFLOW</code><a class="headerlink" href="#_CPPv421ER_TUPLE_REF_OVERFLOW" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_ROLE_LOOP">
+<span id="_CPPv312ER_ROLE_LOOP"></span><span id="_CPPv212ER_ROLE_LOOP"></span><em class="property">enumerator </em><code class="descname">ER_ROLE_LOOP</code><a class="headerlink" href="#_CPPv412ER_ROLE_LOOP" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv48ER_GRANT">
+<span id="_CPPv38ER_GRANT"></span><span id="_CPPv28ER_GRANT"></span><em class="property">enumerator </em><code class="descname">ER_GRANT</code><a class="headerlink" href="#_CPPv48ER_GRANT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_PRIV_GRANTED">
+<span id="_CPPv315ER_PRIV_GRANTED"></span><span id="_CPPv215ER_PRIV_GRANTED"></span><em class="property">enumerator </em><code class="descname">ER_PRIV_GRANTED</code><a class="headerlink" href="#_CPPv415ER_PRIV_GRANTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_ROLE_GRANTED">
+<span id="_CPPv315ER_ROLE_GRANTED"></span><span id="_CPPv215ER_ROLE_GRANTED"></span><em class="property">enumerator </em><code class="descname">ER_ROLE_GRANTED</code><a class="headerlink" href="#_CPPv415ER_ROLE_GRANTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_PRIV_NOT_GRANTED">
+<span id="_CPPv319ER_PRIV_NOT_GRANTED"></span><span id="_CPPv219ER_PRIV_NOT_GRANTED"></span><em class="property">enumerator </em><code class="descname">ER_PRIV_NOT_GRANTED</code><a class="headerlink" href="#_CPPv419ER_PRIV_NOT_GRANTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_ROLE_NOT_GRANTED">
+<span id="_CPPv319ER_ROLE_NOT_GRANTED"></span><span id="_CPPv219ER_ROLE_NOT_GRANTED"></span><em class="property">enumerator </em><code class="descname">ER_ROLE_NOT_GRANTED</code><a class="headerlink" href="#_CPPv419ER_ROLE_NOT_GRANTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_MISSING_SNAPSHOT">
+<span id="_CPPv319ER_MISSING_SNAPSHOT"></span><span id="_CPPv219ER_MISSING_SNAPSHOT"></span><em class="property">enumerator </em><code class="descname">ER_MISSING_SNAPSHOT</code><a class="headerlink" href="#_CPPv419ER_MISSING_SNAPSHOT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv426ER_CANT_UPDATE_PRIMARY_KEY">
+<span id="_CPPv326ER_CANT_UPDATE_PRIMARY_KEY"></span><span id="_CPPv226ER_CANT_UPDATE_PRIMARY_KEY"></span><em class="property">enumerator </em><code class="descname">ER_CANT_UPDATE_PRIMARY_KEY</code><a class="headerlink" href="#_CPPv426ER_CANT_UPDATE_PRIMARY_KEY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv426ER_UPDATE_INTEGER_OVERFLOW">
+<span id="_CPPv326ER_UPDATE_INTEGER_OVERFLOW"></span><span id="_CPPv226ER_UPDATE_INTEGER_OVERFLOW"></span><em class="property">enumerator </em><code class="descname">ER_UPDATE_INTEGER_OVERFLOW</code><a class="headerlink" href="#_CPPv426ER_UPDATE_INTEGER_OVERFLOW" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_GUEST_USER_PASSWORD">
+<span id="_CPPv322ER_GUEST_USER_PASSWORD"></span><span id="_CPPv222ER_GUEST_USER_PASSWORD"></span><em class="property">enumerator </em><code class="descname">ER_GUEST_USER_PASSWORD</code><a class="headerlink" href="#_CPPv422ER_GUEST_USER_PASSWORD" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_TRANSACTION_CONFLICT">
+<span id="_CPPv323ER_TRANSACTION_CONFLICT"></span><span id="_CPPv223ER_TRANSACTION_CONFLICT"></span><em class="property">enumerator </em><code class="descname">ER_TRANSACTION_CONFLICT</code><a class="headerlink" href="#_CPPv423ER_TRANSACTION_CONFLICT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_UNSUPPORTED_ROLE_PRIV">
+<span id="_CPPv324ER_UNSUPPORTED_ROLE_PRIV"></span><span id="_CPPv224ER_UNSUPPORTED_ROLE_PRIV"></span><em class="property">enumerator </em><code class="descname">ER_UNSUPPORTED_ROLE_PRIV</code><a class="headerlink" href="#_CPPv424ER_UNSUPPORTED_ROLE_PRIV" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_LOAD_FUNCTION">
+<span id="_CPPv316ER_LOAD_FUNCTION"></span><span id="_CPPv216ER_LOAD_FUNCTION"></span><em class="property">enumerator </em><code class="descname">ER_LOAD_FUNCTION</code><a class="headerlink" href="#_CPPv416ER_LOAD_FUNCTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_FUNCTION_LANGUAGE">
+<span id="_CPPv320ER_FUNCTION_LANGUAGE"></span><span id="_CPPv220ER_FUNCTION_LANGUAGE"></span><em class="property">enumerator </em><code class="descname">ER_FUNCTION_LANGUAGE</code><a class="headerlink" href="#_CPPv420ER_FUNCTION_LANGUAGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_RTREE_RECT">
+<span id="_CPPv313ER_RTREE_RECT"></span><span id="_CPPv213ER_RTREE_RECT"></span><em class="property">enumerator </em><code class="descname">ER_RTREE_RECT</code><a class="headerlink" href="#_CPPv413ER_RTREE_RECT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv49ER_PROC_C">
+<span id="_CPPv39ER_PROC_C"></span><span id="_CPPv29ER_PROC_C"></span><em class="property">enumerator </em><code class="descname">ER_PROC_C</code><a class="headerlink" href="#_CPPv49ER_PROC_C" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv436ER_UNKNOWN_RTREE_INDEX_DISTANCE_TYPE">
+<span id="_CPPv336ER_UNKNOWN_RTREE_INDEX_DISTANCE_TYPE"></span><span id="_CPPv236ER_UNKNOWN_RTREE_INDEX_DISTANCE_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_UNKNOWN_RTREE_INDEX_DISTANCE_TYPE</code><a class="headerlink" href="#_CPPv436ER_UNKNOWN_RTREE_INDEX_DISTANCE_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv411ER_PROTOCOL">
+<span id="_CPPv311ER_PROTOCOL"></span><span id="_CPPv211ER_PROTOCOL"></span><em class="property">enumerator </em><code class="descname">ER_PROTOCOL</code><a class="headerlink" href="#_CPPv411ER_PROTOCOL" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv430ER_UPSERT_UNIQUE_SECONDARY_KEY">
+<span id="_CPPv330ER_UPSERT_UNIQUE_SECONDARY_KEY"></span><span id="_CPPv230ER_UPSERT_UNIQUE_SECONDARY_KEY"></span><em class="property">enumerator </em><code class="descname">ER_UPSERT_UNIQUE_SECONDARY_KEY</code><a class="headerlink" href="#_CPPv430ER_UPSERT_UNIQUE_SECONDARY_KEY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_WRONG_INDEX_RECORD">
+<span id="_CPPv321ER_WRONG_INDEX_RECORD"></span><span id="_CPPv221ER_WRONG_INDEX_RECORD"></span><em class="property">enumerator </em><code class="descname">ER_WRONG_INDEX_RECORD</code><a class="headerlink" href="#_CPPv421ER_WRONG_INDEX_RECORD" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_WRONG_INDEX_PARTS">
+<span id="_CPPv320ER_WRONG_INDEX_PARTS"></span><span id="_CPPv220ER_WRONG_INDEX_PARTS"></span><em class="property">enumerator </em><code class="descname">ER_WRONG_INDEX_PARTS</code><a class="headerlink" href="#_CPPv420ER_WRONG_INDEX_PARTS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_WRONG_INDEX_OPTIONS">
+<span id="_CPPv322ER_WRONG_INDEX_OPTIONS"></span><span id="_CPPv222ER_WRONG_INDEX_OPTIONS"></span><em class="property">enumerator </em><code class="descname">ER_WRONG_INDEX_OPTIONS</code><a class="headerlink" href="#_CPPv422ER_WRONG_INDEX_OPTIONS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_WRONG_SCHEMA_VERSION">
+<span id="_CPPv323ER_WRONG_SCHEMA_VERSION"></span><span id="_CPPv223ER_WRONG_SCHEMA_VERSION"></span><em class="property">enumerator </em><code class="descname">ER_WRONG_SCHEMA_VERSION</code><a class="headerlink" href="#_CPPv423ER_WRONG_SCHEMA_VERSION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_MEMTX_MAX_TUPLE_SIZE">
+<span id="_CPPv323ER_MEMTX_MAX_TUPLE_SIZE"></span><span id="_CPPv223ER_MEMTX_MAX_TUPLE_SIZE"></span><em class="property">enumerator </em><code class="descname">ER_MEMTX_MAX_TUPLE_SIZE</code><a class="headerlink" href="#_CPPv423ER_MEMTX_MAX_TUPLE_SIZE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_WRONG_SPACE_OPTIONS">
+<span id="_CPPv322ER_WRONG_SPACE_OPTIONS"></span><span id="_CPPv222ER_WRONG_SPACE_OPTIONS"></span><em class="property">enumerator </em><code class="descname">ER_WRONG_SPACE_OPTIONS</code><a class="headerlink" href="#_CPPv422ER_WRONG_SPACE_OPTIONS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv428ER_UNSUPPORTED_INDEX_FEATURE">
+<span id="_CPPv328ER_UNSUPPORTED_INDEX_FEATURE"></span><span id="_CPPv228ER_UNSUPPORTED_INDEX_FEATURE"></span><em class="property">enumerator </em><code class="descname">ER_UNSUPPORTED_INDEX_FEATURE</code><a class="headerlink" href="#_CPPv428ER_UNSUPPORTED_INDEX_FEATURE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv413ER_VIEW_IS_RO">
+<span id="_CPPv313ER_VIEW_IS_RO"></span><span id="_CPPv213ER_VIEW_IS_RO"></span><em class="property">enumerator </em><code class="descname">ER_VIEW_IS_RO</code><a class="headerlink" href="#_CPPv413ER_VIEW_IS_RO" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv412ER_UNUSED114">
+<span id="_CPPv312ER_UNUSED114"></span><span id="_CPPv212ER_UNUSED114"></span><em class="property">enumerator </em><code class="descname">ER_UNUSED114</code><a class="headerlink" href="#_CPPv412ER_UNUSED114" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv49ER_SYSTEM">
+<span id="_CPPv39ER_SYSTEM"></span><span id="_CPPv29ER_SYSTEM"></span><em class="property">enumerator </em><code class="descname">ER_SYSTEM</code><a class="headerlink" href="#_CPPv49ER_SYSTEM" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv410ER_LOADING">
+<span id="_CPPv310ER_LOADING"></span><span id="_CPPv210ER_LOADING"></span><em class="property">enumerator </em><code class="descname">ER_LOADING</code><a class="headerlink" href="#_CPPv410ER_LOADING" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_CONNECTION_TO_SELF">
+<span id="_CPPv321ER_CONNECTION_TO_SELF"></span><span id="_CPPv221ER_CONNECTION_TO_SELF"></span><em class="property">enumerator </em><code class="descname">ER_CONNECTION_TO_SELF</code><a class="headerlink" href="#_CPPv421ER_CONNECTION_TO_SELF" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_KEY_PART_IS_TOO_LONG">
+<span id="_CPPv323ER_KEY_PART_IS_TOO_LONG"></span><span id="_CPPv223ER_KEY_PART_IS_TOO_LONG"></span><em class="property">enumerator </em><code class="descname">ER_KEY_PART_IS_TOO_LONG</code><a class="headerlink" href="#_CPPv423ER_KEY_PART_IS_TOO_LONG" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_COMPRESSION">
+<span id="_CPPv314ER_COMPRESSION"></span><span id="_CPPv214ER_COMPRESSION"></span><em class="property">enumerator </em><code class="descname">ER_COMPRESSION</code><a class="headerlink" href="#_CPPv414ER_COMPRESSION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv425ER_CHECKPOINT_IN_PROGRESS">
+<span id="_CPPv325ER_CHECKPOINT_IN_PROGRESS"></span><span id="_CPPv225ER_CHECKPOINT_IN_PROGRESS"></span><em class="property">enumerator </em><code class="descname">ER_CHECKPOINT_IN_PROGRESS</code><a class="headerlink" href="#_CPPv425ER_CHECKPOINT_IN_PROGRESS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv415ER_SUB_STMT_MAX">
+<span id="_CPPv315ER_SUB_STMT_MAX"></span><span id="_CPPv215ER_SUB_STMT_MAX"></span><em class="property">enumerator </em><code class="descname">ER_SUB_STMT_MAX</code><a class="headerlink" href="#_CPPv415ER_SUB_STMT_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_COMMIT_IN_SUB_STMT">
+<span id="_CPPv321ER_COMMIT_IN_SUB_STMT"></span><span id="_CPPv221ER_COMMIT_IN_SUB_STMT"></span><em class="property">enumerator </em><code class="descname">ER_COMMIT_IN_SUB_STMT</code><a class="headerlink" href="#_CPPv421ER_COMMIT_IN_SUB_STMT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv423ER_ROLLBACK_IN_SUB_STMT">
+<span id="_CPPv323ER_ROLLBACK_IN_SUB_STMT"></span><span id="_CPPv223ER_ROLLBACK_IN_SUB_STMT"></span><em class="property">enumerator </em><code class="descname">ER_ROLLBACK_IN_SUB_STMT</code><a class="headerlink" href="#_CPPv423ER_ROLLBACK_IN_SUB_STMT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv416ER_DECOMPRESSION">
+<span id="_CPPv316ER_DECOMPRESSION"></span><span id="_CPPv216ER_DECOMPRESSION"></span><em class="property">enumerator </em><code class="descname">ER_DECOMPRESSION</code><a class="headerlink" href="#_CPPv416ER_DECOMPRESSION" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_INVALID_XLOG_TYPE">
+<span id="_CPPv320ER_INVALID_XLOG_TYPE"></span><span id="_CPPv220ER_INVALID_XLOG_TYPE"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_XLOG_TYPE</code><a class="headerlink" href="#_CPPv420ER_INVALID_XLOG_TYPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418ER_ALREADY_RUNNING">
+<span id="_CPPv318ER_ALREADY_RUNNING"></span><span id="_CPPv218ER_ALREADY_RUNNING"></span><em class="property">enumerator </em><code class="descname">ER_ALREADY_RUNNING</code><a class="headerlink" href="#_CPPv418ER_ALREADY_RUNNING" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv426ER_INDEX_FIELD_COUNT_LIMIT">
+<span id="_CPPv326ER_INDEX_FIELD_COUNT_LIMIT"></span><span id="_CPPv226ER_INDEX_FIELD_COUNT_LIMIT"></span><em class="property">enumerator </em><code class="descname">ER_INDEX_FIELD_COUNT_LIMIT</code><a class="headerlink" href="#_CPPv426ER_INDEX_FIELD_COUNT_LIMIT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv433ER_LOCAL_INSTANCE_ID_IS_READ_ONLY">
+<span id="_CPPv333ER_LOCAL_INSTANCE_ID_IS_READ_ONLY"></span><span id="_CPPv233ER_LOCAL_INSTANCE_ID_IS_READ_ONLY"></span><em class="property">enumerator </em><code class="descname">ER_LOCAL_INSTANCE_ID_IS_READ_ONLY</code><a class="headerlink" href="#_CPPv433ER_LOCAL_INSTANCE_ID_IS_READ_ONLY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_BACKUP_IN_PROGRESS">
+<span id="_CPPv321ER_BACKUP_IN_PROGRESS"></span><span id="_CPPv221ER_BACKUP_IN_PROGRESS"></span><em class="property">enumerator </em><code class="descname">ER_BACKUP_IN_PROGRESS</code><a class="headerlink" href="#_CPPv421ER_BACKUP_IN_PROGRESS" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ER_READ_VIEW_ABORTED">
+<span id="_CPPv320ER_READ_VIEW_ABORTED"></span><span id="_CPPv220ER_READ_VIEW_ABORTED"></span><em class="property">enumerator </em><code class="descname">ER_READ_VIEW_ABORTED</code><a class="headerlink" href="#_CPPv420ER_READ_VIEW_ABORTED" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_INVALID_INDEX_FILE">
+<span id="_CPPv321ER_INVALID_INDEX_FILE"></span><span id="_CPPv221ER_INVALID_INDEX_FILE"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_INDEX_FILE</code><a class="headerlink" href="#_CPPv421ER_INVALID_INDEX_FILE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_INVALID_RUN_FILE">
+<span id="_CPPv319ER_INVALID_RUN_FILE"></span><span id="_CPPv219ER_INVALID_RUN_FILE"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_RUN_FILE</code><a class="headerlink" href="#_CPPv419ER_INVALID_RUN_FILE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ER_INVALID_VYLOG_FILE">
+<span id="_CPPv321ER_INVALID_VYLOG_FILE"></span><span id="_CPPv221ER_INVALID_VYLOG_FILE"></span><em class="property">enumerator </em><code class="descname">ER_INVALID_VYLOG_FILE</code><a class="headerlink" href="#_CPPv421ER_INVALID_VYLOG_FILE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ER_CHECKPOINT_ROLLBACK">
+<span id="_CPPv322ER_CHECKPOINT_ROLLBACK"></span><span id="_CPPv222ER_CHECKPOINT_ROLLBACK"></span><em class="property">enumerator </em><code class="descname">ER_CHECKPOINT_ROLLBACK</code><a class="headerlink" href="#_CPPv422ER_CHECKPOINT_ROLLBACK" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ER_VY_QUOTA_TIMEOUT">
+<span id="_CPPv319ER_VY_QUOTA_TIMEOUT"></span><span id="_CPPv219ER_VY_QUOTA_TIMEOUT"></span><em class="property">enumerator </em><code class="descname">ER_VY_QUOTA_TIMEOUT</code><a class="headerlink" href="#_CPPv419ER_VY_QUOTA_TIMEOUT" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv414ER_PARTIAL_KEY">
+<span id="_CPPv314ER_PARTIAL_KEY"></span><span id="_CPPv214ER_PARTIAL_KEY"></span><em class="property">enumerator </em><code class="descname">ER_PARTIAL_KEY</code><a class="headerlink" href="#_CPPv414ER_PARTIAL_KEY" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv424ER_TRUNCATE_SYSTEM_SPACE">
+<span id="_CPPv324ER_TRUNCATE_SYSTEM_SPACE"></span><span id="_CPPv224ER_TRUNCATE_SYSTEM_SPACE"></span><em class="property">enumerator </em><code class="descname">ER_TRUNCATE_SYSTEM_SPACE</code><a class="headerlink" href="#_CPPv424ER_TRUNCATE_SYSTEM_SPACE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv418box_error_code_MAX">
+<span id="_CPPv318box_error_code_MAX"></span><span id="_CPPv218box_error_code_MAX"></span><em class="property">enumerator </em><code class="descname">box_error_code_MAX</code><a class="headerlink" href="#_CPPv418box_error_code_MAX" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.box_error_t">
+<code class="descname">box_error_t</code><a class="headerlink" href="#c.box_error_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error - contains information about error.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_error_type">
+const char * <code class="descname">box_error_type</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_error_t" title="box_error_t">box_error_t</a><em>&nbsp;*error</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the error type, e.g. “ClientError”, “SocketError”, etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>error</strong> (<a class="reference internal" href="#c.box_error_t" title="box_error_t"><em>box_error_t*</em></a>) – error</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">not-null string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_error_code">
+uint32_t <code class="descname">box_error_code</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_error_t" title="box_error_t">box_error_t</a><em>&nbsp;*error</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return IPROTO error code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>error</strong> (<a class="reference internal" href="#c.box_error_t" title="box_error_t"><em>box_error_t*</em></a>) – error</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">enum <a class="reference internal" href="#capi-box-error-code"><span class="std std-ref">box_error_code</span></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_error_message">
+const char * <code class="descname">box_error_message</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.box_error_t" title="box_error_t">box_error_t</a><em>&nbsp;*error</em><span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the error message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>error</strong> (<a class="reference internal" href="#c.box_error_t" title="box_error_t"><em>box_error_t*</em></a>) – error</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">not-null string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-error-box-error-last"></span><dl class="function">
+<dt id="c.box_error_last">
+<a class="reference internal" href="#c.box_error_t" title="box_error_t">box_error_t</a> * <code class="descname">box_error_last</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the information about the last API call error.</p>
+<p>The Tarantool error handling works most like libc’s errno. All API calls
+return -1 or NULL in the event of error. An internal pointer to box_error_t
+type is set by API functions to indicate what went wrong. This value is only
+significant if API call failed (returned -1 or NULL).</p>
+<p>Successful function can also touch the last error in some cases. You don’t
+have to clear the last error before calling API functions. The returned
+object is valid only until next call to <strong>any</strong> API function.</p>
+<p>You must set the last error using box_error_set() in your stored C procedures
+if you want to return a custom error message. You can re-throw the last API
+error to IPROTO client by keeping the current value and returning -1 to
+Tarantool from your stored procedure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">last error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_error_clear">
+void <code class="descname">box_error_clear</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the last error.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.box_error_set">
+int <code class="descname">box_error_set</code><span class="sig-paren">(</span>const char<em>&nbsp;*file</em>, unsigned<em>&nbsp;line</em>, uint32_t<em>&nbsp;code</em>, const char<em>&nbsp;*format</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the last error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>char* file</strong> (<em>const</em>) – </li>
+<li><strong>line</strong> (<em>unsigned</em>) – </li>
+<li><strong>code</strong> (<em>uint32_t</em>) – IPROTO <a class="reference internal" href="#capi-box-error-code"><span class="std std-ref">error code</span></a></li>
+<li><strong>char* format</strong> (<em>const</em>) – </li>
+<li><strong>...</strong> – format arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also: IPROTO <a class="reference internal" href="#capi-box-error-code"><span class="std std-ref">error code</span></a></p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.box_error_raise">
+<code class="descname">box_error_raise</code><span class="sig-paren">(</span>code, format, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.box_error_raise" title="Permalink to this definition">¶</a></dt>
+<dd><p>A backward-compatible API define.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="fiber.html" class="btn btn-neutral float-right" title="Module fiber" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="coio.html" class="btn btn-neutral float-left" title="Module coio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Constant box.NULL &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Constant <cite>box.NULL</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/reference/reference_lua/box_null.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="constant-box-null">
+<span id="box-null"></span><h1>Constant <cite>box.NULL</cite><a class="headerlink" href="#constant-box-null" title="Permalink to this headline">¶</a></h1>
+<p>There are some major problems with using Lua <strong>nil</strong> values in tables.
+For example: you can’t correctly assess the length of a table that is not a sequence.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; t = {0, nil, 1, 2, nil}
+---
+...
+
+tarantool&gt; t
+---
+- - 0
+  - null
+  - 1
+  - 2
+...
+
+tarantool&gt; #t
+---
+- 4
+...
+</pre></div>
+</div>
+<p>The console output of <code class="docutils literal notranslate"><span class="pre">t</span></code> processes <strong>nil</strong> values in the middle and at
+the end of the table differently. This is due to undefined behavior.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Trying to find the length for sparse arrays in LuaJIT leads to another
+scenario of
+<a class="reference external" href="https://www.lua.org/manual/5.2/manual.html#3.4.6">undefined behavior</a>.</p>
+</div>
+<p>To avoid this problem, use Tarantool’s <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> constant instead of <strong>nil</strong>.
+<code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> is a placeholder for a <strong>nil</strong> value in tables to preserve a key
+without a value.</p>
+<div class="section" id="using-box-null">
+<h2>Using box.NULL<a class="headerlink" href="#using-box-null" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> is a value of the cdata type representing a NULL pointer.
+It is similar to <code class="docutils literal notranslate"><span class="pre">msgpack.NULL</span></code>, <code class="docutils literal notranslate"><span class="pre">json.NULL</span></code> and <code class="docutils literal notranslate"><span class="pre">yaml.NULL</span></code>. So it is
+some not <strong>nil</strong> value, even if it is a pointer to NULL.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> only with capitalized NULL (<code class="docutils literal notranslate"><span class="pre">box.null</span></code> is incorrect).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Technically speaking, <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> equals to <code class="docutils literal notranslate"><span class="pre">ffi.cast('void</span> <span class="pre">*',</span> <span class="pre">0)</span></code>.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; t = {0, box.NULL, 1, 2, box.NULL}
+---
+...
+
+tarantool&gt; t
+---
+- - 0
+  - null # cdata
+  - 1
+  - 2
+  - null # cdata
+...
+
+tarantool&gt; #t
+---
+- 5
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Notice that <code class="docutils literal notranslate"><span class="pre">t[2]</span></code> shows the same <code class="docutils literal notranslate"><span class="pre">null</span></code> output in both examples.
+However in this example <code class="docutils literal notranslate"><span class="pre">t[2]</span></code> and <code class="docutils literal notranslate"><span class="pre">t[5]</span></code> are of the cdata type, while
+in the previous example their type was <strong>nil</strong>.</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Avoid using implicit comparisons with nullable values when using <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>.
+Due to <a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#2.4.4">Lua behavior</a>,
+returning anything except <strong>false</strong> or <strong>nil</strong> from a condition expression
+is considered as <strong>true</strong>. And, as it was mentioned earlier, <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> is a
+pointer by design.</p>
+<p>That is why the expression <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> will always be considered <strong>true</strong> in case
+it is used as a condition in a comparison. This means that the code</p>
+<p><code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">box.NULL</span> <span class="pre">then</span> <span class="pre">func()</span> <span class="pre">end</span></code></p>
+<p class="last">will always execute the function <code class="docutils literal notranslate"><span class="pre">func()</span></code> (because the condition <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code> will
+always be neither <strong>false</strong> nor <strong>nil</strong>).</p>
+</div>
+</div>
+<div class="section" id="distinction-of-nil-and-box-null">
+<h2>Distinction of nil and <cite>box.NULL</cite><a class="headerlink" href="#distinction-of-nil-and-box-null" title="Permalink to this headline">¶</a></h2>
+<p>Use the expression <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">x</span> <span class="pre">==</span> <span class="pre">nil</span></code> to check if the <code class="docutils literal notranslate"><span class="pre">x</span></code> is either a <strong>nil</strong>
+or a <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>.</p>
+<p>To check whether <code class="docutils literal notranslate"><span class="pre">x</span></code> is a <strong>nil</strong> but not a <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>, use the following
+condition expression:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;nil&#39;</span>
+</pre></div>
+</div>
+<p>If it’s <strong>true</strong>, then <code class="docutils literal notranslate"><span class="pre">x</span></code> is a <strong>nil</strong>, but not a <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>.</p>
+<p>You can use the following for <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">==</span> <span class="kc">nil</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;cdata&#39;</span>
+</pre></div>
+</div>
+<p>If the expression above is <strong>true</strong>, then <code class="docutils literal notranslate"><span class="pre">x</span></code> is a <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By converting data to different formats (JSON, YAML, msgpack), you shall expect
+that it is possible that <strong>nil</strong> in sparse arrays will be converted to
+<code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>. And it is worth mentioning that such conversion might be
+unexpected (for example: by sending data via <a class="reference internal" href="net_box.html#net-box-module"><span class="std std-ref">net.box</span></a>
+or by obtaining data from <a class="reference internal" href="box_space.html#box-space"><span class="std std-ref">spaces</span></a> etc.).</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; type(({1, nil, 2})[2])
+---
+- nil
+...
+
+tarantool&gt; type(json.decode(json.encode({1, nil, 2}))[2])
+---
+- cdata
+...
+</pre></div>
+</div>
+<p class="last">You must anticipate such behavior and use a proper condition expression.
+Use the explicit comparison <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">nil</span></code> for checking for NULL in nullable values.
+It will detect both <strong>nil</strong> and <code class="docutils literal notranslate"><span class="pre">box.NULL</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

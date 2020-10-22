@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module coio &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Module error" href="error.html" />
+    <link rel="prev" title="Module clock" href="clock.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Contributor’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">C API reference</a> &raquo;</li>
+        
+      <li>Module <cite>coio</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/dev_guide/reference_capi/coio.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-coio">
+<span id="coio-module"></span><h1>Module <cite>coio</cite><a class="headerlink" href="#module-coio" title="Permalink to this headline">¶</a></h1>
+<dl class="enum">
+<dt id="_CPPv410COIO_EVENT">
+<span id="_CPPv310COIO_EVENT"></span><span id="_CPPv210COIO_EVENT"></span><em class="property">enum </em><code class="descname">COIO_EVENT</code><a class="headerlink" href="#_CPPv410COIO_EVENT" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv49COIO_READ">
+<span id="_CPPv39COIO_READ"></span><span id="_CPPv29COIO_READ"></span><em class="property">enumerator </em><code class="descname">COIO_READ</code><a class="headerlink" href="#_CPPv49COIO_READ" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>READ event</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv410COIO_WRITE">
+<span id="_CPPv310COIO_WRITE"></span><span id="_CPPv210COIO_WRITE"></span><em class="property">enumerator </em><code class="descname">COIO_WRITE</code><a class="headerlink" href="#_CPPv410COIO_WRITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>WRITE event</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="c-api-coio-coio-wait"></span><dl class="function">
+<dt id="c.coio_wait">
+int <code class="descname">coio_wait</code><span class="sig-paren">(</span>int<em>&nbsp;fd</em>, int<em>&nbsp;event</em>, double<em>&nbsp;timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#c.coio_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until READ or WRITE event on socket (<code class="docutils literal notranslate"><span class="pre">fd</span></code>). Yields.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fd</strong> (<em>int</em>) – non-blocking socket file description</li>
+<li><strong>event</strong> (<em>int</em>) – requested events to wait. Combination of
+<code class="docutils literal notranslate"><span class="pre">COIO_READ</span> <span class="pre">|</span> <span class="pre">COIO_WRITE</span></code> bit flags.</li>
+<li><strong>timeout</strong> (<em>double</em>) – timeout in seconds.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">0 - timeout</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">&gt;0 - returned events. Combination of <code class="docutils literal notranslate"><span class="pre">TNT_IO_READ</span> <span class="pre">|</span> <span class="pre">TNT_IO_WRITE</span></code> bit flags.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="c-api-coio-coio-call"></span><dl class="function">
+<dt id="c.coio_call">
+ssize_t <code class="descname">coio_call</code><span class="sig-paren">(</span>ssize_t (<em>*func</em>)(va_list), ...<span class="sig-paren">)</span><a class="headerlink" href="#c.coio_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new eio task with specified function and arguments. Yield and wait
+until the task is complete.
+This function may use the <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-worker-pool-threads"><span class="std std-ref">worker_pool_threads</span></a>
+configuration parameter.</p>
+<p>To avoid double error checking, this function does not throw exceptions.
+In most cases it is also necessary to check the return value of the called
+function and perform necessary actions. If func sets errno, the errno is
+preserved across the call.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">-1 and <code class="docutils literal notranslate"><span class="pre">errno</span></code> = ENOMEM if failed to create a task</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the function’s return (<code class="docutils literal notranslate"><span class="pre">errno</span></code> is preserved).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">ssize_t</span> <span class="n">openfile_cb</span><span class="p">(</span><span class="kt">va_list</span> <span class="n">ap</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">flags</span> <span class="o">=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">coio_call</span><span class="p">(</span><span class="n">openfile_cb</span><span class="p">,</span> <span class="s">&quot;/tmp/file&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">-1</span><span class="p">)</span>
+    <span class="c1">// handle errors.</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.coio_getaddrinfo">
+int <code class="descname">coio_getaddrinfo</code><span class="sig-paren">(</span>const char<em>&nbsp;*host</em>, const char<em>&nbsp;*port</em>, const struct addrinfo<em>&nbsp;*hints</em>, struct addrinfo<em>&nbsp;**res</em>, double<em>&nbsp;timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#c.coio_getaddrinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fiber-friendly version of <em class="manpage">getaddrinfo(3)</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.coio_close">
+int <code class="descname">coio_close</code><span class="sig-paren">(</span>int<em>&nbsp;fd</em><span class="sig-paren">)</span><a class="headerlink" href="#c.coio_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the <code class="docutils literal notranslate"><span class="pre">fd</span></code> and wake any fiber blocked in
+<a class="reference internal" href="#c-api-coio-coio-wait"><span class="std std-ref">coio_wait()</span></a> call on this <code class="docutils literal notranslate"><span class="pre">fd</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fd</strong> (<em>int</em>) – non-blocking socket file description</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the result of <code class="docutils literal notranslate"><span class="pre">close(fd)</span></code>, see <em class="manpage">close(2)</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="error.html" class="btn btn-neutral float-right" title="Module error" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="clock.html" class="btn btn-neutral float-left" title="Module clock" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

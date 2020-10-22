@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Troubleshooting guide &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Troubleshooting guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/troubleshoot.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="troubleshooting-guide">
+<span id="admin-troubleshooting-guide"></span><span id="admin-troubleshoot"></span><h1>Troubleshooting guide<a class="headerlink" href="#troubleshooting-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="problem-insert-update-requests-result-in-er-memory-issue-error">
+<span id="admin-troubleshoot-memory-issues"></span><h2>Problem: INSERT/UPDATE-requests result in ER_MEMORY_ISSUE error<a class="headerlink" href="#problem-insert-update-requests-result-in-er-memory-issue-error" title="Permalink to this headline">¶</a></h2>
+<p><strong>Possible reasons</strong></p>
+<ul>
+<li><p class="first">Lack of RAM (parameters <code class="docutils literal notranslate"><span class="pre">arena_used_ratio</span></code> and <code class="docutils literal notranslate"><span class="pre">quota_used_ratio</span></code> in
+<a class="reference internal" href="../../reference/reference_lua/box_slab.html#box-slab-info"><span class="std std-ref">box.slab.info()</span></a> report are getting close to 100%).</p>
+<p>To check these parameters, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># attaching to a Tarantool instance</span>
+<span class="gp">$</span> tarantoolctl enter &lt;instance_name&gt;
+<span class="gp">$</span> <span class="c1"># -- OR --</span>
+<span class="gp">$</span> tarantoolctl connect &lt;URI&gt;
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- requesting arena_used_ratio value
+tarantool&gt; box.slab.info().arena_used_ratio
+
+-- requesting quota_used_ratio value
+tarantool&gt; box.slab.info().quota_used_ratio
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Solution</strong></p>
+<p>Try either of the following measures:</p>
+<ul>
+<li><p class="first">In Tarantool’s <a class="reference internal" href="instance_config.html#admin-instance-config"><span class="std std-ref">instance file</span></a>, increase the
+value of <a class="reference internal" href="../../reference/configuration/index.html#cfg-storage-memtx-memory"><span class="std std-ref">box.cfg{memtx_memory}</span></a>
+(if memory resources are available).</p>
+<p>In versions of Tarantool before 1.10, the server needs to be restarted
+to change this parameter. The Tarantool
+server will be unavailable while restarting from .xlog files, unless
+you restart it using <a class="reference internal" href="../../reference/configuration/index.html#index-hot-standby"><span class="std std-ref">hot standby</span></a> mode.
+In the latter case, nearly 100% server availability is guaranteed.</p>
+</li>
+<li><p class="first">Clean up the database.</p>
+</li>
+<li><p class="first">Check the indicators of memory fragmentation:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- requesting quota_used_ratio value
+tarantool&gt; box.slab.info().quota_used_ratio
+
+-- requesting items_used_ratio value
+tarantool&gt; box.slab.info().items_used_ratio
+</pre></div>
+</div>
+<p>In case of heavy memory fragmentation (<code class="docutils literal notranslate"><span class="pre">quota_used_ratio</span></code> is getting close
+to 100%, <code class="docutils literal notranslate"><span class="pre">items_used_ratio</span></code> is about 50%), we recommend restarting Tarantool
+in the <a class="reference internal" href="../../reference/configuration/index.html#index-hot-standby"><span class="std std-ref">hot standby</span></a> mode.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="problem-tarantool-generates-too-heavy-cpu-load">
+<span id="admin-troubleshoot-cpu-load"></span><h2>Problem: Tarantool generates too heavy CPU load<a class="headerlink" href="#problem-tarantool-generates-too-heavy-cpu-load" title="Permalink to this headline">¶</a></h2>
+<p><strong>Possible reasons</strong></p>
+<p>The <a class="reference internal" href="../box/atomic_index.html#atomic-threads-fibers-yields"><span class="std std-ref">transaction processor thread</span></a> consumes
+over 60% CPU.</p>
+<p><strong>Solution</strong></p>
+<p>Attach to the Tarantool instance with <a class="reference internal" href="../../reference/tarantoolctl.html#tarantoolctl"><span class="std std-ref">tarantoolctl</span></a> utility,
+analyze the query statistics with <a class="reference internal" href="../../reference/reference_lua/box_stat.html#box-introspection-box-stat"><span class="std std-ref">box.stat()</span></a>
+and spot the CPU consumption leader. The following commands can help:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># attaching to a Tarantool instance</span>
+<span class="gp">$</span> tarantoolctl enter &lt;instance_name&gt;
+<span class="gp">$</span> <span class="c1"># -- OR --</span>
+<span class="gp">$</span> tarantoolctl connect &lt;URI&gt;
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- checking the RPS of calling stored procedures
+tarantool&gt; box.stat().CALL.rps
+</pre></div>
+</div>
+<p>The critical RPS value is 75 000, boiling down to 10 000 - 20 000 for a rich
+Lua application (a Lua module of 200+ lines).</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- checking RPS per query type
+tarantool&gt; box.stat().&lt;query_type&gt;.rps
+</pre></div>
+</div>
+<p>The critical RPS value for SELECT/INSERT/UPDATE/DELETE requests is 100 000.</p>
+<p>If the load is mostly generated by SELECT requests, we recommend adding a
+<a class="reference internal" href="../replication/repl_bootstrap.html#replication-bootstrap"><span class="std std-ref">slave server</span></a> and let it process part of the
+queries.</p>
+<p>If the load is mostly generated by INSERT/UPDATE/DELETE requests, we recommend
+<a class="reference internal" href="../../reference/reference_rock/shard.html#shard-module"><span class="std std-ref">sharding the database</span></a>.</p>
+</div>
+<div class="section" id="problem-query-processing-times-out">
+<span id="admin-troubleshoot-query-timeout"></span><h2>Problem: Query processing times out<a class="headerlink" href="#problem-query-processing-times-out" title="Permalink to this headline">¶</a></h2>
+<p><strong>Possible reasons</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All reasons that we discuss here can be identified by messages
+in Tarantool’s log file, all starting with the words <code class="docutils literal notranslate"><span class="pre">'Too</span> <span class="pre">long...'</span></code>.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Both fast and slow queries are processed within a single connection, so the
+readahead buffer is cluttered with slow queries.</p>
+<p><strong>Solution</strong></p>
+<p>Try either of the following measures:</p>
+<ul>
+<li><p class="first">Increase the readahead buffer size
+(<a class="reference internal" href="../../reference/configuration/index.html#cfg-networking-readahead"><span class="std std-ref">box.cfg{readahead}</span></a> parameter).</p>
+<p>This parameter can be changed on the fly, so you don’t need to restart
+Tarantool. Attach to the Tarantool instance with
+<a class="reference internal" href="../../reference/tarantoolctl.html#tarantoolctl"><span class="std std-ref">tarantoolctl</span></a> utility and call <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code> with a
+new <code class="docutils literal notranslate"><span class="pre">readahead</span></code> value:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># attaching to a Tarantool instance</span>
+<span class="gp">$</span> tarantoolctl enter &lt;instance_name&gt;
+<span class="gp">$</span> <span class="c1"># -- OR --</span>
+<span class="gp">$</span> tarantoolctl connect &lt;URI&gt;
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- changing the readahead value
+tarantool&gt; box.cfg{readahead = 10 * 1024 * 1024}
+</pre></div>
+</div>
+<p><strong>Example:</strong> Given 1000 RPS, 1 Кbyte of query size, and 10 seconds of
+maximal query processing time, the minimal readahead buffer size must be
+10 Mbytes.</p>
+</li>
+<li><p class="first">On the business logic level, split fast and slow queries processing by
+different connections.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Slow disks.</p>
+<p><strong>Solution</strong></p>
+<p>Check disk performance (use <a class="reference external" href="https://linux.die.net/man/1/iostat">iostat</a>,
+<a class="reference external" href="https://linux.die.net/man/1/iotop">iotop</a> or
+<a class="reference external" href="https://linux.die.net/man/1/strace">strace</a> utility to
+check <code class="docutils literal notranslate"><span class="pre">iowait</span></code> parameter) and try to put .xlog files and snapshot files on
+different physical disks (i.e. use different locations for
+<a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-wal-dir"><span class="std std-ref">wal_dir</span></a> and <a class="reference internal" href="../../reference/configuration/index.html#cfg-basic-memtx-dir"><span class="std std-ref">memtx_dir</span></a>).</p>
+</li>
+</ol>
+</div>
+<div class="section" id="problem-replication-lag-and-idle-contain-negative-values">
+<span id="admin-troubleshoot-negative-lag-idle"></span><h2>Problem: Replication “lag” and “idle” contain negative values<a class="headerlink" href="#problem-replication-lag-and-idle-contain-negative-values" title="Permalink to this headline">¶</a></h2>
+<p>This is about <code class="docutils literal notranslate"><span class="pre">box.info.replication.(upstream.)lag</span></code> and
+<code class="docutils literal notranslate"><span class="pre">box.info.replication.(upstream.)idle</span></code> values in
+<a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication</span></a> section.</p>
+<p><strong>Possible reasons</strong></p>
+<p>Operating system clock on the hosts is not synchronized, or the NTP server is
+faulty.</p>
+<p><strong>Solution</strong></p>
+<p>Check NTP server settings.</p>
+<p>If you found no problems with the NTP server, just do nothing then.
+Lag calculation uses operating system clock from two different machines.
+If they get out of sync, the remote master clock can get consistently behind
+the local instance’s clock.</p>
+</div>
+<div class="section" id="problem-replication-idle-keeps-growing-but-no-related-log-messages-appear">
+<span id="admin-troubleshoot-idle-grows-no-logs"></span><h2>Problem: Replication “idle” keeps growing, but no related log messages appear<a class="headerlink" href="#problem-replication-idle-keeps-growing-but-no-related-log-messages-appear" title="Permalink to this headline">¶</a></h2>
+<p>This is about <code class="docutils literal notranslate"><span class="pre">box.info.replication.(upstream.)idle</span></code> value in
+<a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication</span></a> section.</p>
+<p><strong>Possible reasons</strong></p>
+<p>Some server was assigned different IP addresses, or some server was specified
+twice in <code class="docutils literal notranslate"><span class="pre">box.cfg{}</span></code>, so duplicate connections were established.</p>
+<p><strong>Solution</strong></p>
+<p><a class="reference internal" href="upgrades.html#admin-upgrades-instance"><span class="std std-ref">Upgrade Tarantool 1.6 to 1.9+</span></a>, where this error
+is fixed: in case of duplicate connections, replication is stopped and the
+following message is added to the log:
+<code class="docutils literal notranslate"><span class="pre">'Incorrect</span> <span class="pre">value</span> <span class="pre">for</span> <span class="pre">option</span> <span class="pre">''replication_source'':</span> <span class="pre">duplicate</span> <span class="pre">connection</span> <span class="pre">with</span>
+<span class="pre">the</span> <span class="pre">same</span> <span class="pre">replica</span> <span class="pre">UUID'</span></code>.</p>
+</div>
+<div class="section" id="problem-replication-statistics-differ-on-replicas-within-a-replica-set">
+<span id="admin-troubleshoot-mr-odd-replication-stats"></span><h2>Problem: Replication statistics differ on replicas within a replica set<a class="headerlink" href="#problem-replication-statistics-differ-on-replicas-within-a-replica-set" title="Permalink to this headline">¶</a></h2>
+<p>This is about a replica set that consists of one master and several replicas.
+In a replica set of this type, values in
+<a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication</span></a> section, like
+<code class="docutils literal notranslate"><span class="pre">box.info.replication.lsn</span></code>, come from the master and must be the same on all
+replicas within the replica set. The problem is that they get different.</p>
+<p><strong>Possible reasons</strong></p>
+<p>Replication is broken.</p>
+<p><strong>Solution</strong></p>
+<p><a class="reference internal" href="../replication/repl_recover.html#replication-recover"><span class="std std-ref">Restart replication</span></a>.</p>
+</div>
+<div class="section" id="problem-master-master-replication-is-stopped">
+<span id="admin-troubleshoot-mm-replication-stopped"></span><h2>Problem: Master-master replication is stopped<a class="headerlink" href="#problem-master-master-replication-is-stopped" title="Permalink to this headline">¶</a></h2>
+<p>This is about <a class="reference internal" href="../../reference/reference_lua/box_info.html#box-info-replication"><span class="std std-ref">box.info.replication(.upstream).status</span></a>
+= stopped.</p>
+<p><strong>Possible reasons</strong></p>
+<p>In a master-master replica set of two Tarantool instances, one of the masters
+has tried to perform an action already performed by the other server,
+for example re-insert a tuple with the same unique key. This would cause an
+error message like
+<code class="docutils literal notranslate"><span class="pre">'Duplicate</span> <span class="pre">key</span> <span class="pre">exists</span> <span class="pre">in</span> <span class="pre">unique</span> <span class="pre">index</span> <span class="pre">'primary'</span> <span class="pre">in</span> <span class="pre">space</span> <span class="pre">&lt;space_name&gt;'</span></code>.</p>
+<p><strong>Solution</strong></p>
+<p>Restart replication with the following commands (at each master instance):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># attaching to a Tarantool instance</span>
+<span class="gp">$</span> tarantoolctl enter &lt;instance_name&gt;
+<span class="gp">$</span> <span class="c1"># -- OR --</span>
+<span class="gp">$</span> tarantoolctl connect &lt;URI&gt;
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- restarting replication
+tarantool&gt; original_value = box.cfg.replication
+tarantool&gt; box.cfg{replication={}}
+tarantool&gt; box.cfg{replication=original_value}
+</pre></div>
+</div>
+<p>We also recommend using text primary keys or setting up
+<a class="reference internal" href="../replication/repl_bootstrap.html#replication-master-replica-bootstrap"><span class="std std-ref">master-slave replication</span></a>.</p>
+</div>
+<div class="section" id="problem-tarantool-works-much-slower-than-before">
+<span id="admin-troubleshoot-slow-tarantool"></span><h2>Problem: Tarantool works much slower than before<a class="headerlink" href="#problem-tarantool-works-much-slower-than-before" title="Permalink to this headline">¶</a></h2>
+<p><strong>Possible reasons</strong></p>
+<p>Inefficient memory usage (RAM is cluttered with a huge amount of unused objects).</p>
+<p><strong>Solution</strong></p>
+<p>Call the Lua garbage collector with the
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-collectgarbage">collectgarbage(‘count’) function</a>
+and measure its execution time with the Tarantool functions
+<a class="reference internal" href="../../reference/reference_lua/clock.html#clock-bench"><span class="std std-ref">clock.bench()</span></a> or <a class="reference internal" href="../../reference/reference_lua/clock.html#clock-proc"><span class="std std-ref">clock.proc()</span></a>.</p>
+<p>Example of calculating memory usage statistics:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># attaching to a Tarantool instance</span>
+<span class="gp">$</span> tarantoolctl enter &lt;instance_name&gt;
+<span class="gp">$</span> <span class="c1"># -- OR --</span>
+<span class="gp">$</span> tarantoolctl connect &lt;URI&gt;
+</pre></div>
+</div>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>-- loading Tarantool&#39;s &quot;clock&quot; module with time-related routines
+tarantool&gt; clock = require &#39;clock&#39;
+-- starting the timer
+tarantool&gt; b = clock.proc()
+-- launching garbage collection
+tarantool&gt; c = collectgarbage(&#39;count&#39;)
+-- stopping the timer after garbage collection is completed
+tarantool&gt; return c, clock.proc() - b
+</pre></div>
+</div>
+<p>If the returned <code class="docutils literal notranslate"><span class="pre">clock.proc()</span></code> value is greater than 0.001, this may be an
+indicator of inefficient memory usage (no active measures are required, but we
+recommend to optimize your Tarantool application code).</p>
+<p>If the value is greater than 0.01, your application definitely needs thorough
+code analysis aimed at optimizing memory usage.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

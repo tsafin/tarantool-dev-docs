@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Administration &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="administration">
+<span id="admin"></span><h1>Administration<a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h1>
+<p>Tarantool is designed to have multiple running instances on the same host.</p>
+<p>Here we show how to administer Tarantool instances using any of the following
+utilities:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">systemd</span></code> native utilities, or</li>
+<li><a class="reference internal" href="../../reference/tarantoolctl.html#tarantoolctl"><span class="std std-ref">tarantoolctl</span></a>, a utility shipped and installed as
+part of Tarantool distribution.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Unlike the rest of this manual, here we use system-wide paths.</li>
+<li>Console examples here are for Fedora.</li>
+</ul>
+</div>
+<p>This chapter includes the following sections:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="instance_config.html">Instance configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="instance_config.html#instance-file">Instance file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instance_config.html#tarantoolctl-configuration-file"><cite>tarantoolctl</cite> configuration file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="start_stop_instance.html">Starting/stopping an instance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="start_stop_instance.html#running-tarantool-locally">Running Tarantool locally</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server_introspection.html">Server introspection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server_introspection.html#using-tarantool-as-a-client">Using Tarantool as a client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server_introspection.html#executing-code-on-an-instance">Executing code on an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server_introspection.html#health-checks">Health checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server_introspection.html#profiling-performance-issues">Profiling performance issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="daemon_supervision.html">Daemon supervision</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="daemon_supervision.html#server-signals">Server signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="daemon_supervision.html#automatic-instance-restart">Automatic instance restart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="daemon_supervision.html#core-dumps">Core dumps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="daemon_supervision.html#stack-traces">Stack traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="daemon_supervision.html#debugger">Debugger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="disaster_recovery.html">Disaster recovery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="disaster_recovery.html#master-replica">Master-replica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disaster_recovery.html#master-master">Master-master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disaster_recovery.html#data-loss">Data loss</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#hot-backup-memtx">Hot backup (memtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#hot-backup-vinyl-memtx">Hot backup (vinyl/memtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#continuous-remote-backup-memtx">Continuous remote backup (memtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backups.html#continuous-backup-memtx">Continuous backup (memtx)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrades.html">Upgrades</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrades.html#upgrading-a-tarantool-database">Upgrading a Tarantool database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrades.html#upgrading-a-tarantool-instance">Upgrading a Tarantool instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrades.html#upgrading-tarantool-in-a-replication-cluster">Upgrading Tarantool in a replication cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="os_notes.html">Notes for operating systems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="os_notes.html#mac-os">Mac OS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="os_notes.html#freebsd">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="os_notes.html#gentoo-linux">Gentoo Linux</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bug_reports.html">Bug reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshooting guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-insert-update-requests-result-in-er-memory-issue-error">Problem: INSERT/UPDATE-requests result in ER_MEMORY_ISSUE error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-tarantool-generates-too-heavy-cpu-load">Problem: Tarantool generates too heavy CPU load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-query-processing-times-out">Problem: Query processing times out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-replication-lag-and-idle-contain-negative-values">Problem: Replication “lag” and “idle” contain negative values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-replication-idle-keeps-growing-but-no-related-log-messages-appear">Problem: Replication “idle” keeps growing, but no related log messages appear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-replication-statistics-differ-on-replicas-within-a-replica-set">Problem: Replication statistics differ on replicas within a replica set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-master-master-replication-is-stopped">Problem: Master-master replication is stopped</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshoot.html#problem-tarantool-works-much-slower-than-before">Problem: Tarantool works much slower than before</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

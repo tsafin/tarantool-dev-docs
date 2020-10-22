@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Server introspection &mdash; Tarantool Dev Docs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> Tarantool Dev Docs
+          
+
+          
+            
+            <img src="../../../../_static/logo_white_text.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Contributor’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html">Tarantool internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../internals/source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tarantool Dev Docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Server introspection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/doc/doc/book/admin/server_introspection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="server-introspection">
+<span id="admin-server-introspection"></span><h1>Server introspection<a class="headerlink" href="#server-introspection" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-tarantool-as-a-client">
+<span id="admin-using-tarantool-as-a-client"></span><h2>Using Tarantool as a client<a class="headerlink" href="#using-tarantool-as-a-client" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool enters the interactive mode if:</p>
+<ul class="simple">
+<li>you start Tarantool without an
+<a class="reference internal" href="instance_config.html#admin-instance-file"><span class="std std-ref">instance file</span></a>, or</li>
+<li>the instance file contains <a class="reference internal" href="../../reference/reference_lua/console.html#console-start"><span class="std std-ref">console.start()</span></a>.</li>
+</ul>
+<p>Tarantool displays a prompt (e.g. “tarantool&gt;”) and you can enter requests.
+When used this way, Tarantool can be a client for a remote server.
+See basic examples in <a class="reference internal" href="../../getting_started/index.html#getting-started"><span class="std std-ref">Getting started</span></a>.</p>
+<p>The interactive mode is used by <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> to implement “enter” and
+“connect” commands.</p>
+</div>
+<div class="section" id="executing-code-on-an-instance">
+<span id="admin-executing-code-on-an-instance"></span><h2>Executing code on an instance<a class="headerlink" href="#executing-code-on-an-instance" title="Permalink to this headline">¶</a></h2>
+<p>You can attach to an instance’s <a class="reference internal" href="security.html#admin-security"><span class="std std-ref">admin console</span></a> and
+execute some Lua code using <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># for local instances:</span>
+<span class="gp">$</span> tarantoolctl enter my_app
+<span class="go">/bin/tarantoolctl: Found my_app.lua in /etc/tarantool/instances.available</span>
+<span class="go">/bin/tarantoolctl: Connecting to /var/run/tarantool/my_app.control</span>
+<span class="go">/bin/tarantoolctl: connected to unix/:/var/run/tarantool/my_app.control</span>
+<span class="go">unix/:/var/run/tarantool/my_app.control&gt; 1 + 1</span>
+<span class="go">---</span>
+<span class="go">- 2</span>
+<span class="go">...</span>
+<span class="go">unix/:/var/run/tarantool/my_app.control&gt;</span>
+
+<span class="gp">$</span> <span class="c1"># for local and remote instances:</span>
+<span class="gp">$</span> tarantoolctl connect username:password@127.0.0.1:3306
+</pre></div>
+</div>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span></code> to execute Lua code on an instance without
+attaching to its admin console. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="c1"># executing commands directly from the command line</span>
+<span class="gp">$</span> &lt;command&gt; <span class="p">|</span> tarantoolctl <span class="nb">eval</span> my_app
+<span class="go">&lt;...&gt;</span>
+
+<span class="gp">$</span> <span class="c1"># - OR -</span>
+
+<span class="gp">$</span> <span class="c1"># executing commands from a script file</span>
+<span class="gp">$</span> tarantoolctl <span class="nb">eval</span> my_app script.lua
+<span class="go">&lt;...&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Alternatively, you can use the <a class="reference internal" href="../../reference/reference_lua/console.html#console-module"><span class="std std-ref">console</span></a> module or the
+<a class="reference internal" href="../../reference/reference_lua/net_box.html#net-box-module"><span class="std std-ref">net.box</span></a> module from a Tarantool server. Also, you can
+write your client programs with any of the
+<a class="reference internal" href="../connectors/index.html#index-box-connectors"><span class="std std-ref">connectors</span></a>. However, most of the examples in
+this manual illustrate usage with either <code class="docutils literal notranslate"><span class="pre">tarantoolctl</span> <span class="pre">connect</span></code> or
+<a class="reference internal" href="#admin-using-tarantool-as-a-client"><span class="std std-ref">using the Tarantool server as a client</span></a>.</p>
+</div>
+</div>
+<div class="section" id="health-checks">
+<span id="admin-health-checks"></span><h2>Health checks<a class="headerlink" href="#health-checks" title="Permalink to this headline">¶</a></h2>
+<p>To check the instance status, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl status my_app
+<span class="go">my_app is running (pid: /var/run/tarantool/my_app.pid)</span>
+
+<span class="gp">$</span> <span class="c1"># - OR -</span>
+
+<span class="gp">$</span> systemctl status tarantool@my_app
+<span class="go">tarantool@my_app.service - Tarantool Database Server</span>
+<span class="go">Loaded: loaded (/etc/systemd/system/tarantool@.service; disabled; vendor preset: disabled)</span>
+<span class="go">Active: active (running)</span>
+<span class="go">Docs: man:tarantool(1)</span>
+<span class="go">Process: 5346 ExecStart=/usr/bin/tarantoolctl start %I (code=exited, status=0/SUCCESS)</span>
+<span class="go">Main PID: 5350 (tarantool)</span>
+<span class="go">Tasks: 11 (limit: 512)</span>
+<span class="go">CGroup: /system.slice/system-tarantool.slice/tarantool@my_app.service</span>
+<span class="go">+ 5350 tarantool my_app.lua &lt;running&gt;</span>
+</pre></div>
+</div>
+<p>To check the boot log, on systems with <code class="docutils literal notranslate"><span class="pre">systemd</span></code>, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> journalctl -u tarantool@my_app -n <span class="m">5</span>
+<span class="go">-- Logs begin at Fri 2016-01-08 12:21:53 MSK, end at Thu 2016-01-21 21:17:47 MSK. --</span>
+<span class="go">Jan 21 21:17:47 localhost.localdomain systemd[1]: Stopped Tarantool Database Server.</span>
+<span class="go">Jan 21 21:17:47 localhost.localdomain systemd[1]: Starting Tarantool Database Server...</span>
+<span class="go">Jan 21 21:17:47 localhost.localdomain tarantoolctl[5969]: /usr/bin/tarantoolctl: Found my_app.lua in /etc/tarantool/instances.available</span>
+<span class="go">Jan 21 21:17:47 localhost.localdomain tarantoolctl[5969]: /usr/bin/tarantoolctl: Starting instance...</span>
+<span class="go">Jan 21 21:17:47 localhost.localdomain systemd[1]: Started Tarantool Database Server</span>
+</pre></div>
+</div>
+<p>For more details, use the reports provided by functions in the following submodules:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../reference/reference_lua/box_introspection.html#box-introspection-box-cfg"><span class="std std-ref">box.cfg</span></a> submodule (check and specify all
+configuration parameters for the Tarantool server)</li>
+<li><a class="reference internal" href="../../reference/reference_lua/box_slab.html#box-introspection-box-slab"><span class="std std-ref">box.slab</span></a> submodule (monitor the total use
+and fragmentation of memory allocated for storing data in Tarantool)</li>
+<li><a class="reference internal" href="../../reference/reference_lua/box_introspection.html#box-introspection-box-info"><span class="std std-ref">box.info</span></a> submodule (introspect Tarantool
+server variables, primarily those related to replication)</li>
+<li><a class="reference internal" href="../../reference/reference_lua/box_stat.html#box-introspection-box-stat"><span class="std std-ref">box.stat</span></a> submodule (introspect Tarantool
+request and network statistics)</li>
+</ul>
+<p>You can also try <a class="reference external" href="https://github.com/tarantool/metrics/tree/master/metrics/plugins/prometheus">prometheus</a>,
+a plugin that makes it easy to collect metrics (e.g. memory usage or number
+of requests) from Tarantool applications and databases and expose them via the
+Prometheus protocol.</p>
+<p><strong>Example</strong></p>
+<p>A very popular administrator request is <a class="reference internal" href="../../reference/reference_lua/box_slab.html#box-slab-info"><span class="std std-ref">box.slab.info()</span></a>,
+which displays detailed memory usage statistics for a Tarantool instance.</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; box.slab.info()
+---
+- items_size: 228128
+  items_used_ratio: 1.8%
+  quota_size: 1073741824
+  quota_used_ratio: 0.8%
+  arena_used_ratio: 43.2%
+  items_used: 4208
+  quota_used: 8388608
+  arena_size: 2325176
+  arena_used: 1003632
+...
+</pre></div>
+</div>
+<p>Tarantool takes memory from the operating system,
+for example when a user does many insertions.
+You can see how much it has taken by saying (on Linux):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ps -eo args,%mem | grep &quot;tarantool&quot;</span>
+</pre></div>
+</div>
+<p>Tarantool almost never releases this memory, even if the user
+deletes everything that was inserted, or reduces
+fragmentation by calling the Lua garbage collector via the
+<a class="reference external" href="https://www.lua.org/manual/5.1/manual.html#pdf-collectgarbage">collectgarbage function</a>.</p>
+<p>Ordinarily this does not affect performance.
+But, to force Tarantool to release memory, you can
+call <a class="reference internal" href="../../reference/reference_lua/box_snapshot.html#box-snapshot"><span class="std std-ref">box.snapshot</span></a>, stop the server instance,
+and restart it.</p>
+</div>
+<div class="section" id="profiling-performance-issues">
+<span id="admin-profiling-performance-issues"></span><h2>Profiling performance issues<a class="headerlink" href="#profiling-performance-issues" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool can at times work slower than usual. There can be multiple reasons,
+such as disk issues, CPU-intensive Lua scripts or misconfiguration.
+Tarantool’s log may lack details in such cases, so the only indications that
+something goes wrong are log entries like this: <code class="docutils literal notranslate"><span class="pre">W&gt;</span> <span class="pre">too</span> <span class="pre">long</span> <span class="pre">DELETE:</span> <span class="pre">8.546</span> <span class="pre">sec</span></code>.
+Here are tools and techniques that can help you collect Tarantool’s performance
+profile, which is helpful in troubleshooting slowdowns.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Most of these tools – except <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> – are intended for
+generic GNU/Linux distributions, but not FreeBSD or Mac OS.</p>
+</div>
+<div class="section" id="fiber-info">
+<h3>fiber.info()<a class="headerlink" href="#fiber-info" title="Permalink to this headline">¶</a></h3>
+<p>The simplest profiling method is to take advantage of Tarantool’s built-in
+functionality. <a class="reference internal" href="../../reference/reference_lua/fiber.html#fiber-info"><span class="std std-ref">fiber.info()</span></a> returns information about all
+running fibers with their corresponding C stack traces. You can use this data
+to see how many fibers are running and which C functions are executed more often
+than others.</p>
+<p>First, enter your instance’s interactive administrator console:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl enter NAME
+</pre></div>
+</div>
+<p>Once there, load the <code class="docutils literal notranslate"><span class="pre">fiber</span></code> module:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+</pre></div>
+</div>
+<p>After that you can get the required information with <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code>.</p>
+<p>At this point, you console output should look something like this:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+---
+...
+tarantool&gt; fiber.info()
+---
+- 360:
+    csw: 2098165
+    backtrace:
+    - &#39;#0 0x4d1b77 in wal_write(journal*, journal_entry*)+487&#39;
+    - &#39;#1 0x4bbf68 in txn_commit(txn*)+152&#39;
+    - &#39;#2 0x4bd5d8 in process_rw(request*, space*, tuple**)+136&#39;
+    - &#39;#3 0x4bed48 in box_process1+104&#39;
+    - &#39;#4 0x4d72f8 in lbox_replace+120&#39;
+    - &#39;#5 0x50f317 in lj_BC_FUNCC+52&#39;
+    fid: 360
+    memory:
+      total: 61744
+      used: 480
+    name: main
+  129:
+    csw: 113
+    backtrace: []
+    fid: 129
+    memory:
+      total: 57648
+      used: 0
+    name: &#39;console/unix/:&#39;
+...
+</pre></div>
+</div>
+<p>We highly recommend to assign meaningful names to fibers you create so that you
+can find them in the <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> list. In the example below, we create a
+fiber named <code class="docutils literal notranslate"><span class="pre">myworker</span></code>:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber = require(&#39;fiber&#39;)
+---
+...
+tarantool&gt; f = fiber.create(function() while true do fiber.sleep(0.5) end end)
+---
+...
+tarantool&gt; f:name(&#39;myworker&#39;) &lt;!-- assigning the name to a fiber
+---
+...
+tarantool&gt; fiber.info()
+---
+- 102:
+    csw: 14
+    backtrace:
+    - &#39;#0 0x501a1a in fiber_yield_timeout+90&#39;
+    - &#39;#1 0x4f2008 in lbox_fiber_sleep+72&#39;
+    - &#39;#2 0x5112a7 in lj_BC_FUNCC+52&#39;
+    fid: 102
+    memory:
+      total: 57656
+      used: 0
+    name: myworker &lt;!-- newly created background fiber
+  101:
+    csw: 284
+    backtrace: []
+    fid: 101
+    memory:
+      total: 57656
+      used: 0
+    name: interactive
+...
+</pre></div>
+</div>
+<p>You can kill any fiber with <a class="reference internal" href="../../reference/reference_lua/fiber.html#fiber-kill"><span class="std std-ref">fiber.kill(fid)</span></a>:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; fiber.kill(102)
+---
+...
+tarantool&gt; fiber.info()
+---
+- 101:
+    csw: 324
+    backtrace: []
+    fid: 101
+    memory:
+      total: 57656
+      used: 0
+    name: interactive
+...
+</pre></div>
+</div>
+<p>If you want to dynamically obtain information with <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code>, the shell
+script below may come in handy. It connects to a Tarantool instance specified by
+<code class="docutils literal notranslate"><span class="pre">NAME</span></code> every 0.5 seconds, grabs the <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> output and writes it to
+the <code class="docutils literal notranslate"><span class="pre">fiber-info.txt</span></code> file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> rm -f fiber.info.txt
+<span class="gp">$</span> watch -n <span class="m">0</span>.5 <span class="s2">&quot;echo &#39;require(\&quot;fiber\&quot;).info()&#39; | tarantoolctl enter NAME | tee -a fiber-info.txt&quot;</span>
+</pre></div>
+</div>
+<p>If you can’t understand which fiber causes performance issues, collect the
+metrics of the <code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> output for 10-15 seconds using the script above
+and contact the Tarantool team at <a class="reference external" href="mailto:support&#37;&#52;&#48;tarantool&#46;org">support<span>&#64;</span>tarantool<span>&#46;</span>org</a>.</p>
+</div>
+<div class="section" id="poor-mans-profilers">
+<h3>Poor man’s profilers<a class="headerlink" href="#poor-mans-profilers" title="Permalink to this headline">¶</a></h3>
+<p><strong>pstack &lt;pid&gt;</strong></p>
+<p>To use this tool, first install it with a package manager that comes with your
+Linux distribution. This command prints an execution stack trace of a running
+process specified by the PID. You might want to run this command several times
+in a row to pinpoint the bottleneck that causes the slowdown.</p>
+<p>Once installed, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pstack <span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span>
+</pre></div>
+</div>
+<p>Next, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">echo</span> <span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span>
+</pre></div>
+</div>
+<p>to show the PID of the Tarantool instance that runs the <code class="docutils literal notranslate"><span class="pre">INSTANCENAME.lua</span></code> file.</p>
+<p>You should get similar output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Thread <span class="m">19</span> <span class="o">(</span>Thread 0x7f09d1bff700 <span class="o">(</span>LWP <span class="m">24173</span><span class="o">))</span>:
+<span class="c1">#0 0x00007f0a1a5423f2 in ?? () from /lib64/libgomp.so.1</span>
+<span class="c1">#1 0x00007f0a1a53fdc0 in ?? () from /lib64/libgomp.so.1</span>
+<span class="c1">#2 0x00007f0a1ad5adc5 in start_thread () from /lib64/libpthread.so.0</span>
+<span class="c1">#3 0x00007f0a1a050ced in clone () from /lib64/libc.so.6</span>
+Thread <span class="m">18</span> <span class="o">(</span>Thread 0x7f09d13fe700 <span class="o">(</span>LWP <span class="m">24174</span><span class="o">))</span>:
+<span class="c1">#0 0x00007f0a1a5423f2 in ?? () from /lib64/libgomp.so.1</span>
+<span class="c1">#1 0x00007f0a1a53fdc0 in ?? () from /lib64/libgomp.so.1</span>
+<span class="c1">#2 0x00007f0a1ad5adc5 in start_thread () from /lib64/libpthread.so.0</span>
+<span class="c1">#3 0x00007f0a1a050ced in clone () from /lib64/libc.so.6</span>
+&lt;...&gt;
+Thread <span class="m">2</span> <span class="o">(</span>Thread 0x7f09c8bfe700 <span class="o">(</span>LWP <span class="m">24191</span><span class="o">))</span>:
+<span class="c1">#0 0x00007f0a1ad5e6d5 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0</span>
+<span class="c1">#1 0x000000000045d901 in wal_writer_pop(wal_writer*) ()</span>
+<span class="c1">#2 0x000000000045db01 in wal_writer_f(__va_list_tag*) ()</span>
+<span class="c1">#3 0x0000000000429abc in fiber_cxx_invoke(int (*)(__va_list_tag*), __va_list_tag*) ()</span>
+<span class="c1">#4 0x00000000004b52a0 in fiber_loop ()</span>
+<span class="c1">#5 0x00000000006099cf in coro_init ()</span>
+Thread <span class="m">1</span> <span class="o">(</span>Thread 0x7f0a1c47fd80 <span class="o">(</span>LWP <span class="m">24172</span><span class="o">))</span>:
+<span class="c1">#0 0x00007f0a1a0512c3 in epoll_wait () from /lib64/libc.so.6</span>
+<span class="c1">#1 0x00000000006051c8 in epoll_poll ()</span>
+<span class="c1">#2 0x0000000000607533 in ev_run ()</span>
+<span class="c1">#3 0x0000000000428e13 in main ()</span>
+</pre></div>
+</div>
+<p><strong>gdb -ex “bt” -p &lt;pid&gt;</strong></p>
+<p>As with <code class="docutils literal notranslate"><span class="pre">pstack</span></code>, the GNU debugger (also known as <code class="docutils literal notranslate"><span class="pre">gdb</span></code>) needs to be installed
+before you can start using it. Your Linux package manager can help you with that.</p>
+<p>Once the debugger is installed, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> gdb -ex <span class="s2">&quot;set pagination 0&quot;</span> -ex <span class="s2">&quot;thread apply all bt&quot;</span> --batch -p <span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span>
+</pre></div>
+</div>
+<p>Next, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">echo</span> <span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span>
+</pre></div>
+</div>
+<p>to show the PID of the Tarantool instance that runs the <code class="docutils literal notranslate"><span class="pre">INSTANCENAME.lua</span></code> file.</p>
+<p>After using the debugger, your console output should look like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>Thread debugging using libthread_db enabled<span class="o">]</span>
+Using host libthread_db library <span class="s2">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.
+
+<span class="o">[</span>CUT<span class="o">]</span>
+
+Thread <span class="m">1</span> <span class="o">(</span>Thread 0x7f72289ba940 <span class="o">(</span>LWP <span class="m">20535</span><span class="o">))</span>:
+<span class="c1">#0 _int_malloc (av=av@entry=0x7f7226e0eb20 &lt;main_arena&gt;, bytes=bytes@entry=504) at malloc.c:3697</span>
+<span class="c1">#1 0x00007f7226acf21a in __libc_calloc (n=&lt;optimized out&gt;, elem_size=&lt;optimized out&gt;) at malloc.c:3234</span>
+<span class="c1">#2 0x00000000004631f8 in vy_merge_iterator_reserve (capacity=3, itr=0x7f72264af9e0) at /usr/src/tarantool/src/box/vinyl.c:7629</span>
+<span class="c1">#3 vy_merge_iterator_add (itr=itr@entry=0x7f72264af9e0, is_mutable=is_mutable@entry=true, belong_range=belong_range@entry=false) at /usr/src/tarantool/src/box/vinyl.c:7660</span>
+<span class="c1">#4 0x00000000004703df in vy_read_iterator_add_mem (itr=0x7f72264af990) at /usr/src/tarantool/src/box/vinyl.c:8387</span>
+<span class="c1">#5 vy_read_iterator_use_range (itr=0x7f72264af990) at /usr/src/tarantool/src/box/vinyl.c:8453</span>
+<span class="c1">#6 0x000000000047657d in vy_read_iterator_start (itr=&lt;optimized out&gt;) at /usr/src/tarantool/src/box/vinyl.c:8501</span>
+<span class="c1">#7 0x00000000004766b5 in vy_read_iterator_next (itr=itr@entry=0x7f72264af990, result=result@entry=0x7f72264afad8) at /usr/src/tarantool/src/box/vinyl.c:8592</span>
+<span class="c1">#8 0x000000000047689d in vy_index_get (tx=tx@entry=0x7f7226468158, index=index@entry=0x2563860, key=&lt;optimized out&gt;, part_count=&lt;optimized out&gt;, result=result@entry=0x7f72264afad8) at /usr/src/tarantool/src/box/vinyl.c:5705</span>
+<span class="c1">#9 0x0000000000477601 in vy_replace_impl (request=&lt;optimized out&gt;, request=&lt;optimized out&gt;, stmt=0x7f72265a7150, space=0x2567ea0, tx=0x7f7226468158) at /usr/src/tarantool/src/box/vinyl.c:5920</span>
+<span class="c1">#10 vy_replace (tx=0x7f7226468158, stmt=stmt@entry=0x7f72265a7150, space=0x2567ea0, request=&lt;optimized out&gt;) at /usr/src/tarantool/src/box/vinyl.c:6608</span>
+<span class="c1">#11 0x00000000004615a9 in VinylSpace::executeReplace (this=&lt;optimized out&gt;, txn=&lt;optimized out&gt;, space=&lt;optimized out&gt;, request=&lt;optimized out&gt;) at /usr/src/tarantool/src/box/vinyl_space.cc:108</span>
+<span class="c1">#12 0x00000000004bd723 in process_rw (request=request@entry=0x7f72265a70f8, space=space@entry=0x2567ea0, result=result@entry=0x7f72264afbc8) at /usr/src/tarantool/src/box/box.cc:182</span>
+<span class="c1">#13 0x00000000004bed48 in box_process1 (request=0x7f72265a70f8, result=result@entry=0x7f72264afbc8) at /usr/src/tarantool/src/box/box.cc:700</span>
+<span class="c1">#14 0x00000000004bf389 in box_replace (space_id=space_id@entry=513, tuple=&lt;optimized out&gt;, tuple_end=&lt;optimized out&gt;, result=result@entry=0x7f72264afbc8) at /usr/src/tarantool/src/box/box.cc:754</span>
+<span class="c1">#15 0x00000000004d72f8 in lbox_replace (L=0x413c5780) at /usr/src/tarantool/src/box/lua/index.c:72</span>
+<span class="c1">#16 0x000000000050f317 in lj_BC_FUNCC ()</span>
+<span class="c1">#17 0x00000000004d37c7 in execute_lua_call (L=0x413c5780) at /usr/src/tarantool/src/box/lua/call.c:282</span>
+<span class="c1">#18 0x000000000050f317 in lj_BC_FUNCC ()</span>
+<span class="c1">#19 0x0000000000529c7b in lua_cpcall ()</span>
+<span class="c1">#20 0x00000000004f6aa3 in luaT_cpcall (L=L@entry=0x413c5780, func=func@entry=0x4d36d0 &lt;execute_lua_call&gt;, ud=ud@entry=0x7f72264afde0) at /usr/src/tarantool/src/lua/utils.c:962</span>
+<span class="c1">#21 0x00000000004d3fe7 in box_process_lua (handler=0x4d36d0 &lt;execute_lua_call&gt;, out=out@entry=0x7f7213020600, request=request@entry=0x413c5780) at /usr/src/tarantool/src/box/lua/call.c:382</span>
+<span class="c1">#22 box_lua_call (request=request@entry=0x7f72130401d8, out=out@entry=0x7f7213020600) at /usr/src/tarantool/src/box/lua/call.c:405</span>
+<span class="c1">#23 0x00000000004c0f27 in box_process_call (request=request@entry=0x7f72130401d8, out=out@entry=0x7f7213020600) at /usr/src/tarantool/src/box/box.cc:1074</span>
+<span class="c1">#24 0x000000000041326c in tx_process_misc (m=0x7f7213040170) at /usr/src/tarantool/src/box/iproto.cc:942</span>
+<span class="c1">#25 0x0000000000504554 in cmsg_deliver (msg=0x7f7213040170) at /usr/src/tarantool/src/cbus.c:302</span>
+<span class="c1">#26 0x0000000000504c2e in fiber_pool_f (ap=&lt;error reading variable: value has been optimized out&gt;) at /usr/src/tarantool/src/fiber_pool.c:64</span>
+<span class="c1">#27 0x000000000041122c in fiber_cxx_invoke(fiber_func, typedef __va_list_tag __va_list_tag *) (f=&lt;optimized out&gt;, ap=&lt;optimized out&gt;) at /usr/src/tarantool/src/fiber.h:645</span>
+<span class="c1">#28 0x00000000005011a0 in fiber_loop (data=&lt;optimized out&gt;) at /usr/src/tarantool/src/fiber.c:641</span>
+<span class="c1">#29 0x0000000000688fbf in coro_init () at /usr/src/tarantool/third_party/coro/coro.c:110</span>
+</pre></div>
+</div>
+<p>Run the debugger in a loop a few times to collect enough samples for making
+conclusions about why Tarantool demonstrates suboptimal performance.
+Use the following script:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> rm -f stack-trace.txt
+<span class="gp">$</span> watch -n <span class="m">0</span>.5 <span class="s2">&quot;gdb -ex &#39;set pagination 0&#39; -ex &#39;thread apply all bt&#39; --batch -p </span><span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span><span class="s2"> | tee -a stack-trace.txt&quot;</span>
+</pre></div>
+</div>
+<p>Structurally and functionally, this script is very similar to the one used with
+<code class="docutils literal notranslate"><span class="pre">fiber.info()</span></code> above.</p>
+<p>If you have any difficulties troubleshooting, let the script run for 10-15 seconds
+and then send the resulting <code class="docutils literal notranslate"><span class="pre">stack-trace.txt</span></code> file to the Tarantool team at
+<a class="reference external" href="mailto:support&#37;&#52;&#48;tarantool&#46;org">support<span>&#64;</span>tarantool<span>&#46;</span>org</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Use the poor man’s profilers with caution: each time they attach to a running
+process, this stops the process execution for about a second, which may leave
+a serious footprint in high-load services.</p>
+</div>
+</div>
+<div class="section" id="gperftools">
+<h3>gperftools<a class="headerlink" href="#gperftools" title="Permalink to this headline">¶</a></h3>
+<p>To use the CPU profiler from the Google Performance Tools suite with Tarantool,
+first take care of the prerequisites:</p>
+<ul class="simple">
+<li>For Debian/Ubuntu, run:</li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get install libgoogle-perftools4
+</pre></div>
+</div>
+<ul class="simple">
+<li>For RHEL/CentOS/Fedora, run:</li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> yum install gperftools-libs
+</pre></div>
+</div>
+<p>Once you do this, install Lua bindings:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl rocks install gperftools
+</pre></div>
+</div>
+<p>Now you’re ready to go. Enter your instance’s interactive administrator console:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tarantoolctl enter NAME
+</pre></div>
+</div>
+<p>To start profiling, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; cpuprof = require(&#39;gperftools.cpu&#39;)
+tarantool&gt; cpuprof.start(&#39;/home/&lt;username&gt;/tarantool-on-production.prof&#39;)
+</pre></div>
+</div>
+<p>It takes at least a couple of minutes for the profiler to gather performance
+metrics. After that, save the results to disk (you can do that as many times as
+you need):</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; cpuprof.flush()
+</pre></div>
+</div>
+<p>To stop profiling, say:</p>
+<div class="highlight-tarantoolsession notranslate"><div class="highlight"><pre><span></span>tarantool&gt; cpuprof.stop()
+</pre></div>
+</div>
+<p>You can now analyze the output with the <code class="docutils literal notranslate"><span class="pre">pprof</span></code> utility that comes with the
+<code class="docutils literal notranslate"><span class="pre">gperftools</span></code> package:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pprof --text /usr/bin/tarantool /home/&lt;username&gt;/tarantool-on-production.prof
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Debian/Ubuntu, the <code class="docutils literal notranslate"><span class="pre">pprof</span></code> utility is called <code class="docutils literal notranslate"><span class="pre">google-pprof</span></code>.</p>
+</div>
+<p>Your output should look similar to this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Total: <span class="m">598</span> samples
+      <span class="m">83</span> <span class="m">13</span>.9% <span class="m">13</span>.9% <span class="m">83</span> <span class="m">13</span>.9% epoll_wait
+      <span class="m">54</span> <span class="m">9</span>.0% <span class="m">22</span>.9% <span class="m">102</span> <span class="m">17</span>.1%
+vy_mem_tree_insert.constprop.35
+      <span class="m">32</span> <span class="m">5</span>.4% <span class="m">28</span>.3% <span class="m">34</span> <span class="m">5</span>.7% __write_nocancel
+      <span class="m">28</span> <span class="m">4</span>.7% <span class="m">32</span>.9% <span class="m">42</span> <span class="m">7</span>.0% vy_mem_iterator_start_from
+      <span class="m">26</span> <span class="m">4</span>.3% <span class="m">37</span>.3% <span class="m">26</span> <span class="m">4</span>.3% _IO_str_seekoff
+      <span class="m">21</span> <span class="m">3</span>.5% <span class="m">40</span>.8% <span class="m">21</span> <span class="m">3</span>.5% tuple_compare_field
+      <span class="m">19</span> <span class="m">3</span>.2% <span class="m">44</span>.0% <span class="m">19</span> <span class="m">3</span>.2%
+::TupleCompareWithKey::compare
+      <span class="m">19</span> <span class="m">3</span>.2% <span class="m">47</span>.2% <span class="m">38</span> <span class="m">6</span>.4% tuple_compare_slowpath
+      <span class="m">12</span> <span class="m">2</span>.0% <span class="m">49</span>.2% <span class="m">23</span> <span class="m">3</span>.8% __libc_calloc
+       <span class="m">9</span> <span class="m">1</span>.5% <span class="m">50</span>.7% <span class="m">9</span> <span class="m">1</span>.5%
+::TupleCompare::compare@42efc0
+       <span class="m">9</span> <span class="m">1</span>.5% <span class="m">52</span>.2% <span class="m">9</span> <span class="m">1</span>.5% vy_cache_on_write
+       <span class="m">9</span> <span class="m">1</span>.5% <span class="m">53</span>.7% <span class="m">57</span> <span class="m">9</span>.5% vy_merge_iterator_next_key
+       <span class="m">8</span> <span class="m">1</span>.3% <span class="m">55</span>.0% <span class="m">8</span> <span class="m">1</span>.3% __nss_passwd_lookup
+       <span class="m">6</span> <span class="m">1</span>.0% <span class="m">56</span>.0% <span class="m">25</span> <span class="m">4</span>.2% gc_onestep
+       <span class="m">6</span> <span class="m">1</span>.0% <span class="m">57</span>.0% <span class="m">6</span> <span class="m">1</span>.0% lj_tab_next
+       <span class="m">5</span> <span class="m">0</span>.8% <span class="m">57</span>.9% <span class="m">5</span> <span class="m">0</span>.8% lj_alloc_malloc
+       <span class="m">5</span> <span class="m">0</span>.8% <span class="m">58</span>.7% <span class="m">131</span> <span class="m">21</span>.9% vy_prepare
+</pre></div>
+</div>
+</div>
+<div class="section" id="perf">
+<h3>perf<a class="headerlink" href="#perf" title="Permalink to this headline">¶</a></h3>
+<p>This tool for performance monitoring and analysis is installed separately via
+your package manager. Try running the <code class="docutils literal notranslate"><span class="pre">perf</span></code> command in the terminal and
+follow the prompts to install the necessary package(s).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, some <code class="docutils literal notranslate"><span class="pre">perf</span></code> commands are restricted to <strong>root</strong>, so, to be on
+the safe side, either run all commands as <strong>root</strong> or prepend them with
+<code class="docutils literal notranslate"><span class="pre">sudo</span></code>.</p>
+</div>
+<p>To start gathering performance statistics, say:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> perf record -g -p <span class="k">$(</span>pidof tarantool INSTANCENAME.lua<span class="k">)</span>
+</pre></div>
+</div>
+<p>This command saves the gathered data to a file named <code class="docutils literal notranslate"><span class="pre">perf.data</span></code> inside the
+current working directory. To stop this process (usually, after 10-15 seconds),
+press <strong>ctrl+C</strong>. In your console, you’ll see:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">^C[ perf record: Woken up 1 times to write data ]</span>
+<span class="go">[ perf record: Captured and wrote 0.225 MB perf.data (1573 samples) ]</span>
+</pre></div>
+</div>
+<p>Now run the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> perf report -n -g --stdio <span class="p">|</span> tee perf-report.txt
+</pre></div>
+</div>
+<p>It formats the statistical data in the <code class="docutils literal notranslate"><span class="pre">perf.data</span></code> file into a performance
+report and writes it to the <code class="docutils literal notranslate"><span class="pre">perf-report.txt</span></code> file.</p>
+<p>The resulting output should look similar to this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Samples: 14K of event &#39;cycles&#39;</span>
+<span class="c1"># Event count (approx.): 9927346847</span>
+<span class="c1">#</span>
+<span class="c1"># Children Self Samples Command Shared Object Symbol</span>
+<span class="c1"># ........ ........ ............ ......... .................. .......................................</span>
+<span class="c1">#</span>
+    <span class="m">35</span>.50% <span class="m">0</span>.55% <span class="m">79</span> tarantool tarantool <span class="o">[</span>.<span class="o">]</span> lj_gc_step
+            <span class="p">|</span>
+             --34.95%--lj_gc_step
+                       <span class="p">|</span>
+                       <span class="p">|</span>--29.26%--gc_onestep
+                       <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span>--13.85%--gc_sweep
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>--5.59%--lj_alloc_free
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>--1.33%--lj_tab_free
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> --1.01%--lj_alloc_free
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> --1.17%--lj_cdata_free
+                       <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span>--5.41%--gc_finalize
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>--1.06%--lj_obj_equal
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> --0.95%--lj_tab_set
+                       <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span>--4.97%--rehashtab
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> --3.65%--lj_tab_resize
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>--0.74%--lj_tab_set
+                       <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span> --0.72%--lj_tab_newkey
+                       <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> <span class="p">|</span>--0.91%--propagatemark
+                       <span class="p">|</span> <span class="p">|</span>
+                       <span class="p">|</span> --0.67%--lj_cdata_free
+                       <span class="p">|</span>
+                        --5.43%--propagatemark
+                                  <span class="p">|</span>
+                                   --0.73%--gc_mark
+</pre></div>
+</div>
+<p>Unlike the poor man’s profilers, <code class="docutils literal notranslate"><span class="pre">gperftools</span></code> and <code class="docutils literal notranslate"><span class="pre">perf</span></code> have low overhead
+(almost negligible as compared with <code class="docutils literal notranslate"><span class="pre">pstack</span></code> and <code class="docutils literal notranslate"><span class="pre">gdb</span></code>): they don’t result
+in long delays when attaching to a process and therefore can be used without
+serious consequences.</p>
+</div>
+<div class="section" id="jit-p">
+<h3>jit.p<a class="headerlink" href="#jit-p" title="Permalink to this headline">¶</a></h3>
+<p>The jit.p profiler comes with the Tarantool application server, to load it one
+only needs to say <code class="docutils literal notranslate"><span class="pre">require('jit.p')</span></code> or <code class="docutils literal notranslate"><span class="pre">require('jit.profile')</span></code>.
+There are many options for sampling and display, they are described in
+the documentation for
+<a class="reference external" href="http://www.luatex.org/svn/trunk/source/libs/luajit/LuaJIT-src/doc/ext_profiler.html">The LuaJIT Profiler</a>.</p>
+<p><strong>Example</strong></p>
+<p>Make a function that calls a function named f1 that
+does 500,000 inserts and deletes in a Tarantool space.
+Start the profiler, execute the function, stop the
+profiler, and show what the profiler sampled.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>box.space.t:drop()
+box.schema.space.create(&#39;t&#39;)
+box.space.t:create_index(&#39;i&#39;)
+function f1() for i = 1,500000 do
+  box.space.t:insert{i}
+  box.space.t:delete{i}
+  end
+return 1
+end
+function f3() f1() end
+jit_p = require(&quot;jit.profile&quot;)
+sampletable = {}
+jit_p.start(&quot;f&quot;, function(thread, samples, vmstate)
+  local dump=jit_p.dumpstack(thread, &quot;f&quot;, 1)
+  sampletable[dump] = (sampletable[dump] or 0) + samples
+end)
+f3()
+jit_p.stop()
+for d,v in pairs(sampletable) do print(v, d) end
+</pre></div>
+</div>
+<p>Typically the result will show that the sampling happened
+within f1() many times, but also within internal Tarantool
+functions, whose names may change with each new version.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Tarantool Core Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
