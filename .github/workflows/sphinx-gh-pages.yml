@@ -1,9 +1,13 @@
 name: Generate Sphinx to gh-pages
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  sphinx-pages-deploy:
 
     runs-on: ubuntu-latest
 
