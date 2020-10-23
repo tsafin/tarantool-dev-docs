@@ -82,7 +82,7 @@ html_theme = 'sphinx_rtd_theme'
 #
 # html_theme_options = {}
 
-html_logo = '_static/logo_white_text.png'
+html_logo = '' # _static/logo_white_text.png'
 # github_url = ''
 # html_baseurl = ''
 
